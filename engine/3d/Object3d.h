@@ -8,24 +8,12 @@
 #include <string.h>
 #include "Model.h"
 
-
 #include "Vector3.h"
 #include "Matrix4.h"
 #include "Affin.h"
 
 #include "Transform.h"
 #include "View.h"
-
-//// 定数バッファ用データ構造体
-//struct ViewState
-//{
-//	XMFLOAT3 eye;
-//	XMFLOAT3 target;
-//	XMFLOAT3 up;
-//
-//	XMMATRIX view;       // ワールド → ビュー変換行列
-//	XMMATRIX projection; // ビュー → プロジェクション変換行列
-//};
 
 /// <summary>
 /// 3Dオブジェクト
@@ -36,12 +24,6 @@ private: // エイリアス
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 	// DirectX::を省略
-	/*using XMFLOAT2 = DirectX::XMFLOAT2;
-	using XMFLOAT3 = DirectX::XMFLOAT3;
-	using XMFLOAT4 = DirectX::XMFLOAT4;
-	using XMMATRIX = DirectX::XMMATRIX;*/
-
-
 
 	// 定数バッファ用データ構造体
 	struct ConstBufferDataB0
@@ -49,8 +31,6 @@ private: // エイリアス
 		//XMFLOAT4 color;	// 色 (RGBA)
 		XMMATRIX mat;	// ３Ｄ変換行列
 	};
-
-	
 
 private: // 定数
 	static const int division = 50;					// 分割数
@@ -85,45 +65,6 @@ public: // 静的メンバ関数
 	/// <returns></returns>
 	static Object3d* Create();
 
-	/*/// <summary>
-	/// 視点座標の取得
-	/// </summary>
-	/// <returns>座標</returns>
-	static const Vector3& GetEye() { return eye; }
-
-	/// <summary>
-	/// 視点座標の設定
-	/// </summary>
-	/// <param name="position">座標</param>
-	static void SetEye(Vector3 eye);
-
-	/// <summary>
-	/// 注視点座標の取得
-	/// </summary>
-	/// <returns>座標</returns>
-	static const Vector3& GetTarget() { return target; }
-
-	/// <summary>
-	/// 注視点座標の設定
-	/// </summary>
-	/// <param name="position">座標</param>
-	static void SetTarget(Vector3 target);*/
-
-	/// <summary>
-	/// ベクトルによる移動
-	/// </summary>
-	/// <param name="move">移動量</param>
-	//static void CameraMoveVector(Vector3 move);
-
-	
-	/*static const XMFLOAT3& GetEye() { return eye; }
-
-	static void SetEye(XMFLOAT3 eye);
-
-	static const XMFLOAT3& GetTarget() { return target; }
-
-	static void SetTarget(XMFLOAT3 target);*/
-
 	static float FieldOfViewY(float focalLengs, float sensor);
 	
 
@@ -138,20 +79,6 @@ private: // 静的メンバ変数
 	// パイプラインステートオブジェクト
 	static ComPtr<ID3D12PipelineState> pipelinestate;
 
-
-	//// ビュー行列
-	//static Matrix4 matView;
-	//// 射影行列
-	//static Matrix4 matProjection;
-	//// 視点座標
-	//static Vector3 eye;
-	//// 注視点座標
-	//static Vector3 target;
-	//// 上方向ベクトル
-	//static Vector3 up;
-
-	//static Matrix4 viewProjectionMatrix;
-	//static Matrix4 viewMatrixInv;
 
 	// ビュー行列
 	static XMMATRIX matView;

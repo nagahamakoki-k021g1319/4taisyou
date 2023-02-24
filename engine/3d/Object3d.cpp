@@ -22,14 +22,6 @@ ID3D12Device* Object3d::device = nullptr;
 ID3D12GraphicsCommandList* Object3d::cmdList = nullptr;
 ComPtr<ID3D12RootSignature> Object3d::rootsignature;
 ComPtr<ID3D12PipelineState> Object3d::pipelinestate;
-//Matrix4 Object3d::matView = Affin::matUnit();
-//Matrix4 Object3d::matProjection = Affin::matUnit();
-//Matrix4 Object3d::viewMatrixInv = Affin::matUnit();
-//Matrix4 Object3d::viewProjectionMatrix = Affin::matUnit();
-//Vector3 Object3d::eye = { 0, 0, -50.0f };
-//Vector3 Object3d::target = { 0, 0, 0 };
-//Vector3 Object3d::up = { 0, 1, 0 };
-//float Object3d::focalLengs = 10.0f;
 
 XMMATRIX Object3d::matView{};
 XMMATRIX Object3d::matProjection{};
@@ -96,47 +88,9 @@ Object3d* Object3d::Create()
 		return nullptr;
 	}
 
-	////スケールをセット
-	//float scale_val = 5;
-	//object3d->scale = { scale_val,scale_val,scale_val };
-
-	//float trans_val = 30;
-	//object3d->position = { trans_val,trans_val,trans_val };
 
 	return homeOBJ;
 }
-
-//void Object3d::SetEye(Vector3 eye)
-//{
-//	Object3d::eye = eye;
-//
-//	UpdateViewMatrix();
-//}
-//
-//void Object3d::SetTarget(Vector3 target)
-//{
-//	Object3d::target = target;
-//
-//	UpdateViewMatrix();
-//}
-//
-//void Object3d::CameraMoveVector(Vector3 move)
-//{
-//	Vector3 eye_moved = GetEye();
-//	Vector3 target_moved = GetTarget();
-//
-//	eye_moved.x += move.x;
-//	eye_moved.y += move.y;
-//	eye_moved.z += move.z;
-//
-//	target_moved.x += move.x;
-//	target_moved.y += move.y;
-//	target_moved.z += move.z;
-//
-//	SetEye(eye_moved);
-//	SetTarget(target_moved);
-//}
-//
 
 
 void Object3d::InitializeCamera(int window_width, int window_height)
@@ -148,12 +102,6 @@ void Object3d::InitializeCamera(int window_width, int window_height)
 		XMLoadFloat3(&up));
 
 	
-
-	// 平行投影による射影行列の生成
-	//constMap->mat = XMMatrixOrthographicOffCenterLH(
-	//	0, window_width,
-	//	window_height, 0,
-	//	0, 1);
 	// 透視投影による射影行列の生成
 
 	
@@ -162,13 +110,6 @@ void Object3d::InitializeCamera(int window_width, int window_height)
 		(float)window_width / window_height,
 		0.1f, 1000.0f
 	);
-	
-
-	/*MakeLookL(eye, target, up, matView);
-	MakePerspectiveL(focalLengs,
-		(float)window_width / window_height
-		, 0.1f, 1000.0f,
-		matProjection);*/
 
 }
 
@@ -253,8 +194,6 @@ void Object3d::InitializeGraphicsPipeline()
 	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; // 標準設定
 	// ラスタライザステート
 	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	//gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
-	//gpipeline.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
 	// デプスステンシルステート
 	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
 
@@ -292,9 +231,6 @@ void Object3d::InitializeGraphicsPipeline()
 	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); // t0 レジスタ
 
 	// ルートパラメータ
-	/*CD3DX12_ROOT_PARAMETER rootparams[2];
-	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
-	rootparams[1].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);*/
 	CD3DX12_ROOT_PARAMETER rootparams[3];
 	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
 	rootparams[1].InitAsConstantBufferView(1,0, D3D12_SHADER_VISIBILITY_ALL);
@@ -327,8 +263,6 @@ void Object3d::UpdateViewMatrix()
 {
 	// ビュー行列の更新
 	
-	//matView = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));
-	
 	// ビュー行列の生成
 	matView = XMMatrixLookAtLH(
 		XMLoadFloat3(&eye),
@@ -340,17 +274,6 @@ void Object3d::UpdateViewMatrix()
 		(float) 1280 / 720,
 		0.1f, 1000.0f
 	);
-	
-	//MakePerspectiveL(focalLengs,
-	//	(float)1280 / 720
-	//	, 0.1f, 1000.0f,
-	//	matProjection);
-	////ビュー行列の算出
-	//MakeLookL(eye, target, up, matView);
-	////ビュープロジェクション行列の作成
-	//viewProjectionMatrix = matView * matProjection;
-	////ビュー行列の逆行列を計算
-	//viewMatrixInv = MakeInverse(&matView);
 
 }
 
@@ -383,43 +306,6 @@ bool Object3d::Initialize()
 	return true;
 }
 
-/*
-	void Object3d::Update()
-	{
-		HRESULT result;
-		Matrix4 matScale, matRot, matTrans, resultMat;
-		resultMat = Affin::matUnit();
-
-		// スケール、回転、平行移動行列の計算
-		matScale = Affin::matScale(scale.x, scale.y, scale.z);
-		matRot = Affin::matUnit();
-		matRot *= Affin::matRotation(rotation);
-		matTrans = Affin::matTrans(position.x, position.y, position.z);
-
-		// ワールド行列の合成
-		matWorld = Affin::matUnit(); // 変形をリセット
-		matWorld *= matScale; // ワールド行列にスケーリングを反映
-		matWorld *= matRot; // ワールド行列に回転を反映
-		matWorld *= matTrans; // ワールド行列に平行移動を反映
-
-		// 親オブジェクトがあれば
-		if (parent != nullptr) {
-			// 親オブジェクトのワールド行列を掛ける
-			matWorld *= parent->matWorld;
-		}
-
-		// 定数バッファへデータ転送
-
-		UpdateViewMatrix();
-		ConstBufferDataB0* constMap = nullptr;
-		result = constBuffB0->Map(0, nullptr, (void**)&constMap);
-		resultMat = matWorld * ConvertXM::ConvertXMMATtoMat4(matView * matProjection);	// 行列の合成
-
-		constMap->mat = ConvertXM::ConvertMat4toXMMAT(resultMat);
-		constBuffB0->Unmap(0, nullptr);
-
-	}
-*/
 
 void Object3d::Update(View* view)
 {
