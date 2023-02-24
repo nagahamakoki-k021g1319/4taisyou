@@ -30,6 +30,7 @@ public:
 		RB,//‰E‰º
 		RT,//‰Eã
 	};
+
 public:
 	//‰Šú‰»
 	void Initialize(SpriteCommon* spritecommon_);

@@ -125,10 +125,6 @@ void Model::LoadTexture(const std::string& directoryPath, const std::string& fil
 	wchar_t wfilepath[128];
 	int iBufferSize = MultiByteToWideChar(CP_ACP, 0, filepath.c_str(), -1, wfilepath, _countof(wfilepath));
 
-	//// WICテクスチャのロード
-	//result = LoadFromWICFile(L"Resources/tex1.png", WIC_FLAGS_NONE, &metadata, scratchImg);
-	//assert(SUCCEEDED(result));
-
 	result = LoadFromWICFile(
 		wfilepath, WIC_FLAGS_NONE,
 		&metadata, scratchImg
@@ -201,8 +197,6 @@ void Model::LoadFromOBJInternal(const std::string& modelname)
 	//ファイルストリーム
 	ifstream file;
 	// .objファイルを開く
-	/*file.open("Resources/triangle2/triangle2.obj");*/
-	//const string modelname = "as"; //triangle_mat
 	const string filename = modelname + ".obj"; //triangle_mat.obj
 	const string directoryPath = "Resources/" + modelname + "/"; //Resources/triangle_mat/
 	file.open(directoryPath + filename); //Resources/triangle_mat/triangle_mat.obj
@@ -241,10 +235,6 @@ void Model::LoadFromOBJInternal(const std::string& modelname)
 			line_stream >> position.z;
 			//座標データに追加
 			positions.emplace_back(position);
-			//頂点データに追加
-			/*VertexPosNormalUv vertex{};
-			vertex.pos = position;
-			vertices.emplace_back(vertex);*/
 		}
 
 		//先頭文字列がvtならテクスチャ
@@ -356,7 +346,6 @@ void Model::CreateBuffers()
 
 	// 頂点バッファビューの作成
 	vbView.BufferLocation = vertBuff->GetGPUVirtualAddress();
-	/*vbView.SizeInBytes = sizeof(vertices);*/
 	vbView.SizeInBytes = sizeVB;
 	vbView.StrideInBytes = sizeof(vertices[0]);
 
@@ -374,11 +363,6 @@ void Model::CreateBuffers()
 	result = indexBuff->Map(0, nullptr, (void**)&indexMap);
 	if (SUCCEEDED(result)) {
 
-		//// 全インデックスに対して
-		//for (int i = 0; i < _countof(indices); i++)
-		//{
-		//	indexMap[i] = indices[i];	// インデックスをコピー
-		//}
 		std::copy(indices.begin(), indices.end(), indexMap);
 
 		indexBuff->Unmap(0, nullptr);
