@@ -10,6 +10,7 @@ GameScene::~GameScene() {
 	audio->Finalize();
 	delete audio;
 	delete player_;
+	delete enemy_;
 }
 
 void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, GameScene* gamescene) {
@@ -39,12 +40,16 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, GameScene* gam
 	player_->Initialize();
 	player_->SetView(view);
 
+	//エネミー
+	enemy_ = new Enemy();
+	enemy_->Initialize();
+	enemy_->SetView(view);
 }
 
 
 void GameScene::Update() {
 	player_->Update();
-
+	enemy_->Update();
 
 
 }
@@ -60,6 +65,7 @@ void GameScene::Draw() {
 
 	//3Dオブジェクトの描画
 	player_->Draw();
+	enemy_->Draw();
 
 	//3Dオブジェクト描画後処理
 	Object3d::PostDraw();

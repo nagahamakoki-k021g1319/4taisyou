@@ -15,7 +15,9 @@
 #include "Transform.h"
 #include "View.h"
 
-#include"player.h"
+#include "player.h"
+#include "Enemy.h"
+
 
 /// <summary>
 /// ゲームシーン
@@ -93,6 +95,7 @@ private: // メンバ変数
 
 	//プレイヤー
 	Player* player_ = nullptr;
-
+	//エネミー
+	Enemy* enemy_ = nullptr;
 };
 
