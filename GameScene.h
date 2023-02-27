@@ -15,6 +15,8 @@
 #include "Transform.h"
 #include "View.h"
 
+#include"player.h"
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -89,6 +91,8 @@ private: // メンバ変数
 
 	Vector3 ai;
 
+	//プレイヤー
+	Player* player_ = nullptr;
 
 };
 
