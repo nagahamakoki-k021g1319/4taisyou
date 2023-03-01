@@ -12,7 +12,7 @@ Vector3::Vector3(float x, float y, float z)
 }
 
 float Vector3::length()const {
-	return sqrt(x * x) + (y * y) + (z * z);
+	return sqrt((x * x) + (y * y) + (z * z));
 }
 
 Vector3& Vector3::nomalize() {
@@ -39,6 +39,29 @@ const Vector3 Vector3::lerp(const Vector3& start, const Vector3& end, const floa
 	/*float y = t;
 	return start * (1.0f - y) + end * y;*/
 	return start * (1.0f - t) + end * t;
+}
+
+Vector3 Vector3::Vector3Zero() {
+	Vector3 a = { 0, 0, 0 };
+	return a;
+}
+
+bool Vector3::Vector3Equal(Vector3 v1, Vector3 v2) {
+	if (v1.x == v2.x && v1.y == v2.y && v1.z == v2.z) {
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+bool Vector3::Vector3IsInfinite() {
+	if (isfinite(this->x) && isfinite(this->y) && isfinite(this->z)) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 Vector3 Vector3::operator+()const {

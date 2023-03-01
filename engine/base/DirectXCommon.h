@@ -3,12 +3,18 @@
 #include <dxgi1_6.h>
 #include <wrl.h>
 #include "WinApp.h"
-#include <DirectXTex.h>
+//#include <DirectXTex.h>
+#include <vector>
+
+// Microsoft::WRL::を省略
+//template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 //DirectX基盤
 class DirectXCommon
 {
 public://メンバ関数
+	// Microsoft::WRL::を省略
+	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 	//初期化
 	void Initialize(WinApp* winApp);
 
@@ -35,10 +41,8 @@ public://メンバ関数
 	//コマンドリスト取得
 	ID3D12GraphicsCommandList* GetCommandList()const { return commandList.Get(); }
 
-	static DirectXCommon* GetInstance() {
-		static DirectXCommon instance;
-		return &instance;
-	}
+	//バックバッファの数を取得
+	size_t GetBackBufferCount() const { return backBuffers.size(); }
 
 private:
 	//DirectX12デバイス

@@ -7,10 +7,11 @@
 #include <d3dx12.h>
 
 using namespace DirectX;
+using namespace Microsoft::WRL;
 using namespace std;
 
 //静的メンバ変数の実体
-ID3D12Device* Model::device = nullptr;
+ComPtr<ID3D12Device> Model::device ;
 
 
 Model* Model::LoadFromOBJ(const std::string& modelname)
@@ -35,8 +36,8 @@ void Model::Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParamIndexMaterial
 	cmdList->IASetIndexBuffer(&ibView);
 
 	// デスクリプタヒープの配列
-	ID3D12DescriptorHeap* ppHeaps[] = { descHeap.Get() };
-	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+	ComPtr<ID3D12DescriptorHeap> ppHeaps[] = { descHeap.Get() };
+	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps->GetAddressOf());
 	
 	// 定数バッファビューをセット
 	cmdList->SetGraphicsRootConstantBufferView(rootParamIndexMaterial, constBuffB1->GetGPUVirtualAddress());
@@ -125,6 +126,10 @@ void Model::LoadTexture(const std::string& directoryPath, const std::string& fil
 	wchar_t wfilepath[128];
 	int iBufferSize = MultiByteToWideChar(CP_ACP, 0, filepath.c_str(), -1, wfilepath, _countof(wfilepath));
 
+	//// WICテクスチャのロード
+	//result = LoadFromWICFile(L"Resources/tex1.png", WIC_FLAGS_NONE, &metadata, scratchImg);
+	//assert(SUCCEEDED(result));
+
 	result = LoadFromWICFile(
 		wfilepath, WIC_FLAGS_NONE,
 		&metadata, scratchImg
@@ -197,15 +202,17 @@ void Model::LoadFromOBJInternal(const std::string& modelname)
 	//ファイルストリーム
 	ifstream file;
 	// .objファイルを開く
+	/*file.open("Resources/triangle2/triangle2.obj");*/
+	//const string modelname = "as"; //triangle_mat
 	const string filename = modelname + ".obj"; //triangle_mat.obj
 	const string directoryPath = "Resources/" + modelname + "/"; //Resources/triangle_mat/
 	file.open(directoryPath + filename); //Resources/triangle_mat/triangle_mat.obj
 
 	// ファイルオープン失敗をチェック
 	assert(!file.fail());
-	vector<XMFLOAT3> positions; //頂点座標
-	vector<XMFLOAT3> normals;   //法線ベクトル
-	vector<XMFLOAT2> texcoords; //テクスチャUV
+	vector<Vector3> positions; //頂点座標
+	vector<Vector3> normals;   //法線ベクトル
+	vector<Vector2> texcoords; //テクスチャUV
 	//1行ずつ読み込み
 	string line;
 	while (getline(file, line)) {
@@ -229,18 +236,22 @@ void Model::LoadFromOBJInternal(const std::string& modelname)
 		//先頭文字列がvなら頂点座標
 		if (key == "v") {
 			//X,Y,Z座標読み込み
-			XMFLOAT3 position{};
+			Vector3 position{};
 			line_stream >> position.x;
 			line_stream >> position.y;
 			line_stream >> position.z;
 			//座標データに追加
 			positions.emplace_back(position);
+			//頂点データに追加
+			/*VertexPosNormalUv vertex{};
+			vertex.pos = position;
+			vertices.emplace_back(vertex);*/
 		}
 
 		//先頭文字列がvtならテクスチャ
 		if (key == "vt") {
 			//U,V成分読み込み
-			XMFLOAT2 texcoord{};
+			Vector2 texcoord{};
 			line_stream >> texcoord.x;
 			line_stream >> texcoord.y;
 			//V方向反転
@@ -253,7 +264,7 @@ void Model::LoadFromOBJInternal(const std::string& modelname)
 		//先頭文字列がvnなら法線ベクトル
 		if (key == "vn") {
 			//X,Y,Z座標読み込み
-			XMFLOAT3 normal{};
+			Vector3 normal{};
 			line_stream >> normal.x;
 			line_stream >> normal.y;
 			line_stream >> normal.z;
@@ -346,6 +357,7 @@ void Model::CreateBuffers()
 
 	// 頂点バッファビューの作成
 	vbView.BufferLocation = vertBuff->GetGPUVirtualAddress();
+	/*vbView.SizeInBytes = sizeof(vertices);*/
 	vbView.SizeInBytes = sizeVB;
 	vbView.StrideInBytes = sizeof(vertices[0]);
 
@@ -363,6 +375,11 @@ void Model::CreateBuffers()
 	result = indexBuff->Map(0, nullptr, (void**)&indexMap);
 	if (SUCCEEDED(result)) {
 
+		//// 全インデックスに対して
+		//for (int i = 0; i < _countof(indices); i++)
+		//{
+		//	indexMap[i] = indices[i];	// インデックスをコピー
+		//}
 		std::copy(indices.begin(), indices.end(), indexMap);
 
 		indexBuff->Unmap(0, nullptr);

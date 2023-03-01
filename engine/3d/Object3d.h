@@ -8,12 +8,15 @@
 #include <string.h>
 #include "Model.h"
 
+
 #include "Vector3.h"
+#include "Vector4.h"
 #include "Matrix4.h"
 #include "Affin.h"
 
 #include "Transform.h"
-#include "View.h"
+#include "Camera.h"
+
 
 /// <summary>
 /// 3Dオブジェクト
@@ -29,8 +32,10 @@ private: // エイリアス
 	struct ConstBufferDataB0
 	{
 		//XMFLOAT4 color;	// 色 (RGBA)
-		XMMATRIX mat;	// ３Ｄ変換行列
+		Matrix4 mat;	// ３Ｄ変換行列
 	};
+
+	
 
 private: // 定数
 	static const int division = 50;					// 分割数
@@ -65,31 +70,37 @@ public: // 静的メンバ関数
 	/// <returns></returns>
 	static Object3d* Create();
 
-	static float FieldOfViewY(float focalLengs, float sensor);
+	
+
 	
 
 private: // 静的メンバ変数
 	// デバイス
-	static ID3D12Device* device;
+	static ComPtr<ID3D12Device> device;
 	
 	// コマンドリスト
-	static ID3D12GraphicsCommandList* cmdList;
+	static ComPtr<ID3D12GraphicsCommandList> cmdList;
 	// ルートシグネチャ
 	static ComPtr<ID3D12RootSignature> rootsignature;
 	// パイプラインステートオブジェクト
 	static ComPtr<ID3D12PipelineState> pipelinestate;
 
 
+	
+
 	// ビュー行列
-	static XMMATRIX matView;
+	static Matrix4 matView;
 	// 射影行列
-	static XMMATRIX matProjection;
+	static Matrix4 matProjection;
 	// 視点座標
-	static XMFLOAT3 eye;
+	static Vector3 eye;
 	// 注視点座標
-	static XMFLOAT3 target;
+	static Vector3 target;
 	// 上方向ベクトル
-	static XMFLOAT3 up;
+	static Vector3 up;
+
+
+	static float focalLengs;
 
 private:// 静的メンバ関数
 
@@ -112,14 +123,17 @@ private:// 静的メンバ関数
 	static void UpdateViewMatrix();
 
 public: // メンバ関数
+
+	Object3d();
+	~Object3d();
 	
 	bool Initialize();
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
-	//void Update();
+	void Update();
 
-	void Update(View* view);
+	//void Update(View* view);
 
 	/// <summary>
 	/// 描画
@@ -129,33 +143,26 @@ public: // メンバ関数
 	Object3d* GetParent() const { return parent; }
 
 	void SetParent(Object3d* parent) { this->parent = parent; }
+	static void SetCamera(Camera* camera) { Object3d::camera = camera; }
 
 	//setter
 	void SetModel(Model* model) { this->model = model; }
-
-	static void MakePerspectiveL(float fovAngleY, float aspect, float near_, float far_, Matrix4& matrix);
-
-	static void MakeLookL(const Vector3& eye, const Vector3& target, const Vector3& up, Matrix4& mat);
-
-	static Matrix4 MakeInverse(const Matrix4* mat);
-
-
 
 private: // メンバ変数
 	public:
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
 
 	// 色
-	XMFLOAT4 color = { 1,1,1,1 };	
+	Vector4 color ={ 1,1,1,1 };	
 
 	// 親オブジェクト
 	Object3d* parent = nullptr;
 	//モデル
 	Model* model = nullptr;
+	static Camera* camera;
 
 	static float win_wi, win_hi;
 public:
 	Transform wtf;
-	static float focalLengs;
 
 };

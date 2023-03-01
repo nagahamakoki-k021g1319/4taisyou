@@ -1,129 +1,162 @@
-ï»¿
-#include "FPS.h"
+
 #include "WinApp.h"
+#include "Input.h"
 #include "DirectXCommon.h"
+#include "FPS.h"
+#include "ImGuiManager.h"
+#include <imgui.h>
+
+
 #include "GameScene.h"
+
+
 
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
-#pragma region WindowsAPIåˆæœŸåŒ–å‡¦ç†
+#pragma region WindowsAPI‰Šú‰»ˆ—
 
 
-	//ãƒã‚¤ãƒ³ã‚¿
+	//ƒ|ƒCƒ“ƒ^
 	WinApp* winApp = nullptr;
 	DirectXCommon* dxCommon = nullptr;
 	FPS* fps = new FPS;
 	Input* input = nullptr;
 	GameScene* gameScene = nullptr;
 
-	//windowsAPIã®åˆæœŸåŒ–
+	ImGuiManager* imgui = nullptr;
+
+	//windowsAPI‚Ì‰Šú‰»
 	winApp = new WinApp();
 	winApp->Initialize();
 
 	dxCommon = new DirectXCommon();
 	dxCommon->Initialize(winApp);
 
-	MSG msg = {};
-	
-	//å…¥åŠ›ã®åˆæœŸåŒ–ã€€
+	//“ü—Í‚Ì‰Šú‰»@
 	input = new Input();
 	input->Initialize(winApp);
 
+	// ImGui‚Ì‰Šú‰»
+	imgui = new ImGuiManager();
+	imgui->Initialize(winApp,dxCommon);
 
-	
-	
+
+
+
 
 #pragma endregion
 
-#pragma region DirectXåˆæœŸåŒ–å‡¦ç†
-	// 3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé™çš„åˆæœŸåŒ–
+#pragma region DirectX‰Šú‰»ˆ—
+	// 3DƒIƒuƒWƒFƒNƒgÃ“I‰Šú‰»
 	Object3d::StaticInitialize(dxCommon->GetDevice(), WinApp::window_width, WinApp::window_height);
-
+	//ƒp[ƒeƒBƒNƒ‹Ã“I‰Šú‰»
+	ParticleManager::StaticInitialize(dxCommon->GetDevice(), WinApp::window_width, WinApp::window_height);
+	
 
 #pragma endregion
 
-#pragma region æç”»åˆæœŸåŒ–å‡¦ç†
-
-	
-
-	
+#pragma region •`‰æ‰Šú‰»ˆ—
 
 	////////////////////////////
-	//------éŸ³å£°èª­ã¿è¾¼ã¿--------//
+	//------‰¹º“Ç‚Ýž‚Ý--------//
 	///////////////////////////
 
-	// ã‚²ãƒ¼ãƒ ã‚·ãƒ¼ãƒ³ã®åˆæœŸåŒ–
+	// ƒQ[ƒ€ƒV[ƒ“‚Ì‰Šú‰»
 	gameScene = new GameScene();
-	gameScene->Initialize(dxCommon, input,gameScene);
+	gameScene->Initialize(dxCommon, input);
 
-	//FPSå¤‰ãˆãŸã„ã¨ã
+	//FPS•Ï‚¦‚½‚¢‚Æ‚«
 	fps->SetFrameRate(60);
 
 #pragma endregion
-	//ã‚²ãƒ¼ãƒ ãƒ«ãƒ¼ãƒ—
+	//ƒQ[ƒ€ƒ‹[ƒv
 	while (true) {
-#pragma region ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡¦ç†
-	
-		//ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ãŒçµ‚ã‚ã‚‹æ™‚ã«messageãŒWM_QUITã«ãªã‚‹
+#pragma region ƒEƒBƒ“ƒhƒEƒƒbƒZ[ƒWˆ—
+
+		//ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ªI‚í‚éŽž‚Émessage‚ªWM_QUIT‚É‚È‚é
 		if (winApp->ProcessMessage()) {
 			break;
 		}
 		if (input->PushKey(DIK_ESCAPE)) {
 			break;
 		}
-		
+
+
 		fps->FpsControlBegin();
 
 #pragma endregion
 
-#pragma region DirectXæ¯Žãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†
+#pragma region DirectX–ˆƒtƒŒ[ƒ€ˆ—
 		/////////////////////////////////////////////////////
-		//----------DireceXæ¯Žãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†ã€€ã“ã“ã‹ã‚‰------------//
+		//----------DireceX–ˆƒtƒŒ[ƒ€ˆ—@‚±‚±‚©‚ç------------//
 		///////////////////////////////////////////////////
 
-		//å…¥åŠ›ã®æ›´æ–°
-		input->Update();
-		// ã‚²ãƒ¼ãƒ ã‚·ãƒ¼ãƒ³ã®æ¯Žãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†
-		gameScene->Update();
+		//“ü—Í‚ÌXV
+		input->Update();	
+
+		// ƒQ[ƒ€ƒV[ƒ“‚Ì–ˆƒtƒŒ[ƒ€ˆ—
+		gameScene->Update();		
 
 		//////////////////////////////////////////////
-		//-------DireceXæ¯Žãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†ã€€ã“ã“ã¾ã§--------//
+		//-------DireceX–ˆƒtƒŒ[ƒ€ˆ—@‚±‚±‚Ü‚Å--------//
 		////////////////////////////////////////////
 
 #pragma endregion
 
-#pragma region ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ã‚¹ã‚³ãƒžãƒ³ãƒ‰
+#pragma region ƒOƒ‰ƒtƒBƒbƒNƒXƒRƒ}ƒ“ƒh
 
-		//4.æç”»ã‚³ãƒžãƒ³ãƒ‰ã“ã“ã‹ã‚‰
-		dxCommon->PreDraw(); 
-		// ã‚²ãƒ¼ãƒ ã‚·ãƒ¼ãƒ³ã®æç”»
+		//4.•`‰æƒRƒ}ƒ“ƒh‚±‚±‚©‚ç
+		dxCommon->PreDraw();
+
+		// ImguiŽó•tŠJŽn
+		imgui->Begin();
+		// ƒfƒ‚ƒEƒBƒ“ƒhƒE‚Ì•\Ž¦ƒIƒ“
+		ImGui::ShowDemoWindow();
+
+		// ƒQ[ƒ€ƒV[ƒ“‚Ì•`‰æ
 		gameScene->Draw();
-		// æç”»çµ‚äº†
+
+
+		// ImguiŽó•tI—¹
+		imgui->End();
+		// Imgui•`‰æ
+		imgui->Draw();
+
+		// •`‰æI—¹
 		dxCommon->PostDraw();
 
 		fps->FpsControlEnd();
-		//4.æç”»ã‚³ãƒžãƒ³ãƒ‰ã“ã“ã¾ã§
+		//4.•`‰æƒRƒ}ƒ“ƒh‚±‚±‚Ü‚Å
 
 #pragma endregion
 
-#pragma region ç”»é¢å…¥ã‚Œæ›¿ãˆ
+#pragma region ‰æ–Ê“ü‚ê‘Ö‚¦
 
 #pragma endregion
 	}
-#pragma region  WindowsAPIå¾Œå§‹æœ«
+#pragma region  WindowsAPIŒãŽn––
+
+	/*ID3D12DebugDevice* debugInterface;
+	if (SUCCEEDED(dxCommon->GetDevice()->QueryInterface(&debugInterface))) {
+		debugInterface->ReportLiveDeviceObjects(D3D12_RLDO_DETAIL | D3D12_RLDO_IGNORE_INTERNAL);
+		debugInterface->Release();
+	}*/
 
 	delete gameScene;
-	//WindowsAPIã®çµ‚äº†å‡¦ç†
-	winApp->Finalize();
 
-	//å…¥åŠ›é–‹æ”¾
+	imgui->Finalize();
+	//WindowsAPI‚ÌI—¹ˆ—
+	winApp->Finalize();
+	delete imgui;
+
+	//“ü—ÍŠJ•ú
 	delete input;
-	//WindowsAPIé–‹æ”¾
+	//WindowsAPIŠJ•ú
 	delete winApp;
 	delete dxCommon;
 
 	delete fps;
-
+	
 #pragma endregion
 	return 0;
 }
