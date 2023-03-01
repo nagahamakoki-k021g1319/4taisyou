@@ -199,7 +199,7 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 
 	// リソース設定
 	textureResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-	textureResourceDesc.Format = metadata.format;
+	textureResourceDesc.Format = MakeSRGB(metadata.format);
 	textureResourceDesc.Width = metadata.width;
 	textureResourceDesc.Height = (UINT)metadata.height;
 	textureResourceDesc.DepthOrArraySize = (UINT16)metadata.arraySize;
@@ -239,7 +239,7 @@ void SpriteCommon::LoadTexture(uint32_t index, const std::string& fileName)
 
 	// リソース設定
 	textureResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-	textureResourceDesc.Format = metadata.format;
+	textureResourceDesc.Format = MakeSRGB(metadata.format);
 	textureResourceDesc.Width = metadata.width;
 	textureResourceDesc.Height = (UINT)metadata.height;
 	textureResourceDesc.DepthOrArraySize = (UINT16)metadata.arraySize;

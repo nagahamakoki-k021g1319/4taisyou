@@ -15,54 +15,56 @@
 #include "Transform.h"
 #include "View.h"
 
-#include"Player.h"
+#include "Player.h"
+#include "Enemy.h"
+
 
 /// <summary>
-/// ƒQ[ƒ€ƒV[ƒ“
+/// ã‚²ãƒ¼ãƒ ã‚·ãƒ¼ãƒ³
 /// </summary>
 class GameScene
 {
-private: // ƒGƒCƒŠƒAƒX
-	// Microsoft::WRL::‚ğÈ—ª
+private: // ã‚¨ã‚¤ãƒªã‚¢ã‚¹
+	// Microsoft::WRL::ã‚’çœç•¥
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::‚ğÈ—ª
+	// DirectX::ã‚’çœç•¥
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 
-private: // Ã“Iƒƒ“ƒo•Ï”
+private: // é™çš„ãƒ¡ãƒ³ãƒå¤‰æ•°
 	static const int debugTextTexNumber = 0;
 
-public: // ƒƒ“ƒoŠÖ”
+public: // ãƒ¡ãƒ³ãƒé–¢æ•°
 
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒNƒ‰ƒ^
+	/// ã‚³ãƒ³ã‚¹ãƒˆã‚¯ãƒ©ã‚¿
 	/// </summary>
 	GameScene();
 
 	/// <summary>
-	/// ƒfƒXƒgƒ‰ƒNƒ^
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
 	~GameScene();
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	void Initialize(DirectXCommon* dxCommon, Input* input, GameScene* gamescene);
 
 	/// <summary>
-	/// –ˆƒtƒŒ[ƒ€ˆ—
+	/// æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
 	void Draw();
 
 
-private: // ƒƒ“ƒo•Ï”
+private: // ãƒ¡ãƒ³ãƒå¤‰æ•°
 	DirectXCommon* dxCommon = nullptr;
 	Input* input = nullptr;
 	SpriteCommon* spriteCommon = nullptr;
@@ -70,19 +72,19 @@ private: // ƒƒ“ƒo•Ï”
 
 
 	/// <summary>
-	/// ƒQ[ƒ€ƒV[ƒ“—p
+	/// ã‚²ãƒ¼ãƒ ã‚·ãƒ¼ãƒ³ç”¨
 	/// </summary>
 
-	// ƒJƒƒ‰ŠÖŒW
+	// ã‚«ãƒ¡ãƒ©é–¢ä¿‚
 	View* view = nullptr;
-	// ŠÔŒv‘ª‚É•K—v‚Èƒf[ƒ^
+	// æ™‚é–“è¨ˆæ¸¬ã«å¿…è¦ãªãƒ‡ãƒ¼ã‚¿
 	long long startCount = 0;
 	long long nowCount = 0;
 	long long elapsedCount = 0;
 	float elapsedTime = 0;
 
-	// •âŠÔ‚Åg‚¤ƒf[ƒ^
-	// start -> end ‚ğ 5[‚“] ‚ÅŠ®—¹‚³‚¹‚é
+	// è£œé–“ã§ä½¿ã†ãƒ‡ãƒ¼ã‚¿
+	// start -> end ã‚’ 5[ï½“] ã§å®Œäº†ã•ã›ã‚‹
 	Vector3 p0, p1, p2, p3;
 	float maxTime = 50.0f;
 	float timeRate;
@@ -91,8 +93,13 @@ private: // ƒƒ“ƒo•Ï”
 
 	Vector3 ai;
 
-	//ƒvƒŒƒCƒ„[
-	Player* player_ = nullptr;
+	Sprite* sprite = new Sprite();
+	XMFLOAT2 position = sprite->GetPosition();
 
+
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼
+	Player* player_ = nullptr;
+	//ã‚¨ãƒãƒŸãƒ¼
+	Enemy* enemy_ = nullptr;
 };
 

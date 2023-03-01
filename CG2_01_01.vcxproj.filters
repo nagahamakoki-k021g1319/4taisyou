@@ -121,6 +121,9 @@
     <ClCompile Include="user\Player.cpp">
       <Filter>user\ソース</Filter>
     </ClCompile>
+    <ClCompile Include="user\Enemy.cpp">
+      <Filter>user\ソース</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="SpriteVS.hlsl">
@@ -206,6 +209,9 @@
       <Filter>engin\ヘッダー ファイル\3d</Filter>
     </ClInclude>
     <ClInclude Include="user\Player.h">
+      <Filter>user\ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="user\Enemy.h">
       <Filter>user\ヘッダー</Filter>
     </ClInclude>
   </ItemGroup>
