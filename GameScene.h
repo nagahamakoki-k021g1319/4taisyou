@@ -15,7 +15,7 @@
 #include "Transform.h"
 #include "View.h"
 
-#include"player.h"
+#include"Player.h"
 
 /// <summary>
 /// ƒQ[ƒ€ƒV[ƒ“

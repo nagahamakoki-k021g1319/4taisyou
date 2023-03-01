@@ -301,8 +301,6 @@ bool Object3d::Initialize()
 	assert(SUCCEEDED(result));
 
 
-	
-
 	return true;
 }
 
