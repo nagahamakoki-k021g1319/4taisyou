@@ -1,9 +1,11 @@
 #pragma once
 #include <windows.h>
 #include <wrl.h>
-#define DIRECTINPUT_VERSION 0x0800 // DirectInputのバージョン指定
 #include <dinput.h>
 #include "WinApp.h"
+
+#define DIRECTINPUT_VERSION 0x0800 // DirectInputのバージョン指定
+
 
 // 入力
 class Input
@@ -32,6 +34,13 @@ public: // メンバ関数
 	/// </param name="keyNumber">キー番号( DIK_0 等)</param>
 	/// <reutrns>トリガーか</params>
 	bool TriggerKey(BYTE keyNumber);
+
+	/// <summary>
+	/// キーのトリガーをチェック
+	/// </summary>
+	/// </param name="keyNumber">キー番号( DIK_0 等)</param>
+	/// <reutrns>離されたか</params>
+	bool ReleaseKey(BYTE keyNumber);
 
 private: // メンバ変数
 	// キーボードのデバイス

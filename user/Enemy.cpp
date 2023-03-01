@@ -4,13 +4,10 @@ Enemy::Enemy() {
 }
 
 Enemy::~Enemy() {
-	delete enemyModel_;
 	delete enemyObj_;
 }
 
 void Enemy::Initialize() {
-	view_ = new View();
-
 	enemyModel_ = Model::LoadFromOBJ("as");
 	enemyObj_ = Object3d::Create();
 	enemyObj_->SetModel(enemyModel_);
@@ -19,7 +16,7 @@ void Enemy::Initialize() {
 }
 
 void Enemy::Update() {
-	enemyObj_->Update(view_);
+	enemyObj_->Update();
 	switch (phase_) {
 	case Phase::Approach:
 		enemyObj_->wtf.position.z -= 0.1;

@@ -4,15 +4,11 @@ Player::Player() {
 }
 
 Player::~Player() {
-	delete bodyModel_;
 	delete bodyObj_;
 }
 
 void Player::Initialize(Input* input) {
 	input_ = input;
-	view_ = new View();
-	view_->Initialize();
-	view_->eye = { 0,3,-8 };
 
 	bodyModel_ = Model::LoadFromOBJ("as2");
 	bodyObj_ = Object3d::Create();
@@ -20,34 +16,17 @@ void Player::Initialize(Input* input) {
 }
 
 
-void Player::UpdateView() {
-	Matrix4 affineMat;
-	affineMat.MakeIdentity();
-	affineMat.m[3][0] = view_->eye.x;
-	affineMat.m[3][1] = view_->eye.y;
-	affineMat.m[3][2] = view_->eye.z;
-
-	affineMat *= bodyObj_->wtf.matWorld;
-
-	Vector3 newEye;
-
-	newEye.x = affineMat.m[3][0];
-	newEye.y = affineMat.m[3][1];
-	newEye.z = affineMat.m[3][2];
-
-	view_->eye = newEye;
-}
-
 void Player::Rota() {
 	Vector3 theta;
+
 	if (input_->PushKey(DIK_E)) {
-		theta.y = +rotaSpeed_;
+		theta.y += +rotaSpeed_;
 	}
 	else if (input_->PushKey(DIK_Q)) {
-		theta.y = -rotaSpeed_;
+		theta.y += -rotaSpeed_;
 	}
 
-	bodyObj_->wtf.rotation = theta;
+	bodyObj_->wtf.rotation += theta;
 }
 
 void Player::Move() {
@@ -73,8 +52,7 @@ void Player::Move() {
 void Player::Update() {
 	Rota();
 	Move();
-	UpdateView();
-	bodyObj_->Update(view_);
+	bodyObj_->Update();
 }
 
 

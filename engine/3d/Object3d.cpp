@@ -18,36 +18,39 @@ using namespace std;
 /// </summary>
 const float Object3d::radius = 5.0f;				// 底面の半径
 const float Object3d::prizmHeight = 8.0f;			// 柱の高さ
-ID3D12Device* Object3d::device = nullptr;
-ID3D12GraphicsCommandList* Object3d::cmdList = nullptr;
+ComPtr<ID3D12Device> Object3d::device;
+ComPtr<ID3D12GraphicsCommandList> Object3d::cmdList;
 ComPtr<ID3D12RootSignature> Object3d::rootsignature;
 ComPtr<ID3D12PipelineState> Object3d::pipelinestate;
+Matrix4 Object3d::matView = Affin::matUnit();
+Matrix4 Object3d::matProjection = Affin::matUnit();
+Vector3 Object3d::eye = { 0, 0, -50.0f };
+Vector3 Object3d::target = { 0, 0, 0 };
+Vector3 Object3d::up = { 0, 1, 0 };
+float Object3d::focalLengs = 50.0f;
 
-XMMATRIX Object3d::matView{};
-XMMATRIX Object3d::matProjection{};
-XMFLOAT3 Object3d::eye = { 0, 0, -50.0f };
-XMFLOAT3 Object3d::target = { 0, 0, 0 };
-XMFLOAT3 Object3d::up = { 0, 1, 0 };
-float Object3d::focalLengs = 90.0f;
+Camera* Object3d::camera = nullptr;
 
+Object3d::Object3d() {
 
+}
+Object3d::~Object3d() {
+	delete model;
+}
 
 void Object3d::StaticInitialize(ID3D12Device* device, int window_width, int window_height)
 {
 	// nullptrチェック
 	assert(device);
-	
+
 	Object3d::device = device;
 
 	Model::SetDevice(device);
 
-	// カメラ初期化
-	InitializeCamera(window_width, window_height);
-
 	// パイプライン初期化
 	InitializeGraphicsPipeline();
 
-	
+
 
 }
 
@@ -88,28 +91,19 @@ Object3d* Object3d::Create()
 		return nullptr;
 	}
 
-
 	return homeOBJ;
 }
 
-
 void Object3d::InitializeCamera(int window_width, int window_height)
 {
-	// ビュー行列の生成
-	matView = XMMatrixLookAtLH(
-		XMLoadFloat3(&eye),
-		XMLoadFloat3(&target),
-		XMLoadFloat3(&up));
-
 	
-	// 透視投影による射影行列の生成
 
-	
-	matProjection = XMMatrixPerspectiveFovLH(
-		FieldOfViewY(focalLengs,35),
-		(float)window_width / window_height,
-		0.1f, 1000.0f
-	);
+	//ビュー行列の算出
+	matView.MakeLookL(eye, target, up, matView);
+	matProjection.MakePerspectiveL(focalLengs,
+		(float)1280 / 720
+		, 0.1f, 1000.0f,
+		matProjection);
 
 }
 
@@ -122,7 +116,7 @@ void Object3d::InitializeGraphicsPipeline()
 
 	// 頂点シェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/shaders/OBJVertexShader.hlsl",	// シェーダファイル名
+		L"Engine/SHADER/OBJVertexShader.hlsl",	// シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "vs_5_0",	// エントリーポイント名、シェーダーモデル指定
@@ -145,7 +139,7 @@ void Object3d::InitializeGraphicsPipeline()
 
 	// ピクセルシェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/shaders/OBJPixelShader.hlsl",	// シェーダファイル名
+		L"Engine/SHADER/OBJPixelShader.hlsl",	// シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "ps_5_0",	// エントリーポイント名、シェーダーモデル指定
@@ -194,6 +188,8 @@ void Object3d::InitializeGraphicsPipeline()
 	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; // 標準設定
 	// ラスタライザステート
 	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+	//gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+	//gpipeline.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
 	// デプスステンシルステート
 	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
 
@@ -231,9 +227,12 @@ void Object3d::InitializeGraphicsPipeline()
 	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); // t0 レジスタ
 
 	// ルートパラメータ
+	/*CD3DX12_ROOT_PARAMETER rootparams[2];
+	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
+	rootparams[1].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);*/
 	CD3DX12_ROOT_PARAMETER rootparams[3];
 	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
-	rootparams[1].InitAsConstantBufferView(1,0, D3D12_SHADER_VISIBILITY_ALL);
+	rootparams[1].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);
 	rootparams[2].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
 
 	// スタティックサンプラー
@@ -262,18 +261,18 @@ void Object3d::InitializeGraphicsPipeline()
 void Object3d::UpdateViewMatrix()
 {
 	// ビュー行列の更新
-	
-	// ビュー行列の生成
-	matView = XMMatrixLookAtLH(
-		XMLoadFloat3(&eye),
-		XMLoadFloat3(&target),
-		XMLoadFloat3(&up));
 
-	matProjection = XMMatrixPerspectiveFovLH(
-		FieldOfViewY(focalLengs, 35),
-		(float) 1280 / 720,
-		0.1f, 1000.0f
-	);
+
+	//ビュー行列の算出
+	matView.MakeLookL(eye, target, up, matView);
+	matProjection.MakePerspectiveL(focalLengs,
+		(float)1280 / 720
+		, 0.1f, 1000.0f,
+		matProjection);
+	////ビュープロジェクション行列の作成
+	//viewProjectionMatrix = matView * matProjection;
+	////ビュー行列の逆行列を計算
+	//viewMatrixInv = MakeInverse(&matView);
 
 }
 
@@ -293,27 +292,22 @@ bool Object3d::Initialize()
 	// 定数バッファの生成
 	result = device->CreateCommittedResource(
 		&heapProps, // アップロード可能
-		D3D12_HEAP_FLAG_NONE, 
-		&resourceDesc, 
-		D3D12_RESOURCE_STATE_GENERIC_READ, 
-	nullptr,
+		D3D12_HEAP_FLAG_NONE,
+		&resourceDesc,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
 		IID_PPV_ARGS(&constBuffB0));
 	assert(SUCCEEDED(result));
+
+
 
 
 	return true;
 }
 
 
-void Object3d::Update(View* view)
+void Object3d::Update()
 {
-	
-	assert(view);
-	eye = ConvertXM::ConvertVec3toXMFlo3(view->eye);
-	target = ConvertXM::ConvertVec3toXMFlo3(view->target);
-	up = ConvertXM::ConvertVec3toXMFlo3(view->up);
-	focalLengs = view->focalLengs;
-
 
 	HRESULT result;
 	Matrix4 matScale, matRot, matTrans, resultMat;
@@ -338,13 +332,11 @@ void Object3d::Update(View* view)
 	}
 
 	// 定数バッファへデータ転送
-
-	UpdateViewMatrix();
 	ConstBufferDataB0* constMap = nullptr;
 	result = constBuffB0->Map(0, nullptr, (void**)&constMap);
-	resultMat = wtf.matWorld * ConvertXM::ConvertXMMATtoMat4(matView * matProjection);	// 行列の合成
+	resultMat = wtf.matWorld * camera->GetViewProjectionMatrix();	// 行列の合成
 
-	constMap->mat = ConvertXM::ConvertMat4toXMMAT(resultMat);
+	constMap->mat = resultMat;
 	constBuffB0->Unmap(0, nullptr);
 
 }
@@ -353,171 +345,17 @@ void Object3d::Draw()
 {
 	// nullptrチェック
 	assert(device);
-	assert(Object3d::cmdList);
+	//assert(Object3d::cmdList);
 
 	//モデルがセットされてなければ描画をスキップ
 	if (model == nullptr) return;
 
 	// 定数バッファビューをセット
 	cmdList->SetGraphicsRootConstantBufferView(0, constBuffB0->GetGPUVirtualAddress());
-	
+
 	//モデルを描画
-	model->Draw(cmdList, 1);
+	model->Draw(cmdList.Get(), 1);
 }
 
-void Object3d::MakePerspectiveL(float fovAngleY, float aspect, float near_, float far_, Matrix4& matrix)
-{
 
-	float sinFov = 0.0f;
-	float cosFov = 0.0f;
-	Affin::SinCos(sinFov, cosFov, 0.5f * fovAngleY);
 
-	float range = far_ / (far_ - near_);
-	float height = cosFov / sinFov;
-
-	matrix.m[0][0] = height / aspect;
-
-	matrix.m[1][1] = cosFov / sinFov;
-
-	matrix.m[2][2] = range;
-	matrix.m[2][3] = 1.0f;
-
-	matrix.m[3][2] = -range * near_;
-
-	matrix.m[0][1] = matrix.m[0][2] = matrix.m[0][3] =
-		matrix.m[1][0] = matrix.m[1][2] = matrix.m[1][3] =
-		matrix.m[2][0] = matrix.m[2][1] =
-		matrix.m[3][0] = matrix.m[3][1] = matrix.m[3][3] = 0.0f;
-}
-void Object3d::MakeLookL(const Vector3& eye, const Vector3& target, const Vector3& up, Matrix4& mat)
-{
-	Vector3 zVec = target - eye;
-	zVec.nomalize();
-
-	Vector3 xVec = up.cross(zVec);
-	xVec.nomalize();
-
-	Vector3 yVec = zVec.cross(xVec);
-	yVec.nomalize();
-
-	mat.m[0][0] = xVec.x;
-	mat.m[0][1] = xVec.y;
-	mat.m[0][2] = xVec.z;
-	mat.m[1][0] = yVec.x;
-	mat.m[1][1] = yVec.y;
-	mat.m[1][2] = yVec.z;
-	mat.m[2][0] = zVec.x;
-	mat.m[2][1] = zVec.y;
-	mat.m[2][2] = zVec.z;
-	mat.m[3][0] = eye.x;
-	mat.m[3][1] = eye.y;
-	mat.m[3][2] = eye.z;
-}
-
-Matrix4 Object3d::MakeInverse(const Matrix4* mat)
-{
-	assert(mat);
-
-	//掃き出し法を行う行列
-	float sweep[4][8]{};
-	//定数倍用
-	float constTimes = 0.0f;
-	//許容する誤差
-	float MAX_ERR = 1e-10f;
-	//戻り値用
-	Matrix4 retMat;
-
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-		{
-			//weepの左側に逆行列を求める行列をセット
-			sweep[i][j] = mat->m[i][j];
-
-			//sweepの右側に単位行列をセット
-			sweep[i][4 + j] = Matrix4::MakeIdentity().m[i][j];
-		}
-	}
-
-	//全ての列の対角成分に対する繰り返し
-	for (int i = 0; i < 4; i++)
-	{
-		//最大の絶対値を注目対角成分の絶対値と仮定
-		float max = std::fabs(sweep[i][i]);
-		int maxIndex = i;
-
-		//i列目が最大の絶対値となる行を探す
-		for (int j = i + 1; j < 4; j++)
-		{
-			if (std::fabs(sweep[j][i]) > max)
-			{
-				max = std::fabs(sweep[j][i]);
-				maxIndex = j;
-			}
-		}
-
-		if (fabs(sweep[maxIndex][i]) <= MAX_ERR)
-		{
-			//逆行列は求められない
-			return Matrix4::MakeIdentity();
-		}
-
-		//操作(1):i行目とmaxIndex行目を入れ替える
-		if (i != maxIndex)
-		{
-			for (int j = 0; j < 8; j++)
-			{
-				float tmp = sweep[maxIndex][j];
-				sweep[maxIndex][j] = sweep[i][j];
-				sweep[i][j] = tmp;
-			}
-		}
-
-		//sweep[i][i]に掛けると1になる値を求める
-		constTimes = 1 / sweep[i][i];
-
-		//操作(2):p行目をa倍する
-		for (int j = 0; j < 8; j++)
-		{
-			//これによりsweep[i][i]が1になる
-			sweep[i][j] *= constTimes;
-		}
-
-		//操作(3)によりi行目以外の行のi列目を0にする
-		for (int j = 0; j < 4; j++)
-		{
-			if (j == i)
-			{
-				//i行目はそのまま
-				continue;
-			}
-
-			//i行目に掛ける値を求める
-			constTimes = -sweep[j][i];
-
-			for (int k = 0; k < 8; k++)
-			{
-				//j行目にi行目をa倍した行を足す
-				//これによりsweep[j][i]が0になる
-				sweep[j][k] += sweep[i][k] * constTimes;
-			}
-		}
-	}
-
-	//sweepの右半分がmatの逆行列
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-		{
-			retMat.m[i][j] = sweep[i][4 + j];
-		}
-	}
-
-	return retMat;
-}
-
-float Object3d::FieldOfViewY(float focalLengs, float sensor) {
-
-	return 2 * atan(sensor / (2 * focalLengs));
-
-}

@@ -25,7 +25,7 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 	resDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 	// 頂点シェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"SpriteVS.hlsl", // シェーダファイル名
+		L"Engine/SHADER/SpriteVS.hlsl", // シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "vs_5_0", // エントリーポイント名、シェーダーモデル指定
@@ -47,7 +47,7 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 	}
 	// ピクセルシェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"SpritePS.hlsl", // シェーダファイル名
+		L"Engine/SHADER/SpritePS.hlsl", // シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "ps_5_0", // エントリーポイント名、シェーダーモデル指定
@@ -106,6 +106,12 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;             // 加算
 	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;         // ソースのアルファ値
 	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+
+	// ブレンドステートの設定
+	pipelineDesc.BlendState.RenderTarget[0] = blenddesc;
+
+	// 深度バッファのフォーマット
+	pipelineDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 
 	// 頂点レイアウトの設定
 	pipelineDesc.InputLayout.pInputElementDescs = inputLayout;
@@ -175,7 +181,7 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 	rootSigBlob->Release();
 
 	// パイプラインにルートシグネチャをセット
-	pipelineDesc.pRootSignature = rootSignature;
+	pipelineDesc.pRootSignature = rootSignature.Get();
 	result = dxcommon_->GetDevice()->CreateGraphicsPipelineState(&pipelineDesc, IID_PPV_ARGS(&pipelineState));
 	assert(SUCCEEDED(result));
 
@@ -199,7 +205,7 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 
 	// リソース設定
 	textureResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-	textureResourceDesc.Format = MakeSRGB(metadata.format);
+	textureResourceDesc.Format = metadata.format;
 	textureResourceDesc.Width = metadata.width;
 	textureResourceDesc.Height = (UINT)metadata.height;
 	textureResourceDesc.DepthOrArraySize = (UINT16)metadata.arraySize;
@@ -239,7 +245,7 @@ void SpriteCommon::LoadTexture(uint32_t index, const std::string& fileName)
 
 	// リソース設定
 	textureResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-	textureResourceDesc.Format = MakeSRGB(metadata.format);
+	textureResourceDesc.Format =  MakeSRGB(metadata.format);
 	textureResourceDesc.Width = metadata.width;
 	textureResourceDesc.Height = (UINT)metadata.height;
 	textureResourceDesc.DepthOrArraySize = (UINT16)metadata.arraySize;
@@ -285,13 +291,13 @@ void SpriteCommon::LoadTexture(uint32_t index, const std::string& fileName)
 void SpriteCommon::SetTextureCommands(uint32_t index)
 {
 	// パイプラインステートとルートシグネチャの設定コマンド
-	dxcommon_->GetCommandList()->SetPipelineState(pipelineState);
-	dxcommon_->GetCommandList()->SetGraphicsRootSignature(rootSignature);
+	dxcommon_->GetCommandList()->SetPipelineState(pipelineState.Get());
+	dxcommon_->GetCommandList()->SetGraphicsRootSignature(rootSignature.Get());
 
 	//プリミティブ形状の設定コマンド
 	dxcommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);//三角リスト
 	// SRVヒープの設定コマンド
-	dxcommon_->GetCommandList()->SetDescriptorHeaps(1, &srvHeap);
+	dxcommon_->GetCommandList()->SetDescriptorHeaps(1,srvHeap.GetAddressOf());
 	// SRVヒープの先頭ハンドルを取得（SRVを指しているはず）
 	D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandle = srvHeap->GetGPUDescriptorHandleForHeapStart();
 	// SRVヒープの先頭にあるSRVをルートパラメータ1番に設定
