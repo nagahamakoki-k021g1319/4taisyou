@@ -118,7 +118,7 @@
     <ClCompile Include="engine\3d\View.cpp">
       <Filter>engin\ソース ファイル\3d</Filter>
     </ClCompile>
-    <ClCompile Include="user\player.cpp">
+    <ClCompile Include="user\Player.cpp">
       <Filter>user\ソース</Filter>
     </ClCompile>
     <ClCompile Include="user\Enemy.cpp">
@@ -208,7 +208,7 @@
     <ClInclude Include="engine\3d\View.h">
       <Filter>engin\ヘッダー ファイル\3d</Filter>
     </ClInclude>
-    <ClInclude Include="user\player.h">
+    <ClInclude Include="user\Player.h">
       <Filter>user\ヘッダー</Filter>
     </ClInclude>
     <ClInclude Include="user\Enemy.h">

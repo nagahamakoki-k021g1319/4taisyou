@@ -29,6 +29,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, GameScene* gam
 	{
 		view = new View();
 		view->Initialize();
+		view->eye = { 0,3,-8 };
 	}
 	
 	audio = new Audio();
@@ -37,8 +38,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input, GameScene* gam
 
 	//プレイヤー
 	player_ = new Player();
-	player_->Initialize();
-	player_->SetView(view);
+	player_->Initialize(input);
+	//player_->SetView(view);
 
 	//エネミー
 	enemy_ = new Enemy();

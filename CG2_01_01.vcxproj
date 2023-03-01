@@ -175,7 +175,7 @@
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="user\Enemy.cpp" />
-    <ClCompile Include="user\player.cpp" />
+    <ClCompile Include="user\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="BasicPS.hlsl">
@@ -237,7 +237,7 @@
     <ClInclude Include="engine\math\Vector3.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="user\Enemy.h" />
-    <ClInclude Include="user\player.h" />
+    <ClInclude Include="user\Player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
