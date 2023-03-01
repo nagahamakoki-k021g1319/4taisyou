@@ -93,6 +93,10 @@ private: // メンバ変数
 
 	Vector3 ai;
 
+	Sprite* sprite = new Sprite();
+	XMFLOAT2 position = sprite->GetPosition();
+
+
 	//プレイヤー
 	Player* player_ = nullptr;
 	//エネミー
