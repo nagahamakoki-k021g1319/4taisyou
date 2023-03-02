@@ -21,43 +21,44 @@ void Player::Initialize(Input* input) {
 
 void Player::Rota() {
 	Vector3 theta;
+	Vector3 camTheta;
 
-	if (input_->PushKey(DIK_E)) {
-		theta.y += +rotaSpeed_;
+	if (input_->PushKey(DIK_D)) {
+		theta.y = rotaSpeed_;
 	}
-	else if (input_->PushKey(DIK_Q)) {
-		theta.y += -rotaSpeed_;
+	else if (input_->PushKey(DIK_A)) {
+		theta.y = -rotaSpeed_;
 	}
 
 	bodyObj_->wtf.rotation += theta;
+
+	if (input_->PushKey(DIK_W)) {
+		camTheta.y = rotaSpeed_;
+	}
+	else if (input_->PushKey(DIK_S)) {
+		camTheta.y = -rotaSpeed_;
+	}
+
+	camera->SetTarget(camera->GetTarget() + camTheta);
 }
 
 void Player::Move() {
 	Vector3 velocity = { 0,0,0 };
 
-	if (input_->PushKey(DIK_W)) {
+	if (input_->PushKey(DIK_UPARROW)) {
 		velocity.z = moveSpeed_;
-	}else if (input_->PushKey(DIK_S)) {
+	}else if (input_->PushKey(DIK_DOWNARROW)) {
 		velocity.z = -moveSpeed_;
 	}
-	if (input_->PushKey(DIK_D)) {
+	if (input_->PushKey(DIK_RIGHTARROW)) {
 		velocity.x = moveSpeed_;
-	}else if (input_->PushKey(DIK_A)) {
+	}else if (input_->PushKey(DIK_LEFTARROW)) {
 		velocity.x = -moveSpeed_;
 	}
 
 	velocity = bVelocity(velocity, bodyObj_->wtf);
 
 	bodyObj_->wtf.position += velocity;
-
-
-	if (input_->PushKey(DIK_R)) {
-		velocity.y = moveSpeed_;
-	}
-	else if (input_->PushKey(DIK_F)) {
-		velocity.y = -moveSpeed_;
-	}
-
 	camera->SetTarget(camera->GetTarget() + velocity);
 
 }
