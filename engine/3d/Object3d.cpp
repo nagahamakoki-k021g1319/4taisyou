@@ -304,15 +304,8 @@ bool Object3d::Initialize()
 
 	return true;
 }
-
-
-void Object3d::Update()
-{
-
-	HRESULT result;
-	Matrix4 matScale, matRot, matTrans, resultMat;
-	resultMat = Affin::matUnit();
-
+void Object3d::UpdateMat () {
+	Matrix4 matScale, matRot, matTrans;
 	// スケール、回転、平行移動行列の計算
 	matScale = Affin::matScale(wtf.scale.x, wtf.scale.y, wtf.scale.z);
 	matRot = Affin::matUnit();
@@ -330,6 +323,15 @@ void Object3d::Update()
 		// 親オブジェクトのワールド行列を掛ける
 		wtf.matWorld *= parent->wtf.matWorld;
 	}
+}
+
+void Object3d::Update(){
+
+	HRESULT result;
+	Matrix4 resultMat;
+	resultMat = Affin::matUnit();
+
+	UpdateMat();
 
 	// 定数バッファへデータ転送
 	ConstBufferDataB0* constMap = nullptr;

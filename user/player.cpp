@@ -9,6 +9,9 @@ Player::~Player() {
 
 void Player::Initialize(Input* input) {
 	input_ = input;
+	camera = new Camera(WinApp::window_width, WinApp::window_height);
+	camera->SetEye({ 0.0f,3.0f,-8.0f });
+	Object3d::SetCamera(camera);
 
 	bodyModel_ = Model::LoadFromOBJ("as2");
 	bodyObj_ = Object3d::Create();
@@ -47,11 +50,23 @@ void Player::Move() {
 
 	bodyObj_->wtf.position += velocity;
 
+
+	if (input_->PushKey(DIK_R)) {
+		velocity.y = moveSpeed_;
+	}
+	else if (input_->PushKey(DIK_F)) {
+		velocity.y = -moveSpeed_;
+	}
+
+	camera->SetTarget(camera->GetTarget() + velocity);
+
 }
 
 void Player::Update() {
 	Rota();
 	Move();
+	bodyObj_->UpdateMat();
+	camera->Update(bodyObj_->wtf);
 	bodyObj_->Update();
 }
 

@@ -197,6 +197,7 @@ void Matrix4::MakePerspectiveL(float fovAngleY, float aspect, float near_, float
 		matrix.m[2][0] = matrix.m[2][1] =
 		matrix.m[3][0] = matrix.m[3][1] = matrix.m[3][3] = 0.0f;
 }
+
 void Matrix4::MakeLookL(const Vector3& eye, const Vector3& target, const Vector3& up, Matrix4& mat)
 {
 	Vector3 zVec = target - eye;
