@@ -5,6 +5,7 @@ Player::Player() {
 
 Player::~Player() {
 	delete bodyObj_;
+	delete bodyModel_;
 }
 
 void Player::Initialize(Input* input) {

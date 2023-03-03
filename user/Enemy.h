@@ -1,6 +1,6 @@
 #pragma once
-#include"Object3d.h"
 
+#include"EnemyBullet.h"
 
 class Enemy {
 public:
@@ -30,8 +30,8 @@ private:
 	//敵の攻撃系統
 
 	////-----ダガーファンネル------///
-	Object3d* enemyBulletObj[5] = { 0 };
-	Model* enemyBulletModel[5] = { 0 };
+	std::list<std::unique_ptr<EnemyBullet>> enemyBulletObjs_;
+	Model* enemyBulletModel_ = nullptr;
 	//召喚して飛ばすまでの時間とフラグ
 	int daggerTimer = 0;
 	//////////////////////////////
