@@ -16,7 +16,7 @@ void Enemy::Initialize() {
 	enemyObj_->wtf.position = { 0,3,5 };
 
 	// ダガーファンネル
-	enemyBulletModel_ = Model::LoadFromOBJ("boll");
+	enemyBulletModel_ = Model::LoadFromOBJ("as2");
 	
 	for (int i = 0; i < 5; i++) {
 		std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
