@@ -26,4 +26,17 @@ private:
 
 	//フェーズ
 	Phase phase_ = Phase::Approach;
+
+	//敵の攻撃系統
+
+	////-----ダガーファンネル------///
+	Object3d* enemyBulletObj[5] = { 0 };
+	Model* enemyBulletModel[5] = { 0 };
+	//召喚して飛ばすまでの時間とフラグ
+	int daggerTimer = 0;
+	//////////////////////////////
+
+
+
+
 };
