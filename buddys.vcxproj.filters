@@ -166,6 +166,9 @@
     <ClCompile Include="User\Player.cpp">
       <Filter>user\ソース</Filter>
     </ClCompile>
+    <ClCompile Include="User\SERVANT\Wolf.cpp">
+      <Filter>user\ソース</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BASE\FPS.h">
@@ -235,6 +238,9 @@
       <Filter>user\ヘッダー</Filter>
     </ClInclude>
     <ClInclude Include="User\Player.h">
+      <Filter>user\ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="User\SERVANT\Wolf.h">
       <Filter>user\ヘッダー</Filter>
     </ClInclude>
   </ItemGroup>

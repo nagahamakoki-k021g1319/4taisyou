@@ -2,6 +2,7 @@
 #include"Object3d.h"
 #include "Input.h"
 
+#include"Wolf.h"
 
 class Player {
 	
@@ -24,8 +25,9 @@ public:
 
 private:
 	const float PI = 3.141592;
-
 	Input* input_ = nullptr;
+
+	//プレイヤー
 	Camera* camera = nullptr;
 
 	Model* bodyModel_ = nullptr;
@@ -34,8 +36,10 @@ private:
 	const float moveSpeed_ = 0.1f;
 	const float rotaSpeed_ = 0.1f;
 
-	
+	//バディ
+	int selectBuddy;
 
+	Wolf* wolf_ = nullptr;
 
 public:
 };
