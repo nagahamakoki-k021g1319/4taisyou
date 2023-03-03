@@ -11,15 +11,18 @@ void Wolf::Initialize() {
 	bodyModel_ = Model::LoadFromOBJ("as2");
 	bodyObj_ = Object3d::Create();
 	bodyObj_->SetModel(bodyModel_);
-	bodyObj_->wtf.position = { 3,4,0 };
+	bodyObj_->wtf.position = defaultPos;
 	isAttack = false;
 }
 
 
 void Wolf::ShortRange() {
-	isAttack = true;
-	bodyObj_->wtf = *playerWtf;
+
 	
+	{//攻撃状態になる時必要
+		isAttack = true;
+		bodyObj_->wtf = *playerWtf;
+	}
 	
 
 }
@@ -29,9 +32,13 @@ void Wolf::ChargeShortRange() {
 }
 
 void Wolf::LongRange() {
-	isAttack = false;
-	bodyObj_->wtf.Initialize();
-	bodyObj_->wtf.position = defaultPos;
+
+	{//攻撃が終わってくっつく時に必要
+		isAttack = false;
+		bodyObj_->wtf.Initialize();
+		bodyObj_->wtf.position = defaultPos;
+	}
+
 
 }
 

@@ -41,5 +41,6 @@ private:
 
 	Wolf* wolf_ = nullptr;
 
+
 public:
 };
