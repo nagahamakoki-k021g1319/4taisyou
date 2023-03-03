@@ -33,8 +33,9 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input){
 
 	// ƒJƒƒ‰¶¬
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
-	camera->SetEye({ 0.0f,5.0f,-10.0f });
+	camera->SetEye({ 0.0f,5.0f,-15.0f });
 	camera->SetTarget({ 0.0f,0.0f,0.0f });
+
 	ParticleManager::SetCamera(camera);
 	Object3d::SetCamera(camera);
 
@@ -53,7 +54,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input){
 /// –ˆƒtƒŒ[ƒ€ˆ—
 /// </summary>
 void GameScene::Update() {
-
 	camera->Update();
 	player_->Update();
 	enemy_->Update();

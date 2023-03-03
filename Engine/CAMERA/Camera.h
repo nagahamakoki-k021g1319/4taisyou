@@ -1,10 +1,9 @@
 ﻿#pragma once
 
-//#include <DirectXMath.h>
-
 #include "Vector3.h"
 #include "Matrix4.h"
 #include "Affin.h"
+#include"Transform.h"
 
 /// <summary>
 /// カメラ基本機能
@@ -31,9 +30,19 @@ public: // メンバ関数
 	virtual void Update();
 
 	/// <summary>
+	/// 毎フレーム更新
+	/// </summary>
+	virtual void Update(Transform wtf);
+
+	/// <summary>
 	/// ビュー行列を更新
 	/// </summary>
 	void UpdateViewMatrix();
+
+	/// <summary>
+	/// ビュー行列を更新
+	/// </summary>
+	void UpdateViewMatrix(Vector3 newEye);
 
 	/// <summary>
 	/// 射影行列を更新

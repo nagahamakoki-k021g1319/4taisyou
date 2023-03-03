@@ -23,8 +23,26 @@ void Camera::Update()
 	matViewProjection = matView * matProjection;
 }
 
-void Camera::UpdateViewMatrix()
-{
+void Camera::Update(Transform wtf){
+
+	Matrix4 affineMat;
+	affineMat.MakeIdentity;
+	affineMat = Affin::matTrans(eye);
+
+	affineMat *= wtf.matWorld;
+
+	Vector3 newEye;
+	newEye.x = affineMat.m[3][0];
+	newEye.y = affineMat.m[3][1];
+	newEye.z = affineMat.m[3][2];
+
+
+	UpdateViewMatrix(newEye);
+	UpdateProjectionMatrix();
+	matViewProjection = matView * matProjection;
+}
+
+void Camera::UpdateViewMatrix(){
 
 	XMFLOAT3 xmEye;
 	xmEye.x = eye.x;
@@ -183,6 +201,34 @@ void Camera::UpdateViewMatrix()
 //	matBillboardY.m[3][2] = 0;
 //	matBillboardY.m[3][3] = 1;
 #pragma endregion
+}
+
+void Camera::UpdateViewMatrix(Vector3 newEye) {
+	XMFLOAT3 xmEye;
+	xmEye.x = newEye.x;
+	xmEye.y = newEye.y;
+	xmEye.z = newEye.z;
+
+	XMFLOAT3 xmTarget;
+	xmTarget.x = target.x;
+	xmTarget.y = target.y;
+	xmTarget.z = target.z;
+
+	XMFLOAT3 xmUp;
+	xmUp.x = up.x;
+	xmUp.y = up.y;
+	xmUp.z = up.z;
+
+	XMMATRIX xmMatView = XMMatrixLookAtLH(
+		XMLoadFloat3(&xmEye), XMLoadFloat3(&xmTarget), XMLoadFloat3(&xmUp));
+
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+
+			matView.m[i][j] = xmMatView.r[i].m128_f32[j];
+
+		}
+	}
 }
 
 void Camera::UpdateProjectionMatrix()
