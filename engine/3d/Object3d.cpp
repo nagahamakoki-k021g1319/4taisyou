@@ -96,8 +96,6 @@ Object3d* Object3d::Create()
 
 void Object3d::InitializeCamera(int window_width, int window_height)
 {
-	
-
 	//ビュー行列の算出
 	matView.MakeLookL(eye, target, up, matView);
 	matProjection.MakePerspectiveL(focalLengs,
@@ -299,11 +297,9 @@ bool Object3d::Initialize()
 		IID_PPV_ARGS(&constBuffB0));
 	assert(SUCCEEDED(result));
 
-
-
-
 	return true;
 }
+
 void Object3d::UpdateMat () {
 	Matrix4 matScale, matRot, matTrans;
 	// スケール、回転、平行移動行列の計算
@@ -332,6 +328,26 @@ void Object3d::Update(){
 	resultMat = Affin::matUnit();
 
 	UpdateMat();
+
+	// 定数バッファへデータ転送
+	ConstBufferDataB0* constMap = nullptr;
+	result = constBuffB0->Map(0, nullptr, (void**)&constMap);
+	resultMat = wtf.matWorld * camera->GetViewProjectionMatrix();	// 行列の合成
+
+	constMap->mat = resultMat;
+	constBuffB0->Unmap(0, nullptr);
+
+}
+
+void Object3d::Update(Transform* parentWtf) {
+
+	HRESULT result;
+	Matrix4 resultMat;
+	resultMat = Affin::matUnit();
+
+	UpdateMat();
+
+	wtf.matWorld *= parentWtf->matWorld;
 
 	// 定数バッファへデータ転送
 	ConstBufferDataB0* constMap = nullptr;

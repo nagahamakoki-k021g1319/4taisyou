@@ -167,6 +167,9 @@
       <Filter>user\ソース</Filter>
     </ClCompile>
     <ClCompile Include="User\EnemyBullet.cpp">
+          <Filter>user\ソース</Filter>
+    </ClCompile>
+    <ClCompile Include="User\SERVANT\Wolf.cpp">
       <Filter>user\ソース</Filter>
     </ClCompile>
   </ItemGroup>
@@ -241,6 +244,9 @@
       <Filter>user\ヘッダー</Filter>
     </ClInclude>
     <ClInclude Include="User\EnemyBullet.h">
+      <Filter>user\ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="User\SERVANT\Wolf.h">
       <Filter>user\ヘッダー</Filter>
     </ClInclude>
   </ItemGroup>
