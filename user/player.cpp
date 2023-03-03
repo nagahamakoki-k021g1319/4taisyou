@@ -18,6 +18,40 @@ void Player::Initialize(Input* input) {
 	bodyObj_->SetModel(bodyModel_);
 }
 
+void Player::Attack() {
+	//バディ指示
+	if (input_->PushKey(DIK_LSHIFT)) {
+		if (input_->PushKey(DIK_1)) {
+			//近距離
+
+		}else if (input_->PushKey(DIK_2)) {
+			//遠距離
+
+		}else if (input_->PushKey(DIK_3)) {
+			//溜め近距離
+
+		}else if (input_->PushKey(DIK_4)) {
+			//溜め遠距離
+
+		}
+	}
+	//本体攻撃
+	else{
+		if (input_->PushKey(DIK_1)) {
+			//ガード
+
+		}else if (input_->PushKey(DIK_2)) {
+			//回避
+
+		}else if (input_->PushKey(DIK_3)) {
+			//弱攻撃
+
+		}else if (input_->PushKey(DIK_4)) {
+			//合体?
+
+		}
+	}
+}
 
 void Player::Rota() {
 	Vector3 theta;
@@ -66,6 +100,7 @@ void Player::Move() {
 void Player::Update() {
 	Rota();
 	Move();
+	Attack();
 	bodyObj_->UpdateMat();
 	camera->Update(bodyObj_->wtf);
 	bodyObj_->Update();

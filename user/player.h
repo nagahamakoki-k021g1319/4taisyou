@@ -16,6 +16,8 @@ public:
 	void Move();
 	void Rota();
 	
+	void Attack();
+
 	void Draw();
 
 	Vector3 bVelocity(Vector3& velocity,Transform& worldTransform);
@@ -27,10 +29,13 @@ private:
 	Camera* camera = nullptr;
 
 	Model* bodyModel_ = nullptr;
+	Object3d* bodyObj_ = nullptr;
 
 	const float moveSpeed_ = 0.1f;
 	const float rotaSpeed_ = 0.1f;
 
+	
+
+
 public:
-	Object3d* bodyObj_ = nullptr;
 };
