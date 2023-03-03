@@ -1,21 +1,30 @@
-#include"player.h"
+#include"Player.h"
 
 Player::Player() {
 }
 
 Player::~Player() {
 	delete bodyObj_;
+	delete wolf_;
 }
 
 void Player::Initialize(Input* input) {
 	input_ = input;
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
 	camera->SetEye({ 0.0f,3.0f,-8.0f });
+	camera->SetTarget({ 0,3,0 });
 	Object3d::SetCamera(camera);
 
 	bodyModel_ = Model::LoadFromOBJ("as2");
 	bodyObj_ = Object3d::Create();
 	bodyObj_->SetModel(bodyModel_);
+
+	//バディ
+	selectBuddy = 0;
+	wolf_ = new Wolf();
+	wolf_->Initialize();
+	wolf_->SetPlayerWtf(&bodyObj_->wtf);
+
 }
 
 void Player::Attack() {
@@ -23,16 +32,46 @@ void Player::Attack() {
 	if (input_->PushKey(DIK_LSHIFT)) {
 		if (input_->PushKey(DIK_1)) {
 			//近距離
+			if (selectBuddy == 0) {
+				wolf_->ShortRange();
+			}else if (selectBuddy == 1) {
 
+			}else if (selectBuddy == 2) {
+
+			}
 		}else if (input_->PushKey(DIK_2)) {
 			//遠距離
+			if (selectBuddy == 0) {
+				wolf_->LongRange();
+			}
+			else if (selectBuddy == 1) {
 
+			}
+			else if (selectBuddy == 2) {
+
+			}
 		}else if (input_->PushKey(DIK_3)) {
 			//溜め近距離
+			if (selectBuddy == 0) {
+				wolf_->ChargeShortRange();
+			}
+			else if (selectBuddy == 1) {
 
+			}
+			else if (selectBuddy == 2) {
+
+			}
 		}else if (input_->PushKey(DIK_4)) {
 			//溜め遠距離
+			if (selectBuddy == 0) {
+				wolf_->ChargeLongRange();
+			}
+			else if (selectBuddy == 1) {
 
+			}
+			else if (selectBuddy == 2) {
+
+			}
 		}
 	}
 	//本体攻撃
@@ -101,14 +140,24 @@ void Player::Update() {
 	Rota();
 	Move();
 	Attack();
+	
 	bodyObj_->UpdateMat();
 	camera->Update(bodyObj_->wtf);
 	bodyObj_->Update();
+	wolf_->Update();
 }
 
 
 void Player::Draw() {
 	bodyObj_->Draw();
+
+	if (selectBuddy == 0) {
+		wolf_->Draw();
+	}else if (selectBuddy == 1) {
+
+	}else if (selectBuddy == 2) {
+
+	}
 }
 
 Vector3 Player::bVelocity(Vector3& velocity,Transform& worldTransform)
