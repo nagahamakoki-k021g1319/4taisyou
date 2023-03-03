@@ -35,7 +35,7 @@ Object3d::Object3d() {
 
 }
 Object3d::~Object3d() {
-	delete model;
+	
 }
 
 void Object3d::StaticInitialize(ID3D12Device* device, int window_width, int window_height)
