@@ -132,6 +132,7 @@ public: // メンバ関数
 	/// 毎フレーム処理
 	/// </summary>
 	void Update();
+	void Update(Transform* parentWtf);
 
 	void UpdateMat();
 

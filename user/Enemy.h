@@ -1,6 +1,6 @@
 #pragma once
-#include"Object3d.h"
 
+#include"EnemyBullet.h"
 
 class Enemy {
 public:
@@ -26,4 +26,17 @@ private:
 
 	//フェーズ
 	Phase phase_ = Phase::Approach;
+
+	//敵の攻撃系統
+
+	////-----ダガーファンネル------///
+	std::list<std::unique_ptr<EnemyBullet>> enemyBulletObjs_;
+	Model* enemyBulletModel_ = nullptr;
+	//召喚して飛ばすまでの時間とフラグ
+	int daggerTimer = 0;
+	//////////////////////////////
+
+
+
+
 };

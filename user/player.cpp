@@ -1,53 +1,93 @@
-#include"player.h"
+#include"Player.h"
 
 Player::Player() {
 }
 
 Player::~Player() {
 	delete bodyObj_;
+	delete bodyModel_;
+	delete wolf_;
 }
 
 void Player::Initialize(Input* input) {
 	input_ = input;
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
 	camera->SetEye({ 0.0f,3.0f,-8.0f });
+	camera->SetTarget({ 0,3,0 });
 	Object3d::SetCamera(camera);
 
 	bodyModel_ = Model::LoadFromOBJ("as2");
 	bodyObj_ = Object3d::Create();
 	bodyObj_->SetModel(bodyModel_);
+
+	//„Éê„Éá„Ç£
+	selectBuddy = 0;
+	wolf_ = new Wolf();
+	wolf_->Initialize();
+	wolf_->SetPlayerWtf(&bodyObj_->wtf);
+
 }
 
 void Player::Attack() {
-	//ÉoÉfÉBéwé¶
+	//„Éê„Éá„Ç£ÊåáÁ§∫
 	if (input_->PushKey(DIK_LSHIFT)) {
 		if (input_->PushKey(DIK_1)) {
-			//ãﬂãóó£
+			//ËøëË∑ùÈõ¢
+			if (selectBuddy == 0) {
+				wolf_->ShortRange();
+			}else if (selectBuddy == 1) {
 
+			}else if (selectBuddy == 2) {
+
+			}
 		}else if (input_->PushKey(DIK_2)) {
-			//âìãóó£
+			//ÈÅ†Ë∑ùÈõ¢
+			if (selectBuddy == 0) {
+				wolf_->LongRange();
+			}
+			else if (selectBuddy == 1) {
 
+			}
+			else if (selectBuddy == 2) {
+
+			}
 		}else if (input_->PushKey(DIK_3)) {
-			//ó≠Çﬂãﬂãóó£
+			//Ê∫ú„ÇÅËøëË∑ùÈõ¢
+			if (selectBuddy == 0) {
+				wolf_->ChargeShortRange();
+			}
+			else if (selectBuddy == 1) {
 
+			}
+			else if (selectBuddy == 2) {
+
+			}
 		}else if (input_->PushKey(DIK_4)) {
-			//ó≠Çﬂâìãóó£
+			//Ê∫ú„ÇÅÈÅ†Ë∑ùÈõ¢
+			if (selectBuddy == 0) {
+				wolf_->ChargeLongRange();
+			}
+			else if (selectBuddy == 1) {
 
+			}
+			else if (selectBuddy == 2) {
+
+			}
 		}
 	}
-	//ñ{ëÃçUåÇ
+	//Êú¨‰ΩìÊîªÊíÉ
 	else{
 		if (input_->PushKey(DIK_1)) {
-			//ÉKÅ[Éh
+			//„Ç¨„Éº„Éâ
 
 		}else if (input_->PushKey(DIK_2)) {
-			//âÒî
+			//ÂõûÈÅø
 
 		}else if (input_->PushKey(DIK_3)) {
-			//é„çUåÇ
+			//Âº±ÊîªÊíÉ
 
 		}else if (input_->PushKey(DIK_4)) {
-			//çáëÃ?
+			//Âêà‰Ωì?
 
 		}
 	}
@@ -101,21 +141,31 @@ void Player::Update() {
 	Rota();
 	Move();
 	Attack();
+	
 	bodyObj_->UpdateMat();
 	camera->Update(bodyObj_->wtf);
 	bodyObj_->Update();
+	wolf_->Update();
 }
 
 
 void Player::Draw() {
 	bodyObj_->Draw();
+
+	if (selectBuddy == 0) {
+		wolf_->Draw();
+	}else if (selectBuddy == 1) {
+
+	}else if (selectBuddy == 2) {
+
+	}
 }
 
 Vector3 Player::bVelocity(Vector3& velocity,Transform& worldTransform)
 {
 	Vector3 result = { 0,0,0 };
 
-	//ì‡êœ
+	//ÂÜÖÁ©ç
 	result.z = velocity.x * worldTransform.matWorld.m[0][2] +
 		velocity.y * worldTransform.matWorld.m[1][2] +
 		velocity.z * worldTransform.matWorld.m[2][2];
