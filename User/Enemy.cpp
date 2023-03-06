@@ -5,6 +5,8 @@ Enemy::Enemy() {
 
 Enemy::~Enemy() {
 	delete enemyObj_;
+	delete enemyModel_;
+	delete enemyBulletModel_;
 }
 
 void Enemy::Initialize() {
@@ -14,30 +16,26 @@ void Enemy::Initialize() {
 	enemyObj_->wtf.position = { 0,3,5 };
 
 	// ダガーファンネル
+	enemyBulletModel_ = Model::LoadFromOBJ("boll");
+	
 	for (int i = 0; i < 5; i++) {
-		enemyBulletModel[i] = Model::LoadFromOBJ("boll");
+		std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
+		newBullet->Initialize(30 + 30 * i);
+		newBullet->SetPos({ -6.0f + 3.0f * i,1.0f,8.0f });
+		enemyBulletObjs_.push_back(std::move(newBullet));
 	}
-	for (int i = 0; i < 5; i++) {
-		enemyBulletObj[i] = Object3d::Create();
-	}
-	for (int i = 0; i < 5; i++) {
-		for (int j = 0; j < 5; j++) {
-			enemyBulletObj[i]->SetModel(enemyBulletModel[j]);
-		}
-	}
-	enemyBulletObj[0]->wtf.position = { -8,1,5 };
-	enemyBulletObj[1]->wtf.position = { -4,1,5 };
-	enemyBulletObj[2]->wtf.position = { 0,1,5 };
-	enemyBulletObj[3]->wtf.position = { 4,1,5 };
-	enemyBulletObj[4]->wtf.position = { 8,1,5 };
+	
+
+
 
 
 }
 
 void Enemy::Update() {
 	enemyObj_->Update();
-	for (int i = 0; i < 5; i++) {
-		enemyBulletObj[i]->Update();
+	for (std::unique_ptr<EnemyBullet>& bullet : enemyBulletObjs_){
+		bullet->Update();
+
 	}
 	switch (phase_) {
 	case Phase::Approach:
@@ -46,24 +44,7 @@ void Enemy::Update() {
 		//if (enemyObj_->wtf.position.z < -5.0f) {
 		//	phase_ = Phase::Leave;
 		//}
-		daggerTimer++;
-		if (daggerTimer >= 50) {
-			daggerTimer = 50;
-			for (int i = 0; i < 5; i++) {
-				enemyBulletObj[i]->wtf.position.z -= 1.0;
-			}
-		}
-		for (int i = 0; i < 5; i++) {
-			if (enemyBulletObj[i]->wtf.position.z < -50.0f) {
-				enemyBulletObj[i]->wtf.position.z - -50.0f;
-				phase_ = Phase::Leave;
-			}
-		}
-
-
-
-
-
+		
 
 
 		break;
@@ -85,34 +66,12 @@ void Enemy::Update() {
 
 void Enemy::Draw() {
 	enemyObj_->Draw();
-
+	for (std::unique_ptr<EnemyBullet>& bullet : enemyBulletObjs_) {
+		bullet->Draw();
+	}
 	switch (phase_) {
 	case Phase::Approach:
-		if (daggerTimer >= 1 && daggerTimer <= 10) {
-			enemyBulletObj[0]->Draw();
-		}
-		else if (daggerTimer >= 11 && daggerTimer <= 20) {
-			enemyBulletObj[0]->Draw();
-			enemyBulletObj[1]->Draw();
-		}
-		else if (daggerTimer >= 21 && daggerTimer <= 30) {
-			enemyBulletObj[0]->Draw();
-			enemyBulletObj[1]->Draw();
-			enemyBulletObj[2]->Draw();
-		}
-		else if (daggerTimer >= 31 && daggerTimer <= 40) {
-			enemyBulletObj[0]->Draw();
-			enemyBulletObj[1]->Draw();
-			enemyBulletObj[2]->Draw();
-			enemyBulletObj[3]->Draw();
-		}
-		else if (daggerTimer >= 41 && daggerTimer <= 50) {
-			enemyBulletObj[0]->Draw();
-			enemyBulletObj[1]->Draw();
-			enemyBulletObj[2]->Draw();
-			enemyBulletObj[3]->Draw();
-			enemyBulletObj[4]->Draw();
-		}
+		
 		break;
 	case Phase::Leave:
 		break;
@@ -123,3 +82,4 @@ void Enemy::Draw() {
 
 
 }
+
