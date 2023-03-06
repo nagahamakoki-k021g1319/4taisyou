@@ -164,6 +164,7 @@
     <ClCompile Include="User\EnemyBullet.cpp" />
     <ClCompile Include="User\Player.cpp" />
     <ClCompile Include="User\SCENE\GameScene.cpp" />
+    <ClCompile Include="User\SERVANT\Gorilla.cpp" />
     <ClCompile Include="User\SERVANT\Wolf.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -191,6 +192,7 @@
     <ClInclude Include="User\EnemyBullet.h" />
     <ClInclude Include="User\Player.h" />
     <ClInclude Include="User\SCENE\GameScene.h" />
+    <ClInclude Include="User\SERVANT\Gorilla.h" />
     <ClInclude Include="User\SERVANT\Wolf.h" />
   </ItemGroup>
   <ItemGroup>

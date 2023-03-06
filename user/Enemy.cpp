@@ -7,6 +7,7 @@ Enemy::~Enemy() {
 	delete enemyObj_;
 	delete enemyModel_;
 	delete enemyBulletModel_;
+	enemyBulletObjs_.clear();
 }
 
 void Enemy::Initialize() {
