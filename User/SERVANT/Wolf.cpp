@@ -5,6 +5,7 @@ Wolf::Wolf() {
 
 Wolf::~Wolf() {
 	delete bodyObj_;
+	delete bodyModel_;
 }
 
 void Wolf::Initialize() {
