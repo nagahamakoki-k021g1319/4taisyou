@@ -15,9 +15,8 @@ void Wolf::Initialize() {
 	isAttack = false;
 }
 
-
+//近距離
 void Wolf::ShortRange() {
-
 	
 	{//攻撃状態になる時必要
 		isAttack = true;
@@ -27,10 +26,12 @@ void Wolf::ShortRange() {
 
 }
 
+//溜め近距離
 void Wolf::ChargeShortRange() {
 
 }
 
+//遠距離
 void Wolf::LongRange() {
 
 	{//攻撃が終わってくっつく時に必要
@@ -42,6 +43,7 @@ void Wolf::LongRange() {
 
 }
 
+//溜め遠距離
 void Wolf::ChargeLongRange() {
 
 
@@ -67,7 +69,7 @@ void Wolf::Draw() {
 	bodyObj_->Draw();
 }
 
-
+//向いてる方向にvelocityを変換する
 Vector3 Wolf::bVelocity(Vector3& velocity, Transform& worldTransform)
 {
 	Vector3 result = { 0,0,0 };
