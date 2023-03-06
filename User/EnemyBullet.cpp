@@ -3,7 +3,7 @@
 void EnemyBullet::Initialize(int timer)
 {
 	// ダガーファンネル
-	model_ = Model::LoadFromOBJ("as2");
+	model_ = Model::LoadFromOBJ("boll");
 	obj_ = Object3d::Create();
 	obj_->SetModel(model_);
 
