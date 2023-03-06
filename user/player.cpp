@@ -5,6 +5,7 @@ Player::Player() {
 
 Player::~Player() {
 	delete bodyObj_;
+	delete bodyModel_;
 	delete wolf_;
 }
 
@@ -19,7 +20,7 @@ void Player::Initialize(Input* input) {
 	bodyObj_ = Object3d::Create();
 	bodyObj_->SetModel(bodyModel_);
 
-	//ƒoƒfƒB
+	//ãƒãƒ‡ã‚£
 	selectBuddy = 0;
 	wolf_ = new Wolf();
 	wolf_->Initialize();
@@ -28,10 +29,10 @@ void Player::Initialize(Input* input) {
 }
 
 void Player::Attack() {
-	//ƒoƒfƒBw¦
+	//ãƒãƒ‡ã‚£æŒ‡ç¤º
 	if (input_->PushKey(DIK_LSHIFT)) {
 		if (input_->PushKey(DIK_1)) {
-			//‹ß‹——£
+			//è¿‘è·é›¢
 			if (selectBuddy == 0) {
 				wolf_->ShortRange();
 			}else if (selectBuddy == 1) {
@@ -40,7 +41,7 @@ void Player::Attack() {
 
 			}
 		}else if (input_->PushKey(DIK_2)) {
-			//‰“‹——£
+			//é è·é›¢
 			if (selectBuddy == 0) {
 				wolf_->LongRange();
 			}
@@ -51,7 +52,7 @@ void Player::Attack() {
 
 			}
 		}else if (input_->PushKey(DIK_3)) {
-			//—­‚ß‹ß‹——£
+			//æºœã‚è¿‘è·é›¢
 			if (selectBuddy == 0) {
 				wolf_->ChargeShortRange();
 			}
@@ -62,7 +63,7 @@ void Player::Attack() {
 
 			}
 		}else if (input_->PushKey(DIK_4)) {
-			//—­‚ß‰“‹——£
+			//æºœã‚é è·é›¢
 			if (selectBuddy == 0) {
 				wolf_->ChargeLongRange();
 			}
@@ -74,19 +75,19 @@ void Player::Attack() {
 			}
 		}
 	}
-	//–{‘ÌUŒ‚
+	//æœ¬ä½“æ”»æ’ƒ
 	else{
 		if (input_->PushKey(DIK_1)) {
-			//ƒK[ƒh
+			//ã‚¬ãƒ¼ãƒ‰
 
 		}else if (input_->PushKey(DIK_2)) {
-			//‰ñ”ğ
+			//å›é¿
 
 		}else if (input_->PushKey(DIK_3)) {
-			//ãUŒ‚
+			//å¼±æ”»æ’ƒ
 
 		}else if (input_->PushKey(DIK_4)) {
-			//‡‘Ì?
+			//åˆä½“?
 
 		}
 	}
@@ -164,7 +165,7 @@ Vector3 Player::bVelocity(Vector3& velocity,Transform& worldTransform)
 {
 	Vector3 result = { 0,0,0 };
 
-	//“àÏ
+	//å†…ç©
 	result.z = velocity.x * worldTransform.matWorld.m[0][2] +
 		velocity.y * worldTransform.matWorld.m[1][2] +
 		velocity.z * worldTransform.matWorld.m[2][2];
