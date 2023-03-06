@@ -5,6 +5,8 @@
 
 class EnemyBullet {
 public:
+	~EnemyBullet();
+
 	///< summary>
 	///‰Šú‰»
 	///</summary>

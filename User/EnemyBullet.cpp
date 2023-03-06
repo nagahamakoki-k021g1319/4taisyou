@@ -1,5 +1,11 @@
 #include "EnemyBullet.h"
 
+EnemyBullet::~EnemyBullet() {
+	delete obj_;
+	delete model_;
+}
+
+
 void EnemyBullet::Initialize(int timer)
 {
 	// ダガーファンネル
