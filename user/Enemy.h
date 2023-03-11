@@ -1,6 +1,8 @@
 #pragma once
 
-#include"EnemyBullet.h"
+#include "EnemyBullet.h"
+#include "EnemyCrystalBullet.h"
+#include "Input.h"
 
 class Enemy {
 public:
@@ -8,7 +10,7 @@ public:
 
 	~Enemy();
 
-	void Initialize();
+	void Initialize(Input* input);
 	void Update();
 	void Draw();
 
@@ -24,6 +26,8 @@ private:
 	Object3d* enemyObj_ = nullptr;
 	Model* enemyModel_ = nullptr;
 
+	Input* input_ = nullptr;
+
 	//フェーズ
 	Phase phase_ = Phase::Approach;
 
@@ -36,7 +40,12 @@ private:
 	int daggerTimer = 0;
 	//////////////////////////////
 
-
+	////-----順番に弾が飛んでくる攻撃------///
+	std::list<std::unique_ptr<EnemyCrystalBullet>> enemyCBObjs_;
+	Model* enemyCBModel_ = nullptr;
+	//召喚して飛ばすまでの時間とフラグ
+	int crystalTimer = 0;
+	///////////////////////////////////
 
 
 };

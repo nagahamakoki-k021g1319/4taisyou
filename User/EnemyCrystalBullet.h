@@ -1,22 +1,22 @@
 #pragma once
+#pragma once
 #include "Object3d.h"
 #include <memory>
 #include <list>
 
-class EnemyBullet {
+class EnemyCrystalBullet {
 public:
-	~EnemyBullet();
+	~EnemyCrystalBullet();
 
 	///< summary>
 	///初期化
 	///</summary>
-	void Initialize(int timer);
+	void Initialize(int num);
 
-	
 	///< summary>
 	///更新
 	///</summary>
-	void DaggerFAttack();
+	void CrystalBAttack();
 
 	///< summary>
 	///更新
@@ -28,20 +28,20 @@ public:
 	///</summary>
 	void Draw();
 
-	void SetPos(Vector3 pos) { obj_->wtf.position = pos; };
-
-
-
+	void SetPos(Vector3 pos) { crystalObj_->wtf.position = pos; };
 
 private:
 
-	////-----ダガーファンネル------///
-	Model* model_ = nullptr;
-	Object3d* obj_ = nullptr;
+	////-----------///
+	Model* crystalModel_ = nullptr;
+	Object3d* crystalObj_ = nullptr;
 	//召喚して飛ばすまでの時間とフラグ
-	int daggerTimer;
+	int crystalTimer;
 	bool isLive = false;
 	int shotTimer;
 	//////////////////////////////
 
+	int bulletNum;
+
 };
+

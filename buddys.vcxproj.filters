@@ -175,6 +175,9 @@
     <ClCompile Include="User\SERVANT\Gorilla.cpp">
       <Filter>user\ソース</Filter>
     </ClCompile>
+    <ClCompile Include="User\EnemyCrystalBullet.cpp">
+      <Filter>user\ソース</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BASE\FPS.h">
@@ -253,6 +256,9 @@
       <Filter>user\ヘッダー</Filter>
     </ClInclude>
     <ClInclude Include="User\SERVANT\Gorilla.h">
+      <Filter>user\ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="User\EnemyCrystalBullet.h">
       <Filter>user\ヘッダー</Filter>
     </ClInclude>
   </ItemGroup>
