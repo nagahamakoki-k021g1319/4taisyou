@@ -8,7 +8,8 @@ Enemy::~Enemy() {
 	delete enemyModel_;
 	delete enemyBulletModel_;
 	enemyBulletObjs_.clear();
-	
+	delete enemyCBModel_;
+	enemyCBObjs_.clear();
 }
 
 void Enemy::Initialize(Input* input) {
