@@ -46,7 +46,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input){
 
 	//エネミー
 	enemy_ = new Enemy();
-	enemy_->Initialize();
+	enemy_->Initialize(input);
 
 }
 
