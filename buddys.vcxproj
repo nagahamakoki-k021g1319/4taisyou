@@ -113,7 +113,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)User\SCENE;$(SolutionDir)Engine\IMGUI;$(SolutionDir)Engine\2D;$(SolutionDir)Engine\3D\Particle;$(SolutionDir)Engine\3D;$(SolutionDir)Engine\CAMERA;$(SolutionDir)Engine\AUDIO;$(SolutionDir)Engine\INPUT;$(SolutionDir)Engine\MATH;$(SolutionDir)Engine\BASE;$(SolutionDir)DirectXTex;$(SolutionDir)imgui;$(SolutionDir)User;$(SolutionDir)User\SERVANT;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)User\COLLISION;$(SolutionDir)User\SCENE;$(SolutionDir)Engine\IMGUI;$(SolutionDir)Engine\2D;$(SolutionDir)Engine\3D\Particle;$(SolutionDir)Engine\3D;$(SolutionDir)Engine\CAMERA;$(SolutionDir)Engine\AUDIO;$(SolutionDir)Engine\INPUT;$(SolutionDir)Engine\MATH;$(SolutionDir)Engine\BASE;$(SolutionDir)DirectXTex;$(SolutionDir)imgui;$(SolutionDir)User;$(SolutionDir)User\SERVANT;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -128,7 +128,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)User\SCENE;$(SolutionDir)Engine\IMGUI;$(SolutionDir)Engine\2D;$(SolutionDir)Engine\3D\Particle;$(SolutionDir)Engine\3D;$(SolutionDir)Engine\CAMERA;$(SolutionDir)Engine\AUDIO;$(SolutionDir)Engine\INPUT;$(SolutionDir)Engine\MATH;$(SolutionDir)Engine\BASE;$(SolutionDir)DirectXTex;$(SolutionDir)imgui;$(SolutionDir)User;$(SolutionDir)User\SERVANT;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)User\COLLISION;$(SolutionDir)User\SCENE;$(SolutionDir)Engine\IMGUI;$(SolutionDir)Engine\2D;$(SolutionDir)Engine\3D\Particle;$(SolutionDir)Engine\3D;$(SolutionDir)Engine\CAMERA;$(SolutionDir)Engine\AUDIO;$(SolutionDir)Engine\INPUT;$(SolutionDir)Engine\MATH;$(SolutionDir)Engine\BASE;$(SolutionDir)DirectXTex;$(SolutionDir)imgui;$(SolutionDir)User;$(SolutionDir)User\SERVANT;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -160,6 +160,8 @@
     <ClCompile Include="Engine\MATH\Vector3.cpp" />
     <ClCompile Include="Engine\MATH\Vector4.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="User\COLLISION\Collision.cpp" />
+    <ClCompile Include="User\COLLISION\CollisionPrimitive.cpp" />
     <ClCompile Include="User\Enemy.cpp" />
     <ClCompile Include="User\EnemyBullet.cpp" />
     <ClCompile Include="User\Player.cpp" />
@@ -188,6 +190,8 @@
     <ClInclude Include="Engine\MATH\Vector2.h" />
     <ClInclude Include="Engine\MATH\Vector3.h" />
     <ClInclude Include="Engine\MATH\Vector4.h" />
+    <ClInclude Include="User\COLLISION\Collision.h" />
+    <ClInclude Include="User\COLLISION\CollisionPrimitive.h" />
     <ClInclude Include="User\Enemy.h" />
     <ClInclude Include="User\EnemyBullet.h" />
     <ClInclude Include="User\Player.h" />

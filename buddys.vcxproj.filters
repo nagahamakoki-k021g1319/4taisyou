@@ -175,6 +175,12 @@
     <ClCompile Include="User\SERVANT\Gorilla.cpp">
       <Filter>user\ソース</Filter>
     </ClCompile>
+    <ClCompile Include="User\COLLISION\Collision.cpp">
+      <Filter>Engine\ソースファイル\COLLISION</Filter>
+    </ClCompile>
+    <ClCompile Include="User\COLLISION\CollisionPrimitive.cpp">
+      <Filter>Engine\ソースファイル\COLLISION</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BASE\FPS.h">
@@ -254,6 +260,12 @@
     </ClInclude>
     <ClInclude Include="User\SERVANT\Gorilla.h">
       <Filter>user\ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="User\COLLISION\Collision.h">
+      <Filter>Engine\ヘッダーファイル\COLLISION</Filter>
+    </ClInclude>
+    <ClInclude Include="User\COLLISION\CollisionPrimitive.h">
+      <Filter>Engine\ヘッダーファイル\COLLISION</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
