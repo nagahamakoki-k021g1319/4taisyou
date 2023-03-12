@@ -4,7 +4,7 @@
 #include "Collision.h"
 
 class Wolf {
-//
+
 
 public:
 	Wolf();
