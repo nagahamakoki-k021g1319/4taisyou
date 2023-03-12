@@ -6,6 +6,9 @@ Player::Player() {
 Player::~Player() {
 	delete bodyObj_;
 	delete bodyModel_;
+	delete guardModel;
+	delete dodgeModel;
+	delete unionModel;
 	delete wolf_;
 }
 
@@ -16,9 +19,26 @@ void Player::Initialize(Input* input) {
 	camera->SetTarget({ 0,3,0 });
 	Object3d::SetCamera(camera);
 
+	//プレイヤー設定
 	bodyModel_ = Model::LoadFromOBJ("as2");
 	bodyObj_ = Object3d::Create();
 	bodyObj_->SetModel(bodyModel_);
+
+	//ガード設定
+	guardModel = Model::LoadFromOBJ("guard");
+	GuardDurability = guardMax;
+	isGuard = false;
+
+	//回避設定
+	dodgeModel = Model::LoadFromOBJ("dodge");
+	dodgeTimer = dodgeLimit;
+	isDodge = false;
+
+	//合体設定
+	unionModel = Model::LoadFromOBJ("union");
+	specialMeter = 100;
+	isUnion = false;
+
 
 	//バディ
 	selectBuddy = 0;
@@ -77,19 +97,100 @@ void Player::Attack() {
 	}
 	//本体攻撃
 	else{
+		//ガード
 		if (input_->PushKey(DIK_1)) {
-			//ガード
+			//ガードの発生
+			if (isGuard == false) {
+				isGuard = true;
+				bodyObj_->SetModel(guardModel);
+			}
 
-		}else if (input_->PushKey(DIK_2)) {
-			//回避
+			//時間経過で耐久地消耗
+			if (GuardDurability > 0) {
+				GuardDurability--;
+			}
+			//ガード割れ
+			else if (GuardDurability <= 0) {
+				isGuard = false;
+				bodyObj_->SetModel(bodyModel_);
+			}
+		}
+		else {
+			//ガード解除
+			if (isGuard) {
+				isGuard = false;
+				bodyObj_->SetModel(bodyModel_);
+			}
+			//ガードの耐久回復
+			if (GuardDurability < guardMax) {
+				GuardDurability++;
+			}
+		}
 
-		}else if (input_->PushKey(DIK_3)) {
-			//弱攻撃
+		//回避
+		if (input_->TriggerKey(DIK_2)) {
+			//回避発生
+			if (isDodge==false) {
+				isDodge = true;
+				dodgeTimer = dodgeLimit;
+				bodyObj_->SetModel(dodgeModel);
+			}
+		}
 
-		}else if (input_->PushKey(DIK_4)) {
-			//合体?
+
+		//弱攻撃
+		if (input_->PushKey(DIK_3)) {
 
 		}
+
+		//合体
+		if (input_->PushKey(DIK_4)) {
+			//合体発生
+			if (specialMeter >= 100) {
+				isUnion = true;
+				bodyObj_->SetModel(unionModel);
+			}
+		}
+	}
+
+	//回避更新
+	if (isDodge) {
+		dodgeTimer--;
+		if (dodgeTimer < 0) {
+			isDodge = false;
+			bodyObj_->SetModel(bodyModel_);
+		}
+	}
+
+	//合体更新
+	if (isUnion) {
+		//メーター減少
+		specialMeter -= 1;
+		//0以下で強制解除
+		if (specialMeter < 0) {
+			isUnion = false;
+			bodyObj_->SetModel(bodyModel_);
+		}
+	}
+
+}
+
+void Player::OnCollision() {
+	//ガード時
+	if (isGuard) {
+		if (GuardDurability > 0) {
+			//攻撃によって減る量変えたい
+			GuardDurability--;
+		}
+	}
+	//回避時
+	else if(isDodge) {
+		specialMeter += 1;
+
+	}
+	//通常時
+	else{
+		hp--;
 	}
 }
 
@@ -137,7 +238,18 @@ void Player::Move() {
 
 }
 
+
 void Player::Update() {
+	if (input_->TriggerKey(DIK_Q)) {
+		if (--selectBuddy < 0) {
+			selectBuddy = 2;
+		}
+	}else if (input_->TriggerKey(DIK_E)) {
+		if (++selectBuddy > 2) {
+			selectBuddy = 0;
+		}
+	}
+
 	Rota();
 	Move();
 	Attack();
