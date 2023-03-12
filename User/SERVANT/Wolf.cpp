@@ -145,23 +145,9 @@ void Wolf::Attack(Transform* enemyTransform, int attackNmb)
 		{
 			//UŒ‚ó‘Ô‚É‚È‚éŽž•K—v
 			isAttack = true;
+			attackNmb_ = attackNmb;
 		}
 	}
-	if (isAttack == true) {
-		if (attackNmb == 1) {
-			ShortRange();
-		}
-		else if (attackNmb == 2) {
-			ChargeShortRange();
-		}
-		else if (attackNmb == 3) {
-			LongRange();
-		}
-		else if (attackNmb == 4) {
-			ChargeLongRange();
-		}
-	}
-
 }
 
 void Wolf::Move() {
@@ -170,13 +156,27 @@ void Wolf::Move() {
 	}
 	else {
 		bodyObj_->Update(playerWtf);
-
 	}
 }
 
 void Wolf::Update() {
-	Move();
 
+	if (isAttack == true) {
+		if (attackNmb_ == 1) {
+			ShortRange();
+		}
+		else if (attackNmb_ == 2) {
+			ChargeShortRange();
+		}
+		else if (attackNmb_ == 3) {
+			LongRange();
+		}
+		else if (attackNmb_ == 4) {
+			ChargeLongRange();
+		}
+	}
+
+	Move();
 }
 
 

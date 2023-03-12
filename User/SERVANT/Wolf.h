@@ -38,6 +38,8 @@ private:
 	Object3d* bodyObj_ = nullptr;
 
 	bool isAttack;
+	int attackNmb_;
+
 	Transform* playerWtf = nullptr;
 
 	Transform* enemyWtf = nullptr;
