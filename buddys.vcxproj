@@ -162,6 +162,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="User\Enemy.cpp" />
     <ClCompile Include="User\EnemyBullet.cpp" />
+    <ClCompile Include="User\EnemyCrystalBullet.cpp" />
     <ClCompile Include="User\Player.cpp" />
     <ClCompile Include="User\PlayerBullet.cpp" />
     <ClCompile Include="User\SCENE\GameScene.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="Engine\MATH\Vector4.h" />
     <ClInclude Include="User\Enemy.h" />
     <ClInclude Include="User\EnemyBullet.h" />
+    <ClInclude Include="User\EnemyCrystalBullet.h" />
     <ClInclude Include="User\Player.h" />
     <ClInclude Include="User\PlayerBullet.h" />
     <ClInclude Include="User\SCENE\GameScene.h" />

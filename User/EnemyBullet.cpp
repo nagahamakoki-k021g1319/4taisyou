@@ -13,13 +13,15 @@ void EnemyBullet::Initialize(int timer)
 	obj_ = Object3d::Create();
 	obj_->SetModel(model_);
 
+
 	daggerTimer = timer;
 	isLive = false;
 	shotTimer = 180;
+
+	
 }
 
-void EnemyBullet::Update()
-{
+void EnemyBullet::DaggerFAttack(){
 	//•\Ž¦‚Ü‚Å
 	daggerTimer--;
 	if (daggerTimer < 0) {
@@ -27,16 +29,29 @@ void EnemyBullet::Update()
 	}
 
 	shotTimer--;
+
 	if (isLive) {
 		if (shotTimer <= 0) {
 			obj_->wtf.position.z -= 0.1;
 		}
 	}
+	if (obj_->wtf.position.z <= -30) {
+		isLive = false;
+	}
+}
+
+void EnemyBullet::Update(){
+
+	DaggerFAttack();
+
 	obj_->Update();
+	
+
 }
 
 void EnemyBullet::Draw(){
 	if (isLive) {
 		obj_->Draw();
 	}
+	
 }

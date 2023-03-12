@@ -178,6 +178,9 @@
     <ClCompile Include="User\PlayerBullet.cpp">
       <Filter>user\ソース</Filter>
     </ClCompile>
+    <ClCompile Include="User\EnemyCrystalBullet.cpp">
+      <Filter>user\ソース</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BASE\FPS.h">
@@ -259,6 +262,9 @@
       <Filter>user\ヘッダー</Filter>
     </ClInclude>
     <ClInclude Include="User\PlayerBullet.h">
+      <Filter>user\ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="User\EnemyCrystalBullet.h">
       <Filter>user\ヘッダー</Filter>
     </ClInclude>
   </ItemGroup>
