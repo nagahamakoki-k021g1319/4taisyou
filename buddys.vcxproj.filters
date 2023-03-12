@@ -181,6 +181,12 @@
     <ClCompile Include="User\COLLISION\CollisionPrimitive.cpp">
       <Filter>Engine\ソースファイル\COLLISION</Filter>
     </ClCompile>
+    <ClCompile Include="User\PlayerBullet.cpp">
+      <Filter>user\ソース</Filter>
+    </ClCompile>
+    <ClCompile Include="User\EnemyCrystalBullet.cpp">
+      <Filter>user\ソース</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BASE\FPS.h">
@@ -266,6 +272,12 @@
     </ClInclude>
     <ClInclude Include="User\COLLISION\CollisionPrimitive.h">
       <Filter>Engine\ヘッダーファイル\COLLISION</Filter>
+    </ClCompile>
+    <ClInclude Include="User\PlayerBullet.h">
+      <Filter>user\ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="User\EnemyCrystalBullet.h">
+      <Filter>user\ヘッダー</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

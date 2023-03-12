@@ -164,7 +164,9 @@
     <ClCompile Include="User\COLLISION\CollisionPrimitive.cpp" />
     <ClCompile Include="User\Enemy.cpp" />
     <ClCompile Include="User\EnemyBullet.cpp" />
+    <ClCompile Include="User\EnemyCrystalBullet.cpp" />
     <ClCompile Include="User\Player.cpp" />
+    <ClCompile Include="User\PlayerBullet.cpp" />
     <ClCompile Include="User\SCENE\GameScene.cpp" />
     <ClCompile Include="User\SERVANT\Gorilla.cpp" />
     <ClCompile Include="User\SERVANT\Wolf.cpp" />
@@ -194,7 +196,9 @@
     <ClInclude Include="User\COLLISION\CollisionPrimitive.h" />
     <ClInclude Include="User\Enemy.h" />
     <ClInclude Include="User\EnemyBullet.h" />
+    <ClInclude Include="User\EnemyCrystalBullet.h" />
     <ClInclude Include="User\Player.h" />
+    <ClInclude Include="User\PlayerBullet.h" />
     <ClInclude Include="User\SCENE\GameScene.h" />
     <ClInclude Include="User\SERVANT\Gorilla.h" />
     <ClInclude Include="User\SERVANT\Wolf.h" />
