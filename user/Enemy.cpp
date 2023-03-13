@@ -32,6 +32,7 @@ void Enemy::Initialize(Input* input) {
 }
 
 void Enemy::Update() {
+
 	{//‰¼‚ÅƒvƒŒƒCƒ„[‚Æ‚Ì‚â‚èŽæ‚è
 		player_->SetEnemyPos(&enemyObj_->wtf);
 	}
