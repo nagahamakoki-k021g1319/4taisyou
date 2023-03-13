@@ -10,7 +10,7 @@ public:
 	///< summary>
 	///初期化
 	///</summary>
-	void Initialize(int timer);
+	void Initialize(int timer, Model* model_);
 
 	
 	///< summary>
@@ -36,7 +36,6 @@ public:
 private:
 
 	////-----ダガーファンネル------///
-	Model* model_ = nullptr;
 	Object3d* obj_ = nullptr;
 	//召喚して飛ばすまでの時間とフラグ
 	int daggerTimer;
