@@ -2,12 +2,10 @@
 
 EnemyCrystalBullet::~EnemyCrystalBullet() {
 	delete crystalObj_;
-	delete crystalModel_;
 }
 
-void EnemyCrystalBullet::Initialize(int num) {
+void EnemyCrystalBullet::Initialize(int num,Model* crystalModel_) {
 	// ダガーファンネル
-	crystalModel_ = Model::LoadFromOBJ("boll");
 	crystalObj_ = Object3d::Create();
 	crystalObj_->SetModel(crystalModel_);
 
