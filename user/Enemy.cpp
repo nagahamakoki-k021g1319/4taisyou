@@ -1,4 +1,5 @@
 #include"Enemy.h"
+#include"player.h"
 
 Enemy::Enemy() {
 }
@@ -56,6 +57,9 @@ void Enemy::Initialize(Input* input) {
 }
 
 void Enemy::Update() {
+	//仮でプレイヤーに位置情報渡す
+	player_->SetEnemyPos(&enemyObj_->wtf);
+
 	enemyObj_->Update();
 	
 	switch (phase_) {
@@ -91,7 +95,6 @@ void Enemy::Update() {
 		break;
 	}
 	
-
 
 }
 

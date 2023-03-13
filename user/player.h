@@ -23,6 +23,8 @@ public:
 
 	void OnCollision();
 
+	void SetEnemyPos(Transform* enemyPos) { enemyPos_ = enemyPos; };
+
 	Vector3 bVelocity(Vector3& velocity,Transform& worldTransform);
 
 private:
@@ -42,7 +44,6 @@ private:
 	const int defaultHp = 10;
 	int hp;
 
-	
 	//ガード
 	Model* guardModel = nullptr;
 	bool isGuard;
@@ -66,9 +67,10 @@ private:
 
 	//バディ
 	int selectBuddy;
-
 	Wolf* wolf_ = nullptr;
 
+	//敵
+	Transform* enemyPos_ = nullptr;
 
 public:
 

@@ -4,6 +4,8 @@
 #include "EnemyCrystalBullet.h"
 #include "Input.h"
 
+class Player;
+
 class Enemy {
 public:
 	Enemy();
@@ -14,6 +16,8 @@ public:
 	void Update();
 	void Draw();
 
+	void SetPlayer(Player* player) { player_ = player; };
+
 	//行動フェーズ
 	enum class Phase {
 		Approach, //接近する
@@ -22,6 +26,7 @@ public:
 	};
 
 private:
+	Player* player_ = nullptr;
 
 	Object3d* enemyObj_ = nullptr;
 	Model* enemyModel_ = nullptr;
