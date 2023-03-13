@@ -23,12 +23,6 @@ void Wolf::ShortRange() {
 	len = enemylen;
 	enemylen *= ShortSpeed;
 
-	{
-		//UŒ‚ó‘Ô‚É‚È‚éŽž•K—v
-		isAttack = true;
-		bodyObj_->wtf = *playerWtf;
-	}
-
 
 	if (coll.CircleCollision(bodyObj_->wtf.position + len, enemyWtf->position, 2.0f, 2.0f)) {
 		Hit();
@@ -40,10 +34,6 @@ void Wolf::ShortRange() {
 	{
 		bodyObj_->wtf.position += enemylen;
 	}
-
-
-
-
 }
 
 //—­‚ß‹ß‹——£
@@ -143,7 +133,6 @@ void Wolf::Attack(Transform* enemyTransform, int attackNmb)
 
 	if (isAttack == false) {
 		{
-			//UŒ‚ó‘Ô‚É‚È‚éŽž•K—v
 			isAttack = true;
 			attackNmb_ = attackNmb;
 		}
@@ -151,12 +140,12 @@ void Wolf::Attack(Transform* enemyTransform, int attackNmb)
 }
 
 void Wolf::Move() {
-	if (isAttack) {
+	//if (isAttack) {
 		bodyObj_->Update();
-	}
-	else {
-		bodyObj_->Update(playerWtf);
-	}
+	//}
+	//else {
+	//	bodyObj_->Update(playerWtf);
+	//}
 }
 
 void Wolf::Update() {

@@ -54,6 +54,7 @@ void Player::Attack() {
 	Transform* enemyPos = nullptr;
 	enemyPos = new Transform;
 	enemyPos->Initialize();
+	enemyPos->position = { 0,0,10 };
 
 
 	//バディ指示
