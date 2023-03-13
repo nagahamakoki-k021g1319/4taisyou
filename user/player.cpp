@@ -10,6 +10,7 @@ Player::~Player() {
 	delete dodgeModel;
 	delete unionModel;
 	delete wolf_;
+	delete gorilla_;
 }
 
 void Player::Initialize(Input* input) {
