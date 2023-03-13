@@ -41,11 +41,11 @@ void Wolf::ChargeShortRange() {
 	float ShortSpeed = 2.0f;
 	len = enemylen;
 	enemylen *= ShortSpeed;
-	
+
 	continueAttack--;
 
 	if (coll.CircleCollision(bodyObj_->wtf.position, enemyWtf->position, 2.0f, 2.0f)) {
-		if (continueAttack >= 0) {
+		if (continueAttack <= 0) {
 			Hit();
 			continueAttack = 20;
 			hitCount++;
@@ -61,6 +61,7 @@ void Wolf::ChargeShortRange() {
 		bodyObj_->wtf.Initialize();
 		bodyObj_->wtf.position = defaultPos;
 		hitCount = 0;
+		continueAttack = 0;
 	}
 
 }
@@ -68,58 +69,62 @@ void Wolf::ChargeShortRange() {
 //‰“‹——£
 void Wolf::LongRange() {
 
-	float ShortSpeed = 10.0f;
-	
-	
-	continueAttack--;
-	longTime++;
+	float ShortSpeed = 5.0f;
+
 	if (longTime == 0) {
 		len = enemylen;
 		len *= ShortSpeed;
 	}
 
+	continueAttack--;
+	longTime++;
+
+
 	if (coll.CircleCollision(bodyObj_->wtf.position, enemyWtf->position, 3.0f, 3.0f)) {
-		if (continueAttack >= 0) {
+		if (continueAttack <= 0) {
 			Hit();
 			continueAttack = 20;
 		}
 	}
 	bodyObj_->wtf.position += len;
 
-	if (longTime >= 60) {
+	if (longTime >= 10) {
 		isAttack = false;
 		bodyObj_->wtf.Initialize();
 		bodyObj_->wtf.position = defaultPos;
+		hitCount = 0;
+		continueAttack = 0;
 		longTime = 0;
 	}
 }
 
 //—­‚ß‰“‹——£
 void Wolf::ChargeLongRange() {
-	float ShortSpeed = 10.0f;
+	float ShortSpeed = 5.0f;
 
 	if (longTime == 0) {
 		len = enemylen;
 		len *= ShortSpeed;
 	}
-
+	continueAttack--;
+	longTime++;
 	if (coll.CircleCollision(bodyObj_->wtf.position, enemyWtf->position, 3.0f, 3.0f)) {
-		if (continueAttack >= 0) {
+		if (continueAttack <= 0) {
 			Hit();
-			continueAttack = 20;
+			continueAttack = 5;
+			hitCount++;
+			longTime = -10;
 		}
 	}
 	bodyObj_->wtf.position += len;
 
-	if (longTime >= 20) {
-		hitCount++;
-		longTime = 0;
-	}
-	if (hitCount >= 3) {
+	if (hitCount >= 2) {
 		isAttack = false;
 		bodyObj_->wtf.Initialize();
 		bodyObj_->wtf.position = defaultPos;
 		hitCount = 0;
+		continueAttack = 0;
+		longTime = 0;
 	}
 
 }
@@ -130,18 +135,21 @@ void Wolf::Attack(Transform* enemyTransform, int attackNmb)
 
 	enemylen = enemyWtf->position - bodyObj_->wtf.position;
 	enemylen.nomalize();
-
-	if (isAttack == false) {
-		{
-			isAttack = true;
-			attackNmb_ = attackNmb;
+	coolTIme--;
+	if (coolTIme <= 0) {
+		if (isAttack == false) {
+			{
+				isAttack = true;
+				attackNmb_ = attackNmb;
+				coolTIme = 10;
+			}
 		}
 	}
 }
 
 void Wolf::Move() {
 	//if (isAttack) {
-		bodyObj_->Update();
+	bodyObj_->Update();
 	//}
 	//else {
 	//	bodyObj_->Update(playerWtf);
@@ -149,7 +157,6 @@ void Wolf::Move() {
 }
 
 void Wolf::Update() {
-
 	if (isAttack == true) {
 		if (attackNmb_ == 1) {
 			ShortRange();
@@ -164,7 +171,6 @@ void Wolf::Update() {
 			ChargeLongRange();
 		}
 	}
-
 	Move();
 }
 
