@@ -1,4 +1,4 @@
-#include"Player.h"
+#include"player.h"
 
 Player::Player() {
 }
@@ -35,7 +35,7 @@ void Player::Initialize(Input* input) {
 	isDodge = false;
 
 	//合体設定
-	unionModel = Model::LoadFromOBJ("union");
+	unionModel = Model::LoadFromOBJ("wolfUnion");
 	specialMeter = 95;
 	isUnion = false;
 
