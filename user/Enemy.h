@@ -5,6 +5,7 @@
 #include "Input.h"
 
 class Player;
+#include "Collision.h"
 
 class Enemy {
 public:
@@ -27,6 +28,7 @@ public:
 
 private:
 	Player* player_ = nullptr;
+	Collision coll;
 
 	Object3d* enemyObj_ = nullptr;
 	Model* enemyModel_ = nullptr;

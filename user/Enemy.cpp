@@ -32,8 +32,10 @@ void Enemy::Initialize(Input* input) {
 }
 
 void Enemy::Update() {
-	//仮でプレイヤーに位置情報渡す
-	player_->SetEnemyPos(&enemyObj_->wtf);
+	{//仮でプレイヤーとのやり取り
+		player_->SetEnemyPos(&enemyObj_->wtf);
+	}
+
 
 	enemyObj_->Update();
 	
@@ -72,6 +74,12 @@ void Enemy::Update() {
 		for (std::unique_ptr<EnemyBullet>& bullet : enemyBulletObjs_) {
 			bullet->Update();
 
+			{//仮でプレイヤーとのやり取り
+				if (coll.CircleCollision(player_->GetPos(), bullet->GetPos(), 2.0f, 2.0f)) {
+					player_->OnCollision();
+
+				}
+			}
 		}
 
 		break;

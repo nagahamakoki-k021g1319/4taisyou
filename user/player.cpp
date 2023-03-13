@@ -36,7 +36,7 @@ void Player::Initialize(Input* input) {
 
 	//合体設定
 	unionModel = Model::LoadFromOBJ("union");
-	specialMeter = 100;
+	specialMeter = 95;
 	isUnion = false;
 
 
@@ -265,12 +265,16 @@ void Player::Update() {
 void Player::Draw() {
 	bodyObj_->Draw();
 
-	if (selectBuddy == 0) {
-		wolf_->Draw();
-	}else if (selectBuddy == 1) {
+	if (isUnion == false) {
+		if (selectBuddy == 0) {
+			wolf_->Draw();
+		}
+		else if (selectBuddy == 1) {
 
-	}else if (selectBuddy == 2) {
+		}
+		else if (selectBuddy == 2) {
 
+		}
 	}
 }
 

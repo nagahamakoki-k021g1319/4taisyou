@@ -24,6 +24,7 @@ public:
 	void OnCollision();
 
 	void SetEnemyPos(Transform* enemyPos) { enemyPos_ = enemyPos; };
+	Vector3 GetPos() { return bodyObj_->wtf.position; };
 
 	Vector3 bVelocity(Vector3& velocity,Transform& worldTransform);
 
