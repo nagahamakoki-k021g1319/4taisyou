@@ -29,7 +29,7 @@ public:
 	void Draw();
 
 	void SetPos(Vector3 pos) { obj_->wtf.position = pos; };
-
+	Vector3 GetPos() { return obj_->wtf.position; };
 
 
 
