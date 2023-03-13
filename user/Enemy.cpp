@@ -37,6 +37,14 @@ void Enemy::Update() {
 
 	enemyObj_->Update();
 	
+	if (input_->ButtonInput(RT)) {
+		input_->ShakeController(1.0f, 10.0f);
+	}
+
+	if (input_->StickInput(L_LEFT)){
+		input_->ShakeController(1.0f, 10.0f);
+	}
+
 	switch (phase_) {
 	case Phase::Approach:
 		enemyResetTimer = 0;
@@ -44,6 +52,8 @@ void Enemy::Update() {
 		if (enemyAttackTimer >= 450) {
 			phase_ = Phase::Leave;
 		}
+		
+
 		if (enemyAttackTimer == 10) {
 			for (int i = 0; i < 5; i++) {
 				std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();

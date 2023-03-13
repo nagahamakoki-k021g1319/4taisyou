@@ -1,56 +1,70 @@
 #pragma once
 #include <windows.h>
-#include <wrl.h>
-#include <dinput.h>
-#include "WinApp.h"
-#include"Controller.h"
-
-#define DIRECTINPUT_VERSION 0x0800 // DirectInputのバージョン指定
+#include "Vector2.h"
+#include <xinput.h>
+#pragma comment (lib, "xinput.lib")
 
 
-// 入力
-class Input
+
+
+enum ControllerButton
 {
+	B = XINPUT_GAMEPAD_B,
+	A = XINPUT_GAMEPAD_A,
+	X = XINPUT_GAMEPAD_X,
+	Y = XINPUT_GAMEPAD_Y,
+	START = XINPUT_GAMEPAD_START,
+	BACK = XINPUT_GAMEPAD_BACK,
+	LB = XINPUT_GAMEPAD_LEFT_SHOULDER,
+	RB = XINPUT_GAMEPAD_RIGHT_SHOULDER,
+	LT,
+	RT
+};
+
+enum ControllerStick
+{
+	L_UP, L_DOWN, L_LEFT, L_RIGHT,
+	R_UP, R_DOWN, R_LEFT, R_RIGHT, XBOX_STICK_NUM
+};
+
+class Controller
+{
+private:
+
+	XINPUT_STATE xinputState{};
+	XINPUT_STATE oldXinputState{};
+
+	//コントローラー振動強さ
+	float shakePower = 0.0f;
+	//コントローラー振動長さ(フレーム数)
+	int shakeTimer = 0;
+
+	//デッドゾーンに入っているか(DeadRate : デッドゾーン判定の度合い、1.0fだとデフォルト)
+	bool StickInDeadZone(Vector2& thumb, const Vector2& deadRate);
+
+	//コピーコンストラクタ・代入演算子削除
+	Controller& operator=(const Controller&) = delete;
+	Controller(const Controller&) = delete;
+
+	//最高入力強度
+	const float STICK_INPUT_MAX = 32768.0f;
+
 public:
-	// namespace
-	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
+	//コンストラクタ・デストラクタ
+	Controller() ;
+	~Controller();
 
-public: // メンバ関数
-	// 初期化
-	void Initialize(WinApp* winApp);
-
-	// 更新
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
-
-	/// <summary>
-	/// キーの押下をチェック
-	/// </summary>
-	/// <param name = "keyNumber">キー番号(DIK_0 等)</param>
-	/// <returns>押されているか</returns>
-	bool PushKey(BYTE keyNumber);
-
-	/// <summary>
-	/// キーのトリガーをチェック
-	/// </summary>
-	/// </param name="keyNumber">キー番号( DIK_0 等)</param>
-	/// <reutrns>トリガーか</params>
-	bool TriggerKey(BYTE keyNumber);
-
-	/// <summary>
-	/// キーのトリガーをチェック
-	/// </summary>
-	/// </param name="keyNumber">キー番号( DIK_0 等)</param>
-	/// <reutrns>離されたか</params>
-	bool ReleaseKey(BYTE keyNumber);
-
-	//----- コントローラ- ------//
 
 	/// <summary>
 	/// コントローラーボタンのトリガー入力
 	/// </summary>
 	/// <param name="button">チェックしたいボタン</param>
 	/// <returns>押したか</returns>
-	bool PButtonTrigger(ControllerButton button);
+	bool ButtonTrigger(ControllerButton button);
 
 	/// <summary>
 	/// コントローラースティックのトリガー入力
@@ -59,8 +73,8 @@ public: // メンバ関数
 	/// <param name="deadRange">デッドゾーンの範囲</param>
 	/// <param name="deadRate">デッドゾーン判定の度合い初期値1.0f</param>
 	/// <returns>倒したかどうか</returns>
-	bool PStickTrigger(ControllerStick stickInput, const float& deadRange = 0.3f, const Vector2& deadRate = { 1.0f,1.0f });
-
+	bool StickTrigger(ControllerStick stickInput, const float& deadRange = 0.3f, const Vector2& deadRate = { 1.0f,1.0f });
+	
 	/// <summary>
 	/// コントローラーボタンの入力
 	/// </summary>
@@ -72,7 +86,7 @@ public: // メンバ関数
 	/// コントローラースティックの入力
 	/// </summary>
 	/// <param name="stickInput">コントローラースティック方向</param>
-	/// <param name="deadRange">デッドゾーンの範囲初期値0.3f</param>
+	/// <param name="deadRange">デッドゾーンの範囲</param>
 	/// <param name="deadRate">デッドゾーン判定の度合い初期値1.0f</param>
 	/// <returns>倒したかどうか</returns>
 	bool StickInput(ControllerStick stickInput, const float& deadRange = 0.3f, const Vector2& deadRate = { 1.0f,1.0f });
@@ -92,6 +106,7 @@ public: // メンバ関数
 	/// <param name="deadRate">デッドゾーン判定の度合い初期値1.0f</param>
 	/// <returns>離したか</returns>
 	bool StickOffTrigger(ControllerStick stickInput, const float& deadRange = 0.3f, const Vector2& deadRate = { 1.0f,1.0f });
+
 
 	/// <summary>
 	/// コントローラーの左スティックのベクトル
@@ -113,19 +128,5 @@ public: // メンバ関数
 	/// <param name="power">振動の強さ0.0f～1.0f</param>
 	/// <param name="span">振動の時間フレーム</param>
 	void ShakeController(const float& power, const int& span);
-
-
-private: // メンバ変数
-	// キーボードのデバイス
-	ComPtr<IDirectInputDevice8> keyboard;
-	// DirectInputのインスタンス
-	ComPtr<IDirectInput8> directInput;
-	//コントローラー
-	Controller* controller = nullptr;
-	// 全キーの状態
-	BYTE key[256] = {};
-	// 前回の全キーの状態
-	BYTE keyPre[256] = {};
-	//windwsAPI
-	WinApp* winApp_ = nullptr;
 };
+
