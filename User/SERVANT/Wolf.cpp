@@ -18,154 +18,51 @@ void Wolf::Initialize() {
 
 //近距離
 void Wolf::ShortRange() {
-
-	float ShortSpeed = 2.0f;
-	len = enemylen;
-	enemylen *= ShortSpeed;
-
-
-	if (coll.CircleCollision(bodyObj_->wtf.position + len, enemyWtf->position, 2.0f, 2.0f)) {
-		Hit();
-		isAttack = false;
-		bodyObj_->wtf.Initialize();
-		bodyObj_->wtf.position = defaultPos;
+	
+	{//攻撃状態になる時必要
+		isAttack = true;
+		bodyObj_->wtf = *playerWtf;
 	}
-	else
-	{
-		bodyObj_->wtf.position += enemylen;
-	}
+	
+
 }
 
 //溜め近距離
 void Wolf::ChargeShortRange() {
-	float ShortSpeed = 2.0f;
-	len = enemylen;
-	enemylen *= ShortSpeed;
-	
-	continueAttack--;
-
-	if (coll.CircleCollision(bodyObj_->wtf.position, enemyWtf->position, 2.0f, 2.0f)) {
-		if (continueAttack >= 0) {
-			Hit();
-			continueAttack = 20;
-			hitCount++;
-		}
-
-	}
-	else
-	{
-		bodyObj_->wtf.position += enemylen;
-	}
-	if (hitCount >= 3) {
-		isAttack = false;
-		bodyObj_->wtf.Initialize();
-		bodyObj_->wtf.position = defaultPos;
-		hitCount = 0;
-	}
 
 }
 
 //遠距離
 void Wolf::LongRange() {
 
-	float ShortSpeed = 10.0f;
-	
-	
-	continueAttack--;
-	longTime++;
-	if (longTime == 0) {
-		len = enemylen;
-		len *= ShortSpeed;
-	}
-
-	if (coll.CircleCollision(bodyObj_->wtf.position, enemyWtf->position, 3.0f, 3.0f)) {
-		if (continueAttack >= 0) {
-			Hit();
-			continueAttack = 20;
-		}
-	}
-	bodyObj_->wtf.position += len;
-
-	if (longTime >= 60) {
+	{//攻撃が終わってくっつく時に必要
 		isAttack = false;
 		bodyObj_->wtf.Initialize();
 		bodyObj_->wtf.position = defaultPos;
-		longTime = 0;
 	}
+
+
 }
 
 //溜め遠距離
 void Wolf::ChargeLongRange() {
-	float ShortSpeed = 10.0f;
 
-	if (longTime == 0) {
-		len = enemylen;
-		len *= ShortSpeed;
-	}
 
-	if (coll.CircleCollision(bodyObj_->wtf.position, enemyWtf->position, 3.0f, 3.0f)) {
-		if (continueAttack >= 0) {
-			Hit();
-			continueAttack = 20;
-		}
-	}
-	bodyObj_->wtf.position += len;
-
-	if (longTime >= 20) {
-		hitCount++;
-		longTime = 0;
-	}
-	if (hitCount >= 3) {
-		isAttack = false;
-		bodyObj_->wtf.Initialize();
-		bodyObj_->wtf.position = defaultPos;
-		hitCount = 0;
-	}
-
-}
-
-void Wolf::Attack(Transform* enemyTransform, int attackNmb)
-{
-	enemyWtf = enemyTransform;
-
-	enemylen = enemyWtf->position - bodyObj_->wtf.position;
-	enemylen.nomalize();
-
-	if (isAttack == false) {
-		{
-			isAttack = true;
-			attackNmb_ = attackNmb;
-		}
-	}
 }
 
 void Wolf::Move() {
-	//if (isAttack) {
+	if (isAttack) {
 		bodyObj_->Update();
-	//}
-	//else {
-	//	bodyObj_->Update(playerWtf);
-	//}
+	}
+	else {
+		bodyObj_->Update(playerWtf);
+
+	}
 }
 
 void Wolf::Update() {
-
-	if (isAttack == true) {
-		if (attackNmb_ == 1) {
-			ShortRange();
-		}
-		else if (attackNmb_ == 2) {
-			ChargeShortRange();
-		}
-		else if (attackNmb_ == 3) {
-			LongRange();
-		}
-		else if (attackNmb_ == 4) {
-			ChargeLongRange();
-		}
-	}
-
 	Move();
+
 }
 
 
@@ -192,9 +89,4 @@ Vector3 Wolf::bVelocity(Vector3& velocity, Transform& worldTransform)
 		velocity.z * worldTransform.matWorld.m[2][1];
 
 	return result;
-}
-
-void Wolf::Hit()
-{
-
 }

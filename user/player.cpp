@@ -49,13 +49,12 @@ void Player::Initialize(Input* input) {
 }
 
 void Player::Attack() {
-
 	//バディ指示
 	if (input_->PushKey(DIK_LSHIFT)) {
 		if (input_->PushKey(DIK_1)) {
 			//近距離
 			if (selectBuddy == 0) {
-				wolf_->Attack(enemyPos_, 1);
+				wolf_->ShortRange();
 			}else if (selectBuddy == 1) {
 
 			}else if (selectBuddy == 2) {
@@ -64,7 +63,7 @@ void Player::Attack() {
 		}else if (input_->PushKey(DIK_2)) {
 			//遠距離
 			if (selectBuddy == 0) {
-				wolf_->Attack(enemyPos_, 2);
+				wolf_->LongRange();
 			}
 			else if (selectBuddy == 1) {
 
@@ -75,7 +74,7 @@ void Player::Attack() {
 		}else if (input_->PushKey(DIK_3)) {
 			//溜め近距離
 			if (selectBuddy == 0) {
-				wolf_->Attack(enemyPos_, 3);
+				wolf_->ChargeShortRange();
 			}
 			else if (selectBuddy == 1) {
 
@@ -86,7 +85,7 @@ void Player::Attack() {
 		}else if (input_->PushKey(DIK_4)) {
 			//溜め遠距離
 			if (selectBuddy == 0) {
-				wolf_->Attack(enemyPos_, 4);
+				wolf_->ChargeLongRange();
 			}
 			else if (selectBuddy == 1) {
 

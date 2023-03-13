@@ -47,7 +47,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input){
 	//エネミー
 	enemy_ = new Enemy();
 	enemy_->Initialize(input);
-	enemy_->SetPlayer(player_);
 
 }
 
@@ -58,7 +57,6 @@ void GameScene::Update() {
 	camera->Update();
 	player_->Update();
 	enemy_->Update();
-	
 
 }
 

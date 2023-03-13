@@ -11,7 +11,7 @@ public:
 	///< summary>
 	///初期化
 	///</summary>
-	void Initialize(int num, Model* crystalModel_);
+	void Initialize(int num);
 
 	///< summary>
 	///更新
@@ -33,6 +33,7 @@ public:
 private:
 
 	////-----------///
+	Model* crystalModel_ = nullptr;
 	Object3d* crystalObj_ = nullptr;
 	//召喚して飛ばすまでの時間とフラグ
 	int crystalTimer;
