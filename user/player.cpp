@@ -26,6 +26,10 @@ void Player::Initialize(Input* input) {
 	wolf_->Initialize();
 	wolf_->SetPlayerWtf(&bodyObj_->wtf);
 
+	gorilla_ = new Gorilla();
+	gorilla_->Initialize();
+	gorilla_->SetPlayerWtf(&bodyObj_->wtf);
+
 }
 
 void Player::Attack() {
@@ -36,7 +40,7 @@ void Player::Attack() {
 			if (selectBuddy == 0) {
 				wolf_->ShortRange();
 			}else if (selectBuddy == 1) {
-
+				gorilla_->ShortRange();
 			}else if (selectBuddy == 2) {
 
 			}
@@ -46,7 +50,7 @@ void Player::Attack() {
 				wolf_->LongRange();
 			}
 			else if (selectBuddy == 1) {
-
+				gorilla_->LongRange();
 			}
 			else if (selectBuddy == 2) {
 
@@ -57,7 +61,7 @@ void Player::Attack() {
 				wolf_->ChargeShortRange();
 			}
 			else if (selectBuddy == 1) {
-
+				gorilla_->ChargeShortRange();
 			}
 			else if (selectBuddy == 2) {
 
@@ -68,7 +72,7 @@ void Player::Attack() {
 				wolf_->ChargeLongRange();
 			}
 			else if (selectBuddy == 1) {
-
+				gorilla_->ChargeLongRange();
 			}
 			else if (selectBuddy == 2) {
 
@@ -146,6 +150,7 @@ void Player::Update() {
 	camera->Update(bodyObj_->wtf);
 	bodyObj_->Update();
 	wolf_->Update();
+	gorilla_->Update();
 }
 
 
@@ -155,7 +160,7 @@ void Player::Draw() {
 	if (selectBuddy == 0) {
 		wolf_->Draw();
 	}else if (selectBuddy == 1) {
-
+		gorilla_->Draw();
 	}else if (selectBuddy == 2) {
 
 	}

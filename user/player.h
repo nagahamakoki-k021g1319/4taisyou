@@ -4,6 +4,8 @@
 
 #include"Wolf.h"
 
+#include "Gorilla.h"
+
 class Player {
 	
 
@@ -40,7 +42,7 @@ private:
 	int selectBuddy;
 
 	Wolf* wolf_ = nullptr;
-
+	Gorilla* gorilla_ = nullptr;
 
 public:
 };

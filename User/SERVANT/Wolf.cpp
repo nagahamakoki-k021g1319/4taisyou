@@ -9,7 +9,7 @@ Wolf::~Wolf() {
 }
 
 void Wolf::Initialize() {
-	bodyModel_ = Model::LoadFromOBJ("as2");
+	bodyModel_ = Model::LoadFromOBJ("wolf");
 	bodyObj_ = Object3d::Create();
 	bodyObj_->SetModel(bodyModel_);
 	bodyObj_->wtf.position = defaultPos;
