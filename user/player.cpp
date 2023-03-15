@@ -55,6 +55,15 @@ void Player::Initialize(Input* input) {
 
 void Player::Attack() {
 
+	if (input_->ButtonInput(RT)) {
+		input_->ShakeController(1.0f, 10.0f);
+	}
+
+	if (input_->StickInput(L_LEFT)) {
+		input_->ShakeController(1.0f, 10.0f);
+	}
+
+
 	//バディ指示
 	if (input_->PushKey(DIK_LSHIFT)) {
 		if (input_->PushKey(DIK_1)) {

@@ -40,13 +40,7 @@ void Enemy::Update() {
 
 	enemyObj_->Update();
 	
-	if (input_->ButtonInput(RT)) {
-		input_->ShakeController(1.0f, 10.0f);
-	}
 
-	if (input_->StickInput(L_LEFT)){
-		input_->ShakeController(1.0f, 10.0f);
-	}
 
 	switch (phase_) {
 	case Phase::Approach:
