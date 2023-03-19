@@ -293,3 +293,16 @@ Vector3 Player::bVelocity(Vector3& velocity,Transform& worldTransform)
 
 	return result;
 }
+
+Vector3 Player::GetWorldPosition()
+{
+	//ワールド座標を入れる変数
+	Vector3 worldPos;
+	//ワールド行列の平行移動成分
+	worldPos.x = bodyObj_->wtf.position.x;
+	worldPos.y = bodyObj_->wtf.position.y;
+	worldPos.z = bodyObj_->wtf.position.z;
+
+
+	return worldPos;
+}

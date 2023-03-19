@@ -70,7 +70,7 @@ public: // 静的メンバ関数
 	/// <returns></returns>
 	static Object3d* Create();
 
-	
+	bool IsDead() const { return  isDead_; }
 
 	
 
@@ -152,6 +152,8 @@ public: // メンバ関数
 private: // メンバ変数
 	public:
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
+
+	bool isDead_ = false;
 
 	// 色
 	Vector4 color ={ 1,1,1,1 };	
