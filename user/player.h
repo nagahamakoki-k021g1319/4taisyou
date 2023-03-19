@@ -42,49 +42,37 @@ public:
 private:
 	const float PI = 3.141592;
 	Input* input_ = nullptr;
-
-	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼
-
+	//ƒvƒŒƒCƒ„[
 	Model* bodyModel_ = nullptr;
 	Object3d* bodyObj_ = nullptr;
-
 	const float moveSpeed_ = 0.1f;
 	const float rotaSpeed_ = 0.1f;
-	
-	//ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
+
+	//ƒXƒe[ƒ^ƒX
 	const int defaultHp = 10;
 	int hp;
-
-	//ã‚¬ãƒ¼ãƒ‰
+	//ƒK[ƒh
 	Model* guardModel = nullptr;
 	bool isGuard;
 	const int guardMax = 100;
 	int GuardDurability;
-
-	//å›é¿
+	//‰ñ”ğ
 	Model* dodgeModel = nullptr;
 	bool isDodge;
 	const int dodgeLimit = 60;
 	int dodgeTimer;
+	//ãUŒ‚
 
-	//å¼±æ”»æ’ƒ
-
-	
-
-	//åˆä½“
+	//‡‘Ì
 	Model* unionModel = nullptr;
 	float specialMeter;
 	bool isUnion;
-
-	//ãƒãƒ‡ã‚£
+	//ƒoƒfƒB
 	int selectBuddy;
 	Wolf* wolf_ = nullptr;
 	Gorilla* gorilla_ = nullptr;
-  
-	//æ•µ
+
+	//“G
 	Transform* enemyPos_ = nullptr;
-
 public:
-
-
 };
