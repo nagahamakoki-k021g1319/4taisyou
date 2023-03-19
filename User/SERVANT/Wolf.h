@@ -57,5 +57,7 @@ private:
 
 	int longTime = 0;
 
+	int coolTIme = 0;
+
 public:
 };

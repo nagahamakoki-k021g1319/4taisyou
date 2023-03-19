@@ -1,4 +1,4 @@
-#include"Player.h"
+#include"player.h"
 
 Player::Player() {
 }
@@ -10,6 +10,7 @@ Player::~Player() {
 	delete dodgeModel;
 	delete unionModel;
 	delete wolf_;
+	delete gorilla_;
 }
 
 void Player::Initialize(Input* input) {
@@ -35,8 +36,8 @@ void Player::Initialize(Input* input) {
 	isDodge = false;
 
 	//合体設定
-	unionModel = Model::LoadFromOBJ("union");
-	specialMeter = 100;
+	unionModel = Model::LoadFromOBJ("wolfUnion");
+	specialMeter = 95;
 	isUnion = false;
 
 
@@ -45,6 +46,10 @@ void Player::Initialize(Input* input) {
 	wolf_ = new Wolf();
 	wolf_->Initialize();
 	wolf_->SetPlayerWtf(&bodyObj_->wtf);
+
+	gorilla_ = new Gorilla();
+	gorilla_->Initialize();
+	gorilla_->SetPlayerWtf(&bodyObj_->wtf);
 
 }
 
@@ -57,7 +62,7 @@ void Player::Attack() {
 			if (selectBuddy == 0) {
 				wolf_->Attack(enemyPos_, 1);
 			}else if (selectBuddy == 1) {
-
+				gorilla_->ShortRange();
 			}else if (selectBuddy == 2) {
 
 			}
@@ -67,7 +72,7 @@ void Player::Attack() {
 				wolf_->Attack(enemyPos_, 2);
 			}
 			else if (selectBuddy == 1) {
-
+				gorilla_->LongRange();
 			}
 			else if (selectBuddy == 2) {
 
@@ -78,7 +83,7 @@ void Player::Attack() {
 				wolf_->Attack(enemyPos_, 3);
 			}
 			else if (selectBuddy == 1) {
-
+				gorilla_->ChargeShortRange();
 			}
 			else if (selectBuddy == 2) {
 
@@ -89,7 +94,7 @@ void Player::Attack() {
 				wolf_->Attack(enemyPos_, 4);
 			}
 			else if (selectBuddy == 1) {
-
+				gorilla_->ChargeLongRange();
 			}
 			else if (selectBuddy == 2) {
 
@@ -259,18 +264,23 @@ void Player::Update() {
 	camera->Update(bodyObj_->wtf);
 	bodyObj_->Update();
 	wolf_->Update();
+	gorilla_->Update();
 }
 
 
 void Player::Draw() {
 	bodyObj_->Draw();
 
-	if (selectBuddy == 0) {
-		wolf_->Draw();
-	}else if (selectBuddy == 1) {
+	if (isUnion == false) {
+		if (selectBuddy == 0) {
+			wolf_->Draw();
+		}
+		else if (selectBuddy == 1) {
+		gorilla_->Draw();
+		}
+		else if (selectBuddy == 2) {
 
-	}else if (selectBuddy == 2) {
-
+		}
 	}
 }
 
