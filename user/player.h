@@ -26,12 +26,14 @@ public:
 	void OnCollision();
 
 	void SetEnemyPos(Transform* enemyPos) { enemyPos_ = enemyPos; };
-	Vector3 GetPos() { return bodyObj_->wtf.position; };
 
 	Vector3 bVelocity(Vector3& velocity,Transform& worldTransform);
 	
 	////ワールド座標を取得
 	Vector3 GetWorldPosition();
+
+	float GetHp() { return hp; };
+	float GetUnion() { return specialMeter; };
 
 	/// <summary>
 	/// ポジション
@@ -49,8 +51,9 @@ private:
 	const float rotaSpeed_ = 0.1f;
 
 	//ステータス
-	const int defaultHp = 10;
+	const int defaultHp = 100;
 	int hp;
+	bool isLive = true;
 	//ガード
 	Model* guardModel = nullptr;
 	bool isGuard;

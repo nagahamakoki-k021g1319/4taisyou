@@ -36,7 +36,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
 
 	camWtf.Initialize();
-	camWtf.position = {0.0f, 3.0f, -8.0f};
+	camWtf.position = { 0.0f, 3.0f, -8.0f };
 
 	targetWtf.Initialize();
 	targetWtf.position = { 0.0f,0.0f,targetDistance };
@@ -54,6 +54,43 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	enemy_->Initialize(input);
 	enemy_->SetPlayer(player_);
 
+	//UI
+	UI = new Sprite();
+	UI->Initialize(spriteCommon);
+	UI->SetPozition({ 0,0 });
+	UI->SetSize({1280.0f, 720.0f});
+
+	buttomPng1 = new Sprite();
+	buttomPng1->Initialize(spriteCommon);
+	buttomPng1->SetPozition({ 0,0 });
+	buttomPng1->SetSize({ 1280.0f, 720.0f });
+
+	buttomPng2 = new Sprite();
+	buttomPng2->Initialize(spriteCommon);
+	buttomPng2->SetPozition({ 0,0 });
+	buttomPng2->SetSize({ 1280.0f, 720.0f });
+
+	hpGauge = new Sprite();
+	hpGauge->Initialize(spriteCommon);
+	hpGauge->SetPozition({ 0,0 });
+	hpGauge->SetSize({ 1280.0f, 720.0f });
+
+	unionGauge = new Sprite();
+	unionGauge->Initialize(spriteCommon);
+	unionGauge->SetPozition({ 0,0 });
+	unionGauge->SetSize({ 1280.0f, 720.0f });
+
+	spriteCommon->LoadTexture(0, "UI.png");
+	UI->SetTextureIndex(0);
+	spriteCommon->LoadTexture(1, "buttom1.png");
+	buttomPng1->SetTextureIndex(1);
+	spriteCommon->LoadTexture(2, "buttom2.png");
+	buttomPng2->SetTextureIndex(2);
+	spriteCommon->LoadTexture(3, "hpGauge.png");
+	hpGauge->SetTextureIndex(3);
+	spriteCommon->LoadTexture(4, "unionGauge.png");
+	unionGauge->SetTextureIndex(4);
+
 }
 
 /// <summary>
@@ -63,7 +100,10 @@ void GameScene::Update() {
 	CamUpdate();
 	enemy_->Update();
 	player_->Update(&camWtf);
-	
+
+
+	//hpGaugeのxを(-400 + player.GeHp() * 4)動かしたい
+	//unionGaugeのxを(-200 + player.GetUnion() * 2)動かしたい
 
 }
 
@@ -97,6 +137,15 @@ void GameScene::Draw() {
 
 	// 3Dオブジェクト描画後処理
 	ParticleManager::PostDraw();
+
+	UI->Draw();
+	if (input->ButtonInput(LT)) {
+		buttomPng2->Draw();
+	}else {
+		buttomPng1->Draw();
+	}
+	hpGauge->Draw();
+	unionGauge->Draw();
 }
 
 

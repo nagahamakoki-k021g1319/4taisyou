@@ -57,7 +57,7 @@ void Player::Attack() {
 		if (input_->PushKey(DIK_1) || input_->ButtonInput(B)) {
 			//近距離
 			if (selectBuddy == 0) {
-				wolf_->Attack(1);
+				wolf_->Attack(1, GetWorldPosition());
 			}else if (selectBuddy == 1) {
 				gorilla_->ShortRange();
 			}else if (selectBuddy == 2) {
@@ -66,7 +66,7 @@ void Player::Attack() {
 		}else if (input_->PushKey(DIK_2) || input_->ButtonInput(A)) {
 			//遠距離
 			if (selectBuddy == 0) {
-				wolf_->Attack(2);
+				wolf_->Attack(2, GetWorldPosition());
 			}
 			else if (selectBuddy == 1) {
 				gorilla_->LongRange();
@@ -77,7 +77,7 @@ void Player::Attack() {
 		}else if (input_->PushKey(DIK_3) || input_->ButtonInput(Y)) {
 			//溜め近距離
 			if (selectBuddy == 0) {
-				wolf_->Attack(3);
+				wolf_->Attack(3, GetWorldPosition());
 			}
 			else if (selectBuddy == 1) {
 				gorilla_->ChargeShortRange();
@@ -88,7 +88,7 @@ void Player::Attack() {
 		}else if (input_->PushKey(DIK_4) || input_->ButtonInput(X)) {
 			//溜め遠距離
 			if (selectBuddy == 0) {
-				wolf_->Attack( 4);
+				wolf_->Attack(4, GetWorldPosition());
 			}
 			else if (selectBuddy == 1) {
 				gorilla_->ChargeLongRange();
@@ -193,7 +193,10 @@ void Player::OnCollision() {
 	}
 	//通常時
 	else{
-		hp--;
+		hp -= 10;
+		if (hp < 0) {
+			isLive = false;
+		}
 	}
 }
 
@@ -219,6 +222,8 @@ void Player::Move() {
 
 
 void Player::Update(Transform* cam) {
+	
+
 	if (input_->TriggerKey(DIK_Q)) {
 		if (--selectBuddy < 0) {
 			selectBuddy = 2;
@@ -240,17 +245,19 @@ void Player::Update(Transform* cam) {
 
 
 void Player::Draw() {
-	bodyObj_->Draw();
+	if (isLive) {
+		bodyObj_->Draw();
 
-	if (isUnion == false) {
-		if (selectBuddy == 0) {
-			wolf_->Draw();
-		}
-		else if (selectBuddy == 1) {
-		gorilla_->Draw();
-		}
-		else if (selectBuddy == 2) {
+		if (isUnion == false) {
+			if (selectBuddy == 0) {
+				wolf_->Draw();
+			}
+			else if (selectBuddy == 1) {
+				gorilla_->Draw();
+			}
+			else if (selectBuddy == 2) {
 
+			}
 		}
 	}
 }
