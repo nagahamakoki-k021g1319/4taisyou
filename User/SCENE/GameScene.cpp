@@ -56,8 +56,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input){
 /// </summary>
 void GameScene::Update() {
 	camera->Update();
-	player_->Update();
 	enemy_->Update();
+	player_->Update();
 	
 
 }

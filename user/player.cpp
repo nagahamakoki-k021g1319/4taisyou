@@ -246,11 +246,6 @@ void Player::Move() {
 
 
 void Player::Update() {
-	//------仮の敵位置------
-	Transform* enemyPos = nullptr;
-	enemyPos = new Transform;
-	enemyPos->Initialize();
-	enemyPos->position = { 10,0,20 };
 
 	if (input_->TriggerKey(DIK_Q)) {
 		if (--selectBuddy < 0) {
@@ -269,7 +264,7 @@ void Player::Update() {
 	bodyObj_->UpdateMat();
 	camera->Update(bodyObj_->wtf);
 	bodyObj_->Update();
-	wolf_->Update(enemyPos);
+	wolf_->Update(enemyPos_);
 	gorilla_->Update();
 }
 
