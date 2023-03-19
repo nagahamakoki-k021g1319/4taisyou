@@ -70,5 +70,7 @@ public:
 	bool BoxCircle(Vector3 boxPos, Vector3 circlePos, Vector3 boxWidth, float circleWidth);
 
 	bool CircleCollision(Vector3 playerPos, Vector3 enemyPos, float playerWidth, float enemyWidth);
+
+	bool CircleCollisionXZ(Vector3 playerPos, Vector3 enemyPos, float playerWidth, float enemyWidth);
 };
 

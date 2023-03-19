@@ -187,6 +187,9 @@
     <ClCompile Include="Engine\COLLISION\CollisionPrimitive.cpp">
       <Filter>Engine\ソースファイル\COLLISION</Filter>
     </ClCompile>
+    <ClCompile Include="User\Round.cpp">
+      <Filter>user\ソース</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BASE\FPS.h">
@@ -278,6 +281,9 @@
     </ClInclude>
     <ClInclude Include="Engine\COLLISION\CollisionPrimitive.h">
       <Filter>Engine\ヘッダーファイル\COLLISION</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Round.h">
+      <Filter>user\ヘッダー</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

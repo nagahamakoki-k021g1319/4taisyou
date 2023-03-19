@@ -13,7 +13,7 @@ public:
 	void Initialize();
 
 	void Move();
-	void Update();
+	void Update(Transform* enemyTransform);
 
 	//í èÌçUåÇ
 	void ShortRange();
@@ -21,7 +21,7 @@ public:
 	void LongRange();
 	void ChargeLongRange();
 
-	void Attack(Transform* enemyTransform, int attackNmb);
+	void Attack( int attackNmb);
 
 	void Draw();
 
