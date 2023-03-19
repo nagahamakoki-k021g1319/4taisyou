@@ -33,6 +33,9 @@ public:
 	////ワールド座標を取得
 	Vector3 GetWorldPosition();
 
+	float GetHp() { return hp; };
+	float GetUnion() { return specialMeter; };
+
 	/// <summary>
 	/// ポジション
 	/// </summary>

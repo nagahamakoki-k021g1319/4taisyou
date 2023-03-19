@@ -90,6 +90,11 @@ private:	//メンバ変数
 	//エネミー
 	Enemy* enemy_ = nullptr;
 
-
+	//UI
+	Sprite* UI = nullptr;
+	Sprite* buttomPng1 = nullptr;
+	Sprite* buttomPng2 = nullptr;
+	Sprite* hpGauge = nullptr;
+	Sprite* unionGauge = nullptr;
 
 };
