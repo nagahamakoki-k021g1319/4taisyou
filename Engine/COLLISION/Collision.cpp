@@ -322,6 +322,20 @@ bool Collision::CircleCollision(Vector3 playerPos, Vector3 enemyPos, float playe
 
 	float redius = { (playerWidth + enemyWidth) * (playerWidth + enemyWidth) };
 
+
+	if (lol <= redius) {
+		return true;
+	}
+
+	return false;
+}
+
+bool Collision::CircleCollisionXZ(Vector3 playerPos, Vector3 enemyPos, float playerWidth, float enemyWidth)
+{
+	float lol = { (enemyPos.x - playerPos.x) * (enemyPos.x - playerPos.x) + (0 - 0) * (0 - 0) + (enemyPos.z - playerPos.z) * (enemyPos.z - playerPos.z) };
+
+	float redius = { (playerWidth + enemyWidth) * (playerWidth + enemyWidth) };
+
 	if (lol <= redius) {
 		return true;
 	}

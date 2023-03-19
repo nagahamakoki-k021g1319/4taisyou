@@ -60,7 +60,7 @@ void Player::Attack() {
 		if (input_->PushKey(DIK_1)) {
 			//近距離
 			if (selectBuddy == 0) {
-				wolf_->Attack(enemyPos_, 1);
+				wolf_->Attack(1);
 			}else if (selectBuddy == 1) {
 				gorilla_->ShortRange();
 			}else if (selectBuddy == 2) {
@@ -69,7 +69,7 @@ void Player::Attack() {
 		}else if (input_->PushKey(DIK_2)) {
 			//遠距離
 			if (selectBuddy == 0) {
-				wolf_->Attack(enemyPos_, 2);
+				wolf_->Attack(2);
 			}
 			else if (selectBuddy == 1) {
 				gorilla_->LongRange();
@@ -80,7 +80,7 @@ void Player::Attack() {
 		}else if (input_->PushKey(DIK_3)) {
 			//溜め近距離
 			if (selectBuddy == 0) {
-				wolf_->Attack(enemyPos_, 3);
+				wolf_->Attack(3);
 			}
 			else if (selectBuddy == 1) {
 				gorilla_->ChargeShortRange();
@@ -91,7 +91,7 @@ void Player::Attack() {
 		}else if (input_->PushKey(DIK_4)) {
 			//溜め遠距離
 			if (selectBuddy == 0) {
-				wolf_->Attack(enemyPos_, 4);
+				wolf_->Attack( 4);
 			}
 			else if (selectBuddy == 1) {
 				gorilla_->ChargeLongRange();
@@ -246,6 +246,12 @@ void Player::Move() {
 
 
 void Player::Update() {
+	//------仮の敵位置------
+	Transform* enemyPos = nullptr;
+	enemyPos = new Transform;
+	enemyPos->Initialize();
+	enemyPos->position = { 10,0,20 };
+
 	if (input_->TriggerKey(DIK_Q)) {
 		if (--selectBuddy < 0) {
 			selectBuddy = 2;
@@ -263,7 +269,7 @@ void Player::Update() {
 	bodyObj_->UpdateMat();
 	camera->Update(bodyObj_->wtf);
 	bodyObj_->Update();
-	wolf_->Update();
+	wolf_->Update(enemyPos);
 	gorilla_->Update();
 }
 
