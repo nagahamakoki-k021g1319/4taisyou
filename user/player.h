@@ -15,7 +15,7 @@ public:
 
 	void Initialize(Input* input);
 	
-	void Update();
+	void Update(Transform* cam);
 	void Move();
 	void Rota();
 	

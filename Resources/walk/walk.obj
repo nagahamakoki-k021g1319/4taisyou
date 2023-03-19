@@ -1,6 +1,6 @@
 # Blender v3.1.2 OBJ File: ''
 # www.blender.org
-mtllib a.mtl
+mtllib walk.mtl
 o 立方体_立方体.002
 v 0.418827 6.254738 2.076798
 v -0.256860 6.287663 2.086435

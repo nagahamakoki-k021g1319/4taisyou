@@ -62,7 +62,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 void GameScene::Update() {
 
 	CamUpdate();
-	//player_->Update();
+	player_->Update(&camWtf);
 	enemy_->Update();
 	
 
@@ -98,7 +98,6 @@ void GameScene::Draw() {
 
 	// 3Dオブジェクト描画後処理
 	ParticleManager::PostDraw();
-
 }
 
 
@@ -124,7 +123,6 @@ void GameScene::CamMove() {
 	//更新
 	camWtf.position += eyeVelocity;
 }
-
 
 void GameScene::CamRota() {
 	//視点移動
