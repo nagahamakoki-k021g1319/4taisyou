@@ -263,17 +263,16 @@ bool Controller::StickOffTrigger(ControllerStick stickInput, const float& deadRa
 
 Vector2 Controller::GetLeftStickVec(const Vector2& deadRate)
 {
-
-	Vector2 result(static_cast<float>(xinputState.Gamepad.sThumbLX), static_cast<float>(-xinputState.Gamepad.sThumbLY));
+	Vector2 result(static_cast<float>(xinputState.Gamepad.sThumbLX), static_cast<float>(xinputState.Gamepad.sThumbLY));
 	StickInDeadZone(result, deadRate);
 	return result / STICK_INPUT_MAX;
 }
 
 Vector2 Controller::GetRightStickVec(const Vector2& deadRate)
 {
-	Vector2 result(static_cast<float>(xinputState.Gamepad.sThumbRX), static_cast<float>(-xinputState.Gamepad.sThumbRY));
+	Vector2 result(static_cast<float>(xinputState.Gamepad.sThumbRX), static_cast<float>(xinputState.Gamepad.sThumbRY));
 	StickInDeadZone(result, deadRate);
-	return result / STICK_INPUT_MAX;;
+	return result / STICK_INPUT_MAX;
 }
 
 void Controller::ShakeController(const float& power, const int& span)

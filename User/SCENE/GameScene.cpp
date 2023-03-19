@@ -1,13 +1,14 @@
 #include "GameScene.h"
 
+
 /// <summary>
-	/// ƒRƒ“ƒXƒgƒNƒ‰ƒ^
+	/// ã‚³ãƒ³ã‚¹ãƒˆã‚¯ãƒ©ã‚¿
 	/// </summary>
 GameScene::GameScene() {
 }
 
 /// <summary>
-/// ƒfƒXƒgƒ‰ƒNƒ^
+/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 /// </summary>
 GameScene::~GameScene() {
 	delete spriteCommon;
@@ -17,34 +18,38 @@ GameScene::~GameScene() {
 }
 
 /// <summary>
-/// ‰Šú‰»
+/// åˆæœŸåŒ–
 /// </summary>
-void GameScene::Initialize(DirectXCommon* dxCommon, Input* input){
-	// nullƒ`ƒFƒbƒN
+void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
+	// nullãƒã‚§ãƒƒã‚¯
 	assert(dxCommon);
 	assert(input);
 
 	this->dxCommon = dxCommon;
 	this->input = input;
 
-	//ƒXƒvƒ‰ƒCƒg‹¤’Ê•”•ª‚Ì‰Šú‰»
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆå…±é€šéƒ¨åˆ†ã®åˆæœŸåŒ–
 	spriteCommon = new SpriteCommon;
 	spriteCommon->Initialize(dxCommon);
 
-	// ƒJƒƒ‰¶¬
+	// ã‚«ãƒ¡ãƒ©ç”Ÿæˆ
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
-	camera->SetEye({ 0.0f,5.0f,-15.0f });
-	camera->SetTarget({ 0.0f,0.0f,0.0f });
+
+	camWtf.Initialize();
+	camWtf.position = {0.0f, 3.0f, -8.0f};
+
+	targetWtf.Initialize();
+	targetWtf.position = { 0.0f,0.0f,targetDistance };
 
 	ParticleManager::SetCamera(camera);
 	Object3d::SetCamera(camera);
 
 
-	//ƒvƒŒƒCƒ„[
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼
 	player_ = new Player();
 	player_->Initialize(input);
 
-	//ƒGƒlƒ~[
+	//ã‚¨ãƒãƒŸãƒ¼
 	enemy_ = new Enemy();
 	enemy_->Initialize(input);
 	enemy_->SetPlayer(player_);
@@ -52,45 +57,139 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input){
 }
 
 /// <summary>
-/// –ˆƒtƒŒ[ƒ€ˆ—
+/// æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†
 /// </summary>
 void GameScene::Update() {
-	camera->Update();
+	CamUpdate();
 	enemy_->Update();
-	player_->Update();
+	player_->Update(&camWtf);
 	
 
 }
 
 /// <summary>
-/// •`‰æ
+/// æç”»
 /// </summary>
 void GameScene::Draw() {
 
 	/// <summary>
-	/// 3DƒIƒuƒWƒFƒNƒg‚Ì•`‰æ
-	/// ‚±‚±‚É3DƒIƒuƒWƒFƒNƒg‚Ì•`‰æˆ—‚ğ’Ç‰Á‚Å‚«‚é
+	/// 3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æç”»
+	/// ã“ã“ã«3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æç”»å‡¦ç†ã‚’è¿½åŠ ã§ãã‚‹
 	/// <summary>
-	//3DƒIƒuƒWƒFƒNƒg•`‰æ‘Oˆ—
+	//3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»å‰å‡¦ç†
 	Object3d::PreDraw(dxCommon->GetCommandList());
 	
 
-	//// 3DƒIƒuƒNƒWƒFƒNƒg‚Ì•`‰æ
+	//// 3Dã‚ªãƒ–ã‚¯ã‚¸ã‚§ã‚¯ãƒˆã®æç”»
 	player_->Draw();
 	enemy_->Draw();
 
 
-	//3DƒIƒuƒWƒFƒNƒg•`‰æŒãˆ—
+	//3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»å¾Œå‡¦ç†
 	Object3d::PostDraw();
 
-	// 3DƒIƒuƒWƒFƒNƒg•`‰æ‘Oˆ—
+	// 3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»å‰å‡¦ç†
 	ParticleManager::PreDraw(dxCommon->GetCommandList());
 
 
-	//// 3DƒIƒuƒNƒWƒFƒNƒg‚Ì•`‰æ
+	//// 3Dã‚ªãƒ–ã‚¯ã‚¸ã‚§ã‚¯ãƒˆã®æç”»
 
 
-	// 3DƒIƒuƒWƒFƒNƒg•`‰æŒãˆ—
+	// 3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»å¾Œå‡¦ç†
 	ParticleManager::PostDraw();
+}
 
+
+void GameScene::CamMove() {
+	//ã‚«ãƒ¡ãƒ©ã®ç§»å‹•
+	Vector3 eyeVelocity = { 0,0,0 };
+
+	//å…¥åŠ›
+	if (input->StickInput(L_UP)) {
+		eyeVelocity.z = camMoveSpeed;
+	}else if (input->StickInput(L_DOWN)) {
+		eyeVelocity.z = -camMoveSpeed;
+	}
+	if (input->StickInput(L_LEFT)) {
+		eyeVelocity.x = -camMoveSpeed;
+	}else if (input->StickInput(L_RIGHT)) {
+		eyeVelocity.x = camMoveSpeed;
+	}
+
+	//ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«ã‚’å‘ã„ã¦ã‚‹æ–¹å‘ã«åˆã‚ã›ã‚‹
+	eyeVelocity = bVelocity(eyeVelocity, camWtf);
+
+	//æ›´æ–°
+	camWtf.position += eyeVelocity;
+}
+
+void GameScene::CamRota() {
+	//è¦–ç‚¹ç§»å‹•
+
+	//å·¦å³
+	Vector3 theta;
+	if (input->StickInput(R_LEFT)) {
+		theta.y = -camRotaSpeed;
+	}else if (input->StickInput(R_RIGHT)) {
+		theta.y = camRotaSpeed;
+	}
+	camWtf.rotation += theta;
+
+	//ä¸Šä¸‹
+	if (input->StickInput(R_UP)) {
+		targetTheta += camRotaSpeed;
+	}else if (input->StickInput(R_DOWN)) {
+		targetTheta += -camRotaSpeed;
+	}
+	
+	//è§’åº¦åˆ¶é™
+	if (targetTheta < -PI / 5 * 2) {//ä¸‹ã®åˆ¶é™
+		targetTheta = -PI / 5 * 2;
+	}else if (targetTheta > PI / 3) { //ä¸Šã®åˆ¶é™
+		targetTheta = PI / 3;
+	}
+	
+	//è¦–ç‚¹ã¯ä¸€å®šã®è·é›¢
+	targetWtf.position.z = cos(targetTheta) * targetDistance;
+	targetWtf.position.y = sin(targetTheta) * targetDistance;
+}
+
+void GameScene::CamUpdate() {
+	CamMove();
+	CamRota();
+
+	camWtf.UpdateMat();
+
+	camera->SetEye(camWtf.position);
+
+	targetWtf.UpdateMat();
+	targetWtf.matWorld *= camWtf.matWorld;
+	//yæ–¹å‘ã®åˆ¶é™
+	if (targetWtf.matWorld.m[3][1] < 0) {
+		targetWtf.matWorld.m[3][1] = 0;
+	}
+	camera->SetTarget({ targetWtf.matWorld.m[3][0],targetWtf.matWorld.m[3][1] ,targetWtf.matWorld.m[3][2] });
+
+	camera->Update();
+}
+
+
+Vector3 GameScene::bVelocity(Vector3& velocity, Transform& worldTransform)
+{
+	Vector3 result = { 0,0,0 };
+
+	//å†…ç©
+	result.z = velocity.x * worldTransform.matWorld.m[0][2] +
+		velocity.y * worldTransform.matWorld.m[1][2] +
+		velocity.z * worldTransform.matWorld.m[2][2];
+
+	result.x = velocity.x * worldTransform.matWorld.m[0][0] +
+		velocity.y * worldTransform.matWorld.m[1][0] +
+		velocity.z * worldTransform.matWorld.m[2][0];
+
+	result.y = velocity.x * worldTransform.matWorld.m[0][1] +
+		velocity.y * worldTransform.matWorld.m[1][1] +
+		velocity.z * worldTransform.matWorld.m[2][1];
+
+	return result;
 }

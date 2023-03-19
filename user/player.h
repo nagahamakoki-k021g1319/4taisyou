@@ -15,7 +15,7 @@ public:
 
 	void Initialize(Input* input);
 	
-	void Update();
+	void Update(Transform* cam);
 	void Move();
 	void Rota();
 	
@@ -44,7 +44,6 @@ private:
 	Input* input_ = nullptr;
 
 	//プレイヤー
-	Camera* camera = nullptr;
 
 	Model* bodyModel_ = nullptr;
 	Object3d* bodyObj_ = nullptr;

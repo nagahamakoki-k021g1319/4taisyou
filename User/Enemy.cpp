@@ -21,9 +21,9 @@ void Enemy::Initialize(Input* input) {
 	enemyObj_->SetModel(enemyModel_);
 	enemyObj_->wtf.position = { 0,3,5 };
 
-	// ƒ_ƒK[ƒtƒ@ƒ“ƒlƒ‹
+	// ãƒ€ã‚¬ãƒ¼ãƒ•ã‚¡ãƒ³ãƒãƒ«
 	enemyBulletModel_ = Model::LoadFromOBJ("boll");
-	//‡”Ô‚É’e‚ª”ò‚ñ‚Å‚­‚éUŒ‚
+	//é †ç•ªã«å¼¾ãŒé£›ã‚“ã§ãã‚‹æ”»æ’ƒ
 	enemyCBModel_ = Model::LoadFromOBJ("boll");
 	
 
@@ -31,19 +31,13 @@ void Enemy::Initialize(Input* input) {
 
 void Enemy::Update() {
 
-	{//‰¼‚ÅƒvƒŒƒCƒ„[‚Æ‚Ì‚â‚èæ‚è
+	{//ä»®ã§ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã®ã‚„ã‚Šå–ã‚Š
 		player_->SetEnemyPos(&enemyObj_->wtf);
 	}
 
 
 	enemyObj_->Update();
 	
-	if (input_->ButtonInput(RT)) {
-		input_->ShakeController(1.0f, 10.0f);
-	}
-	if (input_->StickInput(L_LEFT)){
-		input_->ShakeController(1.0f, 10.0f);
-	}
 
 	std::unique_ptr<Object3d> newEnemyObjs_ = std::make_unique<Object3d>();
 	newEnemyObjs_->Initialize();
@@ -56,7 +50,6 @@ void Enemy::Update() {
 	}
 
 
-
 	switch (phase_) {
 	case Phase::Approach:
 		enemyResetTimer = 0;
@@ -65,18 +58,17 @@ void Enemy::Update() {
 			phase_ = Phase::Leave;
 		}
 
-
-		//UŒ‚‚·‚é‚Ü‚ÅˆÚ“®
+		//æ”»æ’ƒã™ã‚‹ã¾ã§ç§»å‹•
 		if (enemyAttackTimer >= 0 && enemyAttackTimer <=9) {
 			enemyObj_->wtf.position.z += 0.1f;
 		}
-		//UŒ‚‚·‚é‚Ü‚ÅˆÚ“®
+		//æ”»æ’ƒã™ã‚‹ã¾ã§ç§»å‹•
 		if (enemyAttackTimer >= 150 && enemyAttackTimer <= 190) {
 			enemyObj_->wtf.position.z += 0.05f;
 			enemyObj_->wtf.position.x += 0.1f;
 		}
 
-		//ƒ_ƒK[ƒtƒ@ƒ“ƒlƒ‹‚ğ•b”‚ÅUŒ‚‚³‚¹‚é
+		//ãƒ€ã‚¬ãƒ¼ãƒ•ã‚¡ãƒ³ãƒãƒ«ã‚’ç§’æ•°ã§æ”»æ’ƒã•ã›ã‚‹
 		if (enemyAttackTimer == 10) {
 			for (int i = 0; i < 5; i++) {
 				std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
@@ -111,7 +103,7 @@ void Enemy::Update() {
 		for (std::unique_ptr<EnemyBullet>& bullet : enemyBulletObjs_) {
 			bullet->Update();
 
-			{//‰¼‚ÅƒvƒŒƒCƒ„[‚Æ‚Ì‚â‚èæ‚è
+			{//ä»®ã§ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã®ã‚„ã‚Šå–ã‚Š
 				if (coll.CircleCollision(player_->GetPos(), bullet->GetPos(), 2.0f, 2.0f)) {
 					player_->OnCollision();
 
@@ -127,12 +119,12 @@ void Enemy::Update() {
 			phase_ = Phase::ReLeave;
 		}
 		
-		//UŒ‚‚·‚é‚Ü‚ÅˆÚ“®
+		//æ”»æ’ƒã™ã‚‹ã¾ã§ç§»å‹•
 		if (enemyAttackTimer2 >= 0 && enemyAttackTimer2 <= 9) {
 			enemyObj_->wtf.position.z -= 0.05f;
 			enemyObj_->wtf.position.x -= 0.1f;
 		}
-		//‡”Ô‚ÉUŒ‚‚·‚é’e‚ğ•b”‚ÅUŒ‚‚³‚¹‚é
+		//é †ç•ªã«æ”»æ’ƒã™ã‚‹å¼¾ã‚’ç§’æ•°ã§æ”»æ’ƒã•ã›ã‚‹
 		if (enemyAttackTimer2 == 10) {
 			for (int i = 0; i < 2; i++) {
 				std::unique_ptr<EnemyCrystalBullet> newCrystalBullet = std::make_unique<EnemyCrystalBullet>();
