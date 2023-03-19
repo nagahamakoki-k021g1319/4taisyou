@@ -17,7 +17,7 @@ void Player::Initialize(Input* input) {
 	input_ = input;
 
 	//プレイヤー設定
-	bodyModel_ = Model::LoadFromOBJ("walk");
+	bodyModel_ = Model::LoadFromOBJ("as2");
 	bodyObj_ = Object3d::Create();
 	bodyObj_->SetModel(bodyModel_);
 	bodyObj_->wtf.position = { 0,-3,8 };
