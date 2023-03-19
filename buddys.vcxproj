@@ -153,6 +153,7 @@
     <ClCompile Include="Engine\COLLISION\Collision.cpp" />
     <ClCompile Include="Engine\COLLISION\CollisionPrimitive.cpp" />
     <ClCompile Include="Engine\IMGUI\ImGuiManager.cpp" />
+    <ClCompile Include="Engine\input\Controller.cpp" />
     <ClCompile Include="Engine\INPUT\Input.cpp" />
     <ClCompile Include="Engine\MATH\Affin.cpp" />
     <ClCompile Include="Engine\MATH\ConvertXM.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="Engine\COLLISION\Collision.h" />
     <ClInclude Include="Engine\COLLISION\CollisionPrimitive.h" />
     <ClInclude Include="Engine\IMGUI\ImGuiManager.h" />
+    <ClInclude Include="Engine\input\Controller.h" />
     <ClInclude Include="Engine\INPUT\Input.h" />
     <ClInclude Include="Engine\MATH\Affin.h" />
     <ClInclude Include="Engine\MATH\ConvertXM.h" />

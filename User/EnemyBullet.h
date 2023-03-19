@@ -8,39 +8,50 @@ public:
 	~EnemyBullet();
 
 	///< summary>
-	///‰Šú‰»
+	///åˆæœŸåŒ–
 	///</summary>
-	void Initialize(int timer);
-
+	void Initialize(int timer, Model* model_);
 	
 	///< summary>
-	///XV
+	///æ›´æ–°
 	///</summary>
 	void DaggerFAttack();
 
 	///< summary>
-	///XV
+	///æ›´æ–°
 	///</summary>
 	void Update();
 
 	///< summary>
-	///•`‰æ
+	///æç”»
 	///</summary>
 	void Draw();
 
+	/// <summary>
+	/// ãƒã‚¸ã‚·ãƒ§ãƒ³
+	/// </summary>
+	/// <param name="pos"></param>
 	void SetPos(Vector3 pos) { obj_->wtf.position = pos; };
 
+	/// <summary>
+	/// å¤§ãã•
+	/// </summary>
+	/// <param name="pos"></param>
+	void SetScale(Vector3 scale) { obj_->wtf.scale = scale; };
+  
+	Vector3 GetPos() { return obj_->wtf.position; };
 
+	bool IsDead() const { return  isDead_; }
 
 
 private:
 
-	////-----ƒ_ƒK[ƒtƒ@ƒ“ƒlƒ‹------///
-	Model* model_ = nullptr;
+	////-----ãƒ€ã‚¬ãƒ¼ãƒ•ã‚¡ãƒ³ãƒãƒ«------///
 	Object3d* obj_ = nullptr;
-	//¢Š«‚µ‚Ä”ò‚Î‚·‚Ü‚Å‚ÌŠÔ‚Æƒtƒ‰ƒO
+	//å¬å–šã—ã¦é£›ã°ã™ã¾ã§ã®æ™‚é–“ã¨ãƒ•ãƒ©ã‚°
 	int daggerTimer;
 	bool isLive = false;
+	bool isDead_ = false;
 	int shotTimer;
 	//////////////////////////////
 

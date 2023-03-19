@@ -9,6 +9,7 @@ void Input::Initialize(WinApp* winApp)
 {
 	this->winApp_ = winApp;
 
+
 	HRESULT result;
 
 	// DirectInputのインスタンス生成
@@ -28,6 +29,9 @@ void Input::Initialize(WinApp* winApp)
 	// 排他制御レベルのセット
 	result = keyboard->SetCooperativeLevel(winApp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(result));
+
+	//コントローラーの初期化
+	controller = new Controller;
 }
 
 void Input::Update()
@@ -43,6 +47,9 @@ void Input::Update()
 	// 全キーの入力状態を取得する
 	/*BYTE key[256] = {};*/
 	result = keyboard->GetDeviceState(sizeof(key), key);
+
+	//コントローラーデバイスの更新
+	controller->Update();
 }
 
 bool Input::PushKey(BYTE keyNumber)
@@ -83,4 +90,49 @@ bool Input::ReleaseKey(BYTE keyNumber) {
 	}
 
 	return false;
+}
+
+bool Input::PButtonTrigger(ControllerButton button)
+{
+	return controller->ButtonTrigger(button);
+}
+
+bool Input::PStickTrigger(ControllerStick stickInput, const float& deadRange, const Vector2& deadRate)
+{
+	return controller->StickTrigger(stickInput, deadRange, deadRate);
+}
+
+bool Input::ButtonInput(ControllerButton button)
+{
+	return controller->ButtonInput(button);
+}
+
+bool Input::StickInput(ControllerStick stickInput, const float& deadRange, const Vector2& deadRate)
+{
+	return controller->StickInput(stickInput, deadRange, deadRate);
+}
+
+bool Input::ButtonOffTrigger(ControllerButton button)
+{
+	return controller->ButtonOffTrigger(button);
+}
+
+bool Input::StickOffTrigger(ControllerStick stickInput, const float& deadRange, const Vector2& deadRate)
+{
+	return controller->StickOffTrigger(stickInput, deadRange, deadRate);
+}
+
+Vector2 Input::GetLeftStickVec(const Vector2& deadRate)
+{
+	return  controller->GetLeftStickVec(deadRate);
+}
+
+Vector2 Input::GetRightStickVec(const Vector2& deadRate)
+{
+	return controller->GetRightStickVec(deadRate);
+}
+
+void Input::ShakeController(const float& power, const int& span)
+{
+	controller->ShakeController(power, span);
 }

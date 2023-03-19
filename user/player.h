@@ -4,6 +4,8 @@
 
 #include"Wolf.h"
 
+#include "Gorilla.h"
+
 class Player {
 	
 
@@ -23,13 +25,25 @@ public:
 
 	void OnCollision();
 
+	void SetEnemyPos(Transform* enemyPos) { enemyPos_ = enemyPos; };
+	Vector3 GetPos() { return bodyObj_->wtf.position; };
+
 	Vector3 bVelocity(Vector3& velocity,Transform& worldTransform);
+	
+	////ƒ[ƒ‹ƒhÀ•W‚ğæ“¾
+	Vector3 GetWorldPosition();
+
+	/// <summary>
+	/// ƒ|ƒWƒVƒ‡ƒ“
+	/// </summary>
+	/// <param name="pos"></param>
+	void SetPos(Vector3 pos) { bodyObj_->wtf.position = pos; };
 
 private:
 	const float PI = 3.141592;
 	Input* input_ = nullptr;
 
-	//ƒvƒŒƒCƒ„[
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼
 	Camera* camera = nullptr;
 
 	Model* bodyModel_ = nullptr;
@@ -38,37 +52,38 @@ private:
 	const float moveSpeed_ = 0.1f;
 	const float rotaSpeed_ = 0.1f;
 	
-	//ƒXƒe[ƒ^ƒX
+	//ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
 	const int defaultHp = 10;
 	int hp;
 
-	
-	//ƒK[ƒh
+	//ã‚¬ãƒ¼ãƒ‰
 	Model* guardModel = nullptr;
 	bool isGuard;
 	const int guardMax = 100;
 	int GuardDurability;
 
-	//‰ñ”ğ
+	//å›é¿
 	Model* dodgeModel = nullptr;
 	bool isDodge;
 	const int dodgeLimit = 60;
 	int dodgeTimer;
 
-	//ãUŒ‚
+	//å¼±æ”»æ’ƒ
 
 	
 
-	//‡‘Ì
+	//åˆä½“
 	Model* unionModel = nullptr;
 	float specialMeter;
 	bool isUnion;
 
-	//ƒoƒfƒB
+	//ãƒãƒ‡ã‚£
 	int selectBuddy;
-
 	Wolf* wolf_ = nullptr;
-
+	Gorilla* gorilla_ = nullptr;
+  
+	//æ•µ
+	Transform* enemyPos_ = nullptr;
 
 public:
 
