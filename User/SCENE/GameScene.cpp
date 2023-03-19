@@ -1,5 +1,6 @@
 #include "GameScene.h"
 
+
 /// <summary>
 	/// コンストクラタ
 	/// </summary>
@@ -19,7 +20,7 @@ GameScene::~GameScene() {
 /// <summary>
 /// 初期化
 /// </summary>
-void GameScene::Initialize(DirectXCommon* dxCommon, Input* input){
+void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	// nullチェック
 	assert(dxCommon);
 	assert(input);
@@ -33,8 +34,12 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input){
 
 	// カメラ生成
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
-	camera->SetEye({ 0.0f,5.0f,-15.0f });
-	camera->SetTarget({ 0.0f,0.0f,0.0f });
+
+	camWtf.Initialize();
+	camWtf.position = {0.0f, 3.0f, -8.0f};
+
+	targetWtf.Initialize();
+	targetWtf.position = { 0.0f,0.0f,targetDistance };
 
 	ParticleManager::SetCamera(camera);
 	Object3d::SetCamera(camera);
@@ -55,8 +60,9 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input){
 /// 毎フレーム処理
 /// </summary>
 void GameScene::Update() {
-	camera->Update();
-	player_->Update();
+
+	CamUpdate();
+	//player_->Update();
 	enemy_->Update();
 	
 
@@ -93,4 +99,100 @@ void GameScene::Draw() {
 	// 3Dオブジェクト描画後処理
 	ParticleManager::PostDraw();
 
+}
+
+
+void GameScene::CamMove() {
+	//カメラの移動
+	Vector3 eyeVelocity = { 0,0,0 };
+
+	//入力
+	if (input->StickInput(L_UP)) {
+		eyeVelocity.z = camMoveSpeed;
+	}else if (input->StickInput(L_DOWN)) {
+		eyeVelocity.z = -camMoveSpeed;
+	}
+	if (input->StickInput(L_LEFT)) {
+		eyeVelocity.x = -camMoveSpeed;
+	}else if (input->StickInput(L_RIGHT)) {
+		eyeVelocity.x = camMoveSpeed;
+	}
+
+	//移動ベクトルを向いてる方向に合わせる
+	eyeVelocity = bVelocity(eyeVelocity, camWtf);
+
+	//更新
+	camWtf.position += eyeVelocity;
+}
+
+
+void GameScene::CamRota() {
+	//視点移動
+
+	//左右
+	Vector3 theta;
+	if (input->StickInput(R_LEFT)) {
+		theta.y = -camRotaSpeed;
+	}else if (input->StickInput(R_RIGHT)) {
+		theta.y = camRotaSpeed;
+	}
+	camWtf.rotation += theta;
+
+	//上下
+	if (input->StickInput(R_UP)) {
+		targetTheta += camRotaSpeed;
+	}else if (input->StickInput(R_DOWN)) {
+		targetTheta += -camRotaSpeed;
+	}
+	
+	//角度制限
+	if (targetTheta < -PI / 5 * 2) {//下の制限
+		targetTheta = -PI / 5 * 2;
+	}else if (targetTheta > PI / 3) { //上の制限
+		targetTheta = PI / 3;
+	}
+	
+	//視点は一定の距離
+	targetWtf.position.z = cos(targetTheta) * targetDistance;
+	targetWtf.position.y = sin(targetTheta) * targetDistance;
+}
+
+void GameScene::CamUpdate() {
+	CamMove();
+	CamRota();
+
+	camWtf.UpdateMat();
+
+	camera->SetEye(camWtf.position);
+
+	targetWtf.UpdateMat();
+	targetWtf.matWorld *= camWtf.matWorld;
+	//y方向の制限
+	if (targetWtf.matWorld.m[3][1] < 0) {
+		targetWtf.matWorld.m[3][1] = 0;
+	}
+	camera->SetTarget({ targetWtf.matWorld.m[3][0],targetWtf.matWorld.m[3][1] ,targetWtf.matWorld.m[3][2] });
+
+	camera->Update();
+}
+
+
+Vector3 GameScene::bVelocity(Vector3& velocity, Transform& worldTransform)
+{
+	Vector3 result = { 0,0,0 };
+
+	//内積
+	result.z = velocity.x * worldTransform.matWorld.m[0][2] +
+		velocity.y * worldTransform.matWorld.m[1][2] +
+		velocity.z * worldTransform.matWorld.m[2][2];
+
+	result.x = velocity.x * worldTransform.matWorld.m[0][0] +
+		velocity.y * worldTransform.matWorld.m[1][0] +
+		velocity.z * worldTransform.matWorld.m[2][0];
+
+	result.y = velocity.x * worldTransform.matWorld.m[0][1] +
+		velocity.y * worldTransform.matWorld.m[1][1] +
+		velocity.z * worldTransform.matWorld.m[2][1];
+
+	return result;
 }

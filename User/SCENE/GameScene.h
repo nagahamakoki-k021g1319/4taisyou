@@ -17,7 +17,6 @@
 #include"Player.h"
 #include"Enemy.h"
 
-
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -53,6 +52,13 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	void CamMove();
+	void CamRota();
+	void CamUpdate();
+
+
+	Vector3 bVelocity(Vector3& velocity, Transform& worldTransform);
+
 public:
 	//音を止める関数
 	IXAudio2SourceVoice* pSourceVoice[10] = { 0 };
@@ -63,11 +69,21 @@ private: // メンバ変数 (固定)
 	Input* input = nullptr;
 
 	SpriteCommon* spriteCommon = nullptr;
-	Camera* camera = nullptr;
 	Audio* audio = nullptr;
 
 
 private:	//メンバ変数
+	const float PI = 3.141592;
+
+	//カメラ
+	Camera* camera = nullptr;
+	Transform camWtf;
+	Transform targetWtf;
+	float targetTheta;
+	float targetDistance = 10;
+	float camMoveSpeed = 0.1f;
+	float camRotaSpeed = PI/180;
+
 
 	//プレイヤー
 	Player* player_ = nullptr;
@@ -77,4 +93,3 @@ private:	//メンバ変数
 
 
 };
-

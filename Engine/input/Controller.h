@@ -4,9 +4,6 @@
 #include <xinput.h>
 #pragma comment (lib, "xinput.lib")
 
-
-
-
 enum ControllerButton
 {
 	B = XINPUT_GAMEPAD_B,

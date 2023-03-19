@@ -15,10 +15,6 @@ Player::~Player() {
 
 void Player::Initialize(Input* input) {
 	input_ = input;
-	camera = new Camera(WinApp::window_width, WinApp::window_height);
-	camera->SetEye({ 0.0f,3.0f,-8.0f });
-	camera->SetTarget({ 0,3,0 });
-	Object3d::SetCamera(camera);
 
 	//プレイヤー設定
 	bodyModel_ = Model::LoadFromOBJ("as2");
@@ -55,18 +51,9 @@ void Player::Initialize(Input* input) {
 
 void Player::Attack() {
 
-	if (input_->ButtonInput(RT)) {
-		input_->ShakeController(1.0f, 10.0f);
-	}
-
-	if (input_->StickInput(L_LEFT)) {
-		input_->ShakeController(1.0f, 10.0f);
-	}
-
-
 	//バディ指示
-	if (input_->PushKey(DIK_LSHIFT)) {
-		if (input_->PushKey(DIK_1)) {
+	if (input_->PushKey(DIK_LSHIFT) || input_->ButtonInput(LT)) {
+		if (input_->PushKey(DIK_1) || input_->ButtonInput(B)) {
 			//近距離
 			if (selectBuddy == 0) {
 				wolf_->Attack(enemyPos_, 1);
@@ -75,7 +62,7 @@ void Player::Attack() {
 			}else if (selectBuddy == 2) {
 
 			}
-		}else if (input_->PushKey(DIK_2)) {
+		}else if (input_->PushKey(DIK_2) || input_->ButtonInput(A)) {
 			//遠距離
 			if (selectBuddy == 0) {
 				wolf_->Attack(enemyPos_, 2);
@@ -86,7 +73,7 @@ void Player::Attack() {
 			else if (selectBuddy == 2) {
 
 			}
-		}else if (input_->PushKey(DIK_3)) {
+		}else if (input_->PushKey(DIK_3) || input_->ButtonInput(Y)) {
 			//溜め近距離
 			if (selectBuddy == 0) {
 				wolf_->Attack(enemyPos_, 3);
@@ -97,7 +84,7 @@ void Player::Attack() {
 			else if (selectBuddy == 2) {
 
 			}
-		}else if (input_->PushKey(DIK_4)) {
+		}else if (input_->PushKey(DIK_4) || input_->ButtonInput(X)) {
 			//溜め遠距離
 			if (selectBuddy == 0) {
 				wolf_->Attack(enemyPos_, 4);
@@ -113,7 +100,7 @@ void Player::Attack() {
 	//本体攻撃
 	else{
 		//ガード
-		if (input_->PushKey(DIK_1)) {
+		if (input_->PushKey(DIK_1) || input_->ButtonInput(Y)) {
 			//ガードの発生
 			if (isGuard == false) {
 				isGuard = true;
@@ -143,7 +130,7 @@ void Player::Attack() {
 		}
 
 		//回避
-		if (input_->TriggerKey(DIK_2)) {
+		if (input_->TriggerKey(DIK_2) || input_->ButtonInput(A)) {
 			//回避発生
 			if (isDodge==false) {
 				isDodge = true;
@@ -154,12 +141,12 @@ void Player::Attack() {
 
 
 		//弱攻撃
-		if (input_->PushKey(DIK_3)) {
+		if (input_->PushKey(DIK_3) || input_->ButtonInput(B)) {
 
 		}
 
 		//合体
-		if (input_->PushKey(DIK_4)) {
+		if (input_->PushKey(DIK_4) || input_->ButtonInput(X)) {
 			//合体発生
 			if (specialMeter >= 100) {
 				isUnion = true;
@@ -229,7 +216,7 @@ void Player::Rota() {
 		camTheta.y = -rotaSpeed_;
 	}
 
-	camera->SetTarget(camera->GetTarget() + camTheta);
+	//camera->SetTarget(camera->GetTarget() + camTheta);
 }
 
 void Player::Move() {
@@ -249,7 +236,7 @@ void Player::Move() {
 	velocity = bVelocity(velocity, bodyObj_->wtf);
 
 	bodyObj_->wtf.position += velocity;
-	camera->SetTarget(camera->GetTarget() + velocity);
+	//camera->SetTarget(camera->GetTarget() + velocity);
 
 }
 
@@ -270,7 +257,7 @@ void Player::Update() {
 	Attack();
 	
 	bodyObj_->UpdateMat();
-	camera->Update(bodyObj_->wtf);
+	//camera->Update(bodyObj_->wtf);
 	bodyObj_->Update();
 	wolf_->Update();
 	gorilla_->Update();

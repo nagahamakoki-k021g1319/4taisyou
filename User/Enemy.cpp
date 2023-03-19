@@ -32,6 +32,7 @@ void Enemy::Initialize(Input* input) {
 }
 
 void Enemy::Update() {
+
 	{//‰¼‚ÅƒvƒŒƒCƒ„[‚Æ‚Ì‚â‚èŽæ‚è
 		player_->SetEnemyPos(&enemyObj_->wtf);
 	}
@@ -39,6 +40,8 @@ void Enemy::Update() {
 
 	enemyObj_->Update();
 	
+
+
 	switch (phase_) {
 	case Phase::Approach:
 		enemyResetTimer = 0;
@@ -46,6 +49,8 @@ void Enemy::Update() {
 		if (enemyAttackTimer >= 450) {
 			phase_ = Phase::Leave;
 		}
+		
+
 		if (enemyAttackTimer == 10) {
 			for (int i = 0; i < 5; i++) {
 				std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
