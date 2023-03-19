@@ -193,7 +193,10 @@ void Player::OnCollision() {
 	}
 	//通常時
 	else{
-		hp--;
+		hp -= 10;
+		if (hp < 0) {
+			isLive = false;
+		}
 	}
 }
 
@@ -219,6 +222,8 @@ void Player::Move() {
 
 
 void Player::Update(Transform* cam) {
+	
+
 	if (input_->TriggerKey(DIK_Q)) {
 		if (--selectBuddy < 0) {
 			selectBuddy = 2;
@@ -240,17 +245,19 @@ void Player::Update(Transform* cam) {
 
 
 void Player::Draw() {
-	bodyObj_->Draw();
+	if (isLive) {
+		bodyObj_->Draw();
 
-	if (isUnion == false) {
-		if (selectBuddy == 0) {
-			wolf_->Draw();
-		}
-		else if (selectBuddy == 1) {
-		gorilla_->Draw();
-		}
-		else if (selectBuddy == 2) {
+		if (isUnion == false) {
+			if (selectBuddy == 0) {
+				wolf_->Draw();
+			}
+			else if (selectBuddy == 1) {
+				gorilla_->Draw();
+			}
+			else if (selectBuddy == 2) {
 
+			}
 		}
 	}
 }
