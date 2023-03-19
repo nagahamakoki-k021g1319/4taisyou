@@ -50,6 +50,7 @@ void Enemy::Update() {
 	}
 
 
+
 	switch (phase_) {
 	case Phase::Approach:
 		enemyResetTimer = 0;
@@ -57,6 +58,7 @@ void Enemy::Update() {
 		if (enemyAttackTimer >= 450) {
 			phase_ = Phase::Leave;
 		}
+
 
 		//攻撃するまで移動
 		if (enemyAttackTimer >= 0 && enemyAttackTimer <=9) {

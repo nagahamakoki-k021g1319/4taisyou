@@ -280,9 +280,9 @@ Vector3 Player::GetWorldPosition()
 	//ワールド座標を入れる変数
 	Vector3 worldPos;
 	//ワールド行列の平行移動成分
-	worldPos.x = bodyObj_->wtf.position.x;
-	worldPos.y = bodyObj_->wtf.position.y;
-	worldPos.z = bodyObj_->wtf.position.z;
+	worldPos.x = bodyObj_->wtf.matWorld.m[3][0];
+	worldPos.y = bodyObj_->wtf.matWorld.m[3][1];
+	worldPos.z = bodyObj_->wtf.matWorld.m[3][2];
 
 
 	return worldPos;
