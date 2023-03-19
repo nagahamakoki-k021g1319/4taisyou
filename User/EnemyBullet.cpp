@@ -35,6 +35,7 @@ void EnemyBullet::DaggerFAttack(){
 	}
 	if (obj_->wtf.position.z <= -30) {
 		isLive = false;
+		isDead_ = true;
 	}
 }
 

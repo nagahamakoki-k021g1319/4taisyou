@@ -19,6 +19,18 @@ public:
 
 	void SetPlayer(Player* player) { player_ = player; };
 
+	/*/// <summary>
+	/// ポジション
+	/// </summary>
+	/// <param name="pos"></param>
+	void SetPos(Vector3 pos) { enemyObj_->wtf.position = pos; };
+
+	/// <summary>
+	/// 大きさ
+	/// </summary>
+	/// <param name="pos"></param>
+	void SetScale(Vector3 scale) { enemyObj_->wtf.scale = scale; };*/
+
 	//行動フェーズ
 	enum class Phase {
 		Approach, //接近する
@@ -31,12 +43,19 @@ private:
 	Collision coll;
 
 	Object3d* enemyObj_ = nullptr;
+	std::list<std::unique_ptr<Object3d>> enemyListObjs_;
+
 	Model* enemyModel_ = nullptr;
+	
+	
 
 	Input* input_ = nullptr;
 
 	//フェーズ
 	Phase phase_ = Phase::Approach;
+
+
+
 
 	//敵の攻撃系統
 
@@ -49,7 +68,6 @@ private:
 	////-----順番に弾が飛んでくる攻撃------///
 	std::list<std::unique_ptr<EnemyCrystalBullet>> enemyCBObjs_;
 	Model* enemyCBModel_ = nullptr;
-
 	int enemyAttackTimer2 = 0;
 	///////////////////////////////////
 

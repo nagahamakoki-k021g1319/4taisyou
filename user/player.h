@@ -29,6 +29,15 @@ public:
 	Vector3 GetPos() { return bodyObj_->wtf.position; };
 
 	Vector3 bVelocity(Vector3& velocity,Transform& worldTransform);
+	
+	////ワールド座標を取得
+	Vector3 GetWorldPosition();
+
+	/// <summary>
+	/// ポジション
+	/// </summary>
+	/// <param name="pos"></param>
+	void SetPos(Vector3 pos) { bodyObj_->wtf.position = pos; };
 
 private:
 	const float PI = 3.141592;
