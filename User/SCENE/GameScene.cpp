@@ -2,13 +2,13 @@
 
 
 /// <summary>
-	/// ƒRƒ“ƒXƒgƒNƒ‰ƒ^
+	/// ã‚³ãƒ³ã‚¹ãƒˆã‚¯ãƒ©ã‚¿
 	/// </summary>
 GameScene::GameScene() {
 }
 
 /// <summary>
-/// ƒfƒXƒgƒ‰ƒNƒ^
+/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 /// </summary>
 GameScene::~GameScene() {
 	delete spriteCommon;
@@ -18,21 +18,21 @@ GameScene::~GameScene() {
 }
 
 /// <summary>
-/// ‰Šú‰»
+/// åˆæœŸåŒ–
 /// </summary>
 void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
-	// nullƒ`ƒFƒbƒN
+	// nullãƒã‚§ãƒƒã‚¯
 	assert(dxCommon);
 	assert(input);
 
 	this->dxCommon = dxCommon;
 	this->input = input;
 
-	//ƒXƒvƒ‰ƒCƒg‹¤’Ê•”•ª‚Ì‰Šú‰»
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆå…±é€šéƒ¨åˆ†ã®åˆæœŸåŒ–
 	spriteCommon = new SpriteCommon;
 	spriteCommon->Initialize(dxCommon);
 
-	// ƒJƒƒ‰¶¬
+	// ã‚«ãƒ¡ãƒ©ç”Ÿæˆ
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
 
 	camWtf.Initialize();
@@ -45,11 +45,11 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	Object3d::SetCamera(camera);
 
 
-	//ƒvƒŒƒCƒ„[
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼
 	player_ = new Player();
 	player_->Initialize(input);
 
-	//ƒGƒlƒ~[
+	//ã‚¨ãƒãƒŸãƒ¼
 	enemy_ = new Enemy();
 	enemy_->Initialize(input);
 	enemy_->SetPlayer(player_);
@@ -57,55 +57,54 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 }
 
 /// <summary>
-/// –ˆƒtƒŒ[ƒ€ˆ—
+/// æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†
 /// </summary>
 void GameScene::Update() {
-
 	CamUpdate();
-	player_->Update(&camWtf);
 	enemy_->Update();
+	player_->Update(&camWtf);
 	
 
 }
 
 /// <summary>
-/// •`‰æ
+/// æç”»
 /// </summary>
 void GameScene::Draw() {
 
 	/// <summary>
-	/// 3DƒIƒuƒWƒFƒNƒg‚Ì•`‰æ
-	/// ‚±‚±‚É3DƒIƒuƒWƒFƒNƒg‚Ì•`‰æˆ—‚ğ’Ç‰Á‚Å‚«‚é
+	/// 3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æç”»
+	/// ã“ã“ã«3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æç”»å‡¦ç†ã‚’è¿½åŠ ã§ãã‚‹
 	/// <summary>
-	//3DƒIƒuƒWƒFƒNƒg•`‰æ‘Oˆ—
+	//3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»å‰å‡¦ç†
 	Object3d::PreDraw(dxCommon->GetCommandList());
 	
 
-	//// 3DƒIƒuƒNƒWƒFƒNƒg‚Ì•`‰æ
+	//// 3Dã‚ªãƒ–ã‚¯ã‚¸ã‚§ã‚¯ãƒˆã®æç”»
 	player_->Draw();
 	enemy_->Draw();
 
 
-	//3DƒIƒuƒWƒFƒNƒg•`‰æŒãˆ—
+	//3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»å¾Œå‡¦ç†
 	Object3d::PostDraw();
 
-	// 3DƒIƒuƒWƒFƒNƒg•`‰æ‘Oˆ—
+	// 3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»å‰å‡¦ç†
 	ParticleManager::PreDraw(dxCommon->GetCommandList());
 
 
-	//// 3DƒIƒuƒNƒWƒFƒNƒg‚Ì•`‰æ
+	//// 3Dã‚ªãƒ–ã‚¯ã‚¸ã‚§ã‚¯ãƒˆã®æç”»
 
 
-	// 3DƒIƒuƒWƒFƒNƒg•`‰æŒãˆ—
+	// 3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»å¾Œå‡¦ç†
 	ParticleManager::PostDraw();
 }
 
 
 void GameScene::CamMove() {
-	//ƒJƒƒ‰‚ÌˆÚ“®
+	//ã‚«ãƒ¡ãƒ©ã®ç§»å‹•
 	Vector3 eyeVelocity = { 0,0,0 };
 
-	//“ü—Í
+	//å…¥åŠ›
 	if (input->StickInput(L_UP)) {
 		eyeVelocity.z = camMoveSpeed;
 	}else if (input->StickInput(L_DOWN)) {
@@ -117,17 +116,17 @@ void GameScene::CamMove() {
 		eyeVelocity.x = camMoveSpeed;
 	}
 
-	//ˆÚ“®ƒxƒNƒgƒ‹‚ğŒü‚¢‚Ä‚é•ûŒü‚É‡‚í‚¹‚é
+	//ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«ã‚’å‘ã„ã¦ã‚‹æ–¹å‘ã«åˆã‚ã›ã‚‹
 	eyeVelocity = bVelocity(eyeVelocity, camWtf);
 
-	//XV
+	//æ›´æ–°
 	camWtf.position += eyeVelocity;
 }
 
 void GameScene::CamRota() {
-	//‹“_ˆÚ“®
+	//è¦–ç‚¹ç§»å‹•
 
-	//¶‰E
+	//å·¦å³
 	Vector3 theta;
 	if (input->StickInput(R_LEFT)) {
 		theta.y = -camRotaSpeed;
@@ -136,21 +135,21 @@ void GameScene::CamRota() {
 	}
 	camWtf.rotation += theta;
 
-	//ã‰º
+	//ä¸Šä¸‹
 	if (input->StickInput(R_UP)) {
 		targetTheta += camRotaSpeed;
 	}else if (input->StickInput(R_DOWN)) {
 		targetTheta += -camRotaSpeed;
 	}
 	
-	//Šp“x§ŒÀ
-	if (targetTheta < -PI / 5 * 2) {//‰º‚Ì§ŒÀ
+	//è§’åº¦åˆ¶é™
+	if (targetTheta < -PI / 5 * 2) {//ä¸‹ã®åˆ¶é™
 		targetTheta = -PI / 5 * 2;
-	}else if (targetTheta > PI / 3) { //ã‚Ì§ŒÀ
+	}else if (targetTheta > PI / 3) { //ä¸Šã®åˆ¶é™
 		targetTheta = PI / 3;
 	}
 	
-	//‹“_‚Íˆê’è‚Ì‹——£
+	//è¦–ç‚¹ã¯ä¸€å®šã®è·é›¢
 	targetWtf.position.z = cos(targetTheta) * targetDistance;
 	targetWtf.position.y = sin(targetTheta) * targetDistance;
 }
@@ -165,7 +164,7 @@ void GameScene::CamUpdate() {
 
 	targetWtf.UpdateMat();
 	targetWtf.matWorld *= camWtf.matWorld;
-	//y•ûŒü‚Ì§ŒÀ
+	//yæ–¹å‘ã®åˆ¶é™
 	if (targetWtf.matWorld.m[3][1] < 0) {
 		targetWtf.matWorld.m[3][1] = 0;
 	}
@@ -179,7 +178,7 @@ Vector3 GameScene::bVelocity(Vector3& velocity, Transform& worldTransform)
 {
 	Vector3 result = { 0,0,0 };
 
-	//“àÏ
+	//å†…ç©
 	result.z = velocity.x * worldTransform.matWorld.m[0][2] +
 		velocity.y * worldTransform.matWorld.m[1][2] +
 		velocity.z * worldTransform.matWorld.m[2][2];

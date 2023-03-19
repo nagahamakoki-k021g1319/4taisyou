@@ -190,6 +190,9 @@
     <ClCompile Include="Engine\input\Controller.cpp">
       <Filter>Engine\ソースファイル\INPUT</Filter>
     </ClCompile>
+    <ClCompile Include="User\Round.cpp">
+      <Filter>user\ソース</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BASE\FPS.h">
@@ -284,6 +287,9 @@
     </ClInclude>
     <ClInclude Include="Engine\input\Controller.h">
       <Filter>Engine\ヘッダーファイル\INPUT</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Round.h">
+      <Filter>user\ヘッダー</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

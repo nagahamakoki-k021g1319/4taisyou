@@ -57,7 +57,7 @@ void Player::Attack() {
 		if (input_->PushKey(DIK_1) || input_->ButtonInput(B)) {
 			//近距離
 			if (selectBuddy == 0) {
-				wolf_->Attack(enemyPos_, 1);
+				wolf_->Attack(1);
 			}else if (selectBuddy == 1) {
 				gorilla_->ShortRange();
 			}else if (selectBuddy == 2) {
@@ -66,7 +66,7 @@ void Player::Attack() {
 		}else if (input_->PushKey(DIK_2) || input_->ButtonInput(A)) {
 			//遠距離
 			if (selectBuddy == 0) {
-				wolf_->Attack(enemyPos_, 2);
+				wolf_->Attack(2);
 			}
 			else if (selectBuddy == 1) {
 				gorilla_->LongRange();
@@ -77,7 +77,7 @@ void Player::Attack() {
 		}else if (input_->PushKey(DIK_3) || input_->ButtonInput(Y)) {
 			//溜め近距離
 			if (selectBuddy == 0) {
-				wolf_->Attack(enemyPos_, 3);
+				wolf_->Attack(3);
 			}
 			else if (selectBuddy == 1) {
 				gorilla_->ChargeShortRange();
@@ -88,7 +88,7 @@ void Player::Attack() {
 		}else if (input_->PushKey(DIK_4) || input_->ButtonInput(X)) {
 			//溜め遠距離
 			if (selectBuddy == 0) {
-				wolf_->Attack(enemyPos_, 4);
+				wolf_->Attack( 4);
 			}
 			else if (selectBuddy == 1) {
 				gorilla_->ChargeLongRange();
@@ -234,7 +234,7 @@ void Player::Update(Transform* cam) {
 	Attack();
 	
 	bodyObj_->Update(cam);
-	wolf_->Update();
+	wolf_->Update(enemyPos_);
 	gorilla_->Update();
 }
 
@@ -273,4 +273,17 @@ Vector3 Player::bVelocity(Vector3& velocity,Transform& worldTransform)
 		velocity.z * worldTransform.matWorld.m[2][1];
 
 	return result;
+}
+
+Vector3 Player::GetWorldPosition()
+{
+	//ワールド座標を入れる変数
+	Vector3 worldPos;
+	//ワールド行列の平行移動成分
+	worldPos.x = bodyObj_->wtf.position.x;
+	worldPos.y = bodyObj_->wtf.position.y;
+	worldPos.z = bodyObj_->wtf.position.z;
+
+
+	return worldPos;
 }
