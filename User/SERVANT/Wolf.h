@@ -21,7 +21,7 @@ public:
 	void LongRange();
 	void ChargeLongRange();
 
-	void Attack( int attackNmb);
+	void Attack(int attackNmb,Vector3 playerPos);
 
 	void Draw();
 

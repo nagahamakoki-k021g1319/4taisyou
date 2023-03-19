@@ -106,9 +106,9 @@ void Enemy::Update() {
 			bullet->Update();
 
 			{//仮でプレイヤーとのやり取り
-				if (coll.CircleCollision(player_->GetPos(), bullet->GetPos(), 2.0f, 2.0f)) {
+				if (coll.CircleCollision(player_->GetWorldPosition() , bullet->GetPos(), 2.0f, 2.0f)) {
 					player_->OnCollision();
-
+					
 				}
 			}
 		}
@@ -156,7 +156,12 @@ void Enemy::Update() {
 
 		for (std::unique_ptr<EnemyCrystalBullet>& crystalBullet : enemyCBObjs_) {
 			crystalBullet->Update();
+			{//仮でプレイヤーとのやり取り
+				if (coll.CircleCollision(player_->GetWorldPosition(), crystalBullet->GetWorldPosition(), 2.0f, 2.0f)) {
+					player_->OnCollision();
 
+				}
+			}
 		}
 
 		break;

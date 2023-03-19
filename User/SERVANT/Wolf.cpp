@@ -156,17 +156,17 @@ void Wolf::ChargeLongRange() {
 
 }
 
-void Wolf::Attack(int attackNmb)
+void Wolf::Attack(int attackNmb, Vector3 playerPos)
 {
 
 	coolTIme--;
 	if (coolTIme <= 0) {
 		if (isAttack == false) {
-			{
-				isAttack = true;
-				attackNmb_ = attackNmb;
-				coolTIme = 30;
-			}
+			isAttack = true;
+			attackNmb_ = attackNmb;
+			coolTIme = 30;
+			Vector3 popPos = playerPos;
+			bodyObj_->wtf.position = popPos;
 		}
 	}
 }
@@ -206,7 +206,9 @@ void Wolf::Update(Transform* enemyTransform) {
 
 
 void Wolf::Draw() {
-	bodyObj_->Draw();
+	if (isAttack) {
+		bodyObj_->Draw();
+	}
 }
 
 //Œü‚¢‚Ä‚é•ûŒü‚Évelocity‚ð•ÏŠ·‚·‚é
