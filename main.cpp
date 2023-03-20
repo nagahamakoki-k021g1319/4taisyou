@@ -25,6 +25,9 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 	ImGuiManager* imgui = nullptr;
 
+	Sprite* sprite_ = nullptr;
+	SpriteCommon* spriteCommon_ = nullptr;
+
 	//windowsAPI‚Ì‰Šú‰»
 	winApp = new WinApp();
 	winApp->Initialize();
@@ -149,6 +152,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	winApp->Finalize();
 	delete imgui;
 
+	delete sprite_;
 	//“ü—ÍŠJ•ú
 	delete input;
 	//WindowsAPIŠJ•ú

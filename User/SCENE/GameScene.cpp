@@ -15,6 +15,14 @@ GameScene::~GameScene() {
 	delete camera;
 	delete player_;
 	delete enemy_;
+	delete UI;
+	delete order;
+	delete PushOrder;
+	delete buttomPng1;
+	delete buttomPng2;
+	delete hpGauge;
+	delete unionGauge;
+
 }
 
 /// <summary>
@@ -60,6 +68,16 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	UI->SetPozition({ 0,0 });
 	UI->SetSize({1280.0f, 720.0f});
 
+	PushOrder = new Sprite();
+	PushOrder->Initialize(spriteCommon);
+	PushOrder->SetPozition({ 0,0 });
+	PushOrder->SetSize({ 1280.0f, 720.0f });
+
+	order = new Sprite();
+	order->Initialize(spriteCommon);
+	order->SetPozition({ 0,0 });
+	order->SetSize({ 1280.0f, 720.0f });
+
 	buttomPng1 = new Sprite();
 	buttomPng1->Initialize(spriteCommon);
 	buttomPng1->SetPozition({ 0,0 });
@@ -74,11 +92,14 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	hpGauge->Initialize(spriteCommon);
 	hpGauge->SetPozition({ 0,0 });
 	hpGauge->SetSize({ 1280.0f, 720.0f });
+	
+
 
 	unionGauge = new Sprite();
 	unionGauge->Initialize(spriteCommon);
 	unionGauge->SetPozition({ 0,0 });
 	unionGauge->SetSize({ 1280.0f, 720.0f });
+
 
 	spriteCommon->LoadTexture(0, "UI.png");
 	UI->SetTextureIndex(0);
@@ -90,6 +111,12 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	hpGauge->SetTextureIndex(3);
 	spriteCommon->LoadTexture(4, "unionGauge.png");
 	unionGauge->SetTextureIndex(4);
+	spriteCommon->LoadTexture(5, "order.png");
+	order->SetTextureIndex(5);
+	spriteCommon->LoadTexture(6, "order2.png");
+	PushOrder->SetTextureIndex(6);
+
+	/*unionGauge->SetPozition({ 0,0 });*/
 
 }
 
@@ -104,6 +131,8 @@ void GameScene::Update() {
 
 	//hpGaugeのxを(-400 + player.GeHp() * 4)動かしたい
 	//unionGaugeのxを(-200 + player.GetUnion() * 2)動かしたい
+
+	
 
 }
 
@@ -139,8 +168,10 @@ void GameScene::Draw() {
 	ParticleManager::PostDraw();
 
 	UI->Draw();
+	order->Draw();
 	if (input->ButtonInput(LT)) {
 		buttomPng2->Draw();
+		PushOrder->Draw();
 	}else {
 		buttomPng1->Draw();
 	}

@@ -96,5 +96,6 @@ private:	//ƒƒ“ƒo•Ï”
 	Sprite* buttomPng2 = nullptr;
 	Sprite* hpGauge = nullptr;
 	Sprite* unionGauge = nullptr;
-
+	Sprite* order = nullptr;
+	Sprite* PushOrder = nullptr;
 };

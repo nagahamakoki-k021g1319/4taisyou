@@ -195,7 +195,7 @@ void Player::OnCollision() {
 	else{
 		hp -= 10;
 		if (hp < 0) {
-			isLive = false;
+		//	isLive = false;
 		}
 	}
 }
