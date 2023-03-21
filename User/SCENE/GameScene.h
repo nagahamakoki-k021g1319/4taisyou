@@ -15,7 +15,7 @@
 #include "ParticleManager.h"
 
 #include"Player.h"
-#include"Enemy.h"
+#include"EnemyManager.h"
 
 /// <summary>
 /// ゲームシーン
@@ -88,7 +88,7 @@ private:	//メンバ変数
 	//プレイヤー
 	Player* player_ = nullptr;
 	//エネミー
-	Enemy* enemy_ = nullptr;
+	EnemyManager* enemyManager_ = nullptr;
 
 	//UI
 	Sprite* UI = nullptr;

@@ -1,8 +1,6 @@
 #pragma once
-
 #include "EnemyBullet.h"
 #include "EnemyCrystalBullet.h"
-#include "Input.h"
 
 class Player;
 #include "Collision.h"
@@ -13,23 +11,22 @@ public:
 
 	~Enemy();
 
-	void Initialize(Input* input);
+	void Initialize(Vector3 pos);
 	void Update();
 	void Draw();
 
 	void SetPlayer(Player* player) { player_ = player; };
 
-	/*/// <summary>
-	/// ポジション
-	/// </summary>
-	/// <param name="pos"></param>
-	void SetPos(Vector3 pos) { enemyObj_->wtf.position = pos; };
+	void CreatDaggerBullet(int bulletNum);
 
-	/// <summary>
-	/// 大きさ
-	/// </summary>
-	/// <param name="pos"></param>
-	void SetScale(Vector3 scale) { enemyObj_->wtf.scale = scale; };*/
+	void CreatCrystalBullet();
+
+	bool IsDead() const { if (isLive) { return false; } else { return true; } };
+
+	void OnColision(int damage);
+
+	////ワールド座標を取得
+	Vector3 GetWorldPosition();
 
 	//行動フェーズ
 	enum class Phase {
@@ -43,30 +40,23 @@ private:
 	Collision coll;
 
 	Object3d* enemyObj_ = nullptr;
-	std::list<std::unique_ptr<Object3d>> enemyListObjs_;
-
 	Model* enemyModel_ = nullptr;
+	bool isLive = true;
+	const int hpMax = 10;
+	int hp = hpMax;
 	
-	
-
-	Input* input_ = nullptr;
-
 	//フェーズ
 	Phase phase_ = Phase::Approach;
 
-
-
-
 	//敵の攻撃系統
-
 	////-----ダガーファンネル------///
-	std::list<std::unique_ptr<EnemyBullet>> enemyBulletObjs_;
-	Model* enemyBulletModel_ = nullptr;
+	std::list<std::unique_ptr<EnemyBullet>> daggerBullets_;
+	Model* daggerBulletModel_ = nullptr;
 	int enemyAttackTimer = 0;
 	//////////////////////////////
 
 	////-----順番に弾が飛んでくる攻撃------///
-	std::list<std::unique_ptr<EnemyCrystalBullet>> enemyCBObjs_;
+	std::list<std::unique_ptr<EnemyCrystalBullet>> crystalBullets_;
 	Model* enemyCBModel_ = nullptr;
 	int enemyAttackTimer2 = 0;
 	///////////////////////////////////

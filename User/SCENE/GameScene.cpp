@@ -14,7 +14,13 @@ GameScene::~GameScene() {
 	delete spriteCommon;
 	delete camera;
 	delete player_;
-	delete enemy_;
+	delete enemyManager_;
+
+	delete UI;
+	delete buttomPng1;
+	delete buttomPng2;
+	delete hpGauge;
+	delete unionGauge;
 }
 
 /// <summary>
@@ -50,9 +56,10 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	player_->Initialize(input);
 
 	//エネミー
-	enemy_ = new Enemy();
-	enemy_->Initialize(input);
-	enemy_->SetPlayer(player_);
+	enemyManager_ = new EnemyManager();
+	enemyManager_->Initialize();
+	enemyManager_->SetPlayer(player_);
+
 
 	//UI
 	UI = new Sprite();
@@ -97,8 +104,17 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 /// 毎フレーム処理
 /// </summary>
 void GameScene::Update() {
+	
+	//仮で敵のラウンド切り替え
+	if (input->TriggerKey(DIK_P)) {
+		enemyManager_->creatEnemy(0);
+	}else if (input->TriggerKey(DIK_O)) {
+		enemyManager_->creatEnemy(1);
+	}
+
+
 	CamUpdate();
-	enemy_->Update();
+	enemyManager_->Update();
 	player_->Update(&camWtf);
 
 
@@ -122,7 +138,7 @@ void GameScene::Draw() {
 
 	//// 3Dオブクジェクトの描画
 	player_->Draw();
-	enemy_->Draw();
+	enemyManager_->Draw();
 
 
 	//3Dオブジェクト描画後処理

@@ -10,11 +10,9 @@ void EnemyCrystalBullet::Initialize(int num, Model* crystalModel_) {
 	crystalObj_ = Object3d::Create();
 	crystalObj_->SetModel(crystalModel_);
 
-
 	isLive = true;
 	bulletNum = num;
 	shotTimer = 300 - num * 50;
-
 }
 
 
@@ -75,4 +73,10 @@ Vector3 EnemyCrystalBullet::GetWorldPosition()
 	worldPos.z = crystalObj_->wtf.position.z;
 
 	return worldPos;
+}
+
+
+void EnemyCrystalBullet::OnCollision() {
+	isLive = false;
+
 }

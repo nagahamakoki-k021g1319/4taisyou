@@ -31,6 +31,8 @@ public:
 
 	void Hit();
 
+	bool CheckAttack2Enemy(Vector3 enemyPos,float& damage);
+
 private:
 	const float PI = 3.141592;
 
