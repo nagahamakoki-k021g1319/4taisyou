@@ -41,6 +41,10 @@ public:
 
 	void Vec(Vector3 pos);
 
+	bool IsDead() const { if (isLive) { return false; } else { return true; } };
+
+	void OnCollision();
+
 	////ƒ[ƒ‹ƒhÀ•W‚ğæ“¾
 	Vector3 GetWorldPosition();
 

@@ -21,6 +21,7 @@ void Player::Initialize(Input* input) {
 	bodyObj_ = Object3d::Create();
 	bodyObj_->SetModel(bodyModel_);
 	bodyObj_->wtf.position = { 0,-3,8 };
+	hp = defaultHp;
 
 	//ガード設定
 	guardModel = Model::LoadFromOBJ("guard");

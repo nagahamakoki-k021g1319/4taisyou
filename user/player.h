@@ -70,12 +70,12 @@ private:
 	Model* unionModel = nullptr;
 	float specialMeter;
 	bool isUnion;
-	//バディ
-	int selectBuddy;
-	Wolf* wolf_ = nullptr;
-	Gorilla* gorilla_ = nullptr;
 
 	//敵
 	Transform* enemyPos_ = nullptr;
 public:
+	//バディ
+	int selectBuddy;
+	Wolf* wolf_ = nullptr;
+	Gorilla* gorilla_ = nullptr;
 };

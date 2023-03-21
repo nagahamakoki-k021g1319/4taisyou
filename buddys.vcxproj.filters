@@ -193,6 +193,9 @@
     <ClCompile Include="User\Round.cpp">
       <Filter>user\ソース</Filter>
     </ClCompile>
+    <ClCompile Include="User\EnemyManager.cpp">
+      <Filter>user\ソース</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BASE\FPS.h">
@@ -289,6 +292,9 @@
       <Filter>Engine\ヘッダーファイル\INPUT</Filter>
     </ClInclude>
     <ClInclude Include="User\Round.h">
+      <Filter>user\ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="User\EnemyManager.h">
       <Filter>user\ヘッダー</Filter>
     </ClInclude>
   </ItemGroup>

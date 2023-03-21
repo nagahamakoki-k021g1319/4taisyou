@@ -5,26 +5,25 @@ EnemyBullet::~EnemyBullet() {
 }
 
 
-void EnemyBullet::Initialize(int timer, Model* model_)
-{
+void EnemyBullet::Initialize(int timer, Model* model_){
 	// ダガーファンネル
 	obj_ = Object3d::Create();
 	obj_->SetModel(model_);
 
-
 	daggerTimer = timer;
-	isLive = false;
+	isLive = true;
+	isPop = false;
 	shotTimer = 120;
 
-	
 }
 
 void EnemyBullet::DaggerFAttack(){
 	//表示まで
 	daggerTimer--;
 	if (daggerTimer < 0) {
-		isLive = true;
+		isPop = true;
 	}
+
 
 	shotTimer--;
 
@@ -35,22 +34,23 @@ void EnemyBullet::DaggerFAttack(){
 	}
 	if (obj_->wtf.position.z <= -30) {
 		isLive = false;
-		isDead_ = true;
 	}
 }
 
 void EnemyBullet::Update(){
-
 	DaggerFAttack();
-
 	obj_->Update();
 	
-
 }
 
 void EnemyBullet::Draw(){
-	if (isLive) {
+	if (isPop) {
 		obj_->Draw();
 	}
-	
+}
+
+
+void EnemyBullet::OnCollision() {
+	isLive = false;
+
 }

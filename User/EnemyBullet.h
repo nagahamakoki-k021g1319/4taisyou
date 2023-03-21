@@ -41,8 +41,9 @@ public:
   
 	Vector3 GetPos() { return obj_->wtf.position; };
 
-	bool IsDead() const { return  isDead_; }
+	bool IsDead() const {if (isLive) { return false; }else { return true; }};
 
+	void OnCollision();
 
 private:
 
@@ -51,8 +52,8 @@ private:
 	//召喚して飛ばすまでの時間とフラグ
 	int daggerTimer;
 	bool isLive = false;
-	bool isDead_ = false;
 	int shotTimer;
 	//////////////////////////////
-
+public:
+	bool isPop = false;
 };
