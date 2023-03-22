@@ -6,11 +6,11 @@ Player::Player() {
 Player::~Player() {
 	delete bodyObj_;
 	delete bodyModel_;
-	delete guardModel;
 	delete dodgeModel;
-	delete unionModel;
 	delete wolf_;
-	delete gorilla_;
+
+	delete debugObj_;
+	delete debugModel_;
 }
 
 void Player::Initialize(Input* input) {
@@ -22,174 +22,111 @@ void Player::Initialize(Input* input) {
 	bodyObj_->SetModel(bodyModel_);
 	bodyObj_->wtf.position = { 0,-3,8 };
 	hp = defaultHp;
-
-	//ガード設定
-	guardModel = Model::LoadFromOBJ("guard");
-	GuardDurability = guardMax;
-	isGuard = false;
+	isAction = 0;
 
 	//回避設定
 	dodgeModel = Model::LoadFromOBJ("dodge");
 	dodgeTimer = dodgeLimit;
 	isDodge = false;
 
-	//合体設定
-	unionModel = Model::LoadFromOBJ("wolfUnion");
-	specialMeter = 95;
-	isUnion = false;
-
-
 	//バディ
-	selectBuddy = 0;
 	wolf_ = new Wolf();
 	wolf_->Initialize();
 	wolf_->SetPlayerWtf(&bodyObj_->wtf);
 
-	gorilla_ = new Gorilla();
-	gorilla_->Initialize();
-	gorilla_->SetPlayerWtf(&bodyObj_->wtf);
 
+
+	//デバッグ用
+	debugModel_ = Model::LoadFromOBJ("boll");
+	debugObj_ = Object3d::Create();
+	debugObj_->SetModel(debugModel_);
 }
 
 void Player::Attack() {
-
-	//バディ指示
-	if (input_->PushKey(DIK_LSHIFT) || input_->ButtonInput(LT)) {
-		if (input_->PushKey(DIK_1) || input_->ButtonInput(B)) {
-			//近距離
-			if (selectBuddy == 0) {
+	if (isAction == 0) {
+		//バディ指示
+		if (input_->PushKey(DIK_LSHIFT) || input_->ButtonInput(LT)) {
+			if (input_->PushKey(DIK_1) || input_->ButtonInput(B)) {
+				//近距離
 				wolf_->Attack(1, GetWorldPosition());
-			}else if (selectBuddy == 1) {
-				gorilla_->ShortRange();
-			}else if (selectBuddy == 2) {
 
 			}
-		}else if (input_->PushKey(DIK_2) || input_->ButtonInput(A)) {
-			//遠距離
-			if (selectBuddy == 0) {
+			else if (input_->PushKey(DIK_2) || input_->ButtonInput(A)) {
+				//遠距離
 				wolf_->Attack(2, GetWorldPosition());
-			}
-			else if (selectBuddy == 1) {
-				gorilla_->LongRange();
-			}
-			else if (selectBuddy == 2) {
 
 			}
-		}else if (input_->PushKey(DIK_3) || input_->ButtonInput(Y)) {
-			//溜め近距離
-			if (selectBuddy == 0) {
+			else if (input_->PushKey(DIK_3) || input_->ButtonInput(Y)) {
+				//溜め近距離
 				wolf_->Attack(3, GetWorldPosition());
-			}
-			else if (selectBuddy == 1) {
-				gorilla_->ChargeShortRange();
-			}
-			else if (selectBuddy == 2) {
 
 			}
-		}else if (input_->PushKey(DIK_4) || input_->ButtonInput(X)) {
-			//溜め遠距離
-			if (selectBuddy == 0) {
+			else if (input_->PushKey(DIK_4) || input_->ButtonInput(X)) {
+				//溜め遠距離
 				wolf_->Attack(4, GetWorldPosition());
 			}
-			else if (selectBuddy == 1) {
-				gorilla_->ChargeLongRange();
-			}
-			else if (selectBuddy == 2) {
-
-			}
 		}
-	}
-	//本体攻撃
-	else{
-		//ガード
-		if (input_->PushKey(DIK_1) || input_->ButtonInput(Y)) {
-			//ガードの発生
-			if (isGuard == false) {
-				isGuard = true;
-				bodyObj_->SetModel(guardModel);
-			}
-
-			//時間経過で耐久地消耗
-			if (GuardDurability > 0) {
-				GuardDurability--;
-			}
-			//ガード割れ
-			else if (GuardDurability <= 0) {
-				isGuard = false;
-				bodyObj_->SetModel(bodyModel_);
-			}
-		}
+		//本体攻撃入力
 		else {
-			//ガード解除
-			if (isGuard) {
-				isGuard = false;
-				bodyObj_->SetModel(bodyModel_);
+			//弱攻撃
+			if (input_->PushKey(DIK_4) || input_->ButtonInput(X)) {
+				isAction = 1;
+				lightAttackCount = 0;
+				lightAttackTimer = lightAttackLimit[0];
 			}
-			//ガードの耐久回復
-			if (GuardDurability < guardMax) {
-				GuardDurability++;
+			//強攻撃
+			if (input_->PushKey(DIK_1) || input_->ButtonInput(Y)) {
+				isAction = 2;
 			}
-		}
+			//回避
+			if (input_->PushKey(DIK_3) || input_->ButtonInput(B)) {
+				isAction = 3;
+				////回避発生
+				//if (input_->LeftStickInput()) {
+				//	if (isDodge == false) {
+				//		//回避スピード
+				//		Vector2 stickVec = input_->GetLeftStickVec();
+				//		dodgeMoveVec = { stickVec.x,0,stickVec.y };
+				//	//	dodgeMoveVec = bVelocity(dodgeMoveVec, bodyObj_->wtf);
 
-		//回避
-		if (input_->TriggerKey(DIK_2) || input_->ButtonInput(A)) {
-			//回避発生
-			if (isDodge==false) {
-				isDodge = true;
-				dodgeTimer = dodgeLimit;
-				bodyObj_->SetModel(dodgeModel);
+				//		isDodge = true;
+				//		dodgeTimer = dodgeLimit;
+				//		bodyObj_->SetModel(dodgeModel);
+				//	}
+				//}
 			}
-		}
-
-
-		//弱攻撃
-		if (input_->PushKey(DIK_3) || input_->ButtonInput(B)) {
-
-		}
-
-		//合体
-		if (input_->PushKey(DIK_4) || input_->ButtonInput(X)) {
-			//合体発生
-			if (specialMeter >= 100) {
-				isUnion = true;
-				bodyObj_->SetModel(unionModel);
+			//null
+			if (input_->TriggerKey(DIK_2) || input_->ButtonInput(A)) {
 			}
 		}
 	}
 
-	//回避更新
-	if (isDodge) {
-		dodgeTimer--;
-		if (dodgeTimer < 0) {
-			isDodge = false;
-			bodyObj_->SetModel(bodyModel_);
-		}
+	//攻撃更新
+	//弱攻撃
+	else if (isAction == 1) {
+		LightAttack();
 	}
-
-	//合体更新
-	if (isUnion) {
-		//メーター減少
-		specialMeter -= 1;
-		//0以下で強制解除
-		if (specialMeter < 0) {
-			isUnion = false;
-			bodyObj_->SetModel(bodyModel_);
-		}
+	//強攻撃
+	else if (isAction == 2) {
+		HeavyAttack();
 	}
+	//回避
+	else if(isAction==3){
+		Dodge();
 
+		//if (isDodge) {
+		//	dodgeTimer--;
+		//	if (dodgeTimer < 0) {
+		//		isDodge = false;
+		//		bodyObj_->SetModel(bodyModel_);
+		//	}
+		//}
+	}
 }
 
 void Player::OnCollision() {
-	//ガード時
-	if (isGuard) {
-		if (GuardDurability > 0) {
-			//攻撃によって減る量変えたい
-			GuardDurability--;
-		}
-	}
 	//回避時
-	else if(isDodge) {
-		specialMeter += 1;
+	if(isDodge) {
 
 	}
 	//通常時
@@ -202,63 +139,34 @@ void Player::OnCollision() {
 }
 
 void Player::Rota() {
-	if (input_->StickInput(L_UP)) {
-		bodyObj_->wtf.rotation.y = 0;
-	}
-	if (input_->StickInput(L_DOWN)) {
-		bodyObj_->wtf.rotation.y = PI;
-	}
-	if (input_->StickInput(L_LEFT)) {
-		bodyObj_->wtf.rotation.y = PI * 3 / 2;
-	}
-	if (input_->StickInput(L_RIGHT)) {
-		bodyObj_->wtf.rotation.y = PI / 2;
-	}
+	if (isAction == 0) {
+		if (input_->LeftStickInput()) {
+			Vector2 stickVec = input_->GetLeftStickVec();
 
+			float theta = atan2(stickVec.x, stickVec.y);
+
+			bodyObj_->wtf.rotation.y = theta;
+		}
+	}
 }
-
-void Player::Move() {
-
-}
-
 
 void Player::Update(Transform* cam) {
-	
-
-	if (input_->TriggerKey(DIK_Q)) {
-		if (--selectBuddy < 0) {
-			selectBuddy = 2;
-		}
-	}else if (input_->TriggerKey(DIK_E)) {
-		if (++selectBuddy > 2) {
-			selectBuddy = 0;
-		}
-	}
-
 	Rota();
-	Move();
 	Attack();
 	
 	bodyObj_->Update(cam);
 	wolf_->Update(enemyPos_);
-	gorilla_->Update();
-}
 
+	debugObj_->Update();
+}
 
 void Player::Draw() {
 	if (isLive) {
 		bodyObj_->Draw();
 
-		if (isUnion == false) {
-			if (selectBuddy == 0) {
-				wolf_->Draw();
-			}
-			else if (selectBuddy == 1) {
-				gorilla_->Draw();
-			}
-			else if (selectBuddy == 2) {
-
-			}
+		//デバッグ用
+		if (isLightAttack) {
+			debugObj_->Draw();
 		}
 	}
 }
@@ -294,4 +202,83 @@ Vector3 Player::GetWorldPosition()
 
 
 	return worldPos;
+}
+
+bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
+	//弱攻撃
+	if (isAction == 1) {
+		//当たり判定が出てるか
+		if (isLightAttack) {
+			//当たり判定
+			if (col.CircleCollisionXZ(lightAttackCol, enemyPos, 1.0f, 1.0f)) {
+				damage = 3;
+				return true;
+			}
+		}
+	}
+
+	//強攻撃
+	else if (isAction == 2) {
+
+
+	}
+
+	return false;
+}
+
+void Player::LightAttack() {
+	
+	lightAttackTimer--;
+	//攻撃の終了
+	if (lightAttackTimer <= 0) {
+		isAction = 0;
+		isLightAttack = false;
+	}
+
+	//1撃目
+	if (lightAttackCount == 0) {
+		//当たり判定の出現
+		if (lightAttackTimer <= lightAttackPopTime[0] && lightAttackTimer > 0) {
+			isLightAttack = true;
+		}
+
+		//当たり判定の移動
+		lightAttackCol = GetWorldPosition();
+		debugObj_->wtf.position = lightAttackCol;
+
+		//次の斬撃入力
+		if (input_->ButtonInput(X)) {
+			//入力受付時間
+			if (lightAttackTimer < lightAttackInput[lightAttackCount] && lightAttackTimer > 0) {
+				//次の斬撃設定
+				lightAttackCount++;
+				lightAttackTimer = lightAttackLimit[lightAttackCount];
+				isLightAttack = false;
+			}
+		}
+	}
+	//2撃目
+	else if (lightAttackCount == 1) {
+
+
+	}
+	//3撃目
+	else if (lightAttackCount == 2) {
+
+
+	}
+	//4撃目
+	else if (lightAttackCount == 3) {
+
+
+	}
+}
+
+void Player::HeavyAttack() {
+
+}
+
+void Player::Dodge() {
+
+
 }

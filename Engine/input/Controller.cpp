@@ -190,6 +190,18 @@ bool Controller::StickInput(ControllerStick stickInput, const float& deadRange, 
 	return false;
 }
 
+bool Controller::LeftStickInput(const float& deadRange) {
+	Vector2 stickVec = { float(xinputState.Gamepad.sThumbLX),float(xinputState.Gamepad.sThumbLY) };
+	
+	float depth = stickVec.length();
+
+	if (depth > STICK_INPUT_MAX * deadRange) {
+		return true;
+	}
+
+	return false;
+}
+
 bool Controller::ButtonOffTrigger(ControllerButton button)
 {
 	//ƒgƒŠƒK[

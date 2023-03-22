@@ -7,58 +7,66 @@ Enemy::Enemy() {
 Enemy::~Enemy() {
 	delete enemyObj_;
 	delete enemyModel_;
-	delete enemyBulletModel_;
-	enemyBulletObjs_.clear();
+	delete daggerBulletModel_;
+	daggerBullets_.clear();
 	delete enemyCBModel_;
-	enemyCBObjs_.clear();
+	crystalBullets_.clear();
 }
 
-void Enemy::Initialize(Input* input) {
-	input_ = input;
-
+void Enemy::Initialize(Vector3 pos) {
 	enemyModel_ = Model::LoadFromOBJ("as");
 	enemyObj_ = Object3d::Create();
 	enemyObj_->SetModel(enemyModel_);
-	enemyObj_->wtf.position = { 0,3,5 };
+	enemyObj_->wtf.position = pos;
 
 	// ダガーファンネル
-	enemyBulletModel_ = Model::LoadFromOBJ("boll");
+	daggerBulletModel_ = Model::LoadFromOBJ("boll");
 	//順番に弾が飛んでくる攻撃
 	enemyCBModel_ = Model::LoadFromOBJ("boll");
 	
-
 }
 
 void Enemy::Update() {
-
 	{//仮でプレイヤーとのやり取り
 		player_->SetEnemyPos(&enemyObj_->wtf);
 	}
 
-
 	enemyObj_->Update();
-	
 
-	std::unique_ptr<Object3d> newEnemyObjs_ = std::make_unique<Object3d>();
-	newEnemyObjs_->Initialize();
-	newEnemyObjs_->SetModel(enemyModel_);
-	newEnemyObjs_->wtf.position = { -3,3,10 };
-	enemyListObjs_.push_back(std::move(newEnemyObjs_));
-	enemyListObjs_.remove_if([](std::unique_ptr<Object3d>& newEnemyObjs_) { return newEnemyObjs_->IsDead(); });
-	for (std::unique_ptr<Object3d>& newEnemyObjs_ : enemyListObjs_) {
-		newEnemyObjs_->Update();
+	//各種球更新
+	//ダガーバレット
+	daggerBullets_.remove_if([](std::unique_ptr<EnemyBullet>& bullet) { return bullet->IsDead(); });
+	for (std::unique_ptr<EnemyBullet>& bullet : daggerBullets_) {
+		bullet->Update();
+		if (bullet->isPop) {
+			//仮でプレイヤーとのやり取り
+			if (coll.CircleCollision(player_->GetWorldPosition(), bullet->GetPos(), 1.0f, 1.0f)) {
+				player_->OnCollision();
+				bullet->OnCollision();
+			}
+		}
 	}
-
-
+	//クリスタルバレット
+	crystalBullets_.remove_if([](std::unique_ptr<EnemyCrystalBullet>& bullet) { return bullet->IsDead(); });
+	for (std::unique_ptr<EnemyCrystalBullet>& bullet : crystalBullets_) {
+		bullet->Update();
+		{//仮でプレイヤーとのやり取り
+			if (coll.CircleCollision(player_->GetWorldPosition(), bullet->GetWorldPosition(), 2.0f, 2.0f)) {
+				player_->OnCollision();
+				bullet->OnCollision();
+			}
+		}
+	}
 
 	switch (phase_) {
 	case Phase::Approach:
 		enemyResetTimer = 0;
 		enemyAttackTimer++;
+
+		//フェーズ移行
 		if (enemyAttackTimer >= 450) {
 			phase_ = Phase::Leave;
 		}
-
 
 		//攻撃するまで移動
 		if (enemyAttackTimer >= 0 && enemyAttackTimer <=9) {
@@ -71,47 +79,10 @@ void Enemy::Update() {
 		}
 
 		//ダガーファンネルを秒数で攻撃させる
-		if (enemyAttackTimer == 10) {
-			for (int i = 0; i < 5; i++) {
-				std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
-				newBullet->Initialize(20 + 20 * i, enemyBulletModel_);
-				newBullet->SetPos({ enemyObj_->wtf.position.x - 4.0f + 2.0f * i,enemyObj_->wtf.position.y - 2.0f,enemyObj_->wtf.position.z + 8.0f });
-				newBullet->SetScale({ 0.5f,0.5f, 0.5f});
-				enemyBulletObjs_.push_back(std::move(newBullet));
-				enemyBulletObjs_.remove_if([](std::unique_ptr<EnemyBullet>& newBullet) { return newBullet->IsDead(); });
-			}
-		}
-		else if (enemyAttackTimer == 200) {
-			for (int i = 0; i < 5; i++) {
-				std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
-				newBullet->Initialize(20 + 20 * i, enemyBulletModel_);
-				newBullet->SetPos({ enemyObj_->wtf.position.x - 4.0f + 2.0f * i,enemyObj_->wtf.position.y - 2.0f,enemyObj_->wtf.position.z + 8.0f });
-				newBullet->SetScale({ 0.5f,0.5f, 0.5f });
-				enemyBulletObjs_.push_back(std::move(newBullet));
-				enemyBulletObjs_.remove_if([](std::unique_ptr<EnemyBullet>& newBullet) { return newBullet->IsDead(); });
-			}
-		}
-		else if (enemyAttackTimer == 250) {
-			for (int i = 0; i < 5; i++) {
-				std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
-				newBullet->Initialize(20 + 20 * i, enemyBulletModel_);
-				newBullet->SetPos({ enemyObj_->wtf.position.x - 4.0f + 2.0f * i,enemyObj_->wtf.position.y - 2.0f,enemyObj_->wtf.position.z + 8.0f });
-				newBullet->SetScale({ 0.5f,0.5f, 0.5f });
-				enemyBulletObjs_.push_back(std::move(newBullet));
-				enemyBulletObjs_.remove_if([](std::unique_ptr<EnemyBullet>& newBullet) { return newBullet->IsDead(); });
-			}
+		if (enemyAttackTimer == 10|| enemyAttackTimer == 200|| enemyAttackTimer == 250) {
+			CreatDaggerBullet(5);
 		}
 
-		for (std::unique_ptr<EnemyBullet>& bullet : enemyBulletObjs_) {
-			bullet->Update();
-
-			{//仮でプレイヤーとのやり取り
-				if (coll.CircleCollision(player_->GetWorldPosition() , bullet->GetPos(), 2.0f, 2.0f)) {
-					player_->OnCollision();
-					
-				}
-			}
-		}
 
 		break;
 	case Phase::Leave:
@@ -128,40 +99,7 @@ void Enemy::Update() {
 		}
 		//順番に攻撃する弾を秒数で攻撃させる
 		if (enemyAttackTimer2 == 10) {
-			for (int i = 0; i < 2; i++) {
-				std::unique_ptr<EnemyCrystalBullet> newCrystalBullet = std::make_unique<EnemyCrystalBullet>();
-				newCrystalBullet->Initialize(i, enemyCBModel_);
-				newCrystalBullet->SetPos({ enemyObj_->wtf.position.x -2.0f + 4.0f * i,enemyObj_->wtf.position.y - 3.0f,enemyObj_->wtf.position.z +15.0f });
-				newCrystalBullet->Vec(player_->GetWorldPosition());
-				enemyCBObjs_.push_back(std::move(newCrystalBullet));
-			}
-			std::unique_ptr<EnemyCrystalBullet> newCrystalBullet = std::make_unique<EnemyCrystalBullet>();
-			newCrystalBullet->Initialize(2, enemyCBModel_);
-			newCrystalBullet->SetPos({ enemyObj_->wtf.position.x -4.0f,enemyObj_->wtf.position.y + 1.0f, enemyObj_->wtf.position.z + 15.0f });
-			newCrystalBullet->Vec(player_->GetWorldPosition());
-			enemyCBObjs_.push_back(std::move(newCrystalBullet));
-
-			std::unique_ptr<EnemyCrystalBullet> newCrystalBullet2 = std::make_unique<EnemyCrystalBullet>();
-			newCrystalBullet2->Initialize(3, enemyCBModel_);
-			newCrystalBullet2->SetPos({ enemyObj_->wtf.position.x + 4.0f,enemyObj_->wtf.position.y + 1.0f, enemyObj_->wtf.position.z + 15.0f });
-			newCrystalBullet2->Vec(player_->GetWorldPosition());
-			enemyCBObjs_.push_back(std::move(newCrystalBullet2));
-
-			std::unique_ptr<EnemyCrystalBullet> newCrystalBullet3 = std::make_unique<EnemyCrystalBullet>();
-			newCrystalBullet3->Initialize(4, enemyCBModel_);
-			newCrystalBullet3->SetPos({ enemyObj_->wtf.position.x,enemyObj_->wtf.position.y + 4.0f,enemyObj_->wtf.position.z + 15.0f });
-			newCrystalBullet3->Vec(player_->GetWorldPosition());
-			enemyCBObjs_.push_back(std::move(newCrystalBullet3));
-		}
-
-		for (std::unique_ptr<EnemyCrystalBullet>& crystalBullet : enemyCBObjs_) {
-			crystalBullet->Update();
-			{//仮でプレイヤーとのやり取り
-				if (coll.CircleCollision(player_->GetWorldPosition(), crystalBullet->GetWorldPosition(), 2.0f, 2.0f)) {
-					player_->OnCollision();
-
-				}
-			}
+			CreatCrystalBullet();
 		}
 
 		break;
@@ -179,26 +117,60 @@ void Enemy::Update() {
 
 }
 
+void Enemy::CreatDaggerBullet(int bulletNum) {
+	for (int i = 0; i < bulletNum; i++) {
+		std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
+		newBullet->Initialize(20 + 20 * i, daggerBulletModel_);
+		newBullet->SetPos({ enemyObj_->wtf.position.x - 4.0f + 2.0f * i,enemyObj_->wtf.position.y,enemyObj_->wtf.position.z + 8.0f });
+		newBullet->SetScale({ 0.5f,0.5f, 0.5f });
+		daggerBullets_.push_back(std::move(newBullet));
+	}
+}
+
+void Enemy::CreatCrystalBullet() {
+	for (int i = 0; i < 2; i++) {
+		std::unique_ptr<EnemyCrystalBullet> newCrystalBullet = std::make_unique<EnemyCrystalBullet>();
+		newCrystalBullet->Initialize(i, enemyCBModel_);
+		newCrystalBullet->SetPos({ enemyObj_->wtf.position.x - 2.0f + 4.0f * i,enemyObj_->wtf.position.y - 3.0f,enemyObj_->wtf.position.z + 15.0f });
+		newCrystalBullet->Vec(player_->GetWorldPosition());
+		crystalBullets_.push_back(std::move(newCrystalBullet));
+	}
+	std::unique_ptr<EnemyCrystalBullet> newCrystalBullet = std::make_unique<EnemyCrystalBullet>();
+	newCrystalBullet->Initialize(2, enemyCBModel_);
+	newCrystalBullet->SetPos({ enemyObj_->wtf.position.x - 4.0f,enemyObj_->wtf.position.y + 1.0f, enemyObj_->wtf.position.z + 15.0f });
+	newCrystalBullet->Vec(player_->GetWorldPosition());
+	crystalBullets_.push_back(std::move(newCrystalBullet));
+
+	std::unique_ptr<EnemyCrystalBullet> newCrystalBullet2 = std::make_unique<EnemyCrystalBullet>();
+	newCrystalBullet2->Initialize(3, enemyCBModel_);
+	newCrystalBullet2->SetPos({ enemyObj_->wtf.position.x + 4.0f,enemyObj_->wtf.position.y + 1.0f, enemyObj_->wtf.position.z + 15.0f });
+	newCrystalBullet2->Vec(player_->GetWorldPosition());
+	crystalBullets_.push_back(std::move(newCrystalBullet2));
+
+	std::unique_ptr<EnemyCrystalBullet> newCrystalBullet3 = std::make_unique<EnemyCrystalBullet>();
+	newCrystalBullet3->Initialize(4, enemyCBModel_);
+	newCrystalBullet3->SetPos({ enemyObj_->wtf.position.x,enemyObj_->wtf.position.y + 4.0f,enemyObj_->wtf.position.z + 15.0f });
+	newCrystalBullet3->Vec(player_->GetWorldPosition());
+	crystalBullets_.push_back(std::move(newCrystalBullet3));
+}
 
 void Enemy::Draw() {
 	enemyObj_->Draw();
-	for (std::unique_ptr<Object3d>& newEnemyObjs_ : enemyListObjs_) {
-		newEnemyObjs_->Draw();
-
+	
+	for (std::unique_ptr<EnemyBullet>& bullet : daggerBullets_) {
+		bullet->Draw();
 	}
 
+	for (std::unique_ptr<EnemyCrystalBullet>& bullet : crystalBullets_) {
+		bullet->Draw();
+	}
+	
 	switch (phase_) {
 	case Phase::Approach:
-		for (std::unique_ptr<EnemyBullet>& bullet : enemyBulletObjs_) {
-			bullet->Draw();
-		}
+
 		break;
 	case Phase::Leave:
-		for (std::unique_ptr<EnemyCrystalBullet>& crystalBullet : enemyCBObjs_) {
-			crystalBullet->Draw();
-
-		}
-
+		
 		break;
 
 	case Phase::ReLeave:
@@ -208,3 +180,22 @@ void Enemy::Draw() {
 
 }
 
+Vector3 Enemy::GetWorldPosition()
+{
+	//ワールド座標を入れる変数
+	Vector3 worldPos;
+	//ワールド行列の平行移動成分
+	worldPos.x = enemyObj_->wtf.matWorld.m[3][0];
+	worldPos.y = enemyObj_->wtf.matWorld.m[3][1];
+	worldPos.z = enemyObj_->wtf.matWorld.m[3][2];
+
+
+	return worldPos;
+}
+
+void Enemy::OnColision(int damage) {
+	hp -= damage;
+	if (hp <= 0) {
+		isLive = false;
+	}
+}
