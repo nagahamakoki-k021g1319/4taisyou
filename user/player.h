@@ -40,6 +40,8 @@ public:
 
 	float GetHp() { return hp; };
 
+	Vector3 GetDodgeMoveVec() { return dodgeMoveVec; };
+
 	/// <summary>
 	/// ƒ|ƒWƒVƒ‡ƒ“
 	/// </summary>
@@ -95,9 +97,10 @@ private:
 
 	//‰ñ”ð
 	bool isDodge;
-	const int dodgeLimit = 60;
+	const int dodgeLimit = 30;
 	int dodgeTimer;
 	Vector3 dodgeMoveVec;
+	Vector3 dodgeMoveVecNomal;
 
 
 	//“G

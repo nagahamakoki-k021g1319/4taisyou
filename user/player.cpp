@@ -96,23 +96,12 @@ void Player::Attack() {
 			if (input_->PushKey(DIK_3) || input_->ButtonInput(B)) {
 				if (input_->LeftStickInput()) {
 					isAction = 3;
+					isDodge = true;
+					dodgeTimer = dodgeLimit;
 					Vector2 stickVec = input_->GetLeftStickVec();
 					dodgeMoveVec = { stickVec.x,0,stickVec.y };
+					dodgeMoveVecNomal = dodgeMoveVec.nomalize();
 				}
-
-				////回避発生
-				//if (input_->LeftStickInput()) {
-				//	if (isDodge == false) {
-				//		//回避スピード
-				//		Vector2 stickVec = input_->GetLeftStickVec();
-				//		dodgeMoveVec = { stickVec.x,0,stickVec.y };
-				//	//	dodgeMoveVec = bVelocity(dodgeMoveVec, bodyObj_->wtf);
-
-				//		isDodge = true;
-				//		dodgeTimer = dodgeLimit;
-				//		bodyObj_->SetModel(dodgeModel);
-				//	}
-				//}
 			}
 			//null
 			if (input_->TriggerKey(DIK_2) || input_->ButtonInput(A)) {
@@ -395,6 +384,22 @@ void Player::HeavyAttack() {
 }
 
 void Player::Dodge() {
+	dodgeTimer--;
 
+	//移動速度変更
+	if (dodgeTimer > 20) {
+		dodgeMoveVec = dodgeMoveVecNomal * 0.4f;
+	}
+	else if (dodgeTimer <= 20 && dodgeTimer > 10) {
+		dodgeMoveVec = dodgeMoveVecNomal * 0.2f;
+	}
+	else {
+		dodgeMoveVec = dodgeMoveVecNomal * 0.08f;
+	}
+
+	if (dodgeTimer < 0) {
+		isAction = 0;
+		isDodge = false;
+	}
 
 }
