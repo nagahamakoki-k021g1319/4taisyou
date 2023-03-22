@@ -95,6 +95,7 @@ private:	//ƒƒ“ƒo•Ï”
 	Sprite* buttomPng1 = nullptr;
 	Sprite* buttomPng2 = nullptr;
 	Sprite* hpGauge = nullptr;
+	Vector2 hpPosition;
 	Sprite* unionGauge = nullptr;
 
 };
