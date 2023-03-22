@@ -235,4 +235,5 @@ Vector3 Wolf::bVelocity(Vector3& velocity, Transform& worldTransform)
 void Wolf::Hit()
 {
 
+
 }
