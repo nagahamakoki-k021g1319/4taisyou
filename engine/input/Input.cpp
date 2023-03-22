@@ -112,6 +112,10 @@ bool Input::StickInput(ControllerStick stickInput, const float& deadRange, const
 	return controller->StickInput(stickInput, deadRange, deadRate);
 }
 
+bool Input::LeftStickInput(const float& deadRange) {
+	return controller->LeftStickInput(deadRange);
+}
+
 bool Input::ButtonOffTrigger(ControllerButton button)
 {
 	return controller->ButtonOffTrigger(button);

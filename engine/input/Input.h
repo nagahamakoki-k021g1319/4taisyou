@@ -77,6 +77,15 @@ public: // メンバ関数
 	/// <returns>倒したかどうか</returns>
 	bool StickInput(ControllerStick stickInput, const float& deadRange = 0.3f, const Vector2& deadRate = { 1.0f,1.0f });
 
+
+	/// <summary>
+	/// コントローラー左スティックの入力
+	/// </summary>
+	/// <param name="deadRange">デッドゾーンの範囲初期値0.3f</param>
+	/// <param name="deadRate">デッドゾーン判定の度合い初期値1.0f</param>
+	/// <returns>倒したかどうか</returns>
+	bool LeftStickInput(const float& deadRange = 0.3f);
+
 	/// <summary>
 	/// コントローラーボタンの離した瞬間
 	/// </summary>

@@ -13,8 +13,7 @@ Vector2::Vector2(float x, float y) {
 }
 
 float Vector2::length()const {
-
-	return (sqrt(x) * sqrt(x)) + (sqrt(y) * sqrt(y));
+	return sqrt(x * x + y * y);
 }
 
 Vector2& Vector2::nomalize() {
