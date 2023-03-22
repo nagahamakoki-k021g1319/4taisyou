@@ -112,7 +112,7 @@ void Wolf::LongRange() {
 //—­‚ß‰“‹——£
 void Wolf::ChargeLongRange() {
 	float ShortSpeed = 5.0f;
-	ShortSpeed += 5.0f;
+	ShortSpeed += 2.0f;
 	if (longTime == 0) {
 
 		len = enemylen;

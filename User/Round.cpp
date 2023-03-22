@@ -36,3 +36,8 @@ void Round::Update()
 		}
 	}
 }
+
+int Round::GetSelection()
+{
+	return selection;
+}

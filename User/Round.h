@@ -11,6 +11,7 @@ public:
 	void RoundManagement();
 	void AddRound();
 	void Update();
+	int GetSelection();
 
 private:
 	int round = 0;

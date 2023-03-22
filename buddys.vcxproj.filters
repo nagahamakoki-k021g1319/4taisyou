@@ -28,9 +28,6 @@
     <Filter Include="Engine\シェーダーファイル">
       <UniqueIdentifier>{f36cb6f0-d97c-4566-b564-a0bcacc08874}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\ヘッダーファイル\BASE">
-      <UniqueIdentifier>{493d40e0-dfb0-446d-a4d8-2c7641677c39}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\ヘッダーファイル\INPUT">
       <UniqueIdentifier>{a9b61b60-399e-4871-97ac-3b6fbb1e8fd8}</UniqueIdentifier>
     </Filter>
@@ -93,6 +90,9 @@
     </Filter>
     <Filter Include="Engine\ソースファイル\COLLISION">
       <UniqueIdentifier>{bbf9d956-63f5-4183-95fa-d75876ef7ae8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\ヘッダーファイル\BASE">
+      <UniqueIdentifier>{493d40e0-dfb0-446d-a4d8-2c7641677c39}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
