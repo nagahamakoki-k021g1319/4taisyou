@@ -59,8 +59,8 @@ void WinApp::Initialize()
 	/*HWND*/ hwnd = CreateWindow(w.lpszClassName,//クラス名指定
 		_T("BUDDY'S"),	//タイトルバーの文字
 		WS_OVERLAPPEDWINDOW,			//タイトルバーと境界線があるウィンドウ
-		CW_USEDEFAULT,					//表示x座標はOSにお任せ
-		CW_USEDEFAULT,					//表示y座標はOSにお任せ
+		130,					//表示x座標はOSにお任せ
+		30,					//表示y座標はOSにお任せ
 		wrc.right - wrc.left,			//ウィンドウ幅
 		wrc.bottom - wrc.top,			//ウィンドウ高
 		nullptr,						//親ウィンドウハンドル

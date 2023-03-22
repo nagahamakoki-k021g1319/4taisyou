@@ -223,4 +223,16 @@ void Sprite::SetIsFlipX(bool isFlipX)
 	Update();
 }
 
+void Sprite::AdjustTextureSize()
+{
+	ComPtr <ID3D12Resource> textureBuffer = spritecomon->GetTextureBuffer(textureIndex_);
+	assert(textureBuffer);
+
+	//テクスチャ情報取得
+	D3D12_RESOURCE_DESC resDesc = textureBuffer->GetDesc();
+
+	textureSize.x = static_cast<float>(resDesc.Width);
+	textureSize.y = static_cast<float>(resDesc.Height);
+}
+
 
