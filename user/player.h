@@ -62,8 +62,8 @@ private:
 	bool isLive = true;
 
 	//弱攻撃
-	//斬撃の位置
-	Vector3 lightAttackCol;
+	Vector3 lightAttackLPos;
+	Vector3 lightAttackWPos;
 	//何回めの連撃か
 	int lightAttackCount;
 	//一回の攻撃全体の時間
@@ -77,16 +77,28 @@ private:
 	float lightAttackInput[4] = { 30,10,30,30 };
 
 
-
 	//強攻撃
+	Vector3 heavyAttackLPos;
+	Vector3 heavyAttackWPos;
+	//何回めの連撃か
+	int heavyAttackCount;
+	//一回の攻撃全体の時間
+	float heavyAttackLimit[2] = { 60,60 };
+	float heavyAttackTimer;
+	//攻撃の当たり判定の有無
+	bool isHeavyAttack;
+	//判定が出始める時間
+	float heavyAttackPopTime[2] = { 40,40 };
+	//次の連撃への入力受付開始時間
+	float heavyAttackInput[2] = { 30,10 };
 
 
 	//回避
-	Model* dodgeModel = nullptr;
 	bool isDodge;
 	const int dodgeLimit = 60;
 	int dodgeTimer;
 	Vector3 dodgeMoveVec;
+
 
 	//敵
 	Transform* enemyPos_ = nullptr;
