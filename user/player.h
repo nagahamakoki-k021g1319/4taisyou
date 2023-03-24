@@ -97,7 +97,7 @@ private:
 
 	//‰ñ”ð
 	bool isDodge;
-	const int dodgeLimit = 30;
+	const int dodgeLimit = 20;
 	int dodgeTimer;
 	Vector3 dodgeMoveVec;
 	Vector3 dodgeMoveVecNomal;

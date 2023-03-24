@@ -91,6 +91,8 @@ void Player::Attack() {
 			//強攻撃
 			if (input_->PushKey(DIK_1) || input_->ButtonInput(Y)) {
 				isAction = 2;
+				heavyAttackCount = 0;
+				heavyAttackTimer = heavyAttackLimit[0];
 			}
 			//回避
 			if (input_->PushKey(DIK_3) || input_->ButtonInput(B)) {
@@ -163,9 +165,13 @@ void Player::Update(Transform* cam) {
 void Player::Draw() {
 	if (isLive) {
 		bodyObj_->Draw();
+		wolf_->Draw();
 
 		//デバッグ用
 		if (isLightAttack) {
+			debugObj_->Draw();
+		}
+		if (isHeavyAttack) {
 			debugObj_->Draw();
 		}
 	}
@@ -387,15 +393,8 @@ void Player::Dodge() {
 	dodgeTimer--;
 
 	//移動速度変更
-	if (dodgeTimer > 20) {
-		dodgeMoveVec = dodgeMoveVecNomal * 0.4f;
-	}
-	else if (dodgeTimer <= 20 && dodgeTimer > 10) {
-		dodgeMoveVec = dodgeMoveVecNomal * 0.2f;
-	}
-	else {
-		dodgeMoveVec = dodgeMoveVecNomal * 0.08f;
-	}
+	dodgeMoveVec = dodgeMoveVecNomal * (0.4f * pow((30 / dodgeLimit), 2));
+
 
 	if (dodgeTimer < 0) {
 		isAction = 0;
