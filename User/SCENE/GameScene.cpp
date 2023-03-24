@@ -79,7 +79,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 
 	hpGauge = new Sprite();
 	hpGauge->Initialize(spriteCommon);
-	hpGauge->SetPozition({ 0,0 });
+	hpPosition = hpGauge->GetPosition();
+	hpGauge->SetPozition(hpPosition);
 	hpGauge->SetSize({ 1280.0f, 720.0f });
 
 	unionGauge = new Sprite();
@@ -113,13 +114,14 @@ void GameScene::Update() {
 	}
 
 
+
 	CamUpdate();
 	enemyManager_->Update();
 	player_->Update(&camWtf);
 
+	hpGauge->SetPozition({-400.0f + player_->GetHp() * 4 ,0});
 
 	//hpGaugeのxを(-400 + player.GeHp() * 4)動かしたい
-	//unionGaugeのxを(-200 + player.GetUnion() * 2)動かしたい
 
 }
 
