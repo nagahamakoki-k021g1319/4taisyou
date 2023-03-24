@@ -39,6 +39,7 @@ public:
 	Vector3 GetWorldPosition();
 
 	float GetHp() { return hp; };
+	bool GetIsDodge() { return isDodge; };
 
 	Vector3 GetDodgeMoveVec() { return dodgeMoveVec; };
 
@@ -62,6 +63,11 @@ private:
 	const int defaultHp = 100;
 	int hp;
 	bool isLive = true;
+
+	//–³“GŠÔ
+	bool isInvincible;
+	const float invincibleLimit = 60;
+	float invincibleTimer = invincibleLimit;
 
 	//ãUŒ‚
 	Vector3 lightAttackLPos;

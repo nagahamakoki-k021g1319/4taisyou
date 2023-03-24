@@ -1,6 +1,7 @@
 #include"player.h"
 
 Player::Player() {
+
 }
 
 Player::~Player() {
@@ -127,15 +128,21 @@ void Player::Attack() {
 }
 
 void Player::OnCollision() {
-	//回避時
-	if(isDodge) {
+	if (isInvincible == false) {
+		//回避時
+		if (isDodge) {
 
-	}
-	//通常時
-	else{
-		hp -= 10;
-		if (hp < 0) {
-			isLive = false;
+		}
+		//通常時
+		else {
+			hp -= 10;
+
+			isInvincible = true;
+			invincibleTimer = invincibleLimit;
+
+			if (hp < 0) {
+				isLive = false;
+			}
 		}
 	}
 }
@@ -153,6 +160,13 @@ void Player::Rota() {
 }
 
 void Player::Update(Transform* cam) {
+	if (isInvincible) {
+		invincibleTimer--;
+		if (invincibleTimer < 0) {
+			isInvincible=false;
+		}
+	}
+
 	Rota();
 	Attack();
 	
