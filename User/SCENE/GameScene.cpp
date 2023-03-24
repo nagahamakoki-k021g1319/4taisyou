@@ -171,22 +171,32 @@ void GameScene::CamMove() {
 	if (input->LeftStickInput()) {
 		//カメラの移動
 		Vector3 eyeVelocity = { 0,0,0 };
-		//入力
-		Vector2 stickVec = input->GetLeftStickVec();
 
-		eyeVelocity.x = stickVec.x;
-		eyeVelocity.z = stickVec.y;
+		//通常移動
+		if (player_->isAction == 0) {
+			//入力
+			Vector2 stickVec = input->GetLeftStickVec();
 
-		eyeVelocity = eyeVelocity.nomalize();
+			eyeVelocity.x = stickVec.x;
+			eyeVelocity.z = stickVec.y;
 
-		eyeVelocity *= camMoveSpeed;
+			eyeVelocity = eyeVelocity.nomalize();
 
+			eyeVelocity *= camMoveSpeed;
+		}
+		//回避時移動
+		else if (player_->isAction == 3) {
+			eyeVelocity = player_->GetDodgeMoveVec();
+
+		}
+		
 		//移動ベクトルを向いてる方向に合わせる
 		eyeVelocity = bVelocity(eyeVelocity, camWtf);
 
 		//更新
 		camWtf.position += eyeVelocity;
 	}
+
 }
 
 void GameScene::CamRota() {
@@ -221,9 +231,7 @@ void GameScene::CamRota() {
 }
 
 void GameScene::CamUpdate() {
-	if (player_->isAction == 0) {
-		CamMove();
-	}
+	CamMove();
 	CamRota();
 
 	camWtf.UpdateMat();
