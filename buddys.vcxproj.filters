@@ -196,6 +196,9 @@
     <ClCompile Include="User\EnemyManager.cpp">
       <Filter>user\ソース</Filter>
     </ClCompile>
+    <ClCompile Include="User\EnemyShortRenge.cpp">
+      <Filter>user\ソース</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BASE\FPS.h">
@@ -295,6 +298,9 @@
       <Filter>user\ヘッダー</Filter>
     </ClInclude>
     <ClInclude Include="User\EnemyManager.h">
+      <Filter>user\ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="User\EnemyShortRenge.h">
       <Filter>user\ヘッダー</Filter>
     </ClInclude>
   </ItemGroup>

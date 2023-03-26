@@ -17,6 +17,8 @@
 #include"Player.h"
 #include"EnemyManager.h"
 
+#include"EnemyShortRenge.h"
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -96,5 +98,8 @@ private:	//メンバ変数
 	Sprite* buttomPng2 = nullptr;
 	Sprite* hpGauge = nullptr;
 	Sprite* unionGauge = nullptr;
+
+	EnemyShortRenge* attck = nullptr;
+	Model* enemyModel_ = nullptr;
 
 };
