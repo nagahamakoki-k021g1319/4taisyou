@@ -270,7 +270,9 @@ void Player::LightAttack() {
 
 		//当たり判定の移動
 		if (isLightAttack) {
+			//移動
 			lightAttackLPos = { 0,0,2.0f };
+			//更新
 			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = lightAttackWPos;
 		}
@@ -295,7 +297,9 @@ void Player::LightAttack() {
 
 		//当たり判定の移動
 		if (isLightAttack) {
+			//移動
 			lightAttackLPos = { 0,0,2.0f };
+			//更新
 			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = lightAttackWPos;
 		}
@@ -320,7 +324,9 @@ void Player::LightAttack() {
 
 		//当たり判定の移動
 		if (isLightAttack) {
+			//移動
 			lightAttackLPos = { 0,0,2.0f };
+			//更新
 			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = lightAttackWPos;
 		}
@@ -371,7 +377,9 @@ void Player::HeavyAttack() {
 
 		//当たり判定の移動
 		if (isHeavyAttack) {
+			//移動
 			heavyAttackLPos = { 0,0,2.0f };
+			//更新
 			heavyAttackWPos = heavyAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = heavyAttackWPos;
 		}
@@ -396,7 +404,9 @@ void Player::HeavyAttack() {
 
 		//当たり判定の移動
 		if (isHeavyAttack) {
+			//移動
 			heavyAttackLPos = { 0,0,2.0f };
+			//更新
 			heavyAttackWPos = heavyAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = heavyAttackWPos;
 		}

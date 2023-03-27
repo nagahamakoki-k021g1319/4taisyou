@@ -75,14 +75,14 @@ private:
 	//何回めの連撃か
 	int lightAttackCount;
 	//一回の攻撃全体の時間
-	float lightAttackLimit[4] = { 60,60,60,60 };
+	float lightAttackLimit[4] = { 20,20,20,20 };
 	float lightAttackTimer;
 	//攻撃の当たり判定の有無
 	bool isLightAttack;
 	//判定が出始める時間
-	float lightAttackPopTime[4] = { 40,40,40,40 };
+	float lightAttackPopTime[4] = { 15,15,15,15 };
 	//次の連撃への入力受付開始時間
-	float lightAttackInput[4] = { 30,10,30,30 };
+	float lightAttackInput[4] = { 10,10,10,10 };
 
 
 	//強攻撃

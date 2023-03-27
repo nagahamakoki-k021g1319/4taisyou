@@ -42,9 +42,7 @@ void Enemy::Update() {
 			//仮でプレイヤーとのやり取り
 			if (coll.CircleCollision(player_->GetWorldPosition(), bullet->GetPos(), 1.0f, 1.0f)) {
 				player_->OnCollision();
-				if (player_->GetIsDodge() == false) {
-					bullet->OnCollision();
-				}
+				bullet->OnCollision();
 			}
 		}
 	}
@@ -55,9 +53,7 @@ void Enemy::Update() {
 		{//仮でプレイヤーとのやり取り
 			if (coll.CircleCollision(player_->GetWorldPosition(), bullet->GetWorldPosition(), 2.0f, 2.0f)) {
 				player_->OnCollision();
-				if (player_->GetIsDodge() == false) {
-					bullet->OnCollision();
-				}
+				bullet->OnCollision();
 			}
 		}
 	}
