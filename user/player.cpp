@@ -1,6 +1,7 @@
 #include"player.h"
 
 Player::Player() {
+
 }
 
 Player::~Player() {
@@ -96,6 +97,8 @@ void Player::Attack() {
 			//強攻撃
 			if (input_->PushKey(DIK_1) || input_->ButtonInput(Y)) {
 				isAction = 2;
+				heavyAttackCount = 0;
+				heavyAttackTimer = heavyAttackLimit[0];
 			}
 			//回避
 			if (input_->PushKey(DIK_3) || input_->ButtonInput(B)) {
@@ -130,16 +133,21 @@ void Player::Attack() {
 }
 
 void Player::OnCollision() {
-	//回避時
-	if(isDodge) {
+	if (isInvincible == false) {
+		//回避時
+		if (isDodge) {
 
-	}
-	//通常時
-	else{
-		hp -= 10;
-		isEffFlag = 1;
-		if (hp < 0) {
-			isLive = false;
+		}
+		//通常時
+		else {
+			hp -= 10;
+
+			isInvincible = true;
+			invincibleTimer = invincibleLimit;
+
+			if (hp < 0) {
+				isLive = false;
+			}
 		}
 	}
 }
@@ -157,6 +165,13 @@ void Player::Rota() {
 }
 
 void Player::Update(Transform* cam) {
+	if (isInvincible) {
+		invincibleTimer--;
+		if (invincibleTimer < 0) {
+			isInvincible=false;
+		}
+	}
+
 	Rota();
 	Attack();
 	if (isEffFlag == 1) {
@@ -180,9 +195,13 @@ void Player::Update(Transform* cam) {
 void Player::Draw() {
 	if (isLive) {
 		bodyObj_->Draw();
+		wolf_->Draw();
 
 		//デバッグ用
 		if (isLightAttack) {
+			debugObj_->Draw();
+		}
+		if (isHeavyAttack) {
 			debugObj_->Draw();
 		}
 	}
@@ -308,7 +327,9 @@ void Player::LightAttack() {
 
 		//当たり判定の移動
 		if (isLightAttack) {
+			//移動
 			lightAttackLPos = { 0,0,2.0f };
+			//更新
 			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = lightAttackWPos;
 		}
@@ -333,7 +354,9 @@ void Player::LightAttack() {
 
 		//当たり判定の移動
 		if (isLightAttack) {
+			//移動
 			lightAttackLPos = { 0,0,2.0f };
+			//更新
 			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = lightAttackWPos;
 		}
@@ -358,7 +381,9 @@ void Player::LightAttack() {
 
 		//当たり判定の移動
 		if (isLightAttack) {
+			//移動
 			lightAttackLPos = { 0,0,2.0f };
+			//更新
 			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = lightAttackWPos;
 		}
@@ -409,7 +434,9 @@ void Player::HeavyAttack() {
 
 		//当たり判定の移動
 		if (isHeavyAttack) {
+			//移動
 			heavyAttackLPos = { 0,0,2.0f };
+			//更新
 			heavyAttackWPos = heavyAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = heavyAttackWPos;
 		}
@@ -434,7 +461,9 @@ void Player::HeavyAttack() {
 
 		//当たり判定の移動
 		if (isHeavyAttack) {
+			//移動
 			heavyAttackLPos = { 0,0,2.0f };
+			//更新
 			heavyAttackWPos = heavyAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = heavyAttackWPos;
 		}
@@ -445,15 +474,8 @@ void Player::Dodge() {
 	dodgeTimer--;
 
 	//移動速度変更
-	if (dodgeTimer > 20) {
-		dodgeMoveVec = dodgeMoveVecNomal * 0.4f;
-	}
-	else if (dodgeTimer <= 20 && dodgeTimer > 10) {
-		dodgeMoveVec = dodgeMoveVecNomal * 0.2f;
-	}
-	else {
-		dodgeMoveVec = dodgeMoveVecNomal * 0.08f;
-	}
+	dodgeMoveVec = dodgeMoveVecNomal * (0.4f * pow((30 / dodgeLimit), 2));
+
 
 	if (dodgeTimer < 0) {
 		isAction = 0;
