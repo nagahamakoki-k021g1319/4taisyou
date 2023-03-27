@@ -69,3 +69,14 @@ void EnemyManager::Draw() {
 	}
 
 }
+
+
+bool EnemyManager::IsAllEnemyDead() {
+	bool result = false;
+
+	if (enemys_.size() == 0) {
+		result = true;
+	}
+
+	return result;
+}
