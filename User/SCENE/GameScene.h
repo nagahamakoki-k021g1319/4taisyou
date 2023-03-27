@@ -89,6 +89,13 @@ private:	//メンバ変数
 	//エネミー
 	EnemyManager* enemyManager_ = nullptr;
 
+	//背景や床
+	Object3d* floor = nullptr;
+	Model* floorMD = nullptr;
+	Object3d* skydome = nullptr;
+	Model* skydomeMD = nullptr;
+
+
 	//UI
 	Sprite* UI = nullptr;
 	Sprite* buttomPng1 = nullptr;
@@ -96,6 +103,9 @@ private:	//メンバ変数
 	Sprite* hpGauge = nullptr;
 	Vector2 hpPosition;
 	Sprite* unionGauge = nullptr;
+	Vector2 unionScale;
+	Sprite* avoidUI = nullptr;
+	Vector3 avoidScale;
 
 	//ゲームフロー
 	enum class Scene

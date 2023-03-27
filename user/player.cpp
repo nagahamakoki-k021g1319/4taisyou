@@ -1,6 +1,7 @@
 #include"player.h"
 
 Player::Player() {
+
 }
 
 Player::~Player() {
@@ -44,6 +45,11 @@ void Player::Initialize(Input* input) {
 	//回避設定
 	dodgeTimer = dodgeLimit;
 	isDodge = false;
+
+	// 3Dオブジェクト生成
+	particleManager = ParticleManager::Create();
+	particleManager->Update();
+
 
 	//バディ
 	wolf_ = new Wolf();
@@ -91,6 +97,8 @@ void Player::Attack() {
 			//強攻撃
 			if (input_->PushKey(DIK_1) || input_->ButtonInput(Y)) {
 				isAction = 2;
+				heavyAttackCount = 0;
+				heavyAttackTimer = heavyAttackLimit[0];
 			}
 			//回避
 			if (input_->PushKey(DIK_3) || input_->ButtonInput(B)) {
@@ -125,15 +133,21 @@ void Player::Attack() {
 }
 
 void Player::OnCollision() {
-	//回避時
-	if(isDodge) {
+	if (isInvincible == false) {
+		//回避時
+		if (isDodge) {
 
-	}
-	//通常時
-	else{
-		hp -= 10;
-		if (hp < 0) {
-			isLive = false;
+		}
+		//通常時
+		else {
+			hp -= 10;
+
+			isInvincible = true;
+			invincibleTimer = invincibleLimit;
+
+			if (hp < 0) {
+				isLive = false;
+			}
 		}
 	}
 }
@@ -151,9 +165,27 @@ void Player::Rota() {
 }
 
 void Player::Update(Transform* cam) {
+	if (isInvincible) {
+		invincibleTimer--;
+		if (invincibleTimer < 0) {
+			isInvincible=false;
+		}
+	}
+
 	Rota();
 	Attack();
-	
+	if (isEffFlag == 1) {
+		EffTimer++;
+	}
+	if (EffTimer <= 10 && EffTimer >= 1) {
+		EffUpdate();
+	}
+	if (EffTimer >= 11 ) {
+		isEffFlag = 0;
+		EffTimer = 0;
+	}
+
+
 	bodyObj_->Update(cam);
 	wolf_->Update(enemyPos_);
 
@@ -163,12 +195,57 @@ void Player::Update(Transform* cam) {
 void Player::Draw() {
 	if (isLive) {
 		bodyObj_->Draw();
+		wolf_->Draw();
 
 		//デバッグ用
 		if (isLightAttack) {
 			debugObj_->Draw();
 		}
+		if (isHeavyAttack) {
+			debugObj_->Draw();
+		}
 	}
+}
+
+void Player::EffUpdate()
+{
+	//パーティクル範囲
+	for (int i = 0; i < 20; i++) {
+		//X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
+		const float rnd_pos = 0.01f;
+		Vector3 pos{};
+		pos.x += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		pos.y += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		pos.z += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+
+		//速度
+		//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
+		const float rnd_vel = 0.1f;
+		Vector3 vel{};
+		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		//重力に見立ててYのみ[-0.001f,0]でランダムに分布
+		const float rnd_acc = 0.00001f;
+		Vector3 acc{};
+		acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+		acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+
+		//追加
+		particleManager->Add(60, pos, vel, acc, 1.0f, 0.0f);
+
+		particleManager->Update();
+	}
+
+}
+
+void Player::EffDraw()
+{
+	if (isEffFlag == 1) {
+		// 3Dオブクジェクトの描画
+		particleManager->Draw();
+	}
+	else{}
 }
 
 Vector3 Player::bVelocity(Vector3& velocity,Transform& worldTransform)
@@ -250,7 +327,9 @@ void Player::LightAttack() {
 
 		//当たり判定の移動
 		if (isLightAttack) {
+			//移動
 			lightAttackLPos = { 0,0,2.0f };
+			//更新
 			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = lightAttackWPos;
 		}
@@ -275,7 +354,9 @@ void Player::LightAttack() {
 
 		//当たり判定の移動
 		if (isLightAttack) {
+			//移動
 			lightAttackLPos = { 0,0,2.0f };
+			//更新
 			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = lightAttackWPos;
 		}
@@ -300,7 +381,9 @@ void Player::LightAttack() {
 
 		//当たり判定の移動
 		if (isLightAttack) {
+			//移動
 			lightAttackLPos = { 0,0,2.0f };
+			//更新
 			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = lightAttackWPos;
 		}
@@ -351,7 +434,9 @@ void Player::HeavyAttack() {
 
 		//当たり判定の移動
 		if (isHeavyAttack) {
+			//移動
 			heavyAttackLPos = { 0,0,2.0f };
+			//更新
 			heavyAttackWPos = heavyAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = heavyAttackWPos;
 		}
@@ -376,7 +461,9 @@ void Player::HeavyAttack() {
 
 		//当たり判定の移動
 		if (isHeavyAttack) {
+			//移動
 			heavyAttackLPos = { 0,0,2.0f };
+			//更新
 			heavyAttackWPos = heavyAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = heavyAttackWPos;
 		}
@@ -387,15 +474,8 @@ void Player::Dodge() {
 	dodgeTimer--;
 
 	//移動速度変更
-	if (dodgeTimer > 20) {
-		dodgeMoveVec = dodgeMoveVecNomal * 0.4f;
-	}
-	else if (dodgeTimer <= 20 && dodgeTimer > 10) {
-		dodgeMoveVec = dodgeMoveVecNomal * 0.2f;
-	}
-	else {
-		dodgeMoveVec = dodgeMoveVecNomal * 0.08f;
-	}
+	dodgeMoveVec = dodgeMoveVecNomal * (0.4f * pow((30 / dodgeLimit), 2));
+
 
 	if (dodgeTimer < 0) {
 		isAction = 0;

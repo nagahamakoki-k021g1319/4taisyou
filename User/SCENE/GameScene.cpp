@@ -20,11 +20,13 @@ GameScene::~GameScene() {
 	delete buttomPng1;
 	delete buttomPng2;
 	delete hpGauge;
-	delete unionGauge;
+	delete unionGauge
 	delete titlePic;
 	delete selectPic;
 	delete clearPic;
 	delete gameoverPic;
+	delete floor;
+	delete skydome;
 }
 
 /// <summary>
@@ -54,6 +56,16 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	ParticleManager::SetCamera(camera);
 	Object3d::SetCamera(camera);
 
+	floorMD = Model::LoadFromOBJ("floor");
+	floor = Object3d::Create();
+	floor->SetModel(floorMD);
+	floor->wtf.position = (Vector3{ 0, -10, 0 });
+
+	skydomeMD = Model::LoadFromOBJ("skydome");
+	skydome = Object3d::Create();
+	skydome->SetModel(skydomeMD);
+	skydome->wtf.scale = (Vector3{ 1000, 1000, 1000 });
+
 
 	//プレイヤー
 	player_ = new Player();
@@ -63,6 +75,9 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	enemyManager_ = new EnemyManager();
 	enemyManager_->Initialize();
 	enemyManager_->SetPlayer(player_);
+
+
+
 
 
 	//UI
@@ -90,7 +105,13 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	unionGauge = new Sprite();
 	unionGauge->Initialize(spriteCommon);
 	unionGauge->SetPozition({ 0,0 });
-	unionGauge->SetSize({ 1280.0f, 720.0f });
+	unionScale = unionGauge->GetPosition();
+	unionScale.x = 1280.0f;
+	unionScale.y = 720.0f;
+	unionGauge->SetSize(unionScale);
+
+
+
 
 	//ゲームフロー
 	scene = Scene::Title;
@@ -175,6 +196,9 @@ void GameScene::Update() {
 		player_->Update(&camWtf);
 
 		hpGauge->SetPozition({ -400.0f + player_->GetHp() * 4 ,0 });
+    
+    floor->Update();
+    skydome->Update();
 
 		//シーン切り替え
 		if (player_->GetHp() < 0) {
@@ -227,7 +251,9 @@ void GameScene::Draw() {
 		player_->Draw();
 		enemyManager_->Draw();
 
-
+    
+    floor->Draw();
+    skydome->Draw();
 		break;
 	case Scene::Clear:
 
@@ -273,6 +299,16 @@ void GameScene::Draw() {
 		break;
 	case Scene::Gameover:
 		gameoverPic->Draw();
+	//3Dオブジェクト描画後処理
+	Object3d::PostDraw();
+
+	//パーティクル描画前処理
+	ParticleManager::PreDraw(dxCommon->GetCommandList());
+
+	player_->EffDraw();
+
+	// パーティクル描画後処理
+	ParticleManager::PostDraw();
 
 		break;
 	}
