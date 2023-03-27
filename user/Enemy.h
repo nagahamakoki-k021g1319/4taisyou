@@ -45,6 +45,12 @@ private:
 	const int hpMax = 10;
 	int hp = hpMax;
 	
+
+	//無敵時間
+	bool isInvincible;
+	const float invincibleLimit = 9;
+	float invincibleTimer = invincibleLimit;
+
 	//フェーズ
 	Phase phase_ = Phase::Approach;
 
