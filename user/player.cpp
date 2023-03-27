@@ -305,7 +305,7 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 	//強攻撃
 	else if (isAction == 2) {
 		//当たり判定が出てるか
-		if (isLightAttack) {
+		if (isHeavyAttack) {
 			//当たり判定
 			if (col.CircleCollisionXZ(heavyAttackWPos, enemyPos, 1.0f, 1.0f)) {
 				damage = 7;
