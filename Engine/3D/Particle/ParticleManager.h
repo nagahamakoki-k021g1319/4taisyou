@@ -13,9 +13,6 @@
 #include "Matrix4.h"
 #include "Affin.h"
 
-
-
-
 /// <summary>
 /// 3Dオブジェクト
 /// </summary>
@@ -172,7 +169,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
-	void Update(Vector3 pos);
+	void Update();
 
 	/// <summary>
 	/// 描画
@@ -189,8 +186,6 @@ public: // メンバ関数
 	void Add(int life, Vector3 position, Vector3 velociy, Vector3 accel, float start_scale, float end_scale);
 
 	static void SetCamera(Camera* camera) {ParticleManager::camera = camera; }
-
-	
 
 private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuff; // 定数バッファ
