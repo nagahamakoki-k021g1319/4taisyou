@@ -149,6 +149,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	clearPic->SetTextureIndex(7);
 	spriteCommon->LoadTexture(8, "gameover.png");
 	gameoverPic->SetTextureIndex(8);
+
+	Reset();
 }
 
 void GameScene::Reset() {
@@ -158,6 +160,7 @@ void GameScene::Reset() {
 	targetWtf.Initialize();
 	targetWtf.position = { 0.0f,0.0f,targetDistance };
 
+	player_->Reset();
 }
 
 /// <summary>
@@ -188,7 +191,7 @@ void GameScene::Update() {
 		//シーン切り替え
 		if (input->PButtonTrigger(B)) {
 			enemyManager_->creatEnemy(stage);
-			player_->Reset();
+			Reset();
 			scene = Scene::Play;
 		}
 
