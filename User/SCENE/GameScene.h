@@ -42,6 +42,8 @@ public: // ƒƒ“ƒoŠÖ”
 	/// </summary>
 	void Initialize(DirectXCommon* dxCommon, Input* input);
 
+	void Reset();
+
 	/// <summary>
 	/// –ˆƒtƒŒ[ƒ€ˆ—
 	/// </summary>

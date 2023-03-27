@@ -15,6 +15,7 @@ public:
 	~Player();
 
 	void Initialize(Input* input);
+	void Reset();
 	
 	void Update(Transform* cam);
 	void Rota();

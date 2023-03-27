@@ -76,10 +76,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	enemyManager_->Initialize();
 	enemyManager_->SetPlayer(player_);
 
-
-
-
-
 	//UI
 	UI = new Sprite();
 	UI->Initialize(spriteCommon);
@@ -109,9 +105,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	unionScale.x = 1280.0f;
 	unionScale.y = 720.0f;
 	unionGauge->SetSize(unionScale);
-
-
-
 
 	//ゲームフロー
 	scene = Scene::Title;
@@ -158,6 +151,15 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	gameoverPic->SetTextureIndex(8);
 }
 
+void GameScene::Reset() {
+	camWtf.Initialize();
+	camWtf.position = { 0.0f, 3.0f, -8.0f };
+
+	targetWtf.Initialize();
+	targetWtf.position = { 0.0f,0.0f,targetDistance };
+
+}
+
 /// <summary>
 /// 毎フレーム処理
 /// </summary>
@@ -186,6 +188,7 @@ void GameScene::Update() {
 		//シーン切り替え
 		if (input->PButtonTrigger(B)) {
 			enemyManager_->creatEnemy(stage);
+			player_->Reset();
 			scene = Scene::Play;
 		}
 
