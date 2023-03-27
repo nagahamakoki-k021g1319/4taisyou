@@ -8,6 +8,8 @@ Player::~Player() {
 	delete bodyObj_;
 	delete bodyModel_;
 	delete wolf_;
+	delete particleManager;
+
 
 	delete debugObj_;
 	delete debugModel_;
@@ -20,9 +22,30 @@ void Player::Initialize(Input* input) {
 	bodyModel_ = Model::LoadFromOBJ("as2");
 	bodyObj_ = Object3d::Create();
 	bodyObj_->SetModel(bodyModel_);
+
+	// 3Dオブジェクト生成
+	particleManager = ParticleManager::Create();
+	particleManager->Update();
+
+	//バディ
+	wolf_ = new Wolf();
+	wolf_->Initialize();
+	wolf_->SetPlayerWtf(&bodyObj_->wtf);
+
+	//デバッグ用
+	debugModel_ = Model::LoadFromOBJ("boll");
+	debugObj_ = Object3d::Create();
+	debugObj_->SetModel(debugModel_);
+
+	Reset();
+}
+
+void Player::Reset() {
+	bodyObj_->wtf.Initialize();
 	bodyObj_->wtf.position = { 0,-3,8 };
 	hp = defaultHp;
 	isAction = 0;
+	isLive = true;
 
 	//弱攻撃
 	lightAttackLPos = { 0,0,3 };
@@ -45,21 +68,6 @@ void Player::Initialize(Input* input) {
 	//回避設定
 	dodgeTimer = dodgeLimit;
 	isDodge = false;
-
-	// 3Dオブジェクト生成
-	particleManager = ParticleManager::Create();
-	particleManager->Update();
-
-
-	//バディ
-	wolf_ = new Wolf();
-	wolf_->Initialize();
-	wolf_->SetPlayerWtf(&bodyObj_->wtf);
-
-	//デバッグ用
-	debugModel_ = Model::LoadFromOBJ("boll");
-	debugObj_ = Object3d::Create();
-	debugObj_->SetModel(debugModel_);
 }
 
 void Player::Attack() {
@@ -287,7 +295,7 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 		//当たり判定が出てるか
 		if (isLightAttack) {
 			//当たり判定
-			if (col.CircleCollisionXZ(lightAttackWPos, enemyPos, 1.0f, 1.0f)) {
+			if (col.CircleCollisionXZ(lightAttackWPos, enemyPos, 0.5f, 1.0f)) {
 				damage = 3;
 				return true;
 			}
@@ -328,7 +336,7 @@ void Player::LightAttack() {
 		//当たり判定の移動
 		if (isLightAttack) {
 			//移動
-			lightAttackLPos = { 0,0,2.0f };
+			lightAttackLPos = { 1.0f,0,3.0f };
 			//更新
 			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = lightAttackWPos;
@@ -355,7 +363,7 @@ void Player::LightAttack() {
 		//当たり判定の移動
 		if (isLightAttack) {
 			//移動
-			lightAttackLPos = { 0,0,2.0f };
+			lightAttackLPos = { -1.0f,0,3.0f };
 			//更新
 			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = lightAttackWPos;
@@ -382,7 +390,7 @@ void Player::LightAttack() {
 		//当たり判定の移動
 		if (isLightAttack) {
 			//移動
-			lightAttackLPos = { 0,0,2.0f };
+			lightAttackLPos = { 1.0f,0,3.0f };
 			//更新
 			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = lightAttackWPos;
@@ -409,7 +417,7 @@ void Player::LightAttack() {
 		//当たり判定の移動
 		if (isLightAttack) {
 			//Lposが相対座標、ここを変える
-			lightAttackLPos = { 0,0,2.0f };
+			lightAttackLPos = { 0,0,4.0f };
 			//ワールド座標に変換
 			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = lightAttackWPos;
@@ -435,7 +443,7 @@ void Player::HeavyAttack() {
 		//当たり判定の移動
 		if (isHeavyAttack) {
 			//移動
-			heavyAttackLPos = { 0,0,2.0f };
+			heavyAttackLPos = { 0,0,4.0f };
 			//更新
 			heavyAttackWPos = heavyAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = heavyAttackWPos;
@@ -462,7 +470,7 @@ void Player::HeavyAttack() {
 		//当たり判定の移動
 		if (isHeavyAttack) {
 			//移動
-			heavyAttackLPos = { 0,0,2.0f };
+			heavyAttackLPos = { 0,0,6.0f };
 			//更新
 			heavyAttackWPos = heavyAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = heavyAttackWPos;

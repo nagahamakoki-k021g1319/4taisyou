@@ -15,6 +15,7 @@ public:
 	~Player();
 
 	void Initialize(Input* input);
+	void Reset();
 	
 	void Update(Transform* cam);
 	void Rota();
@@ -69,7 +70,7 @@ private:
 
 	//無敵時間
 	bool isInvincible;
-	const float invincibleLimit = 60;
+	const float invincibleLimit = 15;
 	float invincibleTimer = invincibleLimit;
 
 	//弱攻撃
@@ -85,7 +86,7 @@ private:
 	//判定が出始める時間
 	float lightAttackPopTime[4] = { 15,15,15,15 };
 	//次の連撃への入力受付開始時間
-	float lightAttackInput[4] = { 10,10,10,10 };
+	float lightAttackInput[4] = { 10,10,10,0 };
 
 
 	//強攻撃
@@ -94,14 +95,14 @@ private:
 	//何回めの連撃か
 	int heavyAttackCount;
 	//一回の攻撃全体の時間
-	float heavyAttackLimit[2] = { 60,60 };
+	float heavyAttackLimit[2] = { 30,30 };
 	float heavyAttackTimer;
 	//攻撃の当たり判定の有無
 	bool isHeavyAttack;
 	//判定が出始める時間
-	float heavyAttackPopTime[2] = { 40,40 };
+	float heavyAttackPopTime[2] = { 20,20 };
 	//次の連撃への入力受付開始時間
-	float heavyAttackInput[2] = { 30,10 };
+	float heavyAttackInput[2] = { 10,0 };
 
 
 	//回避
