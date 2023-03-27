@@ -17,8 +17,6 @@
 #include"Player.h"
 #include"EnemyManager.h"
 
-#include"EnemyShortRenge.h"
-
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -65,7 +63,7 @@ public:
 	//音を止める関数
 	IXAudio2SourceVoice* pSourceVoice[10] = { 0 };
 
-	
+
 private: // メンバ変数 (固定)
 	DirectXCommon* dxCommon = nullptr;
 	Input* input = nullptr;
@@ -84,7 +82,7 @@ private:	//メンバ変数
 	float targetTheta;
 	float targetDistance = 10;
 	float camMoveSpeed = 0.1f;
-	float camRotaSpeed = PI/180;
+	float camRotaSpeed = PI / 180;
 
 
 	//プレイヤー
@@ -97,9 +95,7 @@ private:	//メンバ変数
 	Sprite* buttomPng1 = nullptr;
 	Sprite* buttomPng2 = nullptr;
 	Sprite* hpGauge = nullptr;
+	Vector2 hpPosition;
 	Sprite* unionGauge = nullptr;
-
-	EnemyShortRenge* attck = nullptr;
-	Model* enemyModel_ = nullptr;
 
 };

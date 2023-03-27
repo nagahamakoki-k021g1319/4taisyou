@@ -19,7 +19,7 @@ public:
 	///< summary>
 	///çXêV
 	///</summary>
-	void Update();
+	void Update(Vector3 playerPos);
 
 	///< summary>
 	///ï`âÊ
@@ -28,7 +28,7 @@ public:
 
 	void OnCollision();
 
-	void PlayerVec(Vector3 pos);
+	void PlayerVec();
 
 private:
 	Collision* coll = nullptr;
@@ -39,10 +39,11 @@ private:
 	Vector3 playerLen;
 	Vector3 playerPos;
 
-	float enemySpeed = 2.0f;
+	float enemySpeed = 0.5f;
 
 	bool attackHit = false;
 	bool isAttack = false;
 	int isAttackTime = 0;
+	int noHitRunTime = 30;
 public:
 };

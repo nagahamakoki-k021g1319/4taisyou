@@ -60,12 +60,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	enemyManager_->Initialize();
 	enemyManager_->SetPlayer(player_);
 
-	enemyModel_= Model::LoadFromOBJ("boll");
-
-	attck = new EnemyShortRenge();
-	attck->Initialize(enemyModel_);
-	attck->PlayerVec(player_->GetWorldPosition());
-
 	//UI
 	UI = new Sprite();
 	UI->Initialize(spriteCommon);
@@ -116,16 +110,11 @@ void GameScene::Update() {
 	}else if (input->TriggerKey(DIK_O)) {
 		enemyManager_->creatEnemy(1);
 	}
-	else if (input->TriggerKey(DIK_I)) {
-		attck->PlayerVec(player_->GetWorldPosition());
-		attck->Update();
-	}
 
 
 	CamUpdate();
 	enemyManager_->Update();
 	player_->Update(&camWtf);
-	attck->Update();
 	
 
 	//hpGaugeのxを(-400 + player.GeHp() * 4)動かしたい
@@ -151,7 +140,6 @@ void GameScene::Draw() {
 	//// 3Dオブクジェクトの描画
 	player_->Draw();
 	enemyManager_->Draw();
-	attck->Draw();
 
 	//3Dオブジェクト描画後処理
 	Object3d::PostDraw();
