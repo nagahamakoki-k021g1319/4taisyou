@@ -21,6 +21,9 @@ GameScene::~GameScene() {
 	delete buttomPng2;
 	delete hpGauge;
 	delete unionGauge;
+
+	delete floor;
+	delete skydome;
 }
 
 /// <summary>
@@ -50,6 +53,16 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	ParticleManager::SetCamera(camera);
 	Object3d::SetCamera(camera);
 
+	floorMD = Model::LoadFromOBJ("floor");
+	floor = Object3d::Create();
+	floor->SetModel(floorMD);
+	floor->wtf.position = (Vector3{ 0, -10, 0 });
+
+	skydomeMD = Model::LoadFromOBJ("skydome");
+	skydome = Object3d::Create();
+	skydome->SetModel(skydomeMD);
+	skydome->wtf.scale = (Vector3{ 1000, 1000, 1000 });
+
 
 	//プレイヤー
 	player_ = new Player();
@@ -59,6 +72,9 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	enemyManager_ = new EnemyManager();
 	enemyManager_->Initialize();
 	enemyManager_->SetPlayer(player_);
+
+
+
 
 
 	//UI
@@ -86,7 +102,13 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	unionGauge = new Sprite();
 	unionGauge->Initialize(spriteCommon);
 	unionGauge->SetPozition({ 0,0 });
-	unionGauge->SetSize({ 1280.0f, 720.0f });
+	unionScale = unionGauge->GetPosition();
+	unionScale.x = 1280.0f;
+	unionScale.y = 720.0f;
+	unionGauge->SetSize(unionScale);
+
+
+
 
 	spriteCommon->LoadTexture(0, "UI.png");
 	UI->SetTextureIndex(0);
@@ -98,6 +120,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	hpGauge->SetTextureIndex(3);
 	spriteCommon->LoadTexture(4, "unionGauge.png");
 	unionGauge->SetTextureIndex(4);
+
 
 }
 
@@ -119,8 +142,16 @@ void GameScene::Update() {
 	enemyManager_->Update();
 	player_->Update(&camWtf);
 
-	hpGauge->SetPozition({-400.0f + player_->GetHp() * 4 ,0});
+	floor->Update();
+	skydome->Update();
 
+
+
+
+	hpGauge->SetPozition({-400.0f + player_->GetHp() * 4 ,0});
+	
+
+	//avoidUI->SetAnchorPoint(avoidScale / 2);
 	//hpGaugeのxを(-400 + player.GeHp() * 4)動かしたい
 
 }
@@ -139,21 +170,21 @@ void GameScene::Draw() {
 	
 
 	//// 3Dオブクジェクトの描画
+	floor->Draw();
+	skydome->Draw();
+
 	player_->Draw();
 	enemyManager_->Draw();
-
-
+	
 	//3Dオブジェクト描画後処理
 	Object3d::PostDraw();
 
-	// 3Dオブジェクト描画前処理
+	//パーティクル描画前処理
 	ParticleManager::PreDraw(dxCommon->GetCommandList());
 
+	player_->EffDraw();
 
-	//// 3Dオブクジェクトの描画
-
-
-	// 3Dオブジェクト描画後処理
+	// パーティクル描画後処理
 	ParticleManager::PostDraw();
 
 	UI->Draw();
@@ -164,6 +195,8 @@ void GameScene::Draw() {
 	}
 	hpGauge->Draw();
 	unionGauge->Draw();
+	
+
 }
 
 
