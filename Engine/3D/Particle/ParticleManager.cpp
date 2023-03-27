@@ -35,7 +35,7 @@ ParticleManager::ParticleManager() {
 
 }
 ParticleManager::~ParticleManager() {
-
+	
 }
 
 void ParticleManager::StaticInitialize(ID3D12Device* device, int window_width, int window_height)
@@ -527,9 +527,11 @@ bool ParticleManager::Initialize()
 	return true;
 }
 
-void ParticleManager::Update()
+void ParticleManager::Update(Vector3 pos)
 {
 	HRESULT result;
+
+	Vector3 playerPos =pos;
 
 	//寿命が尽きたパーティクルを削除
 	particles.remove_if(
@@ -539,15 +541,16 @@ void ParticleManager::Update()
 	);
 	//全パーティクル更新
 	for (std::forward_list<Particle>::iterator it = particles.begin();
+	
 		it != particles.end();
 		it++) {
 		//経過フレーム数をカウント
 		it->frame++;
 		//速度に加速度を加算
 		it->velocity = it->velocity + it->accel;
+		/*it->position = playerPos;*/
 		//速度による移動
 		it->position = it->position + it->velocity;
-
 		//進行度を0~1の範囲に換算
 		float f = (float)it->frame / it->num_frame;
 		//スケールの線形補完

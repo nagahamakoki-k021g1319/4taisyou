@@ -11,6 +11,7 @@ Player::~Player() {
 
 	delete debugObj_;
 	delete debugModel_;
+	delete particleManager;
 }
 
 void Player::Initialize(Input* input) {
@@ -48,8 +49,8 @@ void Player::Initialize(Input* input) {
 
 	// 3Dオブジェクト生成
 	particleManager = ParticleManager::Create();
-	particleManager->Update();
-
+	particleManager->Update(GetWorldPosition());
+	
 
 	//バディ
 	wolf_ = new Wolf();
@@ -183,6 +184,7 @@ void Player::Update(Transform* cam) {
 	if (EffTimer >= 11) {
 		isEffFlag = 0;
 		EffTimer = 0;
+		
 	}
 
 
@@ -217,7 +219,7 @@ void Player::EffUpdate()
 		pos.x += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 		pos.y += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 		pos.z += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-
+		pos += GetWorldPosition();
 		//速度
 		//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
 		const float rnd_vel = 0.1f;
@@ -234,7 +236,7 @@ void Player::EffUpdate()
 		//追加
 		particleManager->Add(60, pos, vel, acc, 1.0f, 0.0f);
 
-		particleManager->Update();
+		particleManager->Update(GetWorldPosition());
 	}
 
 }
