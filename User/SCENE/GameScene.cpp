@@ -20,8 +20,11 @@ GameScene::~GameScene() {
 	delete buttomPng1;
 	delete buttomPng2;
 	delete hpGauge;
-	delete unionGauge;
-
+	delete unionGauge
+	delete titlePic;
+	delete selectPic;
+	delete clearPic;
+	delete gameoverPic;
 	delete floor;
 	delete skydome;
 }
@@ -110,6 +113,31 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 
 
 
+	//ゲームフロー
+	scene = Scene::Title;
+	stage = 0;
+
+	titlePic = new Sprite();
+	titlePic->Initialize(spriteCommon);
+	titlePic->SetPozition({ 0,0 });
+	titlePic->SetSize({ 1280,720 });
+
+	selectPic = new Sprite();
+	selectPic->Initialize(spriteCommon);
+	selectPic->SetPozition({ 0,0 });
+	selectPic->SetSize({ 1280,720 });
+
+	clearPic = new Sprite();
+	clearPic->Initialize(spriteCommon);
+	clearPic->SetPozition({ 0,0 });
+	clearPic->SetSize({ 1280,720 });
+
+	gameoverPic = new Sprite();
+	gameoverPic->Initialize(spriteCommon);
+	gameoverPic->SetPozition({ 0,0 });
+	gameoverPic->SetSize({ 1280,720 });
+
+
 	spriteCommon->LoadTexture(0, "UI.png");
 	UI->SetTextureIndex(0);
 	spriteCommon->LoadTexture(1, "buttom1.png");
@@ -120,40 +148,81 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	hpGauge->SetTextureIndex(3);
 	spriteCommon->LoadTexture(4, "unionGauge.png");
 	unionGauge->SetTextureIndex(4);
-
-
+	spriteCommon->LoadTexture(5, "title.png");
+	titlePic->SetTextureIndex(5);
+	spriteCommon->LoadTexture(6, "select.png");
+	selectPic->SetTextureIndex(6);
+	spriteCommon->LoadTexture(7, "clear.png");
+	clearPic->SetTextureIndex(7);
+	spriteCommon->LoadTexture(8, "gameover.png");
+	gameoverPic->SetTextureIndex(8);
 }
 
 /// <summary>
 /// 毎フレーム処理
 /// </summary>
 void GameScene::Update() {
-	
-	//仮で敵のラウンド切り替え
-	if (input->TriggerKey(DIK_P)) {
-		enemyManager_->creatEnemy(0);
-	}else if (input->TriggerKey(DIK_O)) {
-		enemyManager_->creatEnemy(1);
+	switch (scene)
+	{
+	case Scene::Title:
+		//シーン切り替え
+		if (input->PButtonTrigger(B)) {
+			scene = Scene::Select;
+		}
+
+		break;
+	case Scene::Select:
+		//ステージの選択
+		if(input->LeftStickInput()) {
+			if (input->PStickTrigger(L_LEFT)) {
+				stage = 0;
+
+			}else if (input->PStickTrigger(L_RIGHT)){
+				stage = 1;
+
+			}
+		}
+
+		//シーン切り替え
+		if (input->PButtonTrigger(B)) {
+			enemyManager_->creatEnemy(stage);
+			scene = Scene::Play;
+		}
+
+		break;
+	case Scene::Play:
+		CamUpdate();
+		enemyManager_->Update();
+		player_->Update(&camWtf);
+
+		hpGauge->SetPozition({ -400.0f + player_->GetHp() * 4 ,0 });
+    
+    floor->Update();
+    skydome->Update();
+
+		//シーン切り替え
+		if (player_->GetHp() < 0) {
+			scene = Scene::Gameover;
+		}else if (enemyManager_->IsAllEnemyDead()) {
+			scene = Scene::Clear;
+		}
+
+		break;
+	case Scene::Clear:
+		//シーン切り替え
+		if (input->PButtonTrigger(B)) {
+			scene = Scene::Title;
+		}
+
+		break;
+	case Scene::Gameover:
+		//シーン切り替え
+		if (input->PButtonTrigger(B)) {
+			scene = Scene::Title;
+		}
+
+		break;
 	}
-
-
-
-	CamUpdate();
-	enemyManager_->Update();
-	player_->Update(&camWtf);
-
-	floor->Update();
-	skydome->Update();
-
-
-
-
-	hpGauge->SetPozition({-400.0f + player_->GetHp() * 4 ,0});
-	
-
-	//avoidUI->SetAnchorPoint(avoidScale / 2);
-	//hpGaugeのxを(-400 + player.GeHp() * 4)動かしたい
-
 }
 
 /// <summary>
@@ -167,15 +236,69 @@ void GameScene::Draw() {
 	/// <summary>
 	//3Dオブジェクト描画前処理
 	Object3d::PreDraw(dxCommon->GetCommandList());
-	
-
 	//// 3Dオブクジェクトの描画
-	floor->Draw();
-	skydome->Draw();
+	switch (scene)
+	{
+	case Scene::Title:
 
-	player_->Draw();
-	enemyManager_->Draw();
-	
+
+		break;
+	case Scene::Select:
+
+
+		break;
+	case Scene::Play:
+		player_->Draw();
+		enemyManager_->Draw();
+
+    
+    floor->Draw();
+    skydome->Draw();
+		break;
+	case Scene::Clear:
+
+
+		break;
+	case Scene::Gameover:
+
+
+		break;
+	}
+	//3Dオブジェクト描画後処理
+	Object3d::PostDraw();
+
+
+	// パーティクル描画前処理
+	ParticleManager::PreDraw(dxCommon->GetCommandList());
+	//// パーティクルの描画
+	switch (scene)
+	{
+	case Scene::Title:
+		titlePic->Draw();
+
+		break;
+	case Scene::Select:
+		selectPic->Draw();
+
+		break;
+	case Scene::Play:
+		UI->Draw();
+		if (input->ButtonInput(LT)) {
+			buttomPng2->Draw();
+		}
+		else {
+			buttomPng1->Draw();
+		}
+		hpGauge->Draw();
+		unionGauge->Draw();
+
+		break;
+	case Scene::Clear:
+		clearPic->Draw();
+
+		break;
+	case Scene::Gameover:
+		gameoverPic->Draw();
 	//3Dオブジェクト描画後処理
 	Object3d::PostDraw();
 
@@ -187,16 +310,10 @@ void GameScene::Draw() {
 	// パーティクル描画後処理
 	ParticleManager::PostDraw();
 
-	UI->Draw();
-	if (input->ButtonInput(LT)) {
-		buttomPng2->Draw();
-	}else {
-		buttomPng1->Draw();
+		break;
 	}
-	hpGauge->Draw();
-	unionGauge->Draw();
-	
-
+	// パーティクル描画後処理
+	ParticleManager::PostDraw();
 }
 
 
@@ -281,7 +398,6 @@ void GameScene::CamUpdate() {
 
 	camera->Update();
 }
-
 
 Vector3 GameScene::bVelocity(Vector3& velocity, Transform& worldTransform)
 {

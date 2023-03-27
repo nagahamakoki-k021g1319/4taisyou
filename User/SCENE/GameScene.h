@@ -84,7 +84,6 @@ private:	//メンバ変数
 	float camMoveSpeed = 0.1f;
 	float camRotaSpeed = PI/180;
 
-
 	//プレイヤー
 	Player* player_ = nullptr;
 	//エネミー
@@ -107,5 +106,21 @@ private:	//メンバ変数
 	Vector2 unionScale;
 	Sprite* avoidUI = nullptr;
 	Vector3 avoidScale;
+
+	//ゲームフロー
+	enum class Scene
+	{
+			Title,
+			Select,
+			Play,
+			Clear,
+			Gameover,
+	};
+	Scene scene;
+	int stage;
+	Sprite* titlePic;
+	Sprite* selectPic;
+	Sprite* clearPic;
+	Sprite* gameoverPic;
 
 };
