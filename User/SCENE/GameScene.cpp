@@ -20,7 +20,7 @@ GameScene::~GameScene() {
 	delete buttomPng1;
 	delete buttomPng2;
 	delete hpGauge;
-	delete unionGauge
+	delete unionGauge;
 	delete titlePic;
 	delete selectPic;
 	delete clearPic;
@@ -268,8 +268,6 @@ void GameScene::Draw() {
 	Object3d::PostDraw();
 
 
-	// パーティクル描画前処理
-	ParticleManager::PreDraw(dxCommon->GetCommandList());
 	//// パーティクルの描画
 	switch (scene)
 	{
@@ -282,6 +280,12 @@ void GameScene::Draw() {
 
 		break;
 	case Scene::Play:
+		// パーティクル描画前処理
+		ParticleManager::PreDraw(dxCommon->GetCommandList());
+		player_->EffDraw();
+		// パーティクル描画後処理
+		ParticleManager::PostDraw();
+		
 		UI->Draw();
 		if (input->ButtonInput(LT)) {
 			buttomPng2->Draw();
@@ -299,21 +303,9 @@ void GameScene::Draw() {
 		break;
 	case Scene::Gameover:
 		gameoverPic->Draw();
-	//3Dオブジェクト描画後処理
-	Object3d::PostDraw();
-
-	//パーティクル描画前処理
-	ParticleManager::PreDraw(dxCommon->GetCommandList());
-
-	player_->EffDraw();
-
-	// パーティクル描画後処理
-	ParticleManager::PostDraw();
 
 		break;
 	}
-	// パーティクル描画後処理
-	ParticleManager::PostDraw();
 }
 
 

@@ -141,7 +141,7 @@ void Player::OnCollision() {
 		//通常時
 		else {
 			hp -= 10;
-
+			isEffFlag = 1;
 			isInvincible = true;
 			invincibleTimer = invincibleLimit;
 
@@ -180,7 +180,7 @@ void Player::Update(Transform* cam) {
 	if (EffTimer <= 10 && EffTimer >= 1) {
 		EffUpdate();
 	}
-	if (EffTimer >= 11 ) {
+	if (EffTimer >= 11) {
 		isEffFlag = 0;
 		EffTimer = 0;
 	}
