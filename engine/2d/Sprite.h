@@ -37,7 +37,7 @@ public:
 	};
 public:
 	//‰Šú‰»
-	void Initialize(SpriteCommon* spritecommon_);
+	void Initialize(SpriteCommon* spritecommon_, uint32_t textureIndex = UINT32_MAX);
 
 	void Draw();
 

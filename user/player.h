@@ -5,6 +5,7 @@
 #include"Wolf.h"
 
 #include "Gorilla.h"
+#include "ParticleManager.h"
 
 class Player {
 	
@@ -21,6 +22,8 @@ public:
 	void Attack();
 
 	void Draw();
+	void EffUpdate();
+	void EffDraw();
 
 	void OnCollision();
 
@@ -112,6 +115,11 @@ private:
 	//敵
 	Transform* enemyPos_ = nullptr;
 
+	//パーティクルクラスの初期化 
+	ParticleManager* particleManager = nullptr;
+	//当たった時のエフェクト発生
+	int isEffFlag = 0;
+	int EffTimer = 0;
 
 	//デバッグ用
 	Model* debugModel_ = nullptr;
