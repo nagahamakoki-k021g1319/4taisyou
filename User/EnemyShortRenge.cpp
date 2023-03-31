@@ -17,23 +17,25 @@ void EnemyShortRenge::Initialize(Model* model_)
 
 void EnemyShortRenge::ShortAttack()
 {
-	isAttackTime--;
-	if (coll->CircleCollision(obj_->wtf.position + (playerLen * 2), playerPos, 2.0f, 2.0f)) {
-		OnCollision();
-	}
-	else if (coll->CircleCollision(Vector3{ obj_->wtf.position.x + (playerLen.x * 2), obj_->wtf.position.y + playerLen.y + 2.0f, obj_->wtf.position.z + (playerLen.z * 2) }, playerPos, 2.0f, 2.0f)) {
-		OnCollision();
-	}
-	if (isAttackTime <= 0) {
-		isAttack == false;
+	attackAccumulate--;
+	if (attackAccumulate <= 0) {
+		isAttackTime--;
+		if (coll->CircleCollision(obj_->wtf.position + (playerLen * 2), playerPos, 2.0f, 2.0f)) {
+			OnCollision();
+		}
+		else if (coll->CircleCollision(Vector3{ obj_->wtf.position.x + (playerLen.x * 2), obj_->wtf.position.y + playerLen.y + 2.0f, obj_->wtf.position.z + (playerLen.z * 2) }, playerPos, 2.0f, 2.0f)) {
+			OnCollision();
+		}
+		if (isAttackTime <= 0) {
+			isAttack == false;
+		}
 	}
 }
 
 
-void EnemyShortRenge::Update(Vector3 PlayerPos)
+void EnemyShortRenge::Update(Vector3 PlayerPos, Object3d* enemy)
 {
-	obj_->Update();
-	attackRenge->Update();
+	obj_ = enemy;
 	playerPos = PlayerPos;
 	PlayerVec();
 	if (isAttack == false) {
@@ -49,16 +51,16 @@ void EnemyShortRenge::Update(Vector3 PlayerPos)
 		ShortAttack();
 	}
 	attackRenge->wtf.position = obj_->wtf.position + (playerLen * 2);
+	obj_->Update();
+	attackRenge->Update();
+	enemy = obj_;
 }
 
 void EnemyShortRenge::Draw()
 {
-	obj_->Draw();
+	/*obj_->Draw();*/
 	if (isAttack) {
-		//if (coll->CircleCollision(obj_->wtf.position + (playerLen * 2), playerPos, 1.0f, 1.0f)==false) {
-			attackRenge->Draw();
-		//}
-		
+		attackRenge->Draw();
 	}
 
 }

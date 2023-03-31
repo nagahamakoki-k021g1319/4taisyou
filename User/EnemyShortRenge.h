@@ -19,7 +19,7 @@ public:
 	///< summary>
 	///çXêV
 	///</summary>
-	void Update(Vector3 playerPos);
+	void Update(Vector3 playerPos,Object3d* enemy);
 
 	///< summary>
 	///ï`âÊ
@@ -44,6 +44,6 @@ private:
 	bool attackHit = false;
 	bool isAttack = false;
 	int isAttackTime = 0;
-	int noHitRunTime = 30;
+	int attackAccumulate = 20;
 public:
 };
