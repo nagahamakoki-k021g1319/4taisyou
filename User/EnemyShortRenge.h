@@ -39,11 +39,11 @@ private:
 	Vector3 playerLen;
 	Vector3 playerPos;
 
-	float enemySpeed = 0.5f;
+	float enemySpeed = 0.3f;
 
 	bool attackHit = false;
 	bool isAttack = false;
 	int isAttackTime = 0;
-	int attackAccumulate = 20;
+	int attackAccumulate = 30;
 public:
 };
