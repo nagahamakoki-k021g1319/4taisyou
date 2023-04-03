@@ -248,8 +248,6 @@ void GameScene::Draw() {
 	case Scene::Title:
 
 
-		break;
-	case Scene::Select:
 
 
 		break;
