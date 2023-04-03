@@ -18,6 +18,8 @@ public:
 
 	void SetPlayer(Player* player) { player_ = player; };
 
+	bool IsAllEnemyDead();
+
 private:
 	Transform* origin = nullptr;
 

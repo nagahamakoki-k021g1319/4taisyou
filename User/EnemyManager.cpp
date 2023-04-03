@@ -51,7 +51,7 @@ void EnemyManager::Update() {
 		float damage = 0;
 		//“G‚ÆƒvƒŒƒCƒ„[UŒ‚Õ“Ë
 		if (player_->CheckAttack2Enemy(enemy->GetWorldPosition(), damage)) {
-			enemy->OnColision(damage);
+			enemy->OnColision(damage);	
 		}
 		//“G‚ÆƒoƒfƒB‚ÌÕ“Ë
 		if (player_->wolf_->CheckAttack2Enemy(enemy->GetWorldPosition(), damage)) {
@@ -68,4 +68,15 @@ void EnemyManager::Draw() {
 		enemy->Draw();
 	}
 
+}
+
+
+bool EnemyManager::IsAllEnemyDead() {
+	bool result = false;
+
+	if (enemys_.size() == 0) {
+		result = true;
+	}
+
+	return result;
 }

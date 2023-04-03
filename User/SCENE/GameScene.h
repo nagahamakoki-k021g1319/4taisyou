@@ -42,6 +42,8 @@ public: // メンバ関数
 	/// </summary>
 	void Initialize(DirectXCommon* dxCommon, Input* input);
 
+	void Reset();
+
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
@@ -84,11 +86,17 @@ private:	//メンバ変数
 	float camMoveSpeed = 0.1f;
 	float camRotaSpeed = PI / 180;
 
-
 	//プレイヤー
 	Player* player_ = nullptr;
 	//エネミー
 	EnemyManager* enemyManager_ = nullptr;
+
+	//背景や床
+	Object3d* floor = nullptr;
+	Model* floorMD = nullptr;
+	Object3d* skydome = nullptr;
+	Model* skydomeMD = nullptr;
+
 
 	//UI
 	Sprite* UI = nullptr;
@@ -97,5 +105,24 @@ private:	//メンバ変数
 	Sprite* hpGauge = nullptr;
 	Vector2 hpPosition;
 	Sprite* unionGauge = nullptr;
+	Vector2 unionScale;
+	Sprite* avoidUI = nullptr;
+	Vector3 avoidScale;
+
+	//ゲームフロー
+	enum class Scene
+	{
+			Title,
+			Select,
+			Play,
+			Clear,
+			Gameover,
+	};
+	Scene scene;
+	int stage;
+	Sprite* titlePic;
+	Sprite* selectPic;
+	Sprite* clearPic;
+	Sprite* gameoverPic;
 
 };

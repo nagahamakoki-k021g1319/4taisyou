@@ -21,6 +21,12 @@ GameScene::~GameScene() {
 	delete buttomPng2;
 	delete hpGauge;
 	delete unionGauge;
+	delete titlePic;
+	delete selectPic;
+	delete clearPic;
+	delete gameoverPic;
+	delete floor;
+	delete skydome;
 }
 
 /// <summary>
@@ -50,6 +56,16 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	ParticleManager::SetCamera(camera);
 	Object3d::SetCamera(camera);
 
+	floorMD = Model::LoadFromOBJ("floor");
+	floor = Object3d::Create();
+	floor->SetModel(floorMD);
+	floor->wtf.position = (Vector3{ 0, -10, 0 });
+
+	skydomeMD = Model::LoadFromOBJ("skydome");
+	skydome = Object3d::Create();
+	skydome->SetModel(skydomeMD);
+	skydome->wtf.scale = (Vector3{ 1000, 1000, 1000 });
+
 
 	//プレイヤー
 	player_ = new Player();
@@ -78,13 +94,42 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 
 	hpGauge = new Sprite();
 	hpGauge->Initialize(spriteCommon);
-	hpGauge->SetPozition({ 0,0 });
+	hpPosition = hpGauge->GetPosition();
+	hpGauge->SetPozition(hpPosition);
 	hpGauge->SetSize({ 1280.0f, 720.0f });
 
 	unionGauge = new Sprite();
 	unionGauge->Initialize(spriteCommon);
 	unionGauge->SetPozition({ 0,0 });
-	unionGauge->SetSize({ 1280.0f, 720.0f });
+	unionScale = unionGauge->GetPosition();
+	unionScale.x = 1280.0f;
+	unionScale.y = 720.0f;
+	unionGauge->SetSize(unionScale);
+
+	//ゲームフロー
+	scene = Scene::Title;
+	stage = 0;
+
+	titlePic = new Sprite();
+	titlePic->Initialize(spriteCommon);
+	titlePic->SetPozition({ 0,0 });
+	titlePic->SetSize({ 1280,720 });
+
+	selectPic = new Sprite();
+	selectPic->Initialize(spriteCommon);
+	selectPic->SetPozition({ 0,0 });
+	selectPic->SetSize({ 1280,720 });
+
+	clearPic = new Sprite();
+	clearPic->Initialize(spriteCommon);
+	clearPic->SetPozition({ 0,0 });
+	clearPic->SetSize({ 1280,720 });
+
+	gameoverPic = new Sprite();
+	gameoverPic->Initialize(spriteCommon);
+	gameoverPic->SetPozition({ 0,0 });
+	gameoverPic->SetSize({ 1280,720 });
+
 
 	spriteCommon->LoadTexture(0, "UI.png");
 	UI->SetTextureIndex(0);
@@ -96,32 +141,94 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	hpGauge->SetTextureIndex(3);
 	spriteCommon->LoadTexture(4, "unionGauge.png");
 	unionGauge->SetTextureIndex(4);
+	spriteCommon->LoadTexture(5, "title.png");
+	titlePic->SetTextureIndex(5);
+	spriteCommon->LoadTexture(6, "select.png");
+	selectPic->SetTextureIndex(6);
+	spriteCommon->LoadTexture(7, "clear.png");
+	clearPic->SetTextureIndex(7);
+	spriteCommon->LoadTexture(8, "gameover.png");
+	gameoverPic->SetTextureIndex(8);
 
+	Reset();
+}
+
+void GameScene::Reset() {
+	camWtf.Initialize();
+	camWtf.position = { 0.0f, 3.0f, -8.0f };
+
+	targetWtf.Initialize();
+	targetWtf.position = { 0.0f,0.0f,targetDistance };
+
+	player_->Reset();
 }
 
 /// <summary>
 /// 毎フレーム処理
 /// </summary>
 void GameScene::Update() {
-	
-	//仮で敵のラウンド切り替え
-	if (input->TriggerKey(DIK_P)) {
-		enemyManager_->creatEnemy(0);
-	}else if (input->TriggerKey(DIK_O)) {
-		enemyManager_->creatEnemy(1);
+	switch (scene)
+	{
+	case Scene::Title:
+		//シーン切り替え
+		if (input->PButtonTrigger(B)) {
+			scene = Scene::Select;
+		}
+
+		break;
+	case Scene::Select:
+		//ステージの選択
+		if(input->LeftStickInput()) {
+			if (input->PStickTrigger(L_LEFT)) {
+				stage = 0;
+
+			}else if (input->PStickTrigger(L_RIGHT)){
+				stage = 1;
+
+			}
+		}
+
+		//シーン切り替え
+		if (input->PButtonTrigger(B)) {
+			enemyManager_->creatEnemy(stage);
+			Reset();
+			scene = Scene::Play;
+		}
+
+		break;
+	case Scene::Play:
+		CamUpdate();
+		enemyManager_->Update();
+		player_->Update(&camWtf);
+
+		hpGauge->SetPozition({ -400.0f + player_->GetHp() * 4 ,0 });
+    
+    floor->Update();
+    skydome->Update();
+
+		//シーン切り替え
+		if (player_->GetHp() < 0) {
+			scene = Scene::Gameover;
+		}else if (enemyManager_->IsAllEnemyDead()) {
+			scene = Scene::Clear;
+		}
+
+		break;
+	case Scene::Clear:
+		//シーン切り替え
+		if (input->PButtonTrigger(B)) {
+			scene = Scene::Title;
+		}
+
+		break;
+	case Scene::Gameover:
+		//シーン切り替え
+		if (input->PButtonTrigger(B)) {
+			scene = Scene::Title;
+		}
+
+		break;
 	}
-
-
-	CamUpdate();
-	enemyManager_->Update();
-	player_->Update(&camWtf);
-	
-
-	//hpGaugeのxを(-400 + player.GeHp() * 4)動かしたい
-	//unionGaugeのxを(-200 + player.GetUnion() * 2)動かしたい
-
-
-
 }
 
 /// <summary>
@@ -135,33 +242,74 @@ void GameScene::Draw() {
 	/// <summary>
 	//3Dオブジェクト描画前処理
 	Object3d::PreDraw(dxCommon->GetCommandList());
-	
-
 	//// 3Dオブクジェクトの描画
-	player_->Draw();
-	enemyManager_->Draw();
+	switch (scene)
+	{
+	case Scene::Title:
 
+
+
+
+		break;
+	case Scene::Play:
+		player_->Draw();
+		enemyManager_->Draw();
+
+    
+    floor->Draw();
+    skydome->Draw();
+		break;
+	case Scene::Clear:
+
+
+		break;
+	case Scene::Gameover:
+
+
+		break;
+	}
 	//3Dオブジェクト描画後処理
 	Object3d::PostDraw();
 
-	// 3Dオブジェクト描画前処理
-	ParticleManager::PreDraw(dxCommon->GetCommandList());
 
+	//// パーティクルの描画
+	switch (scene)
+	{
+	case Scene::Title:
+		titlePic->Draw();
 
-	//// 3Dオブクジェクトの描画
+		break;
+	case Scene::Select:
+		selectPic->Draw();
 
+		break;
+	case Scene::Play:
+		// パーティクル描画前処理
+		ParticleManager::PreDraw(dxCommon->GetCommandList());
+		player_->EffDraw();
+		// パーティクル描画後処理
+		ParticleManager::PostDraw();
+		
+		UI->Draw();
+		if (input->ButtonInput(LT)) {
+			buttomPng2->Draw();
+		}
+		else {
+			buttomPng1->Draw();
+		}
+		hpGauge->Draw();
+		unionGauge->Draw();
 
-	// 3Dオブジェクト描画後処理
-	ParticleManager::PostDraw();
+		break;
+	case Scene::Clear:
+		clearPic->Draw();
 
-	UI->Draw();
-	if (input->ButtonInput(LT)) {
-		buttomPng2->Draw();
-	}else {
-		buttomPng1->Draw();
+		break;
+	case Scene::Gameover:
+		gameoverPic->Draw();
+
+		break;
 	}
-	hpGauge->Draw();
-	unionGauge->Draw();
 }
 
 
@@ -169,22 +317,32 @@ void GameScene::CamMove() {
 	if (input->LeftStickInput()) {
 		//カメラの移動
 		Vector3 eyeVelocity = { 0,0,0 };
-		//入力
-		Vector2 stickVec = input->GetLeftStickVec();
 
-		eyeVelocity.x = stickVec.x;
-		eyeVelocity.z = stickVec.y;
+		//通常移動
+		if (player_->isAction == 0) {
+			//入力
+			Vector2 stickVec = input->GetLeftStickVec();
 
-		eyeVelocity = eyeVelocity.nomalize();
+			eyeVelocity.x = stickVec.x;
+			eyeVelocity.z = stickVec.y;
 
-		eyeVelocity *= camMoveSpeed;
+			eyeVelocity = eyeVelocity.nomalize();
 
+			eyeVelocity *= camMoveSpeed;
+		}
+		//回避時移動
+		else if (player_->isAction == 3) {
+			eyeVelocity = player_->GetDodgeMoveVec();
+
+		}
+		
 		//移動ベクトルを向いてる方向に合わせる
 		eyeVelocity = bVelocity(eyeVelocity, camWtf);
 
 		//更新
 		camWtf.position += eyeVelocity;
 	}
+
 }
 
 void GameScene::CamRota() {
@@ -219,9 +377,7 @@ void GameScene::CamRota() {
 }
 
 void GameScene::CamUpdate() {
-	if (player_->isAction == 0) {
-		CamMove();
-	}
+	CamMove();
 	CamRota();
 
 	camWtf.UpdateMat();
@@ -238,7 +394,6 @@ void GameScene::CamUpdate() {
 
 	camera->Update();
 }
-
 
 Vector3 GameScene::bVelocity(Vector3& velocity, Transform& worldTransform)
 {
