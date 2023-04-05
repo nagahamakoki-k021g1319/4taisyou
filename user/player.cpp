@@ -46,6 +46,7 @@ void Player::Reset() {
 	hp = defaultHp;
 	isAction = 0;
 	isLive = true;
+	isAttackFin = false;
 
 	//弱攻撃
 	lightAttackLPos = { 0,0,3 };
@@ -101,12 +102,14 @@ void Player::Attack() {
 				isAction = 1;
 				lightAttackCount = 0;
 				lightAttackTimer = lightAttackLimit[0];
+				isAttackFin = false;
 			}
 			//強攻撃
 			if (input_->PushKey(DIK_1) || input_->ButtonInput(Y)) {
 				isAction = 2;
 				heavyAttackCount = 0;
 				heavyAttackTimer = heavyAttackLimit[0];
+				isAttackFin = false;
 			}
 			//回避
 			if (input_->PushKey(DIK_3) || input_->ButtonInput(B)) {
@@ -135,7 +138,7 @@ void Player::Attack() {
 		HeavyAttack();
 	}
 	//回避
-	else if(isAction==3){
+	else if (isAction == 3) {
 		Dodge();
 	}
 }
@@ -176,7 +179,7 @@ void Player::Update(Transform* cam) {
 	if (isInvincible) {
 		invincibleTimer--;
 		if (invincibleTimer < 0) {
-			isInvincible=false;
+			isInvincible = false;
 		}
 	}
 
@@ -253,10 +256,10 @@ void Player::EffDraw()
 		// 3Dオブクジェクトの描画
 		particleManager->Draw();
 	}
-	else{}
+	else {}
 }
 
-Vector3 Player::bVelocity(Vector3& velocity,Transform& worldTransform)
+Vector3 Player::bVelocity(Vector3& velocity, Transform& worldTransform)
 {
 	Vector3 result = { 0,0,0 };
 
@@ -318,25 +321,29 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 }
 
 void Player::LightAttack() {
-	
 	lightAttackTimer--;
-	//攻撃の終了
-	if (lightAttackTimer <= 0) {
-		isAction = 0;
-		isLightAttack = false;
-	}
 
 	//1撃目
 	if (lightAttackCount == 0) {
 		//当たり判定の出現
-		if (lightAttackTimer <= lightAttackPopTime[0] && lightAttackTimer > 0) {
+		if (lightAttackTimer <= lightAttackPopTime[0] && lightAttackTimer > lightAttackDeathTime[0]) {
 			isLightAttack = true;
+			isAttackFin = false;
+		}
+		//当たり判定の消失、硬直
+		else if (lightAttackTimer <= lightAttackDeathTime[0] && lightAttackTimer > 0) {
+			isLightAttack = false;
+		}
+		//攻撃の終了
+		else if (lightAttackTimer <= 0) {
+			isAction = 0;
+			isAttackFin = true;
 		}
 
 		//当たり判定の移動
 		if (isLightAttack) {
 			//移動
-			lightAttackLPos = { 1.0f,0,3.0f };
+			lightAttackLPos = { 0.5f,0,2.0f };
 			//更新
 			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = lightAttackWPos;
@@ -350,20 +357,31 @@ void Player::LightAttack() {
 				lightAttackCount++;
 				lightAttackTimer = lightAttackLimit[lightAttackCount];
 				isLightAttack = false;
+				isAttackFin = true;
 			}
 		}
 	}
 	//2撃目
 	else if (lightAttackCount == 1) {
 		//当たり判定の出現
-		if (lightAttackTimer <= lightAttackPopTime[1] && lightAttackTimer > 0) {
+		if (lightAttackTimer <= lightAttackPopTime[1] && lightAttackTimer > lightAttackDeathTime[1]) {
 			isLightAttack = true;
+			isAttackFin = false;
+		}
+		//当たり判定の消失、硬直
+		else if (lightAttackTimer <= lightAttackDeathTime[1] && lightAttackTimer > 0) {
+			isLightAttack = false;
+		}
+		//攻撃の終了
+		else if (lightAttackTimer <= 0) {
+			isAction = 0;
+			isAttackFin = true;
 		}
 
 		//当たり判定の移動
 		if (isLightAttack) {
 			//移動
-			lightAttackLPos = { -1.0f,0,3.0f };
+			lightAttackLPos = { -0.5f,0,2.0f };
 			//更新
 			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = lightAttackWPos;
@@ -377,20 +395,31 @@ void Player::LightAttack() {
 				lightAttackCount++;
 				lightAttackTimer = lightAttackLimit[lightAttackCount];
 				isLightAttack = false;
+				isAttackFin = true;
 			}
 		}
 	}
 	//3撃目
 	else if (lightAttackCount == 2) {
 		//当たり判定の出現
-		if (lightAttackTimer <= lightAttackPopTime[2] && lightAttackTimer > 0) {
+		if (lightAttackTimer <= lightAttackPopTime[2] && lightAttackTimer > lightAttackDeathTime[2]) {
 			isLightAttack = true;
+			isAttackFin = false;
+		}
+		//当たり判定の消失、硬直
+		else if (lightAttackTimer <= lightAttackDeathTime[2] && lightAttackTimer > 0) {
+			isLightAttack = false;
+		}
+		//攻撃の終了
+		else if (lightAttackTimer <= 0) {
+			isAction = 0;
+			isAttackFin = true;
 		}
 
 		//当たり判定の移動
 		if (isLightAttack) {
 			//移動
-			lightAttackLPos = { 1.0f,0,3.0f };
+			lightAttackLPos = { 0.5f,0,2.0f };
 			//更新
 			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = lightAttackWPos;
@@ -404,21 +433,32 @@ void Player::LightAttack() {
 				lightAttackCount++;
 				lightAttackTimer = lightAttackLimit[lightAttackCount];
 				isLightAttack = false;
+				isAttackFin = true;
 			}
 		}
 	}
 	//4撃目
 	else if (lightAttackCount == 3) {
 		//当たり判定の出現
-		if (lightAttackTimer <= lightAttackPopTime[3] && lightAttackTimer > 0) {
+		if (lightAttackTimer <= lightAttackPopTime[3] && lightAttackTimer > lightAttackDeathTime[3]) {
 			isLightAttack = true;
+			isAttackFin = false;
+		}
+		//当たり判定の消失、硬直
+		else if (lightAttackTimer <= lightAttackDeathTime[3] && lightAttackTimer > 0) {
+			isLightAttack = false;
+		}
+		//攻撃の終了
+		else if (lightAttackTimer <= 0) {
+			isAction = 0;
+			isAttackFin = true;
 		}
 
 		//当たり判定の移動
 		if (isLightAttack) {
-			//Lposが相対座標、ここを変える
-			lightAttackLPos = { 0,0,4.0f };
-			//ワールド座標に変換
+			//移動
+			lightAttackLPos = { 0,0,3.0f };
+			//更新
 			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = lightAttackWPos;
 		}
@@ -427,17 +467,22 @@ void Player::LightAttack() {
 
 void Player::HeavyAttack() {
 	heavyAttackTimer--;
-	//攻撃の終了
-	if (heavyAttackTimer <= 0) {
-		isAction = 0;
-		isHeavyAttack = false;
-	}
 
 	//1撃目
 	if (heavyAttackCount == 0) {
 		//当たり判定の出現
-		if (heavyAttackTimer <= heavyAttackPopTime[0] && heavyAttackTimer > 0) {
+		if (heavyAttackTimer <= heavyAttackPopTime[0] && heavyAttackTimer > heavyAttackDeathTime[0]) {
 			isHeavyAttack = true;
+			isAttackFin = false;
+		}
+		//当たり判定の消失、硬直
+		else if (heavyAttackTimer <= heavyAttackDeathTime[0] && heavyAttackTimer > 0) {
+			isHeavyAttack = false;
+		}
+		//攻撃の終了
+		else if (heavyAttackTimer <= 0) {
+			isAction = 0;
+			isAttackFin = true;
 		}
 
 		//当たり判定の移動
@@ -457,14 +502,25 @@ void Player::HeavyAttack() {
 				heavyAttackCount++;
 				heavyAttackTimer = heavyAttackLimit[heavyAttackCount];
 				isHeavyAttack = false;
+				isAttackFin = true;
 			}
 		}
 	}
 	//2撃目
 	else if (heavyAttackCount == 1) {
 		//当たり判定の出現
-		if (heavyAttackTimer <= heavyAttackPopTime[1] && heavyAttackTimer > 0) {
+		if (heavyAttackTimer <= heavyAttackPopTime[1] && heavyAttackTimer > heavyAttackDeathTime[1]) {
 			isHeavyAttack = true;
+			isAttackFin = false;
+		}
+		//当たり判定の消失、硬直
+		else if (heavyAttackTimer <= heavyAttackDeathTime[1] && heavyAttackTimer > 0) {
+			isHeavyAttack = false;
+		}
+		//攻撃の終了
+		else if (heavyAttackTimer <= 0) {
+			isAction = 0;
+			isAttackFin = true;
 		}
 
 		//当たり判定の移動

@@ -19,8 +19,6 @@ void Enemy::Initialize(Vector3 pos) {
 	enemyObj_->SetModel(enemyModel_);
 	enemyObj_->wtf.position = pos;
 
-	isInvincible = false;
-
 	// ダガーファンネル
 	daggerBulletModel_ = Model::LoadFromOBJ("boll");
 	//順番に弾が飛んでくる攻撃
@@ -29,13 +27,6 @@ void Enemy::Initialize(Vector3 pos) {
 }
 
 void Enemy::Update() {
-	//無敵時間更新
-	if (invincibleTimer > 0) {
-		invincibleTimer--;
-	}
-	else if (invincibleTimer <= 0) {
-		isInvincible = false;
-	}
 
 	{//仮でプレイヤーとのやり取り
 		player_->SetEnemyPos(&enemyObj_->wtf);
@@ -204,12 +195,20 @@ Vector3 Enemy::GetWorldPosition()
 }
 
 void Enemy::OnColision(int damage) {
-	if (isInvincible == false) {
+	//player
+	if (isHitPlayer == false) {
 		hp -= damage;
 		if (hp <= 0) {
 			isLive = false;
 		}
-		isInvincible = true;
-		invincibleTimer = invincibleLimit;
+		isHitPlayer = true;
 	}
+	////wolf
+	//if (isHitWolf == false) {
+	//	hp -= damage;
+	//	if (hp <= 0) {
+	//		isLive = false;
+	//	}
+	//	isHitWolf = true;
+	//}
 }

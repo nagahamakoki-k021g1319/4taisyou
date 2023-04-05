@@ -48,6 +48,10 @@ void EnemyManager::Update() {
 
 	enemys_.remove_if([](std::unique_ptr<Enemy>& enemy) { return enemy->IsDead(); });
 	for (std::unique_ptr<Enemy>& enemy : enemys_) {
+		if (player_->GetIsAttackFin()) {
+			enemy->ResetHit2player();
+		}
+
 		float damage = 0;
 		//“G‚ÆƒvƒŒƒCƒ„[UŒ‚Õ“Ë
 		if (player_->CheckAttack2Enemy(enemy->GetWorldPosition(), damage)) {

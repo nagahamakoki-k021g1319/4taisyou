@@ -45,6 +45,8 @@ public:
 	float GetHp() { return hp; };
 	bool GetIsDodge() { return isDodge; };
 
+	bool GetIsAttackFin() { return isAttackFin; };
+
 	Vector3 GetDodgeMoveVec() { return dodgeMoveVec; };
 
 	/// <summary>
@@ -67,6 +69,7 @@ private:
 	const int defaultHp = 100;
 	int hp;
 	bool isLive = true;
+	bool isAttackFin;
 
 	//無敵時間
 	bool isInvincible;
@@ -85,6 +88,8 @@ private:
 	bool isLightAttack;
 	//判定が出始める時間
 	float lightAttackPopTime[4] = { 15,15,15,15 };
+	//判定が消える時間
+	float lightAttackDeathTime[4] = { 10,10,10,10 };
 	//次の連撃への入力受付開始時間
 	float lightAttackInput[4] = { 10,10,10,0 };
 
@@ -101,6 +106,8 @@ private:
 	bool isHeavyAttack;
 	//判定が出始める時間
 	float heavyAttackPopTime[2] = { 20,20 };
+	//判定が消える時間
+	float heavyAttackDeathTime[2] = { 10,10 };
 	//次の連撃への入力受付開始時間
 	float heavyAttackInput[2] = { 10,0 };
 
