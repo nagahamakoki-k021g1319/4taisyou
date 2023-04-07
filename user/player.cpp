@@ -572,13 +572,17 @@ void Player::HeavyAttack() {
 void Player::Dodge() {
 	dodgeTimer--;
 
-	//移動速度変更
-	dodgeMoveVec = dodgeMoveVecNomal * (0.4f * pow((30 / dodgeLimit), 2));
-
-
+	if (dodgeTimer > dodgeStun) {
+		//回避時
+		//移動速度変更
+		dodgeMoveVec = dodgeMoveVecNomal * (0.4f * pow((30 / dodgeLimit), 2));
+	}else {
+		//硬直
+		isDodge = false;
+		dodgeMoveVec = { 0,0,0 };
+	}
+	
 	if (dodgeTimer < 0) {
 		isAction = 0;
-		isDodge = false;
 	}
-
 }

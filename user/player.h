@@ -117,6 +117,8 @@ private:
 	bool isDodge;
 	const int dodgeLimit = 20;
 	int dodgeTimer;
+	//‰ñ”ğŒãd’¼ŠÔ
+	const int dodgeStun = 8;
 	Vector3 dodgeMoveVec;
 	Vector3 dodgeMoveVecNomal;
 
