@@ -18,6 +18,7 @@ void EnemyManager::creatEnemy(int round) {
 	enemys_.clear();
 
 	//“G‚Ì“Ç‚İ‚İ
+	//ƒXƒe[ƒW1
 	if (round == 0) {
 		{
 			std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
@@ -25,7 +26,9 @@ void EnemyManager::creatEnemy(int round) {
 			newEnemy->SetPlayer(player_);
 			enemys_.push_back(std::move(newEnemy));
 		}
-	}else if (round == 1) {
+	}
+	//ƒXƒe[ƒW2
+	else if (round == 1) {
 		{
 			std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
 			newEnemy->Initialize({ -3,0,5 });
@@ -45,9 +48,9 @@ void EnemyManager::Update() {
 	//“G‚ª‚¢‚È‚¢‚Æ‚«Œ´“_‚ÉUŒ‚
 	player_->SetEnemyPos(origin);
 
-
 	enemys_.remove_if([](std::unique_ptr<Enemy>& enemy) { return enemy->IsDead(); });
 	for (std::unique_ptr<Enemy>& enemy : enemys_) {
+		//“G‚Ì–³“GŠÔ‰ğœ
 		if (player_->GetIsAttackFin()) {
 			enemy->ResetHit2player();
 		}

@@ -70,6 +70,7 @@ private:
 	int hp;
 	bool isLive = true;
 	bool isAttackFin;
+	bool nextAttack;
 
 	//無敵時間
 	bool isInvincible;
@@ -82,16 +83,16 @@ private:
 	//何回めの連撃か
 	int lightAttackCount;
 	//一回の攻撃全体の時間
-	float lightAttackLimit[4] = { 20,20,20,20 };
+	float lightAttackLimit[4] = { 17,18,20,30 };
 	float lightAttackTimer;
 	//攻撃の当たり判定の有無
 	bool isLightAttack;
 	//判定が出始める時間
-	float lightAttackPopTime[4] = { 15,15,15,15 };
+	float lightAttackPopTime[4] = { 14,13,15,24 };
 	//判定が消える時間
-	float lightAttackDeathTime[4] = { 10,10,10,10 };
+	float lightAttackDeathTime[4] = { 13,12,14,22 };
 	//次の連撃への入力受付開始時間
-	float lightAttackInput[4] = { 10,10,10,0 };
+	float lightAttackInput[4] = { 20,20,20,0 };
 
 
 	//強攻撃
@@ -105,11 +106,11 @@ private:
 	//攻撃の当たり判定の有無
 	bool isHeavyAttack;
 	//判定が出始める時間
-	float heavyAttackPopTime[2] = { 20,20 };
+	float heavyAttackPopTime[2] = { 15,25 };
 	//判定が消える時間
-	float heavyAttackDeathTime[2] = { 10,10 };
+	float heavyAttackDeathTime[2] = { 12,22 };
 	//次の連撃への入力受付開始時間
-	float heavyAttackInput[2] = { 10,0 };
+	float heavyAttackInput[2] = { 15,0 };
 
 
 	//回避

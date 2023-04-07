@@ -47,6 +47,7 @@ void Player::Reset() {
 	isAction = 0;
 	isLive = true;
 	isAttackFin = false;
+	nextAttack = false;
 
 	//弱攻撃
 	lightAttackLPos = { 0,0,3 };
@@ -75,22 +76,22 @@ void Player::Attack() {
 	if (isAction == 0) {
 		//バディ指示
 		if (input_->PushKey(DIK_LSHIFT) || input_->ButtonInput(LT)) {
-			if (input_->PushKey(DIK_1) || input_->ButtonInput(B)) {
+			if (input_->PushKey(DIK_1) || input_->PButtonTrigger(B)) {
 				//近距離
 				wolf_->Attack(1, GetWorldPosition());
 
 			}
-			else if (input_->PushKey(DIK_2) || input_->ButtonInput(A)) {
+			else if (input_->PushKey(DIK_2) || input_->PButtonTrigger(A)) {
 				//遠距離
 				wolf_->Attack(2, GetWorldPosition());
 
 			}
-			else if (input_->PushKey(DIK_3) || input_->ButtonInput(Y)) {
+			else if (input_->PushKey(DIK_3) || input_->PButtonTrigger(Y)) {
 				//溜め近距離
 				wolf_->Attack(3, GetWorldPosition());
 
 			}
-			else if (input_->PushKey(DIK_4) || input_->ButtonInput(X)) {
+			else if (input_->PushKey(DIK_4) || input_->PButtonTrigger(X)) {
 				//溜め遠距離
 				wolf_->Attack(4, GetWorldPosition());
 			}
@@ -98,14 +99,14 @@ void Player::Attack() {
 		//本体攻撃入力
 		else {
 			//弱攻撃
-			if (input_->PushKey(DIK_4) || input_->ButtonInput(X)) {
+			if (input_->PushKey(DIK_4) || input_->PButtonTrigger(X)) {
 				isAction = 1;
 				lightAttackCount = 0;
 				lightAttackTimer = lightAttackLimit[0];
 				isAttackFin = false;
 			}
 			//強攻撃
-			if (input_->PushKey(DIK_1) || input_->ButtonInput(Y)) {
+			if (input_->PushKey(DIK_1) || input_->PButtonTrigger(Y)) {
 				isAction = 2;
 				heavyAttackCount = 0;
 				heavyAttackTimer = heavyAttackLimit[0];
@@ -123,7 +124,7 @@ void Player::Attack() {
 				}
 			}
 			//null
-			if (input_->TriggerKey(DIK_2) || input_->ButtonInput(A)) {
+			if (input_->TriggerKey(DIK_2) || input_->PButtonTrigger(A)) {
 			}
 		}
 	}
@@ -336,8 +337,19 @@ void Player::LightAttack() {
 		}
 		//攻撃の終了
 		else if (lightAttackTimer <= 0) {
-			isAction = 0;
-			isAttackFin = true;
+			if (nextAttack) {
+				//次の斬撃設定
+				lightAttackCount++;
+				lightAttackTimer = lightAttackLimit[lightAttackCount];
+				isLightAttack = false;
+				isAttackFin = true;
+				nextAttack = false;
+			}
+			else {
+				isAction = 0;
+				isAttackFin = true;
+				nextAttack = false;
+			}
 		}
 
 		//当たり判定の移動
@@ -350,14 +362,11 @@ void Player::LightAttack() {
 		}
 
 		//次の斬撃入力
-		if (input_->ButtonInput(X)) {
+		if (input_->PButtonTrigger(X)) {
 			//入力受付時間
 			if (lightAttackTimer < lightAttackInput[lightAttackCount] && lightAttackTimer > 0) {
 				//次の斬撃設定
-				lightAttackCount++;
-				lightAttackTimer = lightAttackLimit[lightAttackCount];
-				isLightAttack = false;
-				isAttackFin = true;
+				nextAttack = true;
 			}
 		}
 	}
@@ -374,8 +383,19 @@ void Player::LightAttack() {
 		}
 		//攻撃の終了
 		else if (lightAttackTimer <= 0) {
-			isAction = 0;
-			isAttackFin = true;
+			if (nextAttack) {
+				//次の斬撃設定
+				lightAttackCount++;
+				lightAttackTimer = lightAttackLimit[lightAttackCount];
+				isLightAttack = false;
+				isAttackFin = true;
+				nextAttack = false;
+			}
+			else {
+				isAction = 0;
+				isAttackFin = true;
+				nextAttack = false;
+			}
 		}
 
 		//当たり判定の移動
@@ -388,14 +408,11 @@ void Player::LightAttack() {
 		}
 
 		//次の斬撃入力
-		if (input_->ButtonInput(X)) {
+		if (input_->PButtonTrigger(X)) {
 			//入力受付時間
 			if (lightAttackTimer < lightAttackInput[lightAttackCount] && lightAttackTimer > 0) {
 				//次の斬撃設定
-				lightAttackCount++;
-				lightAttackTimer = lightAttackLimit[lightAttackCount];
-				isLightAttack = false;
-				isAttackFin = true;
+				nextAttack = true;
 			}
 		}
 	}
@@ -412,8 +429,19 @@ void Player::LightAttack() {
 		}
 		//攻撃の終了
 		else if (lightAttackTimer <= 0) {
-			isAction = 0;
-			isAttackFin = true;
+			if (nextAttack) {
+				//次の斬撃設定
+				lightAttackCount++;
+				lightAttackTimer = lightAttackLimit[lightAttackCount];
+				isLightAttack = false;
+				isAttackFin = true;
+				nextAttack = false;
+			}
+			else {
+				isAction = 0;
+				isAttackFin = true;
+				nextAttack = false;
+			}
 		}
 
 		//当たり判定の移動
@@ -426,38 +454,36 @@ void Player::LightAttack() {
 		}
 
 		//次の斬撃入力
-		if (input_->ButtonInput(X)) {
+		if (input_->PButtonTrigger(X)) {
 			//入力受付時間
 			if (lightAttackTimer < lightAttackInput[lightAttackCount] && lightAttackTimer > 0) {
 				//次の斬撃設定
-				lightAttackCount++;
-				lightAttackTimer = lightAttackLimit[lightAttackCount];
-				isLightAttack = false;
-				isAttackFin = true;
+				nextAttack = true;
 			}
 		}
 	}
 	//4撃目
 	else if (lightAttackCount == 3) {
 		//当たり判定の出現
-		if (lightAttackTimer <= lightAttackPopTime[3] && lightAttackTimer > lightAttackDeathTime[3]) {
+		if (lightAttackTimer <= lightAttackPopTime[0] && lightAttackTimer > lightAttackDeathTime[0]) {
 			isLightAttack = true;
 			isAttackFin = false;
 		}
 		//当たり判定の消失、硬直
-		else if (lightAttackTimer <= lightAttackDeathTime[3] && lightAttackTimer > 0) {
+		else if (lightAttackTimer <= lightAttackDeathTime[0] && lightAttackTimer > 0) {
 			isLightAttack = false;
 		}
 		//攻撃の終了
 		else if (lightAttackTimer <= 0) {
 			isAction = 0;
 			isAttackFin = true;
+			nextAttack = false;
 		}
 
 		//当たり判定の移動
 		if (isLightAttack) {
 			//移動
-			lightAttackLPos = { 0,0,3.0f };
+			lightAttackLPos = { 0,0,4.0f };
 			//更新
 			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = lightAttackWPos;
@@ -481,8 +507,19 @@ void Player::HeavyAttack() {
 		}
 		//攻撃の終了
 		else if (heavyAttackTimer <= 0) {
-			isAction = 0;
-			isAttackFin = true;
+			if (nextAttack) {
+				//次の斬撃設定
+				heavyAttackCount++;
+				heavyAttackTimer = heavyAttackLimit[heavyAttackCount];
+				isHeavyAttack = false;
+				isAttackFin = true;
+				nextAttack = false;
+			}
+			else {
+				isAction = 0;
+				isAttackFin = true;
+				nextAttack = false;
+			}
 		}
 
 		//当たり判定の移動
@@ -495,14 +532,11 @@ void Player::HeavyAttack() {
 		}
 
 		//次の斬撃入力
-		if (input_->ButtonInput(X)) {
+		if (input_->PButtonTrigger(Y)) {
 			//入力受付時間
 			if (heavyAttackTimer < heavyAttackInput[heavyAttackCount] && heavyAttackTimer > 0) {
 				//次の斬撃設定
-				heavyAttackCount++;
-				heavyAttackTimer = heavyAttackLimit[heavyAttackCount];
-				isHeavyAttack = false;
-				isAttackFin = true;
+				nextAttack = true;
 			}
 		}
 	}
@@ -521,12 +555,13 @@ void Player::HeavyAttack() {
 		else if (heavyAttackTimer <= 0) {
 			isAction = 0;
 			isAttackFin = true;
+			nextAttack = false;
 		}
 
 		//当たり判定の移動
 		if (isHeavyAttack) {
 			//移動
-			heavyAttackLPos = { 0,0,6.0f };
+			heavyAttackLPos = { 0,0,8.0f };
 			//更新
 			heavyAttackWPos = heavyAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = heavyAttackWPos;
