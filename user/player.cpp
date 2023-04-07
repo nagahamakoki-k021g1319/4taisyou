@@ -25,6 +25,7 @@ void Player::Initialize(Input* input) {
 
 	// 3Dオブジェクト生成
 	particleManager = ParticleManager::Create();
+	particleManager->LoadTexture("doge.png");
 	particleManager->Update();
 
 	//バディ

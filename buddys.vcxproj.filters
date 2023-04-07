@@ -196,6 +196,12 @@
     <ClCompile Include="User\EnemyManager.cpp">
       <Filter>user\ソース</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\3D\Particle\ParticleCommon.cpp">
+      <Filter>Engine\ソースファイル\3D\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3D\Particle\Particle.cpp">
+      <Filter>Engine\ソースファイル\3D\Particle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BASE\FPS.h">
@@ -296,6 +302,12 @@
     </ClInclude>
     <ClInclude Include="User\EnemyManager.h">
       <Filter>user\ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3D\Particle\ParticleCommon.h">
+      <Filter>Engine\ヘッダーファイル\3D\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3D\Particle\Particle.h">
+      <Filter>Engine\ヘッダーファイル\3D\Particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
