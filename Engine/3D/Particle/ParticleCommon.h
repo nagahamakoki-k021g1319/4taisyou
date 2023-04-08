@@ -109,9 +109,9 @@ private: // 静的メンバ変数
 	std::forward_list<Particle>particles;
 
 public: // メンバ関数
-	void LoadTexture(uint32_t index, const std::string& fileName);
+	void LoadTexture(const std::string& fileName);
 
-	bool Initialize();
+	void Initialize();
 
 	/// <summary>
 	/// パーティクルの追加
