@@ -23,7 +23,7 @@ void Player::Initialize(Input* input) {
 	bodyObj_ = Object3d::Create();
 	bodyObj_->SetModel(bodyModel_);
 
-	// 3Dオブジェクト生成
+	//パーティクル生成
 	particleManager = ParticleManager::Create();
 	particleManager->LoadTexture("doge.png");
 	particleManager->Update();
