@@ -30,6 +30,8 @@ public:
 
 	void PlayerVec();
 
+	void ResetAttack();
+
 private:
 	Collision* coll = nullptr;
 	Object3d* obj_ = nullptr;
@@ -39,11 +41,11 @@ private:
 	Vector3 playerLen;
 	Vector3 playerPos;
 
-	float enemySpeed = 0.3f;
+	float enemySpeed = 1.0f;
 
 	bool attackHit = false;
 	bool isAttack = false;
-	int isAttackTime = 0;
-	int attackAccumulate = 30;
+	int isAttackTime = 10;
+	int attackAccumulate = 20;
 public:
 };

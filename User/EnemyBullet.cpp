@@ -32,7 +32,7 @@ void EnemyBullet::DaggerFAttack(){
 			obj_->wtf.position.z -= 0.5;
 		}
 	}
-	if (obj_->wtf.position.z <= -30) {
+	if (obj_->wtf.position.z <= -1000) {
 		isLive = false;
 	}
 }

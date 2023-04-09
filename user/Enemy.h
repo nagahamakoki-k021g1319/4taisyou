@@ -1,6 +1,7 @@
 #pragma once
 #include "EnemyBullet.h"
 #include "EnemyCrystalBullet.h"
+#include "EnemyShortRenge.h"
 
 class Player;
 #include "Collision.h"
@@ -33,6 +34,7 @@ public:
 		Approach, //Ú‹ß‚·‚é
 		Leave,    //—£’E‚·‚é
 		ReLeave,  //Ä—£’E‚·‚é
+		ShortAttack,	//UŒ‚
 	};
 
 private:
@@ -66,6 +68,13 @@ private:
 	Model* enemyCBModel_ = nullptr;
 	int enemyAttackTimer2 = 0;
 	///////////////////////////////////
+
+	////-----‹ßÚUŒ‚-----////
+	EnemyShortRenge* shortRenge = nullptr;
+	int enemyAttackTimer3 = 0;
+	/////////////////////////
+
+
 
 	int enemyResetTimer = 0;
 

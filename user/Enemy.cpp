@@ -25,7 +25,10 @@ void Enemy::Initialize(Vector3 pos) {
 	daggerBulletModel_ = Model::LoadFromOBJ("boll");
 	//順番に弾が飛んでくる攻撃
 	enemyCBModel_ = Model::LoadFromOBJ("boll");
-	
+
+	shortRenge = new EnemyShortRenge();
+	shortRenge->Initialize(enemyCBModel_);
+
 }
 
 void Enemy::Update() {
@@ -99,7 +102,7 @@ void Enemy::Update() {
 		
 		enemyAttackTimer2++;
 		if (enemyAttackTimer2 >= 300) {
-			phase_ = Phase::ReLeave;
+			phase_ = Phase::ShortAttack;
 		}
 		
 		//攻撃するまで移動
@@ -120,7 +123,17 @@ void Enemy::Update() {
 		}
 		enemyAttackTimer = 0;
 		enemyAttackTimer2 = 0;
+		enemyAttackTimer3 = 0;
 	
+		break;
+	case Phase::ShortAttack:
+		enemyAttackTimer3++;
+		shortRenge->Update(player_->GetWorldPosition(), enemyObj_);
+		if (enemyAttackTimer3 >= 120) {
+			phase_ = Phase::ReLeave;
+			shortRenge->ResetAttack();
+		}
+
 		break;
 	}
 	
@@ -145,6 +158,7 @@ void Enemy::CreatCrystalBullet() {
 		newCrystalBullet->Vec(player_->GetWorldPosition());
 		crystalBullets_.push_back(std::move(newCrystalBullet));
 	}
+
 	std::unique_ptr<EnemyCrystalBullet> newCrystalBullet = std::make_unique<EnemyCrystalBullet>();
 	newCrystalBullet->Initialize(2, enemyCBModel_);
 	newCrystalBullet->SetPos({ enemyObj_->wtf.position.x - 4.0f,enemyObj_->wtf.position.y + 1.0f, enemyObj_->wtf.position.z + 15.0f });
@@ -184,6 +198,9 @@ void Enemy::Draw() {
 		break;
 
 	case Phase::ReLeave:
+		break;
+	case Phase::ShortAttack:
+		shortRenge->Draw();
 		break;
 	}
 
