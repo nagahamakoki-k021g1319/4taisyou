@@ -25,6 +25,8 @@ public:
 
 	void OnColision(int damage);
 
+	void ResetHit2player() { isHitPlayer = false; };
+
 	////ワールド座標を取得
 	Vector3 GetWorldPosition();
 
@@ -47,9 +49,8 @@ private:
 	
 
 	//無敵時間
-	bool isInvincible;
-	const float invincibleLimit = 9;
-	float invincibleTimer = invincibleLimit;
+	bool isHitPlayer;
+	bool isHitWolf;
 
 	//フェーズ
 	Phase phase_ = Phase::Approach;
