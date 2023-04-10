@@ -59,6 +59,7 @@ void EnemyManager::Update() {
 		//“G‚ÆƒvƒŒƒCƒ„[UŒ‚Õ“Ë
 		if (player_->CheckAttack2Enemy(enemy->GetWorldPosition(), damage)) {
 			enemy->OnColision(damage);	
+			isHitStop = true;
 		}
 		//“G‚ÆƒoƒfƒB‚ÌÕ“Ë
 		if (player_->wolf_->CheckAttack2Enemy(enemy->GetWorldPosition(), damage)) {
