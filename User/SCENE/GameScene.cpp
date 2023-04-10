@@ -198,13 +198,22 @@ void GameScene::Update() {
 		break;
 	case Scene::Play:
 		CamUpdate();
-		enemyManager_->Update();
-		player_->Update(&camWtf);
+
+		if (enemyManager_->isHitStop) {
+			hitStopTimer--;
+			if (hitStopTimer < 0) {
+				enemyManager_->isHitStop = false;
+			}
+		}else{
+			hitStopTimer = hitStopLimit;
+			enemyManager_->Update();
+			player_->Update(&camWtf);
+		}
 
 		hpGauge->SetPozition({ -400.0f + player_->GetHp() * 4 ,0 });
     
-    floor->Update();
-    skydome->Update();
+		floor->Update();
+		skydome->Update();
 
 		//シーン切り替え
 		if (player_->GetHp() < 0) {

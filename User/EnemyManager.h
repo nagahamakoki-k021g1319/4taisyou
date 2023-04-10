@@ -27,4 +27,7 @@ private:
 
 	std::list<std::unique_ptr<Enemy>> enemys_;
 
+public:
+	bool isHitStop;
+
 };
