@@ -199,6 +199,9 @@
     <ClCompile Include="User\EnemyShortRenge.cpp">
       <Filter>user\ソース</Filter>
     </ClCompile>
+    <ClCompile Include="User\EnemyExplosionAttack.cpp">
+      <Filter>user\ソース</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BASE\FPS.h">
@@ -301,6 +304,9 @@
       <Filter>user\ヘッダー</Filter>
     </ClInclude>
     <ClInclude Include="User\EnemyShortRenge.h">
+      <Filter>user\ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="User\EnemyExplosionAttack.h">
       <Filter>user\ヘッダー</Filter>
     </ClInclude>
   </ItemGroup>

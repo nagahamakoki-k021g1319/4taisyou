@@ -26,6 +26,8 @@ public:
 
 	void OnColision(int damage);
 
+	void AttackDistance();
+
 	////ワールド座標を取得
 	Vector3 GetWorldPosition();
 
@@ -54,7 +56,7 @@ private:
 	float invincibleTimer = invincibleLimit;
 
 	//フェーズ
-	Phase phase_ = Phase::Approach;
+	Phase phase_ = Phase::ReLeave;
 
 	//敵の攻撃系統
 	////-----ダガーファンネル------///
@@ -74,6 +76,15 @@ private:
 	int enemyAttackTimer3 = 0;
 	/////////////////////////
 
+	////-----距離で変わる攻撃-----////
+	int enemyRandomAttack = 0;
+	////////////////////////////
+
+	////-----ランダムに攻撃方法を変える-----////
+	int AttckNmb = 0;
+	int randomAttck = 0;
+	int numberOfAttacks = 0;
+	////////////////////////////
 
 
 	int enemyResetTimer = 0;

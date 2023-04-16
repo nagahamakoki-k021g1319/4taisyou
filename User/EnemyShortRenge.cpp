@@ -21,12 +21,7 @@ void EnemyShortRenge::ShortAttack()
 	attackAccumulate--;
 	if (attackAccumulate <= 0) {
 		isAttackTime--;
-		if (coll->CircleCollision(obj_->wtf.position + (playerLen * 2), playerPos, 2.0f, 2.0f)) {
-			OnCollision();
-		}
-		else if (coll->CircleCollision(Vector3{ obj_->wtf.position.x + (playerLen.x * 2), obj_->wtf.position.y + playerLen.y + 2.0f, obj_->wtf.position.z + (playerLen.z * 2) }, playerPos, 2.0f, 2.0f)) {
-			OnCollision();
-		}
+		OnCollision();
 		//if (isAttackTime <= 0) {
 		//	isAttack = false;
 		//	attackAccumulate = 60;
@@ -73,7 +68,13 @@ void EnemyShortRenge::Draw()
 
 void EnemyShortRenge::OnCollision()
 {
-
+	if (coll->CircleCollision(obj_->wtf.position + (playerLen * 2), playerPos, 2.0f, 2.0f)) {
+		hitAttck = true;
+	}
+	else if (coll->CircleCollision(Vector3{ obj_->wtf.position.x + (playerLen.x * 2), obj_->wtf.position.y + playerLen.y + 2.0f, obj_->wtf.position.z + (playerLen.z * 2) }, playerPos, 2.0f, 2.0f)) {
+		hitAttck = true;
+	}
+	hitAttck = false;
 }
 
 void EnemyShortRenge::PlayerVec()
@@ -92,4 +93,9 @@ void EnemyShortRenge::ResetAttack()
 	isAttack = false;
 	attackAccumulate = 60;
 	isAttackTime = 10;
+}
+
+bool EnemyShortRenge::GetCollision()
+{
+	return hitAttck;
 }
