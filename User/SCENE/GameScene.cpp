@@ -242,14 +242,29 @@ void GameScene::Update() {
 			soundCheckFlag = 1;
 		}
 
-		break;
-	case Scene::Select:
-		sruPosition.x -= 30.0f;
-		sruPosition.y -= 5.0f;
+		sruPosition.x = 0.0f;
+		sruPosition.y = 0.0f;
 		sru->SetPozition(sruPosition);
 
-		srdPosition.x += 30.0f;
-		srdPosition.y += 5.0f;
+		srdPosition.x = 0.0f;
+		srdPosition.y = 0.0f;
+		srd->SetPozition(srdPosition);
+		
+		srrPosition.x = 0.0f;
+		srr->SetPozition(srrPosition);
+
+		srlPosition.x = 0.0f;
+		srl->SetPozition(srlPosition);
+
+
+		break;
+	case Scene::Select:
+		sruPosition.x -= 50.0f;
+		sruPosition.y -= 10.0f;
+		sru->SetPozition(sruPosition);
+
+		srdPosition.x += 50.0f;
+		srdPosition.y += 10.0f;
 		srd->SetPozition(srdPosition);
 		//ステージの選択
 		if(input->LeftStickInput()) {
@@ -271,10 +286,10 @@ void GameScene::Update() {
 	case Scene::Play:
 		CamUpdate();
 
-		srrPosition.x -= 15.0f;
+		srrPosition.x -= 30.0f;
 		srr->SetPozition(srrPosition);
 		
-		srlPosition.x += 15.0f;
+		srlPosition.x += 30.0f;
 		srl->SetPozition(srlPosition);
 
 

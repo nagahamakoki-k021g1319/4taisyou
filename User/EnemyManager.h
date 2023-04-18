@@ -3,7 +3,7 @@
 
 class Player;
 
-class EnemyManager{
+class EnemyManager {
 public:
 	EnemyManager();
 	~EnemyManager();
@@ -11,7 +11,7 @@ public:
 	void Initialize();
 
 	void Update();
-	
+
 	void Draw();
 
 	void EffUpdate();
@@ -31,10 +31,10 @@ private:
 
 	std::list<std::unique_ptr<Enemy>> enemys_;
 
+	Enemy* enemy_ = nullptr;
 
-	//�p�[�e�B�N���N���X�̏��� 
+	//パーティクル
 	std::unique_ptr<ParticleManager> DamageParticle;
-	//����������̃G�t�F�N�g����
 	int isEffFlag = 0;
 	int EffTimer = 0;
 

@@ -10,7 +10,7 @@ EnemyManager::~EnemyManager() {
 void EnemyManager::Initialize() {
 	origin = new Transform();
 	origin->Initialize();
-	
+
 	//パーティクル生成
 	DamageParticle = std::make_unique<ParticleManager>();
 	DamageParticle.get()->Initialize();
@@ -76,7 +76,7 @@ void EnemyManager::Update() {
 		float damage = 0;
 		//敵とプレイヤー攻撃衝突
 		if (player_->CheckAttack2Enemy(enemy->GetWorldPosition(), damage)) {
-			enemy->OnColision(damage);	
+			enemy->OnColision(damage);
 
 			isEffFlag = 1;
 
@@ -104,31 +104,33 @@ void EnemyManager::EffUpdate()
 {
 	//パーティクル範囲
 	for (int i = 0; i < 20; i++) {
-		//X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
-		const float rnd_pos = 0.1f;
-		const float rnd_pos2 = 10.0f;
-		Vector3 pos{};
-		pos.x += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-		pos.y += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-		pos.z += (float)rand() / RAND_MAX * rnd_pos2 - rnd_pos2 / 2.0f;
+		for (std::unique_ptr<Enemy>& enemy : enemys_) {
+			//X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
+			const float rnd_pos = 0.1f;
+			Vector3 pos{};
+			pos.x += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+			pos.y += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+			pos.z += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+			pos += enemy->GetWorldPosition();
 
-		//速度
-		//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
-		const float rnd_vel = 0.1f;
-		Vector3 vel{};
-		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		//重力に見立ててYのみ[-0.001f,0]でランダムに分布
-		const float rnd_acc = 0.00001f;
-		Vector3 acc{};
-		acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
-		acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+			//速度
+			//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
+			const float rnd_vel = 0.1f;
+			Vector3 vel{};
+			vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			//重力に見立ててYのみ[-0.001f,0]でランダムに分布
+			const float rnd_acc = 0.00001f;
+			Vector3 acc{};
+			acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+			acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
 
-		//追加
-		DamageParticle->Add(60, pos, vel, acc, 1.0f, 0.0f);
+			//追加
+			DamageParticle->Add(60, pos, vel, acc, 1.0f, 0.0f);
 
-		DamageParticle->Update();
+			DamageParticle->Update();
+		}
 	}
 
 }
