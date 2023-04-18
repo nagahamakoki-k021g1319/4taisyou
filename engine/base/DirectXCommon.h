@@ -46,11 +46,11 @@ public://メンバ関数
 
 private:
 	//DirectX12デバイス
-	Microsoft::WRL::ComPtr<ID3D12Device> device;
+	ComPtr<ID3D12Device> device;
 	//DXGIファクトリ
-	Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory;
+	ComPtr<IDXGIFactory7> dxgiFactory;
 	//バックバッファ
-	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> backBuffers;
+	std::vector<ComPtr<ID3D12Resource>> backBuffers;
 
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
 
@@ -60,15 +60,15 @@ private:
 	WinApp* winApp_ = nullptr;
 
 	HRESULT result;
-	Microsoft::WRL::ComPtr<IDXGISwapChain4> swapChain;
-	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> cmdAllocator;
-	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList;
-	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue;
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvHeap;
-	Microsoft::WRL::ComPtr<ID3D12Fence> fence;
+    ComPtr<IDXGISwapChain4> swapChain;
+	ComPtr<ID3D12CommandAllocator> cmdAllocator;
+	ComPtr<ID3D12GraphicsCommandList> commandList;
+	ComPtr<ID3D12CommandQueue> commandQueue;
+	ComPtr<ID3D12DescriptorHeap> rtvHeap;
+	ComPtr<ID3D12Fence> fence;
 	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc{};
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvHeap;
+	ComPtr<ID3D12DescriptorHeap> dsvHeap;
 	D3D12_RESOURCE_BARRIER barrierDesc{};
 	UINT64 fenceVal = 0;
-	Microsoft::WRL::ComPtr<ID3D12Resource> depthBuff;
+	ComPtr<ID3D12Resource> depthBuff;
 };

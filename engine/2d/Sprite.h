@@ -39,9 +39,9 @@ public:
 	//‰Šú‰»
 	void Initialize(SpriteCommon* spritecommon_, uint32_t textureIndex = UINT32_MAX);
 
-	void Draw();
-
 	void Update();
+
+	void Draw();
 
 	void SetPozition(const Vector2& position_);
 
