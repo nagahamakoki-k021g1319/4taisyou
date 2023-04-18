@@ -47,7 +47,10 @@ void EnemyCrystalBullet::CrystalBAttack() {
 		}
 	}
 
-	if (crystalObj_->wtf.position.z <= -30) {
+	if (crystalObj_->wtf.position.z <= -1000|| crystalObj_->wtf.position.z >= 1000) {
+		isLive = false;
+	}
+	if (crystalObj_->wtf.position.x <= -1000 || crystalObj_->wtf.position.x >= 1000) {
 		isLive = false;
 	}
 }

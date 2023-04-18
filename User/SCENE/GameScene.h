@@ -65,7 +65,7 @@ public:
 	//音を止める関数
 	IXAudio2SourceVoice* pSourceVoice[10] = { 0 };
 
-	
+
 private: // メンバ変数 (固定)
 	DirectXCommon* dxCommon = nullptr;
 	Input* input = nullptr;
@@ -84,12 +84,14 @@ private:	//メンバ変数
 	float targetTheta;
 	float targetDistance = 10;
 	float camMoveSpeed = 0.1f;
-	float camRotaSpeed = PI/180;
+	float camRotaSpeed = PI / 180;
 
 	//プレイヤー
 	Player* player_ = nullptr;
 	//エネミー
 	EnemyManager* enemyManager_ = nullptr;
+	const int hitStopLimit = 10;
+	int hitStopTimer = hitStopLimit;
 
 	//背景や床
 	Object3d* floor = nullptr;

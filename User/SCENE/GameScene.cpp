@@ -270,6 +270,7 @@ void GameScene::Update() {
 		break;
 	case Scene::Play:
 		CamUpdate();
+
 		srrPosition.x -= 15.0f;
 		srr->SetPozition(srrPosition);
 		
@@ -281,9 +282,20 @@ void GameScene::Update() {
 		
 		player_->Update(&camWtf);
 
+
+		if (enemyManager_->isHitStop) {
+			hitStopTimer--;
+			if (hitStopTimer < 0) {
+				enemyManager_->isHitStop = false;
+			}
+		}else{
+			hitStopTimer = hitStopLimit;
+			enemyManager_->Update();
+			player_->Update(&camWtf);
+		}
+
 		hpGauge->SetPozition({ -400.0f + player_->GetHp() * 4 ,0 });
-		/*hpPosition.x -= 4.0f;
-		hpGauge->SetPozition(hpPosition);*/
+    
 
 		floor->Update();
 		skydome->Update();
@@ -334,8 +346,6 @@ void GameScene::Draw() {
 	case Scene::Title:
 
 
-		break;
-	case Scene::Select:
 
 
 		break;

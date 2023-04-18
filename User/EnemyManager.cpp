@@ -11,7 +11,7 @@ void EnemyManager::Initialize() {
 	origin = new Transform();
 	origin->Initialize();
 	
-	//ƒp[ƒeƒBƒNƒ‹¶¬
+	//ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ç”Ÿæˆ
 	DamageParticle = std::make_unique<ParticleManager>();
 	DamageParticle.get()->Initialize();
 	DamageParticle->LoadTexture("doge.png");
@@ -20,10 +20,11 @@ void EnemyManager::Initialize() {
 }
 
 void EnemyManager::creatEnemy(int round) {
-	//”O‚Ì‚½‚ßƒŠƒXƒg‚Ì‘|œ
+	//å¿µã®ãŸã‚ãƒªã‚¹ãƒˆã®æƒé™¤
 	enemys_.clear();
 
-	//“G‚Ì“Ç‚İ‚İ
+	//æ•µã®èª­ã¿è¾¼ã¿
+	//ã‚¹ãƒ†ãƒ¼ã‚¸1
 	if (round == 0) {
 		{
 			std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
@@ -31,7 +32,9 @@ void EnemyManager::creatEnemy(int round) {
 			newEnemy->SetPlayer(player_);
 			enemys_.push_back(std::move(newEnemy));
 		}
-	}else if (round == 1) {
+	}
+	//ã‚¹ãƒ†ãƒ¼ã‚¸2
+	else if (round == 1) {
 		{
 			std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
 			newEnemy->Initialize({ -3,0,5 });
@@ -48,8 +51,9 @@ void EnemyManager::creatEnemy(int round) {
 
 
 void EnemyManager::Update() {
-	//“G‚ª‚¢‚È‚¢‚Æ‚«Œ´“_‚ÉUŒ‚
+	//æ•µãŒã„ãªã„ã¨ãåŸç‚¹ã«æ”»æ’ƒ
 	player_->SetEnemyPos(origin);
+
 
 	if (isEffFlag == 1) {
 		EffTimer++;
@@ -64,13 +68,22 @@ void EnemyManager::Update() {
 
 	enemys_.remove_if([](std::unique_ptr<Enemy>& enemy) { return enemy->IsDead(); });
 	for (std::unique_ptr<Enemy>& enemy : enemys_) {
+		//æ•µã®ç„¡æ•µæ™‚é–“è§£é™¤
+		if (player_->GetIsAttackFin()) {
+			enemy->ResetHit2player();
+		}
+
 		float damage = 0;
-		//“G‚ÆƒvƒŒƒCƒ„[UŒ‚Õ“Ë
+		//æ•µã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼æ”»æ’ƒè¡çª
 		if (player_->CheckAttack2Enemy(enemy->GetWorldPosition(), damage)) {
 			enemy->OnColision(damage);	
+
 			isEffFlag = 1;
+
+			isHitStop = true;
+
 		}
-		//“G‚ÆƒoƒfƒB‚ÌÕ“Ë
+		//æ•µã¨ãƒãƒ‡ã‚£ã®è¡çª
 		if (player_->wolf_->CheckAttack2Enemy(enemy->GetWorldPosition(), damage)) {
 			enemy->OnColision(damage);
 		}
@@ -89,9 +102,9 @@ void EnemyManager::Draw() {
 
 void EnemyManager::EffUpdate()
 {
-	//ƒp[ƒeƒBƒNƒ‹”ÍˆÍ
+	//ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ç¯„å›²
 	for (int i = 0; i < 20; i++) {
-		//X,Y,Z‘S‚Ä[-5.0f,+5.0f]‚Åƒ‰ƒ“ƒ_ƒ€‚É•ª•z
+		//X,Y,Zå…¨ã¦[-5.0f,+5.0f]ã§ãƒ©ãƒ³ãƒ€ãƒ ã«åˆ†å¸ƒ
 		const float rnd_pos = 0.1f;
 		const float rnd_pos2 = 10.0f;
 		Vector3 pos{};
@@ -99,20 +112,20 @@ void EnemyManager::EffUpdate()
 		pos.y += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 		pos.z += (float)rand() / RAND_MAX * rnd_pos2 - rnd_pos2 / 2.0f;
 
-		//‘¬“x
-		//X,Y,Z‘S‚Ä[-0.05f,+0.05f]‚Åƒ‰ƒ“ƒ_ƒ€‚É•ª•z
+		//é€Ÿåº¦
+		//X,Y,Zå…¨ã¦[-0.05f,+0.05f]ã§ãƒ©ãƒ³ãƒ€ãƒ ã«åˆ†å¸ƒ
 		const float rnd_vel = 0.1f;
 		Vector3 vel{};
 		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		//d—Í‚ÉŒ©—§‚Ä‚ÄY‚Ì‚İ[-0.001f,0]‚Åƒ‰ƒ“ƒ_ƒ€‚É•ª•z
+		//é‡åŠ›ã«è¦‹ç«‹ã¦ã¦Yã®ã¿[-0.001f,0]ã§ãƒ©ãƒ³ãƒ€ãƒ ã«åˆ†å¸ƒ
 		const float rnd_acc = 0.00001f;
 		Vector3 acc{};
 		acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
 		acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
 
-		//’Ç‰Á
+		//è¿½åŠ 
 		DamageParticle->Add(60, pos, vel, acc, 1.0f, 0.0f);
 
 		DamageParticle->Update();
@@ -123,7 +136,7 @@ void EnemyManager::EffUpdate()
 void EnemyManager::EffDraw()
 {
 	if (isEffFlag == 1) {
-		// 3DƒIƒuƒNƒWƒFƒNƒg‚Ì•`‰æ
+		// 3Dã‚ªãƒ–ã‚¯ã‚¸ã‚§ã‚¯ãƒˆã®æç”»
 		DamageParticle->Draw();
 	}
 }

@@ -31,10 +31,13 @@ private:
 
 	std::list<std::unique_ptr<Enemy>> enemys_;
 
-	//ƒp[ƒeƒBƒNƒ‹ƒNƒ‰ƒX‚Ì‰Šú‰» 
+
+	//ï¿½pï¿½[ï¿½eï¿½Bï¿½Nï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Xï¿½Ìï¿½ï¿½ï¿½ 
 	std::unique_ptr<ParticleManager> DamageParticle;
-	//“–‚½‚Á‚½‚ÌƒGƒtƒFƒNƒg”­¶
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÌƒGï¿½tï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½
 	int isEffFlag = 0;
 	int EffTimer = 0;
 
+public:
+	bool isHitStop;
 };
