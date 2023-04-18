@@ -168,7 +168,7 @@
     <ClCompile Include="User\EnemyCrystalBullet.cpp" />
     <ClCompile Include="User\EnemyManager.cpp" />
     <ClCompile Include="User\EnemyShortRenge.cpp" />
-    <ClCompile Include="User\Player.cpp" />
+    <ClCompile Include="User\player.cpp" />
     <ClCompile Include="User\PlayerBullet.cpp" />
     <ClCompile Include="User\Round.cpp" />
     <ClCompile Include="User\SCENE\GameScene.cpp" />
@@ -204,7 +204,7 @@
     <ClInclude Include="User\EnemyCrystalBullet.h" />
     <ClInclude Include="User\EnemyManager.h" />
     <ClInclude Include="User\EnemyShortRenge.h" />
-    <ClInclude Include="User\Player.h" />
+    <ClInclude Include="User\player.h" />
     <ClInclude Include="User\PlayerBullet.h" />
     <ClInclude Include="User\Round.h" />
     <ClInclude Include="User\SCENE\GameScene.h" />

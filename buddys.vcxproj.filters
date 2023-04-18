@@ -160,12 +160,6 @@
     <ClCompile Include="Engine\3D\Particle\ParticleManager.cpp">
       <Filter>Engine\ソースファイル\3D\Particle</Filter>
     </ClCompile>
-    <ClCompile Include="User\Enemy.cpp">
-      <Filter>user\ソース</Filter>
-    </ClCompile>
-    <ClCompile Include="User\Player.cpp">
-      <Filter>user\ソース</Filter>
-    </ClCompile>
     <ClCompile Include="User\EnemyBullet.cpp">
       <Filter>user\ソース</Filter>
     </ClCompile>
@@ -197,6 +191,12 @@
       <Filter>user\ソース</Filter>
     </ClCompile>
     <ClCompile Include="User\EnemyShortRenge.cpp">
+      <Filter>user\ソース</Filter>
+    </ClCompile>
+    <ClCompile Include="User\player.cpp">
+      <Filter>user\ソース</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Enemy.cpp">
       <Filter>user\ソース</Filter>
     </ClCompile>
   </ItemGroup>
@@ -264,12 +264,6 @@
     <ClInclude Include="Engine\3D\Particle\ParticleManager.h">
       <Filter>Engine\ヘッダーファイル\3D\Particle</Filter>
     </ClInclude>
-    <ClInclude Include="User\Enemy.h">
-      <Filter>user\ヘッダー</Filter>
-    </ClInclude>
-    <ClInclude Include="User\Player.h">
-      <Filter>user\ヘッダー</Filter>
-    </ClInclude>
     <ClInclude Include="User\EnemyBullet.h">
       <Filter>user\ヘッダー</Filter>
     </ClInclude>
@@ -301,6 +295,12 @@
       <Filter>user\ヘッダー</Filter>
     </ClInclude>
     <ClInclude Include="User\EnemyShortRenge.h">
+      <Filter>user\ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Enemy.h">
+      <Filter>user\ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="User\player.h">
       <Filter>user\ヘッダー</Filter>
     </ClInclude>
   </ItemGroup>
