@@ -153,6 +153,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	Reset();
 }
 
+//変数のリセット
 void GameScene::Reset() {
 	camWtf.Initialize();
 	camWtf.position = { 0.0f, 3.0f, -8.0f };
@@ -184,7 +185,6 @@ void GameScene::Update() {
 
 			}else if (input->PStickTrigger(L_RIGHT)){
 				stage = 1;
-
 			}
 		}
 
@@ -197,28 +197,38 @@ void GameScene::Update() {
 
 		break;
 	case Scene::Play:
+		//カメラ更新
 		CamUpdate();
 
+		//ゲーム全体ヒットストップ
 		if (enemyManager_->isHitStop) {
 			hitStopTimer--;
+
+			//時間経過でヒットストップ解除
 			if (hitStopTimer < 0) {
 				enemyManager_->isHitStop = false;
 			}
 		}else{
 			hitStopTimer = hitStopLimit;
+			//敵更新
 			enemyManager_->Update();
+			//プレイヤー更新
 			player_->Update(&camWtf);
 		}
 
+		//UI更新
 		hpGauge->SetPozition({ -400.0f + player_->GetHp() * 4 ,0 });
-    
+		
+		//背景オブジェ更新
 		floor->Update();
 		skydome->Update();
 
 		//シーン切り替え
 		if (player_->GetHp() < 0) {
+			//ゲームオーバー画面へ
 			scene = Scene::Gameover;
 		}else if (enemyManager_->IsAllEnemyDead()) {
+			//クリア画面へ
 			scene = Scene::Clear;
 		}
 
@@ -261,12 +271,15 @@ void GameScene::Draw() {
 
 		break;
 	case Scene::Play:
+		//プレイヤー描画
 		player_->Draw();
+		//敵描画
 		enemyManager_->Draw();
 
-    
-    floor->Draw();
-    skydome->Draw();
+		//背景描画
+		floor->Draw();
+		skydome->Draw();
+		
 		break;
 	case Scene::Clear:
 
@@ -285,6 +298,7 @@ void GameScene::Draw() {
 	switch (scene)
 	{
 	case Scene::Title:
+		
 		titlePic->Draw();
 
 		break;
@@ -321,7 +335,6 @@ void GameScene::Draw() {
 	}
 }
 
-
 void GameScene::CamMove() {
 	if (input->LeftStickInput()) {
 		//カメラの移動
@@ -351,7 +364,6 @@ void GameScene::CamMove() {
 		//更新
 		camWtf.position += eyeVelocity;
 	}
-
 }
 
 void GameScene::CamRota() {

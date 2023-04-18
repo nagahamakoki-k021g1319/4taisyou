@@ -90,7 +90,9 @@ private:	//メンバ変数
 	Player* player_ = nullptr;
 	//エネミー
 	EnemyManager* enemyManager_ = nullptr;
+	//ヒットストップ全体時間
 	const int hitStopLimit = 10;
+	//ヒットストップ用タイマー
 	int hitStopTimer = hitStopLimit;
 
 	//背景や床

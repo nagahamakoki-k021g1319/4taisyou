@@ -40,6 +40,7 @@ void Player::Initialize(Input* input) {
 	Reset();
 }
 
+//変数リセット
 void Player::Reset() {
 	bodyObj_->wtf.Initialize();
 	bodyObj_->wtf.position = { 0,-3,8 };
@@ -152,10 +153,12 @@ void Player::OnCollision() {
 		}
 		//通常時
 		else {
+			
 			hp -= 10;
 			isEffFlag = 1;
 			isInvincible = true;
 			invincibleTimer = invincibleLimit;
+
 
 			if (hp < 0) {
 				isLive = false;
