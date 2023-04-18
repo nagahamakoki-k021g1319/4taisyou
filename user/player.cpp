@@ -20,7 +20,6 @@ void Player::Initialize(Input* input) {
 
 	//プレイヤー設定
 	bodyModel_ = Model::LoadFromOBJ("player");
-	
 	bodyObj_ = Object3d::Create();
 	bodyObj_->SetModel(bodyModel_);
 
@@ -309,7 +308,6 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 	if (isAction == 1) {
 		//当たり判定が出てるか
 		if (isLightAttack) {
-
 			//当たり判定
 			if (col.CircleCollisionXZ(lightAttackWPos, enemyPos, 0.5f, 1.0f)) {
 				damage = 3;
@@ -322,7 +320,6 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 	else if (isAction == 2) {
 		//当たり判定が出てるか
 		if (isHeavyAttack) {
-
 			//当たり判定
 			if (col.CircleCollisionXZ(heavyAttackWPos, enemyPos, 1.0f, 1.0f)) {
 				damage = 7;

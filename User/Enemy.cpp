@@ -271,6 +271,7 @@ void Enemy::OnColision(int damage) {
 		}
 		isHitPlayer = true;
 	}
+
 }
 
 void Enemy::AttackDistance()
