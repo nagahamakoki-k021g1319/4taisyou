@@ -169,9 +169,6 @@
     <ClCompile Include="User\SERVANT\Gorilla.cpp">
       <Filter>user\ソース</Filter>
     </ClCompile>
-    <ClCompile Include="User\PlayerBullet.cpp">
-      <Filter>user\ソース</Filter>
-    </ClCompile>
     <ClCompile Include="User\EnemyCrystalBullet.cpp">
       <Filter>user\ソース</Filter>
     </ClCompile>
@@ -191,12 +188,6 @@
       <Filter>user\ソース</Filter>
     </ClCompile>
     <ClCompile Include="User\EnemyShortRenge.cpp">
-      <Filter>user\ソース</Filter>
-    </ClCompile>
-    <ClCompile Include="User\player.cpp">
-      <Filter>user\ソース</Filter>
-    </ClCompile>
-    <ClCompile Include="User\Enemy.cpp">
       <Filter>user\ソース</Filter>
     </ClCompile>
   </ItemGroup>
@@ -273,9 +264,6 @@
     <ClInclude Include="User\SERVANT\Gorilla.h">
       <Filter>user\ヘッダー</Filter>
     </ClInclude>
-    <ClInclude Include="User\PlayerBullet.h">
-      <Filter>user\ヘッダー</Filter>
-    </ClInclude>
     <ClInclude Include="User\EnemyCrystalBullet.h">
       <Filter>user\ヘッダー</Filter>
     </ClInclude>
@@ -295,12 +283,6 @@
       <Filter>user\ヘッダー</Filter>
     </ClInclude>
     <ClInclude Include="User\EnemyShortRenge.h">
-      <Filter>user\ヘッダー</Filter>
-    </ClInclude>
-    <ClInclude Include="User\Enemy.h">
-      <Filter>user\ヘッダー</Filter>
-    </ClInclude>
-    <ClInclude Include="User\player.h">
       <Filter>user\ヘッダー</Filter>
     </ClInclude>
   </ItemGroup>
