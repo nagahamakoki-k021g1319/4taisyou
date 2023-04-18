@@ -26,17 +26,21 @@ public:
 
 	void OnColision(int damage);
 
+
 	void AttackDistance();
 
-	////ƒ[ƒ‹ƒhÀ•W‚ğæ“¾
+	void ResetHit2player() { isHitPlayer = false; };
+
+
+	////ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’å–å¾—
 	Vector3 GetWorldPosition();
 
-	//s“®ƒtƒF[ƒY
+	//è¡Œå‹•ãƒ•ã‚§ãƒ¼ã‚º
 	enum class Phase {
-		Approach, //Ú‹ß‚·‚é
-		Leave,    //—£’E‚·‚é
-		ReLeave,  //Ä—£’E‚·‚é
-		ShortAttack,	//UŒ‚
+		Approach, //æ¥è¿‘ã™ã‚‹
+		Leave,    //é›¢è„±ã™ã‚‹
+		ReLeave,  //å†é›¢è„±ã™ã‚‹
+		ShortAttack,	//æ”»æ’ƒ
 	};
 
 private:
@@ -50,37 +54,36 @@ private:
 	int hp = hpMax;
 	
 
-	//–³“GŠÔ
-	bool isInvincible;
-	const float invincibleLimit = 9;
-	float invincibleTimer = invincibleLimit;
+	//ç„¡æ•µæ™‚é–“
+	bool isHitPlayer;
+	bool isHitWolf;
 
-	//ƒtƒF[ƒY
+	//ãƒ•ã‚§ãƒ¼ã‚º
 	Phase phase_ = Phase::ReLeave;
 
-	//“G‚ÌUŒ‚Œn“
-	////-----ƒ_ƒK[ƒtƒ@ƒ“ƒlƒ‹------///
+	//æ•µã®æ”»æ’ƒç³»çµ±
+	////-----ãƒ€ã‚¬ãƒ¼ãƒ•ã‚¡ãƒ³ãƒãƒ«------///
 	std::list<std::unique_ptr<EnemyBullet>> daggerBullets_;
 	Model* daggerBulletModel_ = nullptr;
 	int enemyAttackTimer = 0;
 	//////////////////////////////
 
-	////-----‡”Ô‚É’e‚ª”ò‚ñ‚Å‚­‚éUŒ‚------///
+	////-----é †ç•ªã«å¼¾ãŒé£›ã‚“ã§ãã‚‹æ”»æ’ƒ------///
 	std::list<std::unique_ptr<EnemyCrystalBullet>> crystalBullets_;
 	Model* enemyCBModel_ = nullptr;
 	int enemyAttackTimer2 = 0;
 	///////////////////////////////////
 
-	////-----‹ßÚUŒ‚-----////
+	////-----è¿‘æ¥æ”»æ’ƒ-----////
 	EnemyShortRenge* shortRenge = nullptr;
 	int enemyAttackTimer3 = 0;
 	/////////////////////////
 
-	////-----‹——£‚Å•Ï‚í‚éUŒ‚-----////
+	////-----è·é›¢ã§å¤‰ã‚ã‚‹æ”»æ’ƒ-----////
 	int enemyRandomAttack = 0;
 	////////////////////////////
 
-	////-----ƒ‰ƒ“ƒ_ƒ€‚ÉUŒ‚•û–@‚ğ•Ï‚¦‚é-----////
+	////-----ãƒ©ãƒ³ãƒ€ãƒ ã«æ”»æ’ƒæ–¹æ³•ã‚’å¤‰ãˆã‚‹-----////
 	int AttckNmb = 0;
 	int randomAttck = 0;
 	int numberOfAttacks = 0;

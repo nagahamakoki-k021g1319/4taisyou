@@ -18,6 +18,7 @@ void EnemyManager::creatEnemy(int round) {
 	enemys_.clear();
 
 	//敵の読み込み
+	//ステージ1
 	if (round == 0) {
 		{
 			std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
@@ -25,7 +26,9 @@ void EnemyManager::creatEnemy(int round) {
 			newEnemy->SetPlayer(player_);
 			enemys_.push_back(std::move(newEnemy));
 		}
-	}else if (round == 1) {
+	}
+	//ステージ2
+	else if (round == 1) {
 		{
 			std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
 			newEnemy->Initialize({ -3,0,5 });
@@ -45,13 +48,18 @@ void EnemyManager::Update() {
 	//敵がいないとき原点に攻撃
 	player_->SetEnemyPos(origin);
 
-
 	enemys_.remove_if([](std::unique_ptr<Enemy>& enemy) { return enemy->IsDead(); });
 	for (std::unique_ptr<Enemy>& enemy : enemys_) {
+		//敵の無敵時間解除
+		if (player_->GetIsAttackFin()) {
+			enemy->ResetHit2player();
+		}
+
 		float damage = 0;
 		//敵とプレイヤー攻撃衝突
 		if (player_->CheckAttack2Enemy(enemy->GetWorldPosition(), damage)) {
 			enemy->OnColision(damage);	
+			isHitStop = true;
 		}
 		//敵とバディの衝突
 		if (player_->wolf_->CheckAttack2Enemy(enemy->GetWorldPosition(), damage)) {
