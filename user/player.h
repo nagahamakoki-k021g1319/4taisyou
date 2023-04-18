@@ -6,6 +6,8 @@
 
 #include "Gorilla.h"
 #include "ParticleManager.h"
+#include "Audio.h"
+
 
 class Player {
 	
@@ -55,10 +57,15 @@ public:
 	/// <param name="pos"></param>
 	void SetPos(Vector3 pos) { bodyObj_->wtf.position = pos; };
 
+public:
+	//音を止める関数
+	IXAudio2SourceVoice* pSourceVoice[10] = { 0 };
+
 private:
 	const float PI = 3.141592;
 	Input* input_ = nullptr;
 	Collision col;
+	Audio* audio = nullptr;
 	//プレイヤー
 	Model* bodyModel_ = nullptr;
 	Object3d* bodyObj_ = nullptr;
@@ -135,6 +142,10 @@ private:
 	//デバッグ用
 	Model* debugModel_ = nullptr;
 	Object3d* debugObj_ = nullptr;
+
+	//音関係まとめ
+	int soundCheckFlag = 0;
+	int soundCheckFlag2 = 0;
 
 
 public:

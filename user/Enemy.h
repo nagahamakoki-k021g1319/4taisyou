@@ -17,7 +17,7 @@ public:
 	void Update();
 	void Draw();
 
-	
+	void EffUpdate();
 
 	void SetPlayer(Player* player) { player_ = player; };
 
@@ -95,7 +95,8 @@ private:
 
 	int enemyResetTimer = 0;
 
-	
+	//パーティクル
+	std::unique_ptr<ParticleManager> DamageParticle;
 
 
 };

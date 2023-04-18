@@ -72,6 +72,13 @@ void Player::Reset() {
 	//回避設定
 	dodgeTimer = dodgeLimit;
 	isDodge = false;
+
+	audio = new Audio();
+	audio->Initialize();
+
+	audio->LoadWave("kouka.wav");
+
+
 }
 
 void Player::Attack() {
@@ -156,6 +163,7 @@ void Player::OnCollision() {
 		else {
 			hp -= 10;
 			isEffFlag = 1;
+			pSourceVoice[0] = audio->PlayWave("kouka.wav");
 			isInvincible = true;
 			invincibleTimer = invincibleLimit;
 
