@@ -34,6 +34,7 @@ public:
 
 	void ResetHit2player() { isHitPlayer = false; };
 
+	void AttackInterval();
 
 	////ワールド座標を取得
 	Vector3 GetWorldPosition();
@@ -92,6 +93,7 @@ private:
 	int numberOfAttacks = 0;
 	////////////////////////////
 
+	int attackInterval = 180;
 
 	int enemyResetTimer = 0;
 

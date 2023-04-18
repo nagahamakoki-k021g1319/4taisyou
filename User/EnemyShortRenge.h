@@ -34,6 +34,8 @@ public:
 
 	bool GetCollision();
 
+	void ResetAttackColl();
+
 private:
 	Collision* coll = nullptr;
 	Object3d* obj_ = nullptr;
@@ -48,7 +50,8 @@ private:
 	bool attackHit = false;
 	bool isAttack = false;
 	int isAttackTime = 10;
-	int attackAccumulate = 20;
+	int attackAccumulate = 10;
 	bool hitAttck = false;
+	bool hitOne = false;
 public:
 };
