@@ -117,7 +117,7 @@ private:
 	Transform* enemyPos_ = nullptr;
 
 	//パーティクルクラスの初期化 
-	ParticleManager* particleManager = nullptr;
+	std::unique_ptr<ParticleManager> particleManager;
 	//当たった時のエフェクト発生
 	int isEffFlag = 0;
 	int EffTimer = 0;

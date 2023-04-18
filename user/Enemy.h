@@ -4,6 +4,7 @@
 
 class Player;
 #include "Collision.h"
+#include "ParticleManager.h"
 
 class Enemy {
 public:
@@ -14,6 +15,8 @@ public:
 	void Initialize(Vector3 pos);
 	void Update();
 	void Draw();
+
+	
 
 	void SetPlayer(Player* player) { player_ = player; };
 
@@ -68,6 +71,8 @@ private:
 	///////////////////////////////////
 
 	int enemyResetTimer = 0;
+
+	
 
 
 };

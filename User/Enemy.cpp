@@ -26,6 +26,8 @@ void Enemy::Initialize(Vector3 pos) {
 	//順番に弾が飛んでくる攻撃
 	enemyCBModel_ = Model::LoadFromOBJ("boll");
 	
+	
+
 }
 
 void Enemy::Update() {
@@ -42,6 +44,9 @@ void Enemy::Update() {
 	}
 
 	enemyObj_->Update();
+
+	
+
 
 	//各種球更新
 	//ダガーバレット
@@ -189,6 +194,7 @@ void Enemy::Draw() {
 
 
 }
+
 
 Vector3 Enemy::GetWorldPosition()
 {

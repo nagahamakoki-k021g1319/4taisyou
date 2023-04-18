@@ -27,6 +27,12 @@ GameScene::~GameScene() {
 	delete gameoverPic;
 	delete floor;
 	delete skydome;
+	delete sordUI;
+	delete sord2UI;
+	delete srr;
+	delete srl;
+	delete sru;
+	delete srd;
 }
 
 /// <summary>
@@ -130,6 +136,39 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	gameoverPic->SetPozition({ 0,0 });
 	gameoverPic->SetSize({ 1280,720 });
 
+	sordUI = new Sprite();
+	sordUI->Initialize(spriteCommon);
+	sordUI->SetPozition({ 0,0 });
+	sordUI->SetSize({ 1280,720 });
+
+	sord2UI = new Sprite();
+	sord2UI->Initialize(spriteCommon);
+	sord2UI->SetPozition({ 0,0 });
+	sord2UI->SetSize({ 1280,720 });
+
+	srr = new Sprite();
+	srr->Initialize(spriteCommon);
+	srrPosition = srr->GetPosition();
+	srr->SetPozition(srrPosition);
+	srr->SetSize({ 1280.0f, 720.0f });
+
+	srl = new Sprite();
+	srl->Initialize(spriteCommon);
+	srlPosition = srl->GetPosition();
+	srl->SetPozition(srlPosition);
+	srl->SetSize({ 1280.0f, 720.0f });
+
+	sru = new Sprite();
+	sru->Initialize(spriteCommon);
+	sruPosition = sru->GetPosition();
+	sru->SetPozition(sruPosition);
+	sru->SetSize({ 1280.0f, 720.0f });
+
+	srd = new Sprite();
+	srd->Initialize(spriteCommon);
+	srdPosition = srd->GetPosition();
+	srd->SetPozition(srdPosition);
+	srd->SetSize({ 1280.0f, 720.0f });
 
 	spriteCommon->LoadTexture(0, "UI.png");
 	UI->SetTextureIndex(0);
@@ -149,6 +188,27 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	clearPic->SetTextureIndex(7);
 	spriteCommon->LoadTexture(8, "gameover.png");
 	gameoverPic->SetTextureIndex(8);
+	spriteCommon->LoadTexture(9, "migi.png");
+	sordUI->SetTextureIndex(9);
+	spriteCommon->LoadTexture(10, "migi2.png");
+	sord2UI->SetTextureIndex(10);
+	spriteCommon->LoadTexture(11, "srr.png");
+	srr->SetTextureIndex(11);
+	spriteCommon->LoadTexture(12, "srl.png");
+	srl->SetTextureIndex(12);
+	spriteCommon->LoadTexture(13, "sru.png");
+	sru->SetTextureIndex(13);
+	spriteCommon->LoadTexture(14, "srd.png");
+	srd->SetTextureIndex(14);
+
+	audio = new Audio();
+	audio->Initialize();
+
+	audio->LoadWave("kako.wav");
+
+
+
+
 
 	Reset();
 }
@@ -175,16 +235,28 @@ void GameScene::Update() {
 			scene = Scene::Select;
 		}
 
+		//音声再生
+		if (soundCheckFlag == 0) {
+			//音声再生
+			pSourceVoice[0] = audio->PlayWave("kako.wav");
+			soundCheckFlag = 1;
+		}
+
 		break;
 	case Scene::Select:
+		sruPosition.x -= 30.0f;
+		sruPosition.y -= 5.0f;
+		sru->SetPozition(sruPosition);
+
+		srdPosition.x += 30.0f;
+		srdPosition.y += 5.0f;
+		srd->SetPozition(srdPosition);
 		//ステージの選択
 		if(input->LeftStickInput()) {
 			if (input->PStickTrigger(L_LEFT)) {
 				stage = 0;
-
 			}else if (input->PStickTrigger(L_RIGHT)){
 				stage = 1;
-
 			}
 		}
 
@@ -198,13 +270,23 @@ void GameScene::Update() {
 		break;
 	case Scene::Play:
 		CamUpdate();
+		srrPosition.x -= 15.0f;
+		srr->SetPozition(srrPosition);
+		
+		srlPosition.x += 15.0f;
+		srl->SetPozition(srlPosition);
+
+
 		enemyManager_->Update();
+		
 		player_->Update(&camWtf);
 
 		hpGauge->SetPozition({ -400.0f + player_->GetHp() * 4 ,0 });
-    
-    floor->Update();
-    skydome->Update();
+		/*hpPosition.x -= 4.0f;
+		hpGauge->SetPozition(hpPosition);*/
+
+		floor->Update();
+		skydome->Update();
 
 		//シーン切り替え
 		if (player_->GetHp() < 0) {
@@ -215,6 +297,8 @@ void GameScene::Update() {
 
 		break;
 	case Scene::Clear:
+		pSourceVoice[0]->Stop();
+		soundCheckFlag = 0;
 		//シーン切り替え
 		if (input->PButtonTrigger(B)) {
 			scene = Scene::Title;
@@ -222,6 +306,8 @@ void GameScene::Update() {
 
 		break;
 	case Scene::Gameover:
+		pSourceVoice[0]->Stop();
+		soundCheckFlag = 0;
 		//シーン切り替え
 		if (input->PButtonTrigger(B)) {
 			scene = Scene::Title;
@@ -254,9 +340,10 @@ void GameScene::Draw() {
 
 		break;
 	case Scene::Play:
+		
 		player_->Draw();
 		enemyManager_->Draw();
-
+		
     
     floor->Draw();
     skydome->Draw();
@@ -283,14 +370,22 @@ void GameScene::Draw() {
 		break;
 	case Scene::Select:
 		selectPic->Draw();
+		
+		//ステージ選択わかりやすく
+		if (stage == 0) {sordUI->Draw();}
+		else if (stage == 1) { sord2UI->Draw(); }
 
+		sru->Draw();
+		srd->Draw();
 		break;
 	case Scene::Play:
+		
 		// パーティクル描画前処理
-		ParticleManager::PreDraw(dxCommon->GetCommandList());
+	/*	ParticleManager::PreDraw(dxCommon->GetCommandList());*/
 		player_->EffDraw();
-		// パーティクル描画後処理
-		ParticleManager::PostDraw();
+		enemyManager_->EffDraw();
+		//// パーティクル描画後処理
+		//ParticleManager::PostDraw();
 		
 		UI->Draw();
 		if (input->ButtonInput(LT)) {
@@ -301,6 +396,9 @@ void GameScene::Draw() {
 		}
 		hpGauge->Draw();
 		unionGauge->Draw();
+
+		srr->Draw();
+		srl->Draw();
 
 		break;
 	case Scene::Clear:

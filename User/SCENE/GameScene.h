@@ -108,6 +108,18 @@ private:	//メンバ変数
 	Vector2 unionScale;
 	Sprite* avoidUI = nullptr;
 	Vector3 avoidScale;
+	Sprite* sordUI = nullptr;
+	Sprite* sord2UI = nullptr;
+
+	Sprite* srr = nullptr;
+	Vector2 srrPosition;
+	Sprite* srl = nullptr;
+	Vector2 srlPosition;
+	Sprite* sru = nullptr;
+	Vector2 sruPosition;
+	Sprite* srd = nullptr;
+	Vector2 srdPosition;
+
 
 	//ゲームフロー
 	enum class Scene
@@ -125,4 +137,10 @@ private:	//メンバ変数
 	Sprite* clearPic;
 	Sprite* gameoverPic;
 
+
+
+
+	//音関係まとめ
+	int soundCheckFlag = 0;
+	int soundCheckFlag2 = 0;
 };

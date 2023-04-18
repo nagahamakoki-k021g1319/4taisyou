@@ -8,7 +8,7 @@ Player::~Player() {
 	delete bodyObj_;
 	delete bodyModel_;
 	delete wolf_;
-	delete particleManager;
+	
 
 
 	delete debugObj_;
@@ -24,8 +24,9 @@ void Player::Initialize(Input* input) {
 	bodyObj_->SetModel(bodyModel_);
 
 	//パーティクル生成
-	particleManager = ParticleManager::Create();
-	particleManager->LoadTexture("doge.png");
+	particleManager = std::make_unique<ParticleManager>();
+	particleManager.get()->Initialize();
+	particleManager->LoadTexture("blod.png");
 	particleManager->Update();
 
 	//バディ
@@ -254,7 +255,6 @@ void Player::EffDraw()
 		// 3Dオブクジェクトの描画
 		particleManager->Draw();
 	}
-	else{}
 }
 
 Vector3 Player::bVelocity(Vector3& velocity,Transform& worldTransform)
