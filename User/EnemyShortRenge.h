@@ -1,4 +1,4 @@
-#pragma once
+Ôªø#pragma once
 #include "Object3d.h"
 #include "Collision.h"
 
@@ -7,22 +7,22 @@ public:
 	~EnemyShortRenge();
 
 	///< summary>
-	///èâä˙âª
+	///¬è
 	///</summary>
 	void Initialize(Model* model_);
 
 	///< summary>
-	///çXêV
+	///
 	///</summary>
 	void ShortAttack();
 
 	///< summary>
-	///çXêV
+	///
 	///</summary>
-	void Update(Vector3 playerPos,Object3d* enemy);
+	void Update(Vector3 playerPos, Object3d* enemy);
 
 	///< summary>
-	///ï`âÊ
+	///
 	///</summary>
 	void Draw();
 
@@ -41,16 +41,16 @@ private:
 	Object3d* obj_ = nullptr;
 
 	Object3d* attackRenge = nullptr;
-	
+
 	Vector3 playerLen;
 	Vector3 playerPos;
 
-	float enemySpeed = 1.5f;
+	float enemySpeed = 0.5f;
 
 	bool attackHit = false;
 	bool isAttack = false;
 	int isAttackTime = 10;
-	int attackAccumulate = 10;
+	int attackAccumulate = 50;
 	bool hitAttck = false;
 	bool hitOne = false;
 public:

@@ -24,11 +24,6 @@ void EnemyShortRenge::ShortAttack()
 		if (hitAttck == false) {
 			isAttackTime--;
 			OnCollision();
-			//if (isAttackTime <= 0) {
-			//	isAttack = false;
-			//	attackAccumulate = 60;
-			//	isAttackTime = 10;
-			//}
 		}
 	}
 }
@@ -61,7 +56,6 @@ void EnemyShortRenge::Update(Vector3 PlayerPos, Object3d* enemy)
 
 void EnemyShortRenge::Draw()
 {
-	/*obj_->Draw();*/
 	if (isAttack) {
 		if (attackAccumulate <= 0) {
 			attackRenge->Draw();
