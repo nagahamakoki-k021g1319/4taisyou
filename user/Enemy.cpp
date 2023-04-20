@@ -288,7 +288,7 @@ void Enemy::EffUpdate()
 
 		DamageParticle->Update();
 	}
-
+}
 
 
 void Enemy::AttackInterval()
