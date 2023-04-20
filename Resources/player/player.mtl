@@ -1,5 +1,5 @@
-# Blender MTL File: 'None'
-# Material Count: 1
+# Blender MTL File: 'player.blend'
+# Material Count: 2
 
 newmtl None
 Ka 0.000 0.000 0.000
@@ -7,3 +7,4 @@ Ka 0.000 0.000 0.000
 	Ks 0.000 0.000 0.000
 	map_Kd player.png
 illum 2
+
