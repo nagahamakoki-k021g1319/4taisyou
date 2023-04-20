@@ -25,10 +25,8 @@ void Enemy::Initialize(Vector3 pos) {
 	//順番に弾が飛んでくる攻撃
 	enemyCBModel_ = Model::LoadFromOBJ("boll");
 
-
 	shortRenge = new EnemyShortRenge();
 	shortRenge->Initialize(enemyCBModel_);
-
 
 }
 
@@ -40,8 +38,6 @@ void Enemy::Update() {
 	AttackDistance();
 
 	enemyObj_->Update();
-
-
 
 
 	//各種球更新
@@ -256,7 +252,6 @@ void Enemy::Draw() {
 
 }
 
-
 void Enemy::EffUpdate()
 {
 	//パーティクル範囲
@@ -289,7 +284,7 @@ void Enemy::EffUpdate()
 		DamageParticle->Update();
 	}
 
-
+}
 
 void Enemy::AttackInterval()
 {
@@ -319,7 +314,6 @@ void Enemy::OnColision(int damage) {
 		}
 		isHitPlayer = true;
 	}
-
 }
 
 void Enemy::AttackDistance()

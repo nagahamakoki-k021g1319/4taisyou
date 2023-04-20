@@ -8,9 +8,6 @@ Player::~Player() {
 	delete bodyObj_;
 	delete bodyModel_;
 	delete wolf_;
-
-
-
 	delete debugObj_;
 	delete debugModel_;
 }
@@ -592,7 +589,6 @@ void Player::Dodge() {
 		isDodge = false;
 		dodgeMoveVec = { 0,0,0 };
 	}
-
 	if (dodgeTimer < 0) {
 		isAction = 0;
 	}
