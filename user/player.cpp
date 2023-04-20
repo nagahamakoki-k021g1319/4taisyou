@@ -8,7 +8,7 @@ Player::~Player() {
 	delete bodyObj_;
 	delete bodyModel_;
 	delete wolf_;
-	
+
 
 
 	delete debugObj_;
@@ -586,12 +586,13 @@ void Player::Dodge() {
 		//回避時
 		//移動速度変更
 		dodgeMoveVec = dodgeMoveVecNomal * (0.4f * pow((30 / dodgeLimit), 2));
-	}else {
+	}
+	else {
 		//硬直
 		isDodge = false;
 		dodgeMoveVec = { 0,0,0 };
 	}
-	
+
 	if (dodgeTimer < 0) {
 		isAction = 0;
 	}

@@ -19,14 +19,17 @@ void EnemyShortRenge::Initialize(Model* model_)
 void EnemyShortRenge::ShortAttack()
 {
 	attackAccumulate--;
+
 	if (attackAccumulate <= 0) {
-		isAttackTime--;
-		OnCollision();
-		//if (isAttackTime <= 0) {
-		//	isAttack = false;
-		//	attackAccumulate = 60;
-		//	isAttackTime = 10;
-		//}
+		if (hitAttck == false) {
+			isAttackTime--;
+			OnCollision();
+			//if (isAttackTime <= 0) {
+			//	isAttack = false;
+			//	attackAccumulate = 60;
+			//	isAttackTime = 10;
+			//}
+		}
 	}
 }
 
@@ -35,19 +38,20 @@ void EnemyShortRenge::Update(Vector3 PlayerPos, Object3d* enemy)
 {
 	obj_ = enemy;
 	playerPos = PlayerPos;
-	
-	if (isAttack == false) {
-		PlayerVec();
-		if (coll->CircleCollision(obj_->wtf.position + (playerLen * 2), playerPos, 1.0f, 1.0f)) {
-			isAttackTime = 3;
-			isAttack = true;
+	if (hitOne == false) {
+		if (isAttack == false) {
+			PlayerVec();
+			if (coll->CircleCollision(obj_->wtf.position + (playerLen * 2), playerPos, 1.0f, 1.0f)) {
+				isAttackTime = 3;
+				isAttack = true;
+			}
+			else if (coll->CircleCollision(obj_->wtf.position + (playerLen * 2), playerPos, 1.0f, 1.0f) == false) {
+				obj_->wtf.position += playerLen;
+			}
 		}
-		else if (coll->CircleCollision(obj_->wtf.position + (playerLen * 2), playerPos, 1.0f, 1.0f) == false) {
-			obj_->wtf.position += playerLen;
+		if (isAttack) {
+			ShortAttack();
 		}
-	}
-	if (isAttack) {
-		ShortAttack();
 	}
 	attackRenge->wtf.position = obj_->wtf.position + (playerLen * 2);
 	obj_->Update();
@@ -68,13 +72,20 @@ void EnemyShortRenge::Draw()
 
 void EnemyShortRenge::OnCollision()
 {
-	if (coll->CircleCollision(obj_->wtf.position + (playerLen * 2), playerPos, 2.0f, 2.0f)) {
-		hitAttck = true;
+
+
+	if (isAttack == true) {
+
+		if (coll->CircleCollision(obj_->wtf.position + (playerLen * 2), playerPos, 2.0f, 2.0f)) {
+			hitAttck = true;
+			hitOne = true;
+		}
+		else if (coll->CircleCollision(Vector3{ obj_->wtf.position.x + (playerLen.x * 2), obj_->wtf.position.y + playerLen.y + 2.0f, obj_->wtf.position.z + (playerLen.z * 2) }, playerPos, 2.0f, 2.0f)) {
+			hitAttck = true;
+			hitOne = true;
+		}
 	}
-	else if (coll->CircleCollision(Vector3{ obj_->wtf.position.x + (playerLen.x * 2), obj_->wtf.position.y + playerLen.y + 2.0f, obj_->wtf.position.z + (playerLen.z * 2) }, playerPos, 2.0f, 2.0f)) {
-		hitAttck = true;
-	}
-	hitAttck = false;
+
 }
 
 void EnemyShortRenge::PlayerVec()
@@ -91,11 +102,18 @@ void EnemyShortRenge::PlayerVec()
 void EnemyShortRenge::ResetAttack()
 {
 	isAttack = false;
-	attackAccumulate = 60;
+	attackAccumulate = 50;
 	isAttackTime = 10;
+	hitAttck = false;
+	hitOne = false;
 }
 
 bool EnemyShortRenge::GetCollision()
 {
 	return hitAttck;
+}
+
+void EnemyShortRenge::ResetAttackColl()
+{
+	hitAttck = false;
 }
