@@ -5,6 +5,7 @@
 
 class Player;
 #include "Collision.h"
+#include "ParticleManager.h"
 
 class Enemy {
 public:
@@ -15,6 +16,8 @@ public:
 	void Initialize(Vector3 pos);
 	void Update();
 	void Draw();
+
+	void EffUpdate();
 
 	void SetPlayer(Player* player) { player_ = player; };
 
@@ -31,6 +34,7 @@ public:
 
 	void ResetHit2player() { isHitPlayer = false; };
 
+	void AttackInterval();
 
 	////ワールド座標を取得
 	Vector3 GetWorldPosition();
@@ -89,8 +93,12 @@ private:
 	int numberOfAttacks = 0;
 	////////////////////////////
 
+	int attackInterval = 180;
 
 	int enemyResetTimer = 0;
+
+	//パーティクル
+	std::unique_ptr<ParticleManager> DamageParticle;
 
 
 };

@@ -24,8 +24,10 @@ void Enemy::Initialize(Vector3 pos) {
 	//順番に弾が飛んでくる攻撃
 	enemyCBModel_ = Model::LoadFromOBJ("boll");
 
+
 	shortRenge = new EnemyShortRenge();
 	shortRenge->Initialize(enemyCBModel_);
+
 
 }
 
@@ -37,6 +39,9 @@ void Enemy::Update() {
 	AttackDistance();
 
 	enemyObj_->Update();
+
+	
+
 
 	//各種球更新
 	//ダガーバレット
@@ -243,6 +248,7 @@ void Enemy::Draw() {
 
 }
 
+
 Vector3 Enemy::GetWorldPosition()
 {
 	//ワールド座標を入れる変数
@@ -265,6 +271,7 @@ void Enemy::OnColision(int damage) {
 		}
 		isHitPlayer = true;
 	}
+
 }
 
 void Enemy::AttackDistance()

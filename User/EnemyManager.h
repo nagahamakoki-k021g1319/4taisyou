@@ -3,7 +3,7 @@
 
 class Player;
 
-class EnemyManager{
+class EnemyManager {
 public:
 	EnemyManager();
 	~EnemyManager();
@@ -11,14 +11,18 @@ public:
 	void Initialize();
 
 	void Update();
-	
+
 	void Draw();
+
+	void EffUpdate();
+	void EffDraw();
 
 	void creatEnemy(int round);
 
 	void SetPlayer(Player* player) { player_ = player; };
 
 	bool IsAllEnemyDead();
+
 
 private:
 	Transform* origin = nullptr;
@@ -27,7 +31,13 @@ private:
 
 	std::list<std::unique_ptr<Enemy>> enemys_;
 
+	Enemy* enemy_ = nullptr;
+
+	//パーティクル
+	std::unique_ptr<ParticleManager> DamageParticle;
+	int isEffFlag = 0;
+	int EffTimer = 0;
+
 public:
 	bool isHitStop;
-
 };

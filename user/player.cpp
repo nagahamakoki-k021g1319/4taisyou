@@ -8,7 +8,7 @@ Player::~Player() {
 	delete bodyObj_;
 	delete bodyModel_;
 	delete wolf_;
-	delete particleManager;
+
 
 
 	delete debugObj_;
@@ -20,12 +20,13 @@ void Player::Initialize(Input* input) {
 
 	//プレイヤー設定
 	bodyModel_ = Model::LoadFromOBJ("player");
-	
 	bodyObj_ = Object3d::Create();
 	bodyObj_->SetModel(bodyModel_);
 
-	// 3Dオブジェクト生成
-	particleManager = ParticleManager::Create();
+	//パーティクル生成
+	particleManager = std::make_unique<ParticleManager>();
+	particleManager.get()->Initialize();
+	particleManager->LoadTexture("blod.png");
 	particleManager->Update();
 
 	//バディ
@@ -71,6 +72,13 @@ void Player::Reset() {
 	//回避設定
 	dodgeTimer = dodgeLimit;
 	isDodge = false;
+
+	audio = new Audio();
+	audio->Initialize();
+
+	audio->LoadWave("kouka.wav");
+
+
 }
 
 void Player::Attack() {
@@ -155,6 +163,7 @@ void Player::OnCollision() {
 		else {
 			hp -= 10;
 			isEffFlag = 1;
+			pSourceVoice[0] = audio->PlayWave("kouka.wav");
 			isInvincible = true;
 			invincibleTimer = invincibleLimit;
 
@@ -258,7 +267,7 @@ void Player::EffDraw()
 		// 3Dオブクジェクトの描画
 		particleManager->Draw();
 	}
-	else {}
+
 }
 
 Vector3 Player::bVelocity(Vector3& velocity, Transform& worldTransform)
@@ -299,7 +308,6 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 	if (isAction == 1) {
 		//当たり判定が出てるか
 		if (isLightAttack) {
-
 			//当たり判定
 			if (col.CircleCollisionXZ(lightAttackWPos, enemyPos, 0.5f, 1.0f)) {
 				damage = 3;
@@ -312,7 +320,6 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 	else if (isAction == 2) {
 		//当たり判定が出てるか
 		if (isHeavyAttack) {
-
 			//当たり判定
 			if (col.CircleCollisionXZ(heavyAttackWPos, enemyPos, 1.0f, 1.0f)) {
 				damage = 7;
@@ -579,12 +586,13 @@ void Player::Dodge() {
 		//回避時
 		//移動速度変更
 		dodgeMoveVec = dodgeMoveVecNomal * (0.4f * pow((30 / dodgeLimit), 2));
-	}else {
+	}
+	else {
 		//硬直
 		isDodge = false;
 		dodgeMoveVec = { 0,0,0 };
 	}
-	
+
 	if (dodgeTimer < 0) {
 		isAction = 0;
 	}
