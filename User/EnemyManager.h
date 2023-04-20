@@ -31,8 +31,6 @@ private:
 
 	std::list<std::unique_ptr<Enemy>> enemys_;
 
-	Enemy* enemy_ = nullptr;
-
 	//パーティクル
 	std::unique_ptr<ParticleManager> DamageParticle;
 	int isEffFlag = 0;
