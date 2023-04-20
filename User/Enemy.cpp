@@ -15,7 +15,7 @@ Enemy::~Enemy() {
 }
 
 void Enemy::Initialize(Vector3 pos) {
-	enemyModel_ = Model::LoadFromOBJ("as");
+	enemyModel_ = Model::LoadFromOBJ("enemy");
 	enemyObj_ = Object3d::Create();
 	enemyObj_->SetModel(enemyModel_);
 	enemyObj_->wtf.position = pos;
