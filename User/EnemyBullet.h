@@ -53,6 +53,7 @@ private:
 	int daggerTimer;
 	bool isLive = false;
 	int shotTimer;
+	float EnemyBulletSpeed = 0.2;
 	//////////////////////////////
 public:
 	bool isPop = false;
