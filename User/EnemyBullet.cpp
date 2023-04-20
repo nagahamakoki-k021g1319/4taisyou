@@ -29,7 +29,7 @@ void EnemyBullet::DaggerFAttack(){
 
 	if (isLive) {
 		if (shotTimer <= 0) {
-			obj_->wtf.position.z -= 0.5;
+			obj_->wtf.position.z -= enemyBulletSpead;
 		}
 	}
 	if (obj_->wtf.position.z <= -1000) {
