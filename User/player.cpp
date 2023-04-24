@@ -9,8 +9,6 @@ Player::~Player() {
 	delete bodyModel_;
 	delete wolf_;
 
-
-
 	delete debugObj_;
 	delete debugModel_;
 }
@@ -22,6 +20,22 @@ void Player::Initialize(Input* input) {
 	bodyModel_ = Model::LoadFromOBJ("player");
 	bodyObj_ = Object3d::Create();
 	bodyObj_->SetModel(bodyModel_);
+
+	dash1Model_ = Model::LoadFromOBJ("Ldash1");
+	dash1Obj_ = Object3d::Create();
+	dash1Obj_->SetModel(dash1Model_);
+
+	dash2Model_ = Model::LoadFromOBJ("Ldash2");
+	dash2Obj_ = Object3d::Create();
+	dash2Obj_->SetModel(dash2Model_);
+
+	dash3Model_ = Model::LoadFromOBJ("Rdash1");
+	dash3Obj_ = Object3d::Create();
+	dash3Obj_->SetModel(dash3Model_);
+
+	dash4Model_ = Model::LoadFromOBJ("Rdash2");
+	dash4Obj_ = Object3d::Create();
+	dash4Obj_->SetModel(dash4Model_);
 
 	//パーティクル生成
 	particleManager = std::make_unique<ParticleManager>();
@@ -45,6 +59,19 @@ void Player::Initialize(Input* input) {
 void Player::Reset() {
 	bodyObj_->wtf.Initialize();
 	bodyObj_->wtf.position = { 0,-3,8 };
+
+	dash1Obj_->wtf.Initialize();
+	dash1Obj_->wtf.position = { 0,-3,8 };
+
+	dash2Obj_->wtf.Initialize();
+	dash2Obj_->wtf.position = { 0,-3,8 };
+
+	dash3Obj_->wtf.Initialize();
+	dash3Obj_->wtf.position = { 0,-3,8 };
+
+	dash4Obj_->wtf.Initialize();
+	dash4Obj_->wtf.position = { 0,-3,8 };
+
 	hp = defaultHp;
 	isAction = 0;
 	isLive = true;
@@ -78,6 +105,7 @@ void Player::Reset() {
 
 	audio->LoadWave("kouka.wav");
 
+	objRotaTimer = 0;
 
 }
 
@@ -164,6 +192,7 @@ void Player::OnCollision() {
 			hp -= 10;
 			isEffFlag = 1;
 			pSourceVoice[0] = audio->PlayWave("kouka.wav");
+			pSourceVoice[0]->SetVolume(0.1f);
 			isInvincible = true;
 			invincibleTimer = invincibleLimit;
 
@@ -182,6 +211,15 @@ void Player::Rota() {
 			float theta = atan2(stickVec.x, stickVec.y);
 
 			bodyObj_->wtf.rotation.y = theta;
+
+			dash1Obj_->wtf.rotation.y = theta;
+
+			dash2Obj_->wtf.rotation.y = theta;
+
+			dash3Obj_->wtf.rotation.y = theta;
+
+			dash4Obj_->wtf.rotation.y = theta;
+
 		}
 	}
 }
@@ -209,6 +247,10 @@ void Player::Update(Transform* cam) {
 
 
 	bodyObj_->Update(cam);
+	dash1Obj_->Update(cam);
+	dash2Obj_->Update(cam);
+	dash3Obj_->Update(cam);
+	dash4Obj_->Update(cam);
 	wolf_->Update(enemyPos_);
 
 	debugObj_->Update();
@@ -216,7 +258,38 @@ void Player::Update(Transform* cam) {
 
 void Player::Draw() {
 	if (isLive) {
-		bodyObj_->Draw();
+		
+
+		if (input_->LeftStickInput()) {
+			
+			objRotaTimer--;
+			if (objRotaTimer >= 25 && objRotaTimer <= 30) {
+				dash1Obj_->Draw();
+			}
+			else if (objRotaTimer >= 20 && objRotaTimer <= 24) {
+				dash2Obj_->Draw();
+			}
+			else if (objRotaTimer >= 15 && objRotaTimer <= 19) {
+				dash3Obj_->Draw();
+			}
+			else if (objRotaTimer >= 10 && objRotaTimer <= 14) {
+				dash4Obj_->Draw();
+			}
+			else if (objRotaTimer >= 5 && objRotaTimer <= 9) {
+				dash3Obj_->Draw();
+			}
+			else if (objRotaTimer >= 0 && objRotaTimer <= 4) {
+				dash2Obj_->Draw();
+			}
+			
+			if (objRotaTimer <= 0) {
+				objRotaTimer = 30;
+			}
+		}
+		else {
+			bodyObj_->Draw();
+			objRotaTimer = 0;
+		}
 		wolf_->Draw();
 
 		//デバッグ用

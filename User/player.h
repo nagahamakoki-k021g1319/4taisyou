@@ -72,6 +72,19 @@ private:
 	const float moveSpeed_ = 0.1f;
 	const float rotaSpeed_ = 0.1f;
 
+	//プレイヤーの移動
+	Model* dash1Model_ = nullptr;
+	Object3d* dash1Obj_ = nullptr;
+
+	Model* dash2Model_ = nullptr;
+	Object3d* dash2Obj_ = nullptr;
+
+	Model* dash3Model_ = nullptr;
+	Object3d* dash3Obj_ = nullptr;
+
+	Model* dash4Model_ = nullptr;
+	Object3d* dash4Obj_ = nullptr;
+
 	//ステータス
 	const int defaultHp = 100;
 	int hp;
@@ -119,6 +132,9 @@ private:
 	//次の連撃への入力受付開始時間
 	float heavyAttackInput[2] = { 15,0 };
 
+
+	//移動した時のplayerOBJを変える
+	int objRotaTimer;
 
 	//回避
 	bool isDodge;

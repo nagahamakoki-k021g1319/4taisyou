@@ -239,6 +239,7 @@ void GameScene::Update() {
 		if (soundCheckFlag == 0) {
 			//音声再生
 			pSourceVoice[0] = audio->PlayWave("kako.wav");
+			pSourceVoice[0]->SetVolume(0.1f);
 			soundCheckFlag = 1;
 		}
 
