@@ -496,9 +496,13 @@ void GameScene::CamRota() {
 		targetTheta = PI / 3;
 	}
 	
+
 	//視点は一定の距離
 	targetWtf.position.z = cos(targetTheta) * targetDistance;
 	targetWtf.position.y = sin(targetTheta) * targetDistance;
+
+
+	targetWtf.position += player_->GetCamShake();
 }
 
 void GameScene::CamUpdate() {

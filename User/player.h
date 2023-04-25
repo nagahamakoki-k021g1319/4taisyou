@@ -46,6 +46,7 @@ public:
 
 	float GetHp() { return hp; };
 	bool GetIsDodge() { return isDodge; };
+	Vector3 GetCamShake() { return camShakeVec; };
 
 	bool GetIsAttackFin() { return isAttackFin; };
 
@@ -83,6 +84,12 @@ private:
 	bool isInvincible;
 	const float invincibleLimit = 15;
 	float invincibleTimer = invincibleLimit;
+
+	//画面シェイク
+	bool isCamShake;
+	const int camShakeLimit = 20;
+	int camShakeTimer = camShakeLimit;
+	Vector3 camShakeVec;
 
 	//弱攻撃
 	Vector3 lightAttackLPos;

@@ -39,6 +39,8 @@ void Player::Initialize(Input* input) {
 	debugObj_ = Object3d::Create();
 	debugObj_->SetModel(debugModel_);
 
+	audio = new Audio();
+
 	Reset();
 }
 
@@ -68,14 +70,16 @@ void Player::Reset() {
 	isHeavyAttack = false;
 	heavyAttackTimer = 60;
 
+	//画面シェイク
+	isCamShake = false;
+	camShakeTimer = camShakeLimit;
 
 	//回避設定
 	dodgeTimer = dodgeLimit;
 	isDodge = false;
 
-	audio = new Audio();
-	audio->Initialize();
 
+	audio->Initialize();
 	audio->LoadWave("kouka.wav");
 
 
@@ -164,8 +168,12 @@ void Player::OnCollision() {
 			hp -= 10;
 			isEffFlag = 1;
 			pSourceVoice[0] = audio->PlayWave("kouka.wav");
+			
 			isInvincible = true;
 			invincibleTimer = invincibleLimit;
+
+			isCamShake = true;
+			camShakeTimer = camShakeLimit;
 
 			if (hp < 0) {
 				isLive = false;
@@ -196,6 +204,7 @@ void Player::Update(Transform* cam) {
 
 	Rota();
 	Attack();
+
 	if (isEffFlag == 1) {
 		EffTimer++;
 	}
@@ -207,6 +216,26 @@ void Player::Update(Transform* cam) {
 		EffTimer = 0;
 	}
 
+	//画面シェイク
+	if (isCamShake == true) {
+		camShakeTimer--;
+		if (camShakeTimer <= camShakeLimit && camShakeTimer > camShakeLimit * 3 / 4) {
+			camShakeVec.y += 0.05f;
+			camShakeVec.z += 0.05f;
+		}else if (camShakeTimer <= camShakeLimit * 3 / 4 && camShakeTimer > camShakeLimit * 2 / 4) {
+			camShakeVec.y -= 0.05f;
+			camShakeVec.z -= 0.05f;
+		}else if (camShakeTimer <= camShakeLimit * 2 / 4 && camShakeTimer > camShakeLimit * 1 / 4) {
+			camShakeVec.y += 0.05f;
+			camShakeVec.z += 0.05f;
+		}else if (camShakeTimer <= camShakeLimit * 1 / 4 && camShakeTimer > 0) {
+			camShakeVec.y -= 0.05f;
+			camShakeVec.z -= 0.05f;
+		}else if (camShakeTimer <= 0) {
+			isCamShake = false;
+			camShakeVec = { 0,0,0 };
+		}
+	}
 
 	bodyObj_->Update(cam);
 	wolf_->Update(enemyPos_);
