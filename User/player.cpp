@@ -7,6 +7,23 @@ Player::Player() {
 Player::~Player() {
 	delete bodyObj_;
 	delete bodyModel_;
+	delete dash1Obj_;
+	delete dash1Model_;
+	delete dash2Obj_;
+	delete dash2Model_;
+	delete dash3Obj_;
+	delete dash3Model_;
+	delete dash4Obj_;
+	delete dash4Model_;
+	delete attack1Obj_;
+	delete attack1Model_;
+	delete attack2Obj_;
+	delete attack2Model_;
+	delete attack3Obj_;
+	delete attack3Model_;
+	delete attack4Obj_;
+	delete attack4Model_;
+
 	delete wolf_;
 
 	delete debugObj_;
@@ -36,6 +53,22 @@ void Player::Initialize(Input* input) {
 	dash4Model_ = Model::LoadFromOBJ("Rdash2");
 	dash4Obj_ = Object3d::Create();
 	dash4Obj_->SetModel(dash4Model_);
+
+	attack1Model_ = Model::LoadFromOBJ("attack1");
+	attack1Obj_ = Object3d::Create();
+	attack1Obj_->SetModel(attack1Model_);
+	
+	attack2Model_ = Model::LoadFromOBJ("attack2");
+	attack2Obj_ = Object3d::Create();
+	attack2Obj_->SetModel(attack2Model_);
+	
+	attack3Model_ = Model::LoadFromOBJ("attack3");
+	attack3Obj_ = Object3d::Create();
+	attack3Obj_->SetModel(attack3Model_);
+	
+	attack4Model_ = Model::LoadFromOBJ("attack4");
+	attack4Obj_ = Object3d::Create();
+	attack4Obj_->SetModel(attack4Model_);
 
 	//パーティクル生成
 	particleManager = std::make_unique<ParticleManager>();
@@ -71,6 +104,18 @@ void Player::Reset() {
 
 	dash4Obj_->wtf.Initialize();
 	dash4Obj_->wtf.position = { 0,-3,8 };
+
+	attack1Obj_->wtf.Initialize();
+	attack1Obj_->wtf.position = { 0,-3,8 };
+	
+	attack2Obj_->wtf.Initialize();
+	attack2Obj_->wtf.position = { 0,-3,8 };
+	
+	attack3Obj_->wtf.Initialize();
+	attack3Obj_->wtf.position = { 0,-3,8 };
+	
+	attack4Obj_->wtf.Initialize();
+	attack4Obj_->wtf.position = { 0,-3,8 };
 
 	hp = defaultHp;
 	isAction = 0;
@@ -220,6 +265,14 @@ void Player::Rota() {
 
 			dash4Obj_->wtf.rotation.y = theta;
 
+			attack1Obj_->wtf.rotation.y = theta;
+
+			attack2Obj_->wtf.rotation.y = theta;
+
+			attack3Obj_->wtf.rotation.y = theta;
+
+			attack4Obj_->wtf.rotation.y = theta;
+
 		}
 	}
 }
@@ -251,6 +304,10 @@ void Player::Update(Transform* cam) {
 	dash2Obj_->Update(cam);
 	dash3Obj_->Update(cam);
 	dash4Obj_->Update(cam);
+	attack1Obj_->Update(cam);
+	attack2Obj_->Update(cam);
+	attack3Obj_->Update(cam);
+	attack4Obj_->Update(cam);
 	wolf_->Update(enemyPos_);
 
 	debugObj_->Update();
@@ -259,37 +316,68 @@ void Player::Update(Transform* cam) {
 void Player::Draw() {
 	if (isLive) {
 		
+		//弱攻撃のモーション
+		if (input_->PushKey(DIK_3) || input_->PButtonTrigger(X)) {
 
-		if (input_->LeftStickInput()) {
-			
-			objRotaTimer--;
-			if (objRotaTimer >= 25 && objRotaTimer <= 30) {
-				dash1Obj_->Draw();
+			attackFlag = 1;
+		}
+		if (attackFlag == 1) {
+			objAttackTimer--;
+
+			if (objAttackTimer >= 12 && objAttackTimer <= 16) {
+				attack1Obj_->Draw();
 			}
-			else if (objRotaTimer >= 20 && objRotaTimer <= 24) {
-				dash2Obj_->Draw();
+			else if (objAttackTimer >= 8 && objAttackTimer <= 11) {
+				attack2Obj_->Draw();
 			}
-			else if (objRotaTimer >= 15 && objRotaTimer <= 19) {
-				dash3Obj_->Draw();
+			else if (objAttackTimer >= 4 && objAttackTimer <= 7) {
+				attack3Obj_->Draw();
 			}
-			else if (objRotaTimer >= 10 && objRotaTimer <= 14) {
-				dash4Obj_->Draw();
+			else if (objAttackTimer >= 0 && objAttackTimer <= 3) {
+				attack4Obj_->Draw();
 			}
-			else if (objRotaTimer >= 5 && objRotaTimer <= 9) {
-				dash3Obj_->Draw();
-			}
-			else if (objRotaTimer >= 0 && objRotaTimer <= 4) {
-				dash2Obj_->Draw();
-			}
-			
-			if (objRotaTimer <= 0) {
-				objRotaTimer = 30;
+			if (objAttackTimer <= 0) {
+				attackFlag = 0;
+				objAttackTimer = 16;
 			}
 		}
-		else {
-			bodyObj_->Draw();
-			objRotaTimer = 0;
+		if (attackFlag == 0) {
+			//移動のモーション
+			if (input_->LeftStickInput()) {
+
+				objRotaTimer--;
+				if (objRotaTimer >= 25 && objRotaTimer <= 30) {
+					dash1Obj_->Draw();
+				}
+				else if (objRotaTimer >= 20 && objRotaTimer <= 24) {
+					dash2Obj_->Draw();
+				}
+				else if (objRotaTimer >= 15 && objRotaTimer <= 19) {
+					dash3Obj_->Draw();
+				}
+				else if (objRotaTimer >= 10 && objRotaTimer <= 14) {
+					dash4Obj_->Draw();
+				}
+				else if (objRotaTimer >= 5 && objRotaTimer <= 9) {
+					dash3Obj_->Draw();
+				}
+				else if (objRotaTimer >= 0 && objRotaTimer <= 4) {
+					dash2Obj_->Draw();
+				}
+
+				if (objRotaTimer <= 0) {
+					objRotaTimer = 30;
+				}
+			}
+			else {
+				if (attackFlag == 0) {
+					bodyObj_->Draw();
+				}
+
+				objRotaTimer = 0;
+			}
 		}
+
 		wolf_->Draw();
 
 		//デバッグ用
