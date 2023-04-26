@@ -90,6 +90,9 @@ void Player::Initialize(Input* input) {
 	//デバッグ用
 	debugModel_ = Model::LoadFromOBJ("boll");
 	debugObj_ = Object3d::Create();
+	debugObj_->wtf.scale.x = 2;
+	debugObj_->wtf.scale.y = 2;
+	debugObj_->wtf.scale.z = 2;
 	debugObj_->SetModel(debugModel_);
 
 	audio = new Audio();
@@ -158,7 +161,8 @@ void Player::Reset() {
 
 
 	audio->Initialize();
-	audio->LoadWave("kouka.wav");
+	audio->LoadWave("col.wav");
+	audio->LoadWave("kaihi.wav");
 
 	objRotaTimer = 0;
 
@@ -240,13 +244,14 @@ void Player::OnCollision() {
 	if (isInvincible == false) {
 		//回避時
 		if (isDodge) {
-
+			pSourceVoice[1] = audio->PlayWave("kaihi.wav");
+			pSourceVoice[1]->SetVolume(0.7f);
 		}
 		//通常時
 		else {
 			hp -= 10;
 			isEffFlag = 1;
-			/*pSourceVoice[0] = audio->PlayWave("kouka.wav");*/
+			pSourceVoice[0] = audio->PlayWave("col.wav");
 			isInvincible = true;
 			invincibleTimer = invincibleLimit;
 
@@ -331,14 +336,6 @@ void Player::Update(Transform* cam) {
 			camShakeVec = { 0,0,0 };
 		}
 	}
-	/*if (input_->StickInput(R_LEFT)) {
-		worldPos.x -= 1.0f;
-	}
-	else if (input_->StickInput(R_RIGHT)) {
-		worldPos.x += 1.0f;
-	}*/
-
-
 	bodyObj_->Update(cam);
 	dash1Obj_->Update(cam);
 	dash2Obj_->Update(cam);
@@ -420,13 +417,13 @@ void Player::Draw() {
 
 		wolf_->Draw();
 
-		//デバッグ用
-		if (isLightAttack) {
-			debugObj_->Draw();
-		}
-		if (isHeavyAttack) {
-			debugObj_->Draw();
-		}
+		////デバッグ用
+		//if (isLightAttack) {
+		//	debugObj_->Draw();
+		//}
+		//if (isHeavyAttack) {
+		//	debugObj_->Draw();
+		//}
 	}
 }
 

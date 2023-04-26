@@ -33,7 +33,7 @@ void EnemyManager::creatEnemy(int round) {
 	if (round == 0) {
 		{
 			std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
-			newEnemy->Initialize({ 0,0,7 });
+			newEnemy->Initialize({ 0,0,20 });
 			newEnemy->SetPlayer(player_);
 			enemys_.push_back(std::move(newEnemy));
 		}
@@ -89,11 +89,7 @@ void EnemyManager::Update() {
 			isHitStop = true;
 
 		}
-		//敵とバディの衝突
-		if (player_->wolf_->CheckAttack2Enemy(enemy->GetWorldPosition(), damage)) {
-			enemy->OnColision(damage);
-		}
-
+		
 		enemy->Update();
 	}
 

@@ -52,7 +52,7 @@ private:
 	Object3d* enemyObj_ = nullptr;
 	Model* enemyModel_ = nullptr;
 	bool isLive = true;
-	const int hpMax = 10;
+	const int hpMax = 30;
 	int hp = hpMax;
 
 	EnemyBullet* enemyBullet = nullptr;

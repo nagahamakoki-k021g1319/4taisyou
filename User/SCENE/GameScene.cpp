@@ -292,11 +292,13 @@ void GameScene::Update() {
 
 		//シーン切り替え
 		if (input->PButtonTrigger(B)) {
-			enemyManager_->creatEnemy(stage);
-			Reset();
-			scene = Scene::Play;
-			pSourceVoice[3] = audio->PlayWave("open.wav");
-			pSourceVoice[3]->SetVolume(0.4f);
+			if (stage == 0) {
+				enemyManager_->creatEnemy(stage);
+				Reset();
+				scene = Scene::Play;
+				pSourceVoice[3] = audio->PlayWave("open.wav");
+				pSourceVoice[3]->SetVolume(0.4f);
+			}
 		}
 		break;
 	case Scene::Play:
@@ -425,6 +427,7 @@ void GameScene::Draw() {
 		if (stage == 0) {sordUI->Draw();}
 		else if (stage == 1) { sord2UI->Draw(); }
 
+		
 		sru->Draw();
 		srd->Draw();
 		break;
@@ -445,7 +448,6 @@ void GameScene::Draw() {
 			buttomPng1->Draw();
 		}
 		hpGauge->Draw();
-		unionGauge->Draw();
 
 		srr->Draw();
 		srl->Draw();

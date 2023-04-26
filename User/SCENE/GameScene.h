@@ -133,6 +133,8 @@ private:	//メンバ変数
 	};
 	Scene scene;
 	int stage;
+	//カミングスーン用フラグ
+	int cmsoon = 0;
 	Sprite* titlePic;
 	Sprite* selectPic;
 	Sprite* clearPic;

@@ -110,8 +110,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 		// Imgui受付開始
 		imgui->Begin();
-		// デモウィンドウの表示オン
-		ImGui::ShowDemoWindow();
+		//// デモウィンドウの表示オン
+		//ImGui::ShowDemoWindow();
 
 		// ゲームシーンの描画
 		gameScene->Draw();
