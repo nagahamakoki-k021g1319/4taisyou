@@ -92,6 +92,8 @@ void Player::Initialize(Input* input) {
 	debugObj_ = Object3d::Create();
 	debugObj_->SetModel(debugModel_);
 
+	audio = new Audio();
+
 	Reset();
 }
 
@@ -146,14 +148,16 @@ void Player::Reset() {
 	isHeavyAttack = false;
 	heavyAttackTimer = 60;
 
+	//��ʃV�F�C�N
+	isCamShake = false;
+	camShakeTimer = camShakeLimit;
 
 	//回避設定
 	dodgeTimer = dodgeLimit;
 	isDodge = false;
 
-	audio = new Audio();
-	audio->Initialize();
 
+	audio->Initialize();
 	audio->LoadWave("kouka.wav");
 
 	objRotaTimer = 0;
@@ -242,11 +246,12 @@ void Player::OnCollision() {
 		else {
 			hp -= 10;
 			isEffFlag = 1;
-
 			/*pSourceVoice[0] = audio->PlayWave("kouka.wav");*/
-
 			isInvincible = true;
 			invincibleTimer = invincibleLimit;
+
+			isCamShake = true;
+			camShakeTimer = camShakeLimit;
 
 			if (hp < 0) {
 				isLive = false;
@@ -294,6 +299,7 @@ void Player::Update(Transform* cam) {
 
 	Rota();
 	Attack();
+
 	if (isEffFlag == 1) {
 		EffTimer++;
 	}
@@ -305,6 +311,26 @@ void Player::Update(Transform* cam) {
 		EffTimer = 0;
 	}
 
+	//��ʃV�F�C�N
+	if (isCamShake == true) {
+		camShakeTimer--;
+		if (camShakeTimer <= camShakeLimit && camShakeTimer > camShakeLimit * 3 / 4) {
+			camShakeVec.y += 0.05f;
+			camShakeVec.z += 0.05f;
+		}else if (camShakeTimer <= camShakeLimit * 3 / 4 && camShakeTimer > camShakeLimit * 2 / 4) {
+			camShakeVec.y -= 0.05f;
+			camShakeVec.z -= 0.05f;
+		}else if (camShakeTimer <= camShakeLimit * 2 / 4 && camShakeTimer > camShakeLimit * 1 / 4) {
+			camShakeVec.y += 0.05f;
+			camShakeVec.z += 0.05f;
+		}else if (camShakeTimer <= camShakeLimit * 1 / 4 && camShakeTimer > 0) {
+			camShakeVec.y -= 0.05f;
+			camShakeVec.z -= 0.05f;
+		}else if (camShakeTimer <= 0) {
+			isCamShake = false;
+			camShakeVec = { 0,0,0 };
+		}
+	}
 	/*if (input_->StickInput(R_LEFT)) {
 		worldPos.x -= 1.0f;
 	}
