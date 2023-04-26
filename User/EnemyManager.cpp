@@ -78,6 +78,11 @@ void EnemyManager::Update() {
 			enemy->ResetHit2player();
 		}
 
+		//敵とプレイヤーの衝突
+		if (player_->CheckBody2Enemy(enemy->GetWorldPosition())) {
+			
+		}
+
 		float damage = 0;
 		//敵とプレイヤー攻撃衝突
 		if (player_->CheckAttack2Enemy(enemy->GetWorldPosition(), damage)) {

@@ -83,7 +83,7 @@ private:	//メンバ変数
 	Transform targetWtf;
 	float targetTheta;
 	float targetDistance = 10;
-	float camMoveSpeed = 0.1f;
+	float camMoveSpeed = 0.2f;
 	float camRotaSpeed = PI / 180;
 
 	//プレイヤー
@@ -98,7 +98,8 @@ private:	//メンバ変数
 	Model* floorMD = nullptr;
 	Object3d* skydome = nullptr;
 	Model* skydomeMD = nullptr;
-
+	Object3d* field = nullptr;
+	Model* fieldMD = nullptr;
 
 	//UI
 	Sprite* UI = nullptr;

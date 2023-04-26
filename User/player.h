@@ -37,6 +37,7 @@ public:
 	void Dodge();
 
 	bool CheckAttack2Enemy(Vector3 enemyPos, float& damage);
+	bool CheckBody2Enemy(Vector3 enemyPos);
 
 
 	Vector3 bVelocity(Vector3& velocity, Transform& worldTransform);
@@ -47,7 +48,7 @@ public:
 	float GetHp() { return hp; };
 	bool GetIsDodge() { return isDodge; };
 	Vector3 GetCamShake() { return camShakeVec; };
-
+	Vector3 GetMoveBack();
 	bool GetIsAttackFin() { return isAttackFin; };
 
 	Vector3 GetDodgeMoveVec() { return dodgeMoveVec; };
@@ -118,6 +119,7 @@ private:
 	const int camShakeLimit = 20;
 	int camShakeTimer = camShakeLimit;
 	Vector3 camShakeVec;
+	Vector3 moveBack;
 
 	//é„çUåÇ
 	Vector3 lightAttackLPos;
