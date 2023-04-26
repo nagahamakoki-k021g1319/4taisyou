@@ -170,6 +170,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	srd->SetPozition(srdPosition);
 	srd->SetSize({ 1280.0f, 720.0f });
 
+	
 	spriteCommon->LoadTexture(0, "UI.png");
 	UI->SetTextureIndex(0);
 	spriteCommon->LoadTexture(1, "buttom1.png");
@@ -201,14 +202,14 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	spriteCommon->LoadTexture(14, "srd.png");
 	srd->SetTextureIndex(14);
 
+
 	audio = new Audio();
 	audio->Initialize();
 
-	audio->LoadWave("kako.wav");
-
-
-
-
+	audio->LoadWave("tit.wav");
+	audio->LoadWave("bb.wav");
+	audio->LoadWave("serect.wav");
+	audio->LoadWave("open.wav");
 
 	Reset();
 }
@@ -233,12 +234,15 @@ void GameScene::Update() {
 		//シーン切り替え
 		if (input->PButtonTrigger(B)) {
 			scene = Scene::Select;
+			pSourceVoice[3] = audio->PlayWave("open.wav");
+			pSourceVoice[3]->SetVolume(0.4f);
 		}
 
 		//音声再生
 		if (soundCheckFlag == 0) {
 			//音声再生
-			pSourceVoice[0] = audio->PlayWave("kako.wav");
+			pSourceVoice[0] = audio->PlayWave("tit.wav");
+			pSourceVoice[0]->SetVolume(0.1f);
 			soundCheckFlag = 1;
 		}
 
@@ -256,7 +260,11 @@ void GameScene::Update() {
 		srlPosition.x = 0.0f;
 		srl->SetPozition(srlPosition);
 
-
+		enemyManager_->EffTimer = 0;
+		enemyManager_->isEffFlag = 0;
+		player_->EffTimer = 0;
+		player_->isEffFlag = 0;
+		
 		break;
 	case Scene::Select:
 		sruPosition.x -= 50.0f;
@@ -269,8 +277,14 @@ void GameScene::Update() {
 		//ステージの選択
 		if(input->LeftStickInput()) {
 			if (input->PStickTrigger(L_LEFT)) {
+				//音声再生
+				pSourceVoice[2] = audio->PlayWave("serect.wav");
+				pSourceVoice[2]->SetVolume(0.6f);
 				stage = 0;
 			}else if (input->PStickTrigger(L_RIGHT)){
+				//音声再生
+				pSourceVoice[2] = audio->PlayWave("serect.wav");
+				pSourceVoice[2]->SetVolume(0.6f);
 				stage = 1;
 			}
 		}
@@ -280,22 +294,34 @@ void GameScene::Update() {
 			enemyManager_->creatEnemy(stage);
 			Reset();
 			scene = Scene::Play;
+			pSourceVoice[3] = audio->PlayWave("open.wav");
+			pSourceVoice[3]->SetVolume(0.4f);
 		}
-
 		break;
 	case Scene::Play:
+		pSourceVoice[0]->Stop();
+		soundCheckFlag = 0;
+		//音声再生
+		if (soundCheckFlag2 == 0) {
+			//音声再生
+			pSourceVoice[1] = audio->PlayWave("bb.wav");
+			pSourceVoice[1]->SetVolume(0.1f);
+			soundCheckFlag2 = 1;
+		}
 		CamUpdate();
-
+		CdTimer++;
+	
 		srrPosition.x -= 30.0f;
 		srr->SetPozition(srrPosition);
 		
 		srlPosition.x += 30.0f;
 		srl->SetPozition(srlPosition);
 
-
+		
 		enemyManager_->Update();
 		
 		player_->Update(&camWtf);
+
 
 
 		if (enemyManager_->isHitStop) {
@@ -321,25 +347,26 @@ void GameScene::Update() {
 		}else if (enemyManager_->IsAllEnemyDead()) {
 			scene = Scene::Clear;
 		}
-
 		break;
 	case Scene::Clear:
-		pSourceVoice[0]->Stop();
-		soundCheckFlag = 0;
+		pSourceVoice[1]->Stop();
+		soundCheckFlag2 = 0;
 		//シーン切り替え
 		if (input->PButtonTrigger(B)) {
 			scene = Scene::Title;
+			pSourceVoice[2] = audio->PlayWave("serect.wav");
+			pSourceVoice[2]->SetVolume(0.6f);
 		}
-
 		break;
 	case Scene::Gameover:
-		pSourceVoice[0]->Stop();
-		soundCheckFlag = 0;
+		pSourceVoice[1]->Stop();
+		soundCheckFlag2 = 0;
 		//シーン切り替え
 		if (input->PButtonTrigger(B)) {
 			scene = Scene::Title;
+			pSourceVoice[2] = audio->PlayWave("serect.wav");
+			pSourceVoice[2]->SetVolume(0.6f);
 		}
-
 		break;
 	}
 }
@@ -360,9 +387,6 @@ void GameScene::Draw() {
 	{
 	case Scene::Title:
 
-
-
-
 		break;
 	case Scene::Play:
 		
@@ -370,8 +394,8 @@ void GameScene::Draw() {
 		enemyManager_->Draw();
 		
     
-    floor->Draw();
-    skydome->Draw();
+		floor->Draw();
+		skydome->Draw();
 		break;
 	case Scene::Clear:
 
@@ -386,7 +410,7 @@ void GameScene::Draw() {
 	Object3d::PostDraw();
 
 
-	//// パーティクルの描画
+	//// パーティクル UI スプライト描画
 	switch (scene)
 	{
 	case Scene::Title:

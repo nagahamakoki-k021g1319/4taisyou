@@ -1,5 +1,10 @@
 #include"player.h"
 
+
+
+
+
+
 Player::Player() {
 
 }
@@ -22,6 +27,7 @@ void Player::Initialize(Input* input) {
 	bodyModel_ = Model::LoadFromOBJ("player");
 	bodyObj_ = Object3d::Create();
 	bodyObj_->SetModel(bodyModel_);
+
 
 	//パーティクル生成
 	particleManager = std::make_unique<ParticleManager>();
@@ -163,7 +169,7 @@ void Player::OnCollision() {
 		else {
 			hp -= 10;
 			isEffFlag = 1;
-			pSourceVoice[0] = audio->PlayWave("kouka.wav");
+			/*pSourceVoice[0] = audio->PlayWave("kouka.wav");*/
 			isInvincible = true;
 			invincibleTimer = invincibleLimit;
 
@@ -207,6 +213,13 @@ void Player::Update(Transform* cam) {
 		EffTimer = 0;
 	}
 
+	/*if (input_->StickInput(R_LEFT)) {
+		worldPos.x -= 1.0f;
+	}
+	else if (input_->StickInput(R_RIGHT)) {
+		worldPos.x += 1.0f;
+	}*/
+
 
 	bodyObj_->Update(cam);
 	wolf_->Update(enemyPos_);
@@ -240,6 +253,7 @@ void Player::EffUpdate()
 		pos.y += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 		pos.z += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 		pos += GetWorldPosition();
+		pos.y += 1.0f;
 		//速度
 		//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
 		const float rnd_vel = 0.1f;
@@ -292,13 +306,10 @@ Vector3 Player::bVelocity(Vector3& velocity, Transform& worldTransform)
 
 Vector3 Player::GetWorldPosition()
 {
-	//ワールド座標を入れる変数
-	Vector3 worldPos;
 	//ワールド行列の平行移動成分
 	worldPos.x = bodyObj_->wtf.matWorld.m[3][0];
 	worldPos.y = bodyObj_->wtf.matWorld.m[3][1];
 	worldPos.z = bodyObj_->wtf.matWorld.m[3][2];
-
 
 	return worldPos;
 }

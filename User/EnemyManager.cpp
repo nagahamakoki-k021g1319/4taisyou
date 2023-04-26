@@ -17,6 +17,11 @@ void EnemyManager::Initialize() {
 	DamageParticle->LoadTexture("doge.png");
 	DamageParticle->Update();
 
+	audio = new Audio();
+	audio->Initialize();
+
+	audio->LoadWave("slash.wav");
+
 }
 
 void EnemyManager::creatEnemy(int round) {
@@ -58,10 +63,10 @@ void EnemyManager::Update() {
 	if (isEffFlag == 1) {
 		EffTimer++;
 	}
-	if (EffTimer <= 10 && EffTimer >= 1) {
+	if (EffTimer <= 5 && EffTimer >= 1) {
 		EffUpdate();
 	}
-	if (EffTimer >= 11) {
+	if (EffTimer >= 6) {
 		isEffFlag = 0;
 		EffTimer = 0;
 	}
@@ -77,7 +82,8 @@ void EnemyManager::Update() {
 		//敵とプレイヤー攻撃衝突
 		if (player_->CheckAttack2Enemy(enemy->GetWorldPosition(), damage)) {
 			enemy->OnColision(damage);
-
+			pSourceVoice[0] = audio->PlayWave("slash.wav");
+			pSourceVoice[0]->SetVolume(0.6f);
 			isEffFlag = 1;
 
 			isHitStop = true;
@@ -106,7 +112,7 @@ void EnemyManager::EffUpdate()
 	for (int i = 0; i < 20; i++) {
 		for (std::unique_ptr<Enemy>& enemy : enemys_) {
 			//X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
-			const float rnd_pos = 0.1f;
+			const float rnd_pos = 5.0f;
 			Vector3 pos{};
 			pos.x += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 			pos.y += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
@@ -142,7 +148,6 @@ void EnemyManager::EffDraw()
 		DamageParticle->Draw();
 	}
 }
-
 
 bool EnemyManager::IsAllEnemyDead() {
 	bool result = false;
