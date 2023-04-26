@@ -241,6 +241,7 @@ void GameScene::Update() {
 		//音声再生
 		if (soundCheckFlag == 0) {
 			//音声再生
+
 			pSourceVoice[0] = audio->PlayWave("tit.wav");
 			pSourceVoice[0]->SetVolume(0.1f);
 			soundCheckFlag = 1;
