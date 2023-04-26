@@ -530,6 +530,21 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 	return false;
 }
 
+bool Player::CheckBody2Enemy(Vector3 enemyPos) {
+	if (col.CircleCollisionXZ(GetWorldPosition(), enemyPos, 1.0f, 1.0f)) {
+		moveBack = { 0,0,-0.1 };
+		moveBack = bVelocity(moveBack, bodyObj_->wtf);
+		return true;
+	}
+	return false;
+}
+
+Vector3 Player::GetMoveBack() {
+	Vector3 result = moveBack;
+	moveBack = { 0,0,0 };
+	return result;
+}
+
 void Player::LightAttack() {
 	lightAttackTimer--;
 

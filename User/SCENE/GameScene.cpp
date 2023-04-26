@@ -490,7 +490,7 @@ void GameScene::CamMove() {
 		eyeVelocity = bVelocity(eyeVelocity, camWtf);
 
 		//更新
-		camWtf.position += eyeVelocity;
+		camWtf.position += eyeVelocity + player_->GetMoveBack();
 	}
 
 }
