@@ -72,6 +72,10 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	skydome->SetModel(skydomeMD);
 	skydome->wtf.scale = (Vector3{ 1000, 1000, 1000 });
 
+	fieldMD = Model::LoadFromOBJ("field");
+	field = Object3d::Create();
+	field->SetModel(fieldMD);
+	field->wtf.scale = (Vector3{ 10, 10, 10 });
 
 	//プレイヤー
 	player_ = new Player();
@@ -341,6 +345,7 @@ void GameScene::Update() {
 
 		floor->Update();
 		skydome->Update();
+		field->Update();
 
 		//シーン切り替え
 		if (player_->GetHp() < 0) {
@@ -397,6 +402,7 @@ void GameScene::Draw() {
     
 		floor->Draw();
 		skydome->Draw();
+		field->Draw();
 		break;
 	case Scene::Clear:
 
@@ -488,6 +494,20 @@ void GameScene::CamMove() {
 		
 		//移動ベクトルを向いてる方向に合わせる
 		eyeVelocity = bVelocity(eyeVelocity, camWtf);
+
+		Vector3 pos = player_->GetWorldPosition() + eyeVelocity;
+		if (pos.x > 50) {
+			eyeVelocity += {-0.2, 0, 0};
+		}
+		else if (pos.x < -50) {
+			eyeVelocity += {0.2, 0, 0};
+		}
+		if (pos.z > 50) {
+			eyeVelocity += {0, 0, -0.2};
+		}
+		else if (pos.z < -50) {
+			eyeVelocity += {0, 0, 0.2};
+		}
 
 		//更新
 		camWtf.position += eyeVelocity + player_->GetMoveBack();

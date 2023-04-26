@@ -350,6 +350,7 @@ void Player::Update(Transform* cam) {
 	attack4Obj_->Update(cam);
 	wolf_->Update(enemyPos_);
 
+
 	debugObj_->Update();
 }
 
@@ -532,7 +533,7 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 
 bool Player::CheckBody2Enemy(Vector3 enemyPos) {
 	if (col.CircleCollisionXZ(GetWorldPosition(), enemyPos, 1.0f, 1.0f)) {
-		moveBack = { 0,0,-0.1 };
+		moveBack += { 0,0,-0.2 };
 		moveBack = bVelocity(moveBack, bodyObj_->wtf);
 		return true;
 	}
