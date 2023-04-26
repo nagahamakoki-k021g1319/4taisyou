@@ -122,7 +122,6 @@ private:	//メンバ変数
 	Sprite* srd = nullptr;
 	Vector2 srdPosition;
 
-
 	//ゲームフロー
 	enum class Scene
 	{
@@ -139,8 +138,12 @@ private:	//メンバ変数
 	Sprite* clearPic;
 	Sprite* gameoverPic;
 
-
-
+	//攻撃する前のわかりやすいエッフェクト(なぜか敵に持たせられない)
+	Sprite* CdUI = nullptr;
+	Sprite* CdUI1 = nullptr;
+	Sprite* CdUI2 = nullptr;
+	int  CdTimer = 0;
+	int  isCdFlag = 0;
 
 	//音関係まとめ
 	int soundCheckFlag = 0;
