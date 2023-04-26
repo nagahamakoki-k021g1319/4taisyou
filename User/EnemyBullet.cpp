@@ -15,6 +15,7 @@ void EnemyBullet::Initialize(int timer, Model* model_){
 	isPop = false;
 	shotTimer = 120;
 
+	
 }
 
 void EnemyBullet::DaggerFAttack(){
@@ -47,8 +48,9 @@ void EnemyBullet::Draw(){
 	if (isPop) {
 		obj_->Draw();
 	}
-}
+	
 
+}
 
 void EnemyBullet::OnCollision() {
 	isLive = false;

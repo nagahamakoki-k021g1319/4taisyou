@@ -57,6 +57,9 @@ public:
 	/// <param name="pos"></param>
 	void SetPos(Vector3 pos) { bodyObj_->wtf.position = pos; };
 
+	int EffTimer = 0;
+	int isEffFlag = 0;
+
 public:
 	//音を止める関数
 	IXAudio2SourceVoice* pSourceVoice[10] = { 0 };
@@ -165,10 +168,10 @@ private:
 
 	//パーティクルクラスの初期化 
 	std::unique_ptr<ParticleManager> particleManager;
-	//当たった時のエフェクト発生
-	int isEffFlag = 0;
-	int EffTimer = 0;
-
+	//ワールド座標を入れる変数
+	Vector3 worldPos;
+	
+	
 	//デバッグ用
 	Model* debugModel_ = nullptr;
 	Object3d* debugObj_ = nullptr;

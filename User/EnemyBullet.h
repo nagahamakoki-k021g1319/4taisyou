@@ -2,6 +2,7 @@
 #include "Object3d.h"
 #include <memory>
 #include <list>
+#include "Sprite.h"
 
 class EnemyBullet {
 public:
@@ -27,6 +28,11 @@ public:
 	///</summary>
 	void Draw();
 
+	///< summary>
+	/// ui描画
+	///</summary>
+	void UIDraw();
+
 	/// <summary>
 	/// ポジション
 	/// </summary>
@@ -46,7 +52,6 @@ public:
 	void OnCollision();
 
 private:
-
 	////-----ダガーファンネル------///
 	Object3d* obj_ = nullptr;
 	//召喚して飛ばすまでの時間とフラグ
@@ -55,6 +60,12 @@ private:
 	int shotTimer;
 	float EnemyBulletSpeed = 0.2;
 	//////////////////////////////
+
+	//攻撃する前のわかりやすいエッフェクト
+	Sprite* CdUI = nullptr;
+	Sprite* CdUI1 = nullptr;
+	Sprite* CdUI2 = nullptr;
+
 public:
 	bool isPop = false;
 };

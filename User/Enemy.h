@@ -17,8 +17,6 @@ public:
 	void Update();
 	void Draw();
 
-	void EffUpdate();
-
 	void SetPlayer(Player* player) { player_ = player; };
 
 	void CreatDaggerBullet(int bulletNum);
@@ -57,6 +55,7 @@ private:
 	const int hpMax = 10;
 	int hp = hpMax;
 
+	EnemyBullet* enemyBullet = nullptr;
 
 	//–³“GŽžŠÔ
 	bool isHitPlayer;
