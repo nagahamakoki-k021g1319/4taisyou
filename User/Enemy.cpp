@@ -61,9 +61,9 @@ void Enemy::Initialize(Vector3 pos) {
 	enemyAttack6Obj_ = Object3d::Create();
 	enemyAttack6Obj_->SetModel(enemyAttack6Model_);
 	enemyAttack6Obj_->wtf.position = pos;
-	// ƒ_ƒK[ƒtƒ@ƒ“ƒlƒ‹
+	// ãƒ€ã‚¬ãƒ¼ãƒ•ã‚¡ãƒ³ãƒãƒ«
 	daggerBulletModel_ = Model::LoadFromOBJ("boll");
-	//‡”Ô‚É’e‚ª”ò‚ñ‚Å‚­‚éUŒ‚
+	//é †ç•ªã«å¼¾ãŒé£›ã‚“ã§ãã‚‹æ”»æ’ƒ
 	enemyCBModel_ = Model::LoadFromOBJ("boll");
 
 
@@ -75,7 +75,7 @@ void Enemy::Initialize(Vector3 pos) {
 
 void Enemy::Update() {
 
-	{//‰¼‚ÅƒvƒŒƒCƒ„[‚Æ‚Ì‚â‚èæ‚è
+	{//ä»®ã§ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã®ã‚„ã‚Šå–ã‚Š
 		player_->SetEnemyPos(&enemyObj_->wtf);
 	}
 	AttackDistance();
@@ -90,24 +90,24 @@ void Enemy::Update() {
 	enemyAttack6Obj_->Update();
 
 
-	//Šeí‹…XV
-	//ƒ_ƒK[ƒoƒŒƒbƒg
+	//å„ç¨®çƒæ›´æ–°
+	//ãƒ€ã‚¬ãƒ¼ãƒãƒ¬ãƒƒãƒˆ
 	daggerBullets_.remove_if([](std::unique_ptr<EnemyBullet>& bullet) { return bullet->IsDead(); });
 	for (std::unique_ptr<EnemyBullet>& bullet : daggerBullets_) {
 		bullet->Update();
 		if (bullet->isPop) {
-			//‰¼‚ÅƒvƒŒƒCƒ„[‚Æ‚Ì‚â‚èæ‚è
+			//ä»®ã§ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã®ã‚„ã‚Šå–ã‚Š
 			if (coll.CircleCollision(player_->GetWorldPosition(), bullet->GetPos(), 1.0f, 1.0f)) {
 				player_->OnCollision();
 				bullet->OnCollision();
 			}
 		}
 	}
-	//ƒNƒŠƒXƒ^ƒ‹ƒoƒŒƒbƒg
+	//ã‚¯ãƒªã‚¹ã‚¿ãƒ«ãƒãƒ¬ãƒƒãƒˆ
 	crystalBullets_.remove_if([](std::unique_ptr<EnemyCrystalBullet>& bullet) { return bullet->IsDead(); });
 	for (std::unique_ptr<EnemyCrystalBullet>& bullet : crystalBullets_) {
 		bullet->Update();
-		{//‰¼‚ÅƒvƒŒƒCƒ„[‚Æ‚Ì‚â‚èæ‚è
+		{//ä»®ã§ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã®ã‚„ã‚Šå–ã‚Š
 			if (coll.CircleCollision(player_->GetWorldPosition(), bullet->GetWorldPosition(), 2.0f, 2.0f)) {
 				player_->OnCollision();
 				bullet->OnCollision();
@@ -120,20 +120,20 @@ void Enemy::Update() {
 	}
 	attackInterval--;
 
-	if (attackInterval <= 0) {
-		switch (phase_) {
-		case Phase::Approach:
-			enemyResetTimer = 0;
-			enemyAttackTimer++;
+	switch (phase_) {
+	case Phase::Approach:
+		enemyResetTimer = 0;
+		enemyAttackTimer++;
 
-			//ƒtƒF[ƒYˆÚs
-			if (enemyAttackTimer >= 450) {
-				phase_ = Phase::ReLeave;
-				numberOfAttacks++;
-				AttackInterval();
-			}
+		//ãƒ•ã‚§ãƒ¼ã‚ºç§»è¡Œ
+		if (enemyAttackTimer >= 450) {
+			phase_ = Phase::ReLeave;
+			numberOfAttacks++;
+			AttackInterval();
+		}
 
-			//UŒ‚‚·‚é‚Ü‚ÅˆÚ“®
+
+			//æ”»æ’ƒã™ã‚‹ã¾ã§ç§»å‹•
 			if (enemyAttackTimer >= 0 && enemyAttackTimer <= 9) {
 				enemyObj_->wtf.position.z += 0.1f;
 
@@ -144,7 +144,7 @@ void Enemy::Update() {
 				enemyAttack5Obj_->wtf.position.z += 0.1f;
 				enemyAttack6Obj_->wtf.position.z += 0.1f;
 			}
-			//UŒ‚‚·‚é‚Ü‚ÅˆÚ“®
+			//æ”»æ’ƒã™ã‚‹ã¾ã§ç§»å‹•
 			if (enemyAttackTimer >= 150 && enemyAttackTimer <= 190) {
 				enemyObj_->wtf.position.z += 0.05f;
 				enemyObj_->wtf.position.x += 0.1f;
@@ -168,23 +168,24 @@ void Enemy::Update() {
 				enemyAttack6Obj_->wtf.position.x += 0.1f;
 			}
 
-			//ƒ_ƒK[ƒtƒ@ƒ“ƒlƒ‹‚ğ•b”‚ÅUŒ‚‚³‚¹‚é
-			if (enemyAttackTimer == 10 || enemyAttackTimer == 200 || enemyAttackTimer == 250) {
-				CreatDaggerBullet(5);
-			}
+		//ãƒ€ã‚¬ãƒ¼ãƒ•ã‚¡ãƒ³ãƒãƒ«ã‚’ç§’æ•°ã§æ”»æ’ƒã•ã›ã‚‹
+		if (enemyAttackTimer == 10 || enemyAttackTimer == 200 || enemyAttackTimer == 250) {
+			CreatDaggerBullet(5);
+		}
 
 
-			break;
-		case Phase::Leave:
+		break;
+	case Phase::Leave:
 
-			enemyAttackTimer2++;
-			if (enemyAttackTimer2 >= 300) {
-				phase_ = Phase::ReLeave;
-				numberOfAttacks++;
-				AttackInterval();
-			}
+		enemyAttackTimer2++;
+		if (enemyAttackTimer2 >= 300) {
+			phase_ = Phase::ReLeave;
+			numberOfAttacks++;
+			AttackInterval();
+		}
 
-			//UŒ‚‚·‚é‚Ü‚ÅˆÚ“®
+
+			//æ”»æ’ƒã™ã‚‹ã¾ã§ç§»å‹•
 			if (enemyAttackTimer2 >= 0 && enemyAttackTimer2 <= 9) {
 				enemyObj_->wtf.position.z -= 0.05f;
 				enemyObj_->wtf.position.x -= 0.1f;
@@ -208,21 +209,23 @@ void Enemy::Update() {
 				enemyAttack6Obj_->wtf.position.x -= 0.1f;
 
 			}
-			//‡”Ô‚ÉUŒ‚‚·‚é’e‚ğ•b”‚ÅUŒ‚‚³‚¹‚é
+			//é †ç•ªã«æ”»æ’ƒã™ã‚‹å¼¾ã‚’ç§’æ•°ã§æ”»æ’ƒã•ã›ã‚‹
 			if (enemyAttackTimer2 == 10) {
 				CreatCrystalBullet();
 			}
 
-			break;
-		case Phase::ReLeave:
-			//enemyResetTimer++;
-			//if (enemyResetTimer >= 50) {
-			//	phase_ = Phase::Random;
-			//}
+
+		break;
+	case Phase::ReLeave:
+		//enemyResetTimer++;
+		//if (enemyResetTimer >= 50) {
+		//	phase_ = Phase::Random;
+		//}
+		if (attackInterval <= 0) {
 			enemyAttackTimer = 0;
 			enemyAttackTimer2 = 0;
 			enemyAttackTimer3 = 0;
-			//‹ß‹——£
+			//è¿‘è·é›¢
 			if (AttckNmb == 1) {
 				if (randomAttck <= 5) {
 					phase_ = Phase::Approach;
@@ -234,7 +237,7 @@ void Enemy::Update() {
 					phase_ = Phase::ShortAttack;
 				}
 			}
-			//’†‹——£
+			//ä¸­è·é›¢
 			else if (AttckNmb == 2) {
 				if (randomAttck <= 5) {
 					phase_ = Phase::Leave;
@@ -246,7 +249,7 @@ void Enemy::Update() {
 					phase_ = Phase::Approach;
 				}
 			}
-			//‰“‹——£
+			//é è·é›¢
 			else if (AttckNmb == 3) {
 				if (randomAttck <= 5) {
 					phase_ = Phase::ShortAttack;
@@ -258,6 +261,7 @@ void Enemy::Update() {
 					phase_ = Phase::Leave;
 				}
 			}
+
 			break;
 		case Phase::ShortAttack:
 			enemyAttackTimer3++;
@@ -276,7 +280,8 @@ void Enemy::Update() {
 			}
 
 			break;
-		}
+      }
+
 	}
 	if (numberOfAttacks >= 3) {
 		AttckNmb = 0;
@@ -324,7 +329,7 @@ void Enemy::CreatCrystalBullet() {
 }
 
 void Enemy::Draw() {
-	//“G‚Ìƒ‚[ƒVƒ‡ƒ“ŠÇ—
+	//æ•µã®ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç®¡ç†
 	enemyAttackRoteTimer++;
 	if (enemyAttackRoteTimer >= 125 && enemyAttackRoteTimer <= 145) {
 		enemyAttack1Obj_->Draw();
@@ -390,15 +395,15 @@ void Enemy::Draw() {
 
 void Enemy::AttackInterval()
 {
-	attackInterval = 20;
+	attackInterval = 250;
 
 }
 
 Vector3 Enemy::GetWorldPosition()
 {
-	//ƒ[ƒ‹ƒhÀ•W‚ğ“ü‚ê‚é•Ï”
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’å…¥ã‚Œã‚‹å¤‰æ•°
 	Vector3 worldPos;
-	//ƒ[ƒ‹ƒhs—ñ‚Ì•½sˆÚ“®¬•ª
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã®å¹³è¡Œç§»å‹•æˆåˆ†
 	worldPos.x = enemyObj_->wtf.position.x;
 	worldPos.y = enemyObj_->wtf.position.y;
 	worldPos.z = enemyObj_->wtf.position.z;
