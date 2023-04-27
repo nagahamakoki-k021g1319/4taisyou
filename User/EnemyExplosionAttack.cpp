@@ -19,3 +19,11 @@ void EnemyExplosionAttack::Draw()
 void EnemyExplosionAttack::Explosion()
 {
 }
+
+void EnemyExplosionAttack::OnCollision()
+{
+}
+
+void EnemyExplosionAttack::PlayerVec()
+{
+}
