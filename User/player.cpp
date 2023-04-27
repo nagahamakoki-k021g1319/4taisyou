@@ -355,7 +355,7 @@ void Player::Draw() {
 	if (isLive) {
 		
 		//弱攻撃のモーション
-		if (input_->PushKey(DIK_3) || input_->PButtonTrigger(X)) {
+		if (input_->PButtonTrigger(X) || input_->PButtonTrigger(Y)) {
 
 			attackFlag = 1;
 		}
