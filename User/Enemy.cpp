@@ -7,6 +7,18 @@ Enemy::Enemy() {
 Enemy::~Enemy() {
 	delete enemyObj_;
 	delete enemyModel_;
+	delete enemyAttack1Obj_;
+	delete enemyAttack1Model_;
+	delete enemyAttack2Obj_;
+	delete enemyAttack2Model_;
+	delete enemyAttack3Obj_;
+	delete enemyAttack3Model_;
+	delete enemyAttack4Obj_;
+	delete enemyAttack4Model_;
+	delete enemyAttack5Obj_;
+	delete enemyAttack5Model_;
+	delete enemyAttack6Obj_;
+	delete enemyAttack6Model_;
 	delete daggerBulletModel_;
 	daggerBullets_.clear();
 	delete enemyCBModel_;
@@ -20,6 +32,35 @@ void Enemy::Initialize(Vector3 pos) {
 	enemyObj_->SetModel(enemyModel_);
 	enemyObj_->wtf.position = pos;
 
+	enemyAttack1Model_ = Model::LoadFromOBJ("enemyattack1");
+	enemyAttack1Obj_ = Object3d::Create();
+	enemyAttack1Obj_->SetModel(enemyAttack1Model_);
+	enemyAttack1Obj_->wtf.position = pos;
+		
+	enemyAttack2Model_ = Model::LoadFromOBJ("enemyattack2");
+	enemyAttack2Obj_ = Object3d::Create();
+	enemyAttack2Obj_->SetModel(enemyAttack2Model_);
+	enemyAttack2Obj_->wtf.position = pos;
+		
+	enemyAttack3Model_ = Model::LoadFromOBJ("enemyattack3");
+	enemyAttack3Obj_ = Object3d::Create();
+	enemyAttack3Obj_->SetModel(enemyAttack3Model_);
+	enemyAttack3Obj_->wtf.position = pos;
+		
+	enemyAttack4Model_ = Model::LoadFromOBJ("enemyattack4");
+	enemyAttack4Obj_ = Object3d::Create();
+	enemyAttack4Obj_->SetModel(enemyAttack4Model_);
+	enemyAttack4Obj_->wtf.position = pos;
+		 
+	enemyAttack5Model_ = Model::LoadFromOBJ("enemyattack5");
+	enemyAttack5Obj_ = Object3d::Create();
+	enemyAttack5Obj_->SetModel(enemyAttack5Model_);
+	enemyAttack5Obj_->wtf.position = pos;
+		
+	enemyAttack6Model_ = Model::LoadFromOBJ("enemyattack6");
+	enemyAttack6Obj_ = Object3d::Create();
+	enemyAttack6Obj_->SetModel(enemyAttack6Model_);
+	enemyAttack6Obj_->wtf.position = pos;
 	// ƒ_ƒK[ƒtƒ@ƒ“ƒlƒ‹
 	daggerBulletModel_ = Model::LoadFromOBJ("boll");
 	//‡”Ô‚É’e‚ª”ò‚ñ‚Å‚­‚éUŒ‚
@@ -41,7 +82,12 @@ void Enemy::Update() {
 
 	enemyObj_->Update();
 
-
+	enemyAttack1Obj_->Update();
+	enemyAttack2Obj_->Update();
+	enemyAttack3Obj_->Update();
+	enemyAttack4Obj_->Update();
+	enemyAttack5Obj_->Update();
+	enemyAttack6Obj_->Update();
 
 
 	//ŠeŽí‹…XV
@@ -90,11 +136,36 @@ void Enemy::Update() {
 			//UŒ‚‚·‚é‚Ü‚ÅˆÚ“®
 			if (enemyAttackTimer >= 0 && enemyAttackTimer <= 9) {
 				enemyObj_->wtf.position.z += 0.1f;
+
+				enemyAttack1Obj_->wtf.position.z += 0.1f;
+				enemyAttack2Obj_->wtf.position.z += 0.1f;
+				enemyAttack3Obj_->wtf.position.z += 0.1f;
+				enemyAttack4Obj_->wtf.position.z += 0.1f;
+				enemyAttack5Obj_->wtf.position.z += 0.1f;
+				enemyAttack6Obj_->wtf.position.z += 0.1f;
 			}
 			//UŒ‚‚·‚é‚Ü‚ÅˆÚ“®
 			if (enemyAttackTimer >= 150 && enemyAttackTimer <= 190) {
 				enemyObj_->wtf.position.z += 0.05f;
 				enemyObj_->wtf.position.x += 0.1f;
+
+				enemyAttack1Obj_->wtf.position.z += 0.05f;
+				enemyAttack1Obj_->wtf.position.x += 0.1f;
+
+				enemyAttack2Obj_->wtf.position.z += 0.05f;
+				enemyAttack2Obj_->wtf.position.x += 0.1f;
+
+				enemyAttack3Obj_->wtf.position.z += 0.05f;
+				enemyAttack3Obj_->wtf.position.x += 0.1f;
+
+				enemyAttack4Obj_->wtf.position.z += 0.05f;
+				enemyAttack4Obj_->wtf.position.x += 0.1f;
+
+				enemyAttack5Obj_->wtf.position.z += 0.05f;
+				enemyAttack5Obj_->wtf.position.x += 0.1f;
+
+				enemyAttack6Obj_->wtf.position.z += 0.05f;
+				enemyAttack6Obj_->wtf.position.x += 0.1f;
 			}
 
 			//ƒ_ƒK[ƒtƒ@ƒ“ƒlƒ‹‚ð•b”‚ÅUŒ‚‚³‚¹‚é
@@ -117,6 +188,25 @@ void Enemy::Update() {
 			if (enemyAttackTimer2 >= 0 && enemyAttackTimer2 <= 9) {
 				enemyObj_->wtf.position.z -= 0.05f;
 				enemyObj_->wtf.position.x -= 0.1f;
+
+				enemyAttack1Obj_->wtf.position.z -= 0.05f;
+				enemyAttack1Obj_->wtf.position.x -= 0.1f;
+
+				enemyAttack2Obj_->wtf.position.z -= 0.05f;
+				enemyAttack2Obj_->wtf.position.x -= 0.1f;
+
+				enemyAttack3Obj_->wtf.position.z -= 0.05f;
+				enemyAttack3Obj_->wtf.position.x -= 0.1f;
+				
+				enemyAttack4Obj_->wtf.position.z -= 0.05f;
+				enemyAttack4Obj_->wtf.position.x -= 0.1f;
+				
+				enemyAttack5Obj_->wtf.position.z -= 0.05f;
+				enemyAttack5Obj_->wtf.position.x -= 0.1f;
+				
+				enemyAttack6Obj_->wtf.position.z -= 0.05f;
+				enemyAttack6Obj_->wtf.position.x -= 0.1f;
+
 			}
 			//‡”Ô‚ÉUŒ‚‚·‚é’e‚ð•b”‚ÅUŒ‚‚³‚¹‚é
 			if (enemyAttackTimer2 == 10) {
@@ -172,6 +262,12 @@ void Enemy::Update() {
 		case Phase::ShortAttack:
 			enemyAttackTimer3++;
 			shortRenge->Update(player_->GetWorldPosition(), enemyObj_);
+			shortRenge->Update(player_->GetWorldPosition(), enemyAttack1Obj_);
+			shortRenge->Update(player_->GetWorldPosition(), enemyAttack2Obj_);
+			shortRenge->Update(player_->GetWorldPosition(), enemyAttack3Obj_);
+			shortRenge->Update(player_->GetWorldPosition(), enemyAttack4Obj_);
+			shortRenge->Update(player_->GetWorldPosition(), enemyAttack5Obj_);
+			shortRenge->Update(player_->GetWorldPosition(), enemyAttack6Obj_);
 			if (enemyAttackTimer3 >= 120) {
 				shortRenge->ResetAttack();
 				numberOfAttacks++;
@@ -228,8 +324,44 @@ void Enemy::CreatCrystalBullet() {
 }
 
 void Enemy::Draw() {
-	enemyObj_->Draw();
-
+	//“G‚Ìƒ‚[ƒVƒ‡ƒ“ŠÇ—
+	enemyAttackRoteTimer++;
+	if (enemyAttackRoteTimer >= 125 && enemyAttackRoteTimer <= 145) {
+		enemyAttack1Obj_->Draw();
+	}
+	else if (enemyAttackRoteTimer >= 146 && enemyAttackRoteTimer <= 165) {
+		enemyObj_->Draw();
+	}
+	else if (enemyAttackRoteTimer >= 166 && enemyAttackRoteTimer <= 215) {
+		enemyAttack2Obj_->Draw();
+	}
+	else if (enemyAttackRoteTimer >= 230 && enemyAttackRoteTimer <= 250) {
+		enemyAttack3Obj_->Draw();
+	}
+	else if (enemyAttackRoteTimer >= 251 && enemyAttackRoteTimer <= 270) {
+		enemyObj_->Draw();
+	}
+	else if (enemyAttackRoteTimer >= 271 && enemyAttackRoteTimer <= 310) {
+		enemyAttack4Obj_->Draw();
+	}
+	else if (enemyAttackRoteTimer >= 330 && enemyAttackRoteTimer <= 340) {
+		enemyAttack5Obj_->Draw();
+	}
+	else if (enemyAttackRoteTimer >= 341 && enemyAttackRoteTimer <= 360) {
+		enemyAttack6Obj_->Draw();
+	}
+	else if (enemyAttackRoteTimer >= 380 && enemyAttackRoteTimer <= 400) {
+		enemyAttack5Obj_->Draw();
+	}
+	else if (enemyAttackRoteTimer >= 401 && enemyAttackRoteTimer <= 420) {
+		enemyAttack6Obj_->Draw();
+	}
+	else {
+		enemyObj_->Draw();
+	}
+	if (enemyAttackRoteTimer >= 421) {
+		enemyAttackRoteTimer = 0;
+	}
 	for (std::unique_ptr<EnemyBullet>& bullet : daggerBullets_) {
 		bullet->Draw();
 	}
