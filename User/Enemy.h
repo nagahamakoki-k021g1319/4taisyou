@@ -2,6 +2,7 @@
 #include "EnemyBullet.h"
 #include "EnemyCrystalBullet.h"
 #include "EnemyShortRenge.h"
+#include "EnemyExplosionAttack.h"
 
 class Player;
 #include "Collision.h"
@@ -45,6 +46,7 @@ public:
 		Leave,    //—£’E‚·‚é
 		ReLeave,  //Ä—£’E‚·‚é
 		ShortAttack,	//UŒ‚
+		Explosion,		//àÑ”­
 	};
 
 private:
@@ -81,6 +83,11 @@ private:
 	////-----‹ßÚUŒ‚-----////
 	EnemyShortRenge* shortRenge = nullptr;
 	int enemyAttackTimer3 = 0;
+	/////////////////////////
+
+	////-----”š”­UŒ‚-----////
+	EnemyExplosionAttack* explosion = nullptr;
+	int enemyAttackTimer4 = 0;
 	/////////////////////////
 
 	////-----‹——£‚Å•Ï‚í‚éUŒ‚-----////

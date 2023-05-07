@@ -2,6 +2,7 @@
 
 EnemyShortRenge::~EnemyShortRenge()
 {
+	delete attackRenge;
 }
 
 void EnemyShortRenge::Initialize(Model* model_)

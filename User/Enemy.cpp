@@ -12,6 +12,7 @@ Enemy::~Enemy() {
 	delete enemyCBModel_;
 	crystalBullets_.clear();
 	delete shortRenge;
+	delete explosion;
 }
 
 void Enemy::Initialize(Vector3 pos) {
@@ -28,6 +29,9 @@ void Enemy::Initialize(Vector3 pos) {
 
 	shortRenge = new EnemyShortRenge();
 	shortRenge->Initialize(enemyCBModel_);
+
+	explosion = new EnemyExplosionAttack();
+	explosion->Initialize(enemyCBModel_);
 
 
 }
@@ -72,6 +76,12 @@ void Enemy::Update() {
 		player_->OnCollision();
 		shortRenge->ResetAttackColl();
 	}
+
+	if (explosion->GetCollision()) {
+		player_->OnCollision();
+		explosion->ResetHit();
+	}
+
 	attackInterval--;
 
 	switch (phase_) {
@@ -132,6 +142,7 @@ void Enemy::Update() {
 			enemyAttackTimer = 0;
 			enemyAttackTimer2 = 0;
 			enemyAttackTimer3 = 0;
+			enemyAttackTimer4 = 0;
 			//‹ß‹——£
 			if (AttckNmb == 1) {
 				if (randomAttck <= 5) {
@@ -146,26 +157,32 @@ void Enemy::Update() {
 			}
 			//’†‹——£
 			else if (AttckNmb == 2) {
-				if (randomAttck <= 5) {
+				if (randomAttck <= 4) {
 					phase_ = Phase::Leave;
 				}
-				else if (6 <= randomAttck <= 8) {
+				else if (5 <= randomAttck <= 7) {
 					phase_ = Phase::ShortAttack;
 				}
-				else if (9 <= randomAttck) {
+				else if (8 <= randomAttck <= 9) {
 					phase_ = Phase::Approach;
+				}
+				else if (randomAttck == 10) {
+					phase_ = Phase::Explosion;
 				}
 			}
 			//‰“‹——£
 			else if (AttckNmb == 3) {
-				if (randomAttck <= 5) {
+				if (randomAttck <= 4) {
 					phase_ = Phase::ShortAttack;
 				}
-				else if (6 <= randomAttck <= 8) {
+				else if (5 <= randomAttck <= 6) {
 					phase_ = Phase::Approach;
 				}
-				else if (9 <= randomAttck) {
+				else if (7 <= randomAttck<=8) {
 					phase_ = Phase::Leave;
+				}
+				else if (9 <= randomAttck) {
+					phase_ = Phase::Explosion;
 				}
 			}
 		}
@@ -180,6 +197,16 @@ void Enemy::Update() {
 			phase_ = Phase::ReLeave;
 		}
 
+		break;
+	case Phase::Explosion:
+		enemyAttackTimer4++;
+		explosion->Update(player_->GetWorldPosition(), enemyObj_);
+		if (enemyAttackTimer4 >= 350) {
+			explosion->ResetColl();
+			numberOfAttacks++;
+			AttackInterval();
+			phase_ = Phase::ReLeave;
+		}
 		break;
 	}
 	if (numberOfAttacks >= 3) {
@@ -250,6 +277,9 @@ void Enemy::Draw() {
 		break;
 	case Phase::ShortAttack:
 		shortRenge->Draw();
+		break;
+	case Phase::Explosion:
+		explosion->Draw();
 		break;
 	}
 
