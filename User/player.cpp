@@ -361,6 +361,10 @@ void Player::Update(Transform* cam) {
 
 	wolf_->Update(enemyPos_);
 	MpUpdate(mpRegen);
+	if (mp > 100) {
+		mp = 100;
+	}
+	
 
 	debugObj_->Update();
 }
@@ -823,5 +827,12 @@ void Player::Dodge() {
 
 	if (dodgeTimer < 0) {
 		isAction = 0;
+	}
+}
+
+void Player::MpUpdate(float mp) {
+	this->mp += mp;
+	if (mp > 100) {
+		mp = 100;
 	}
 }
