@@ -46,12 +46,13 @@ public:
 	Vector3 GetWorldPosition();
 
 	float GetHp() { return hp; };
+	float GetMp() { return mp; };
 	bool GetIsDodge() { return isDodge; };
 	Vector3 GetCamShake() { return camShakeVec; };
 	Vector3 GetMoveBack();
 	bool GetIsAttackFin() { return isAttackFin; };
-
 	Vector3 GetDodgeMoveVec() { return dodgeMoveVec; };
+	void MpUpdate(float mp) { this->mp += mp; };
 
 	/// <summary>
 	/// ポジション
@@ -108,6 +109,19 @@ private:
 	bool isLive = true;
 	bool isAttackFin;
 	bool nextAttack;
+
+	//MP関連
+	float mp;
+	const float mpRegen = 0.5f / 60;
+	const float mpPuls = 5;
+	//小回復
+	const int heal = defaultHp * 0.2;
+	const int healMp = 20;
+	//大回復
+	const int megaHeal = defaultHp * 0.6;
+	const int megaHealMp = 60;
+	//MP攻撃
+	const int bulletMp = 40;
 
 	//無敵時間
 	bool isInvincible;

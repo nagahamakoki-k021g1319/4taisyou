@@ -20,6 +20,7 @@ GameScene::~GameScene() {
 	delete buttomPng1;
 	delete buttomPng2;
 	delete hpGauge;
+	delete mpGauge;
 	delete unionGauge;
 	delete titlePic;
 	delete selectPic;
@@ -107,6 +108,12 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	hpPosition = hpGauge->GetPosition();
 	hpGauge->SetPozition(hpPosition);
 	hpGauge->SetSize({ 1280.0f, 720.0f });
+
+	mpGauge = new Sprite();
+	mpGauge->Initialize(spriteCommon);
+	mpPosition = mpGauge->GetPosition();
+	mpGauge->SetPozition(mpPosition);
+	mpGauge->SetSize({ 1280.0f, 720.0f });
 
 	unionGauge = new Sprite();
 	unionGauge->Initialize(spriteCommon);
@@ -205,6 +212,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	sru->SetTextureIndex(13);
 	spriteCommon->LoadTexture(14, "srd.png");
 	srd->SetTextureIndex(14);
+	spriteCommon->LoadTexture(15, "mpGauge.png");
+	mpGauge->SetTextureIndex(15);
 
 
 	audio = new Audio();
@@ -343,6 +352,7 @@ void GameScene::Update() {
 		}
 
 		hpGauge->SetPozition({ -400.0f + player_->GetHp() * 4 ,0 });
+		mpGauge->SetPozition({ -300.0f + player_->GetMp() * 3,0 });
     
 
 		floor->Update();
@@ -454,6 +464,7 @@ void GameScene::Draw() {
 			buttomPng1->Draw();
 		}
 		hpGauge->Draw();
+		mpGauge->Draw();
 
 		srr->Draw();
 		srl->Draw();
@@ -475,6 +486,13 @@ void GameScene::CamMove() {
 	if (input->LeftStickInput()) {
 		//カメラの移動
 		Vector3 eyeVelocity = { 0,0,0 };
+		
+		//移動速度
+		float speed = camMoveSpeed;
+		if (input->ButtonInput(RT)) {
+			speed = dashSpeed;
+			player_->MpUpdate(-dashMP);
+		}
 
 		//通常移動
 		if (player_->isAction == 0) {
@@ -486,7 +504,7 @@ void GameScene::CamMove() {
 
 			eyeVelocity = eyeVelocity.nomalize();
 
-			eyeVelocity *= camMoveSpeed;
+			eyeVelocity *= speed;
 		}
 		//回避時移動
 		else if (player_->isAction == 3) {

@@ -92,7 +92,10 @@ void EnemyManager::Update() {
 			isEffFlag = 1;
 
 			isHitStop = true;
+		}
 
+		if (player_->wolf_->CheckAttack2Enemy(enemy->GetWorldPosition(), damage)) {
+			enemy->OnColision(damage);
 		}
 		
 		enemy->Update();

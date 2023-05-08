@@ -166,6 +166,9 @@ void Player::Reset() {
 
 	objRotaTimer = 0;
 
+	//MP関連
+	mp = 100;
+
 }
 
 void Player::Attack() {
@@ -173,23 +176,33 @@ void Player::Attack() {
 		//バディ指示
 		if (input_->PushKey(DIK_LSHIFT) || input_->ButtonInput(LT)) {
 			if (input_->PushKey(DIK_1) || input_->PButtonTrigger(B)) {
-				//近距離
-				wolf_->Attack(1, GetWorldPosition());
-
+				//弾を前方に出す
+				if (mp >= bulletMp) {
+					wolf_->Attack(1, GetWorldPosition());
+					mp -= bulletMp;
+				}
 			}
 			else if (input_->PushKey(DIK_2) || input_->PButtonTrigger(A)) {
-				//遠距離
-				wolf_->Attack(2, GetWorldPosition());
-
 			}
 			else if (input_->PushKey(DIK_3) || input_->PButtonTrigger(Y)) {
-				//溜め近距離
-				wolf_->Attack(3, GetWorldPosition());
-
+				//大回復
+				if (mp >= megaHealMp) {
+					mp -= megaHealMp;
+					hp += megaHeal;
+					if (hp > 100) {
+						hp = 100;
+					}
+				}
 			}
 			else if (input_->PushKey(DIK_4) || input_->PButtonTrigger(X)) {
-				//溜め遠距離
-				wolf_->Attack(4, GetWorldPosition());
+				//小回復
+				if (mp >= healMp) {
+					mp -= healMp;
+					hp += heal;
+					if (hp > 100) {
+						hp = 100;
+					}
+				}
 			}
 		}
 		//本体攻撃入力
@@ -345,8 +358,9 @@ void Player::Update(Transform* cam) {
 	attack2Obj_->Update(cam);
 	attack3Obj_->Update(cam);
 	attack4Obj_->Update(cam);
-	wolf_->Update(enemyPos_);
 
+	wolf_->Update(enemyPos_);
+	MpUpdate(mpRegen);
 
 	debugObj_->Update();
 }
@@ -509,6 +523,7 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 			if (col.CircleCollisionXZ(lightAttackWPos, enemyPos, 0.5f, 1.0f)) {
 				damage = 3;
 				return true;
+				MpUpdate(healMp);
 			}
 		}
 	}
@@ -521,6 +536,7 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 			if (col.CircleCollisionXZ(heavyAttackWPos, enemyPos, 1.0f, 1.0f)) {
 				damage = 7;
 				return true;
+				MpUpdate(healMp);
 			}
 		}
 	}
