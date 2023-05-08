@@ -9,7 +9,7 @@ Wolf::~Wolf() {
 }
 
 void Wolf::Initialize() {
-	bodyModel_ = Model::LoadFromOBJ("wolf");
+	bodyModel_ = Model::LoadFromOBJ("boll");
 	bodyObj_ = Object3d::Create();
 	bodyObj_->SetModel(bodyModel_);
 	bodyObj_->wtf.position = defaultPos;
@@ -31,6 +31,7 @@ void Wolf::ShortRange() {
 
 	if (coll.CircleCollisionXZ(bodyObj_->wtf.position, enemyWtf->position, 2.0f, 2.0f)) {
 		isAttack = false;
+		coolTIme = 0;
 		bodyObj_->wtf.Initialize();
 		bodyObj_->wtf.position = defaultPos;
 	}

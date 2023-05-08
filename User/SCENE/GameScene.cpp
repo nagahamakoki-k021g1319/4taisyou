@@ -20,6 +20,7 @@ GameScene::~GameScene() {
 	delete buttomPng1;
 	delete buttomPng2;
 	delete hpGauge;
+	delete mpGauge;
 	delete unionGauge;
 	delete titlePic;
 	delete selectPic;
@@ -72,6 +73,10 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	skydome->SetModel(skydomeMD);
 	skydome->wtf.scale = (Vector3{ 1000, 1000, 1000 });
 
+	fieldMD = Model::LoadFromOBJ("field");
+	field = Object3d::Create();
+	field->SetModel(fieldMD);
+	field->wtf.scale = (Vector3{ 10, 10, 10 });
 
 	//プレイヤー
 	player_ = new Player();
@@ -103,6 +108,12 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	hpPosition = hpGauge->GetPosition();
 	hpGauge->SetPozition(hpPosition);
 	hpGauge->SetSize({ 1280.0f, 720.0f });
+
+	mpGauge = new Sprite();
+	mpGauge->Initialize(spriteCommon);
+	mpPosition = mpGauge->GetPosition();
+	mpGauge->SetPozition(mpPosition);
+	mpGauge->SetSize({ 1280.0f, 720.0f });
 
 	unionGauge = new Sprite();
 	unionGauge->Initialize(spriteCommon);
@@ -170,6 +181,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	srd->SetPozition(srdPosition);
 	srd->SetSize({ 1280.0f, 720.0f });
 
+	
 	spriteCommon->LoadTexture(0, "UI.png");
 	UI->SetTextureIndex(0);
 	spriteCommon->LoadTexture(1, "buttom1.png");
@@ -200,15 +212,17 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	sru->SetTextureIndex(13);
 	spriteCommon->LoadTexture(14, "srd.png");
 	srd->SetTextureIndex(14);
+	spriteCommon->LoadTexture(15, "mpGauge.png");
+	mpGauge->SetTextureIndex(15);
+
 
 	audio = new Audio();
 	audio->Initialize();
 
-	audio->LoadWave("kako.wav");
-
-
-
-
+	audio->LoadWave("tit.wav");
+	audio->LoadWave("bb.wav");
+	audio->LoadWave("serect.wav");
+	audio->LoadWave("open.wav");
 
 	Reset();
 }
@@ -233,12 +247,16 @@ void GameScene::Update() {
 		//シーン切り替え
 		if (input->PButtonTrigger(B)) {
 			scene = Scene::Select;
+			pSourceVoice[3] = audio->PlayWave("open.wav");
+			pSourceVoice[3]->SetVolume(0.4f);
 		}
 
 		//音声再生
 		if (soundCheckFlag == 0) {
 			//音声再生
-			pSourceVoice[0] = audio->PlayWave("kako.wav");
+
+			pSourceVoice[0] = audio->PlayWave("tit.wav");
+			pSourceVoice[0]->SetVolume(0.1f);
 			soundCheckFlag = 1;
 		}
 
@@ -256,7 +274,11 @@ void GameScene::Update() {
 		srlPosition.x = 0.0f;
 		srl->SetPozition(srlPosition);
 
-
+		enemyManager_->EffTimer = 0;
+		enemyManager_->isEffFlag = 0;
+		player_->EffTimer = 0;
+		player_->isEffFlag = 0;
+		
 		break;
 	case Scene::Select:
 		sruPosition.x -= 50.0f;
@@ -269,33 +291,53 @@ void GameScene::Update() {
 		//ステージの選択
 		if(input->LeftStickInput()) {
 			if (input->PStickTrigger(L_LEFT)) {
+				//音声再生
+				pSourceVoice[2] = audio->PlayWave("serect.wav");
+				pSourceVoice[2]->SetVolume(0.6f);
 				stage = 0;
 			}else if (input->PStickTrigger(L_RIGHT)){
+				//音声再生
+				pSourceVoice[2] = audio->PlayWave("serect.wav");
+				pSourceVoice[2]->SetVolume(0.6f);
 				stage = 1;
 			}
 		}
 
 		//シーン切り替え
 		if (input->PButtonTrigger(B)) {
-			enemyManager_->creatEnemy(stage);
-			Reset();
-			scene = Scene::Play;
+			if (stage == 0) {
+				enemyManager_->creatEnemy(stage);
+				Reset();
+				scene = Scene::Play;
+				pSourceVoice[3] = audio->PlayWave("open.wav");
+				pSourceVoice[3]->SetVolume(0.4f);
+			}
 		}
-
 		break;
 	case Scene::Play:
+		pSourceVoice[0]->Stop();
+		soundCheckFlag = 0;
+		//音声再生
+		if (soundCheckFlag2 == 0) {
+			//音声再生
+			pSourceVoice[1] = audio->PlayWave("bb.wav");
+			pSourceVoice[1]->SetVolume(0.1f);
+			soundCheckFlag2 = 1;
+		}
 		CamUpdate();
-
+		CdTimer++;
+	
 		srrPosition.x -= 30.0f;
 		srr->SetPozition(srrPosition);
 		
 		srlPosition.x += 30.0f;
 		srl->SetPozition(srlPosition);
 
-
+		
 		enemyManager_->Update();
 		
 		player_->Update(&camWtf);
+
 
 
 		if (enemyManager_->isHitStop) {
@@ -310,10 +352,12 @@ void GameScene::Update() {
 		}
 
 		hpGauge->SetPozition({ -400.0f + player_->GetHp() * 4 ,0 });
+		mpGauge->SetPozition({ -300.0f + player_->GetMp() * 3,0 });
     
 
 		floor->Update();
 		skydome->Update();
+		field->Update();
 
 		//シーン切り替え
 		if (player_->GetHp() < 0) {
@@ -321,25 +365,26 @@ void GameScene::Update() {
 		}else if (enemyManager_->IsAllEnemyDead()) {
 			scene = Scene::Clear;
 		}
-
 		break;
 	case Scene::Clear:
-		pSourceVoice[0]->Stop();
-		soundCheckFlag = 0;
+		pSourceVoice[1]->Stop();
+		soundCheckFlag2 = 0;
 		//シーン切り替え
 		if (input->PButtonTrigger(B)) {
 			scene = Scene::Title;
+			pSourceVoice[2] = audio->PlayWave("serect.wav");
+			pSourceVoice[2]->SetVolume(0.6f);
 		}
-
 		break;
 	case Scene::Gameover:
-		pSourceVoice[0]->Stop();
-		soundCheckFlag = 0;
+		pSourceVoice[1]->Stop();
+		soundCheckFlag2 = 0;
 		//シーン切り替え
 		if (input->PButtonTrigger(B)) {
 			scene = Scene::Title;
+			pSourceVoice[2] = audio->PlayWave("serect.wav");
+			pSourceVoice[2]->SetVolume(0.6f);
 		}
-
 		break;
 	}
 }
@@ -360,9 +405,6 @@ void GameScene::Draw() {
 	{
 	case Scene::Title:
 
-
-
-
 		break;
 	case Scene::Play:
 		
@@ -370,8 +412,9 @@ void GameScene::Draw() {
 		enemyManager_->Draw();
 		
     
-    floor->Draw();
-    skydome->Draw();
+		floor->Draw();
+		skydome->Draw();
+		field->Draw();
 		break;
 	case Scene::Clear:
 
@@ -386,7 +429,7 @@ void GameScene::Draw() {
 	Object3d::PostDraw();
 
 
-	//// パーティクルの描画
+	//// パーティクル UI スプライト描画
 	switch (scene)
 	{
 	case Scene::Title:
@@ -400,6 +443,7 @@ void GameScene::Draw() {
 		if (stage == 0) {sordUI->Draw();}
 		else if (stage == 1) { sord2UI->Draw(); }
 
+		
 		sru->Draw();
 		srd->Draw();
 		break;
@@ -420,7 +464,7 @@ void GameScene::Draw() {
 			buttomPng1->Draw();
 		}
 		hpGauge->Draw();
-		unionGauge->Draw();
+		mpGauge->Draw();
 
 		srr->Draw();
 		srl->Draw();
@@ -442,6 +486,13 @@ void GameScene::CamMove() {
 	if (input->LeftStickInput()) {
 		//カメラの移動
 		Vector3 eyeVelocity = { 0,0,0 };
+		
+		//移動速度
+		float speed = camMoveSpeed;
+		if (input->ButtonInput(RT)) {
+			speed = dashSpeed;
+			player_->MpUpdate(-dashMP);
+		}
 
 		//通常移動
 		if (player_->isAction == 0) {
@@ -453,7 +504,7 @@ void GameScene::CamMove() {
 
 			eyeVelocity = eyeVelocity.nomalize();
 
-			eyeVelocity *= camMoveSpeed;
+			eyeVelocity *= speed;
 		}
 		//回避時移動
 		else if (player_->isAction == 3) {
@@ -464,8 +515,22 @@ void GameScene::CamMove() {
 		//移動ベクトルを向いてる方向に合わせる
 		eyeVelocity = bVelocity(eyeVelocity, camWtf);
 
+		Vector3 pos = player_->GetWorldPosition() + eyeVelocity;
+		if (pos.x > 50) {
+			eyeVelocity += {-0.2, 0, 0};
+		}
+		else if (pos.x < -50) {
+			eyeVelocity += {0.2, 0, 0};
+		}
+		if (pos.z > 50) {
+			eyeVelocity += {0, 0, -0.2};
+		}
+		else if (pos.z < -50) {
+			eyeVelocity += {0, 0, 0.2};
+		}
+
 		//更新
-		camWtf.position += eyeVelocity;
+		camWtf.position += eyeVelocity + player_->GetMoveBack();
 	}
 
 }
@@ -496,9 +561,13 @@ void GameScene::CamRota() {
 		targetTheta = PI / 3;
 	}
 	
+
 	//視点は一定の距離
 	targetWtf.position.z = cos(targetTheta) * targetDistance;
 	targetWtf.position.y = sin(targetTheta) * targetDistance;
+
+
+	targetWtf.position += player_->GetCamShake();
 }
 
 void GameScene::CamUpdate() {

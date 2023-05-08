@@ -1,5 +1,10 @@
 #include"player.h"
 
+
+
+
+
+
 Player::Player() {
 
 }
@@ -7,9 +12,24 @@ Player::Player() {
 Player::~Player() {
 	delete bodyObj_;
 	delete bodyModel_;
+	delete dash1Obj_;
+	delete dash1Model_;
+	delete dash2Obj_;
+	delete dash2Model_;
+	delete dash3Obj_;
+	delete dash3Model_;
+	delete dash4Obj_;
+	delete dash4Model_;
+	delete attack1Obj_;
+	delete attack1Model_;
+	delete attack2Obj_;
+	delete attack2Model_;
+	delete attack3Obj_;
+	delete attack3Model_;
+	delete attack4Obj_;
+	delete attack4Model_;
+
 	delete wolf_;
-
-
 
 	delete debugObj_;
 	delete debugModel_;
@@ -18,26 +38,64 @@ Player::~Player() {
 void Player::Initialize(Input* input) {
 	input_ = input;
 
-	//ƒvƒŒƒCƒ„[İ’è
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼è¨­å®š
 	bodyModel_ = Model::LoadFromOBJ("player");
 	bodyObj_ = Object3d::Create();
 	bodyObj_->SetModel(bodyModel_);
 
-	//ƒp[ƒeƒBƒNƒ‹¶¬
+	dash1Model_ = Model::LoadFromOBJ("Ldash1");
+	dash1Obj_ = Object3d::Create();
+	dash1Obj_->SetModel(dash1Model_);
+
+	dash2Model_ = Model::LoadFromOBJ("Ldash2");
+	dash2Obj_ = Object3d::Create();
+	dash2Obj_->SetModel(dash2Model_);
+
+	dash3Model_ = Model::LoadFromOBJ("Rdash1");
+	dash3Obj_ = Object3d::Create();
+	dash3Obj_->SetModel(dash3Model_);
+
+	dash4Model_ = Model::LoadFromOBJ("Rdash2");
+	dash4Obj_ = Object3d::Create();
+	dash4Obj_->SetModel(dash4Model_);
+
+	attack1Model_ = Model::LoadFromOBJ("attack1");
+	attack1Obj_ = Object3d::Create();
+	attack1Obj_->SetModel(attack1Model_);
+	
+	attack2Model_ = Model::LoadFromOBJ("attack2");
+	attack2Obj_ = Object3d::Create();
+	attack2Obj_->SetModel(attack2Model_);
+	
+	attack3Model_ = Model::LoadFromOBJ("attack3");
+	attack3Obj_ = Object3d::Create();
+	attack3Obj_->SetModel(attack3Model_);
+	
+	attack4Model_ = Model::LoadFromOBJ("attack4");
+	attack4Obj_ = Object3d::Create();
+	attack4Obj_->SetModel(attack4Model_);
+
+
+	//ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ç”Ÿæˆ
 	particleManager = std::make_unique<ParticleManager>();
 	particleManager.get()->Initialize();
 	particleManager->LoadTexture("blod.png");
 	particleManager->Update();
 
-	//ƒoƒfƒB
+	//ãƒãƒ‡ã‚£
 	wolf_ = new Wolf();
 	wolf_->Initialize();
 	wolf_->SetPlayerWtf(&bodyObj_->wtf);
 
-	//ƒfƒoƒbƒO—p
+	//ãƒ‡ãƒãƒƒã‚°ç”¨
 	debugModel_ = Model::LoadFromOBJ("boll");
 	debugObj_ = Object3d::Create();
+	debugObj_->wtf.scale.x = 2;
+	debugObj_->wtf.scale.y = 2;
+	debugObj_->wtf.scale.z = 2;
 	debugObj_->SetModel(debugModel_);
+
+	audio = new Audio();
 
 	Reset();
 }
@@ -45,83 +103,125 @@ void Player::Initialize(Input* input) {
 void Player::Reset() {
 	bodyObj_->wtf.Initialize();
 	bodyObj_->wtf.position = { 0,-3,8 };
+
+	dash1Obj_->wtf.Initialize();
+	dash1Obj_->wtf.position = { 0,-3,8 };
+
+	dash2Obj_->wtf.Initialize();
+	dash2Obj_->wtf.position = { 0,-3,8 };
+
+	dash3Obj_->wtf.Initialize();
+	dash3Obj_->wtf.position = { 0,-3,8 };
+
+	dash4Obj_->wtf.Initialize();
+	dash4Obj_->wtf.position = { 0,-3,8 };
+
+	attack1Obj_->wtf.Initialize();
+	attack1Obj_->wtf.position = { 0,-3,8 };
+	
+	attack2Obj_->wtf.Initialize();
+	attack2Obj_->wtf.position = { 0,-3,8 };
+	
+	attack3Obj_->wtf.Initialize();
+	attack3Obj_->wtf.position = { 0,-3,8 };
+	
+	attack4Obj_->wtf.Initialize();
+	attack4Obj_->wtf.position = { 0,-3,8 };
+
 	hp = defaultHp;
 	isAction = 0;
 	isLive = true;
 	isAttackFin = false;
 	nextAttack = false;
 
-	//ãUŒ‚
+	//å¼±æ”»æ’ƒ
 	lightAttackLPos = { 0,0,3 };
-	//‰½‰ñ‚ß‚Ì˜AŒ‚‚©
+	//ä½•å›ã‚ã®é€£æ’ƒã‹
 	lightAttackCount = 0;
-	//UŒ‚‚Ì“–‚½‚è”»’è‚Ì—L–³
+	//æ”»æ’ƒã®å½“ãŸã‚Šåˆ¤å®šã®æœ‰ç„¡
 	isLightAttack = false;
 	lightAttackTimer = 60;
 
 
-	//ãUŒ‚
+	//å¼±æ”»æ’ƒ
 	heavyAttackLPos = { 0,0,5 };
-	//‰½‰ñ‚ß‚Ì˜AŒ‚‚©
+	//ä½•å›ã‚ã®é€£æ’ƒã‹
 	heavyAttackCount = 0;
-	//UŒ‚‚Ì“–‚½‚è”»’è‚Ì—L–³
+	//æ”»æ’ƒã®å½“ãŸã‚Šåˆ¤å®šã®æœ‰ç„¡
 	isHeavyAttack = false;
 	heavyAttackTimer = 60;
 
+	//ï¿½ï¿½ÊƒVï¿½Fï¿½Cï¿½N
+	isCamShake = false;
+	camShakeTimer = camShakeLimit;
 
-	//‰ñ”ğİ’è
+	//å›é¿è¨­å®š
 	dodgeTimer = dodgeLimit;
 	isDodge = false;
 
-	audio = new Audio();
+
 	audio->Initialize();
+	audio->LoadWave("col.wav");
+	audio->LoadWave("kaihi.wav");
 
-	audio->LoadWave("kouka.wav");
+	objRotaTimer = 0;
 
+	//MPé–¢é€£
+	mp = 100;
 
 }
 
 void Player::Attack() {
 	if (isAction == 0) {
-		//ƒoƒfƒBw¦
+		//ãƒãƒ‡ã‚£æŒ‡ç¤º
 		if (input_->PushKey(DIK_LSHIFT) || input_->ButtonInput(LT)) {
 			if (input_->PushKey(DIK_1) || input_->PButtonTrigger(B)) {
-				//‹ß‹——£
-				wolf_->Attack(1, GetWorldPosition());
-
+				//å¼¾ã‚’å‰æ–¹ã«å‡ºã™
+				if (mp >= bulletMp) {
+					wolf_->Attack(1, GetWorldPosition());
+					mp -= bulletMp;
+				}
 			}
 			else if (input_->PushKey(DIK_2) || input_->PButtonTrigger(A)) {
-				//‰“‹——£
-				wolf_->Attack(2, GetWorldPosition());
-
 			}
 			else if (input_->PushKey(DIK_3) || input_->PButtonTrigger(Y)) {
-				//—­‚ß‹ß‹——£
-				wolf_->Attack(3, GetWorldPosition());
-
+				//å¤§å›å¾©
+				if (mp >= megaHealMp) {
+					mp -= megaHealMp;
+					hp += megaHeal;
+					if (hp > 100) {
+						hp = 100;
+					}
+				}
 			}
 			else if (input_->PushKey(DIK_4) || input_->PButtonTrigger(X)) {
-				//—­‚ß‰“‹——£
-				wolf_->Attack(4, GetWorldPosition());
+				//å°å›å¾©
+				if (mp >= healMp) {
+					mp -= healMp;
+					hp += heal;
+					if (hp > 100) {
+						hp = 100;
+					}
+				}
 			}
 		}
-		//–{‘ÌUŒ‚“ü—Í
+		//æœ¬ä½“æ”»æ’ƒå…¥åŠ›
 		else {
-			//ãUŒ‚
+			//å¼±æ”»æ’ƒ
 			if (input_->PushKey(DIK_4) || input_->PButtonTrigger(X)) {
 				isAction = 1;
 				lightAttackCount = 0;
 				lightAttackTimer = lightAttackLimit[0];
 				isAttackFin = false;
 			}
-			//‹­UŒ‚
+			//å¼·æ”»æ’ƒ
 			if (input_->PushKey(DIK_1) || input_->PButtonTrigger(Y)) {
 				isAction = 2;
 				heavyAttackCount = 0;
 				heavyAttackTimer = heavyAttackLimit[0];
 				isAttackFin = false;
 			}
-			//‰ñ”ğ
+			//å›é¿
 			if (input_->PushKey(DIK_3) || input_->ButtonInput(B)) {
 				if (input_->LeftStickInput()) {
 					isAction = 3;
@@ -138,16 +238,16 @@ void Player::Attack() {
 		}
 	}
 
-	//UŒ‚XV
-	//ãUŒ‚
+	//æ”»æ’ƒæ›´æ–°
+	//å¼±æ”»æ’ƒ
 	else if (isAction == 1) {
 		LightAttack();
 	}
-	//‹­UŒ‚
+	//å¼·æ”»æ’ƒ
 	else if (isAction == 2) {
 		HeavyAttack();
 	}
-	//‰ñ”ğ
+	//å›é¿
 	else if (isAction == 3) {
 		Dodge();
 	}
@@ -155,17 +255,21 @@ void Player::Attack() {
 
 void Player::OnCollision() {
 	if (isInvincible == false) {
-		//‰ñ”ğ
+		//å›é¿æ™‚
 		if (isDodge) {
-
+			pSourceVoice[1] = audio->PlayWave("kaihi.wav");
+			pSourceVoice[1]->SetVolume(0.7f);
 		}
-		//’Êí
+		//é€šå¸¸æ™‚
 		else {
 			hp -= 10;
 			isEffFlag = 1;
-			pSourceVoice[0] = audio->PlayWave("kouka.wav");
+			pSourceVoice[0] = audio->PlayWave("col.wav");
 			isInvincible = true;
 			invincibleTimer = invincibleLimit;
+
+			isCamShake = true;
+			camShakeTimer = camShakeLimit;
 
 			if (hp < 0) {
 				isLive = false;
@@ -182,6 +286,23 @@ void Player::Rota() {
 			float theta = atan2(stickVec.x, stickVec.y);
 
 			bodyObj_->wtf.rotation.y = theta;
+
+			dash1Obj_->wtf.rotation.y = theta;
+
+			dash2Obj_->wtf.rotation.y = theta;
+
+			dash3Obj_->wtf.rotation.y = theta;
+
+			dash4Obj_->wtf.rotation.y = theta;
+
+			attack1Obj_->wtf.rotation.y = theta;
+
+			attack2Obj_->wtf.rotation.y = theta;
+
+			attack3Obj_->wtf.rotation.y = theta;
+
+			attack4Obj_->wtf.rotation.y = theta;
+
 		}
 	}
 }
@@ -196,6 +317,7 @@ void Player::Update(Transform* cam) {
 
 	Rota();
 	Attack();
+
 	if (isEffFlag == 1) {
 		EffTimer++;
 	}
@@ -207,53 +329,145 @@ void Player::Update(Transform* cam) {
 		EffTimer = 0;
 	}
 
-
+	//ï¿½ï¿½ÊƒVï¿½Fï¿½Cï¿½N
+	if (isCamShake == true) {
+		camShakeTimer--;
+		if (camShakeTimer <= camShakeLimit && camShakeTimer > camShakeLimit * 3 / 4) {
+			camShakeVec.y += 0.05f;
+			camShakeVec.z += 0.05f;
+		}else if (camShakeTimer <= camShakeLimit * 3 / 4 && camShakeTimer > camShakeLimit * 2 / 4) {
+			camShakeVec.y -= 0.05f;
+			camShakeVec.z -= 0.05f;
+		}else if (camShakeTimer <= camShakeLimit * 2 / 4 && camShakeTimer > camShakeLimit * 1 / 4) {
+			camShakeVec.y += 0.05f;
+			camShakeVec.z += 0.05f;
+		}else if (camShakeTimer <= camShakeLimit * 1 / 4 && camShakeTimer > 0) {
+			camShakeVec.y -= 0.05f;
+			camShakeVec.z -= 0.05f;
+		}else if (camShakeTimer <= 0) {
+			isCamShake = false;
+			camShakeVec = { 0,0,0 };
+		}
+	}
 	bodyObj_->Update(cam);
+	dash1Obj_->Update(cam);
+	dash2Obj_->Update(cam);
+	dash3Obj_->Update(cam);
+	dash4Obj_->Update(cam);
+	attack1Obj_->Update(cam);
+	attack2Obj_->Update(cam);
+	attack3Obj_->Update(cam);
+	attack4Obj_->Update(cam);
+
 	wolf_->Update(enemyPos_);
+	MpUpdate(mpRegen);
 
 	debugObj_->Update();
 }
 
 void Player::Draw() {
 	if (isLive) {
-		bodyObj_->Draw();
+		
+		//å¼±æ”»æ’ƒã®ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
+		if (input_->PButtonTrigger(X) || input_->PButtonTrigger(Y)) {
+
+			attackFlag = 1;
+		}
+		if (attackFlag == 1) {
+			objAttackTimer--;
+
+			if (objAttackTimer >= 12 && objAttackTimer <= 16) {
+				attack1Obj_->Draw();
+			}
+			else if (objAttackTimer >= 8 && objAttackTimer <= 11) {
+				attack2Obj_->Draw();
+			}
+			else if (objAttackTimer >= 4 && objAttackTimer <= 7) {
+				attack3Obj_->Draw();
+			}
+			else if (objAttackTimer >= 0 && objAttackTimer <= 3) {
+				attack4Obj_->Draw();
+			}
+			if (objAttackTimer <= 0) {
+				attackFlag = 0;
+				objAttackTimer = 16;
+			}
+		}
+		if (attackFlag == 0) {
+			//ç§»å‹•ã®ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
+			if (input_->LeftStickInput()) {
+
+				objRotaTimer--;
+				if (objRotaTimer >= 25 && objRotaTimer <= 30) {
+					dash1Obj_->Draw();
+				}
+				else if (objRotaTimer >= 20 && objRotaTimer <= 24) {
+					dash2Obj_->Draw();
+				}
+				else if (objRotaTimer >= 15 && objRotaTimer <= 19) {
+					dash3Obj_->Draw();
+				}
+				else if (objRotaTimer >= 10 && objRotaTimer <= 14) {
+					dash4Obj_->Draw();
+				}
+				else if (objRotaTimer >= 5 && objRotaTimer <= 9) {
+					dash3Obj_->Draw();
+				}
+				else if (objRotaTimer >= 0 && objRotaTimer <= 4) {
+					dash2Obj_->Draw();
+				}
+
+				if (objRotaTimer <= 0) {
+					objRotaTimer = 30;
+				}
+			}
+			else {
+				if (attackFlag == 0) {
+					bodyObj_->Draw();
+				}
+
+				objRotaTimer = 0;
+			}
+		}
+
 		wolf_->Draw();
 
-		//ƒfƒoƒbƒO—p
-		if (isLightAttack) {
-			debugObj_->Draw();
-		}
-		if (isHeavyAttack) {
-			debugObj_->Draw();
-		}
+		////ãƒ‡ãƒãƒƒã‚°ç”¨
+		//if (isLightAttack) {
+		//	debugObj_->Draw();
+		//}
+		//if (isHeavyAttack) {
+		//	debugObj_->Draw();
+		//}
 	}
 }
 
 void Player::EffUpdate()
 {
-	//ƒp[ƒeƒBƒNƒ‹”ÍˆÍ
+	//ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ç¯„å›²
 	for (int i = 0; i < 20; i++) {
-		//X,Y,Z‘S‚Ä[-5.0f,+5.0f]‚Åƒ‰ƒ“ƒ_ƒ€‚É•ª•z
+		//X,Y,Zå…¨ã¦[-5.0f,+5.0f]ã§ãƒ©ãƒ³ãƒ€ãƒ ã«åˆ†å¸ƒ
 		const float rnd_pos = 0.01f;
 		Vector3 pos{};
 		pos.x += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 		pos.y += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 		pos.z += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 		pos += GetWorldPosition();
-		//‘¬“x
-		//X,Y,Z‘S‚Ä[-0.05f,+0.05f]‚Åƒ‰ƒ“ƒ_ƒ€‚É•ª•z
+		pos.y += 1.0f;
+		//é€Ÿåº¦
+		//X,Y,Zå…¨ã¦[-0.05f,+0.05f]ã§ãƒ©ãƒ³ãƒ€ãƒ ã«åˆ†å¸ƒ
 		const float rnd_vel = 0.1f;
 		Vector3 vel{};
 		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		//d—Í‚ÉŒ©—§‚Ä‚ÄY‚Ì‚İ[-0.001f,0]‚Åƒ‰ƒ“ƒ_ƒ€‚É•ª•z
+		//é‡åŠ›ã«è¦‹ç«‹ã¦ã¦Yã®ã¿[-0.001f,0]ã§ãƒ©ãƒ³ãƒ€ãƒ ã«åˆ†å¸ƒ
 		const float rnd_acc = 0.00001f;
 		Vector3 acc{};
 		acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
 		acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
 
-		//’Ç‰Á
+		//è¿½åŠ 
 		particleManager->Add(60, pos, vel, acc, 1.0f, 0.0f);
 
 		particleManager->Update();
@@ -264,7 +478,7 @@ void Player::EffUpdate()
 void Player::EffDraw()
 {
 	if (isEffFlag == 1) {
-		// 3DƒIƒuƒNƒWƒFƒNƒg‚Ì•`‰æ
+		// 3Dã‚ªãƒ–ã‚¯ã‚¸ã‚§ã‚¯ãƒˆã®æç”»
 		particleManager->Draw();
 	}
 
@@ -274,7 +488,7 @@ Vector3 Player::bVelocity(Vector3& velocity, Transform& worldTransform)
 {
 	Vector3 result = { 0,0,0 };
 
-	//“àÏ
+	//å†…ç©
 	result.z = velocity.x * worldTransform.matWorld.m[0][2] +
 		velocity.y * worldTransform.matWorld.m[1][2] +
 		velocity.z * worldTransform.matWorld.m[2][2];
@@ -292,38 +506,37 @@ Vector3 Player::bVelocity(Vector3& velocity, Transform& worldTransform)
 
 Vector3 Player::GetWorldPosition()
 {
-	//ƒ[ƒ‹ƒhÀ•W‚ğ“ü‚ê‚é•Ï”
-	Vector3 worldPos;
-	//ƒ[ƒ‹ƒhs—ñ‚Ì•½sˆÚ“®¬•ª
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã®å¹³è¡Œç§»å‹•æˆåˆ†
 	worldPos.x = bodyObj_->wtf.matWorld.m[3][0];
 	worldPos.y = bodyObj_->wtf.matWorld.m[3][1];
 	worldPos.z = bodyObj_->wtf.matWorld.m[3][2];
-
 
 	return worldPos;
 }
 
 bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
-	//ãUŒ‚
+	//å¼±æ”»æ’ƒ
 	if (isAction == 1) {
-		//“–‚½‚è”»’è‚ªo‚Ä‚é‚©
+		//å½“ãŸã‚Šåˆ¤å®šãŒå‡ºã¦ã‚‹ã‹
 		if (isLightAttack) {
-			//“–‚½‚è”»’è
+			//å½“ãŸã‚Šåˆ¤å®š
 			if (col.CircleCollisionXZ(lightAttackWPos, enemyPos, 0.5f, 1.0f)) {
 				damage = 3;
 				return true;
+				MpUpdate(healMp);
 			}
 		}
 	}
 
-	//‹­UŒ‚
+	//å¼·æ”»æ’ƒ
 	else if (isAction == 2) {
-		//“–‚½‚è”»’è‚ªo‚Ä‚é‚©
+		//å½“ãŸã‚Šåˆ¤å®šãŒå‡ºã¦ã‚‹ã‹
 		if (isHeavyAttack) {
-			//“–‚½‚è”»’è
+			//å½“ãŸã‚Šåˆ¤å®š
 			if (col.CircleCollisionXZ(heavyAttackWPos, enemyPos, 1.0f, 1.0f)) {
 				damage = 7;
 				return true;
+				MpUpdate(healMp);
 			}
 		}
 	}
@@ -331,24 +544,39 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 	return false;
 }
 
+bool Player::CheckBody2Enemy(Vector3 enemyPos) {
+	if (col.CircleCollisionXZ(GetWorldPosition(), enemyPos, 1.0f, 1.0f)) {
+		moveBack += { 0,0,-0.2 };
+		moveBack = bVelocity(moveBack, bodyObj_->wtf);
+		return true;
+	}
+	return false;
+}
+
+Vector3 Player::GetMoveBack() {
+	Vector3 result = moveBack;
+	moveBack = { 0,0,0 };
+	return result;
+}
+
 void Player::LightAttack() {
 	lightAttackTimer--;
 
-	//1Œ‚–Ú
+	//1æ’ƒç›®
 	if (lightAttackCount == 0) {
-		//“–‚½‚è”»’è‚ÌoŒ»
+		//å½“ãŸã‚Šåˆ¤å®šã®å‡ºç¾
 		if (lightAttackTimer <= lightAttackPopTime[0] && lightAttackTimer > lightAttackDeathTime[0]) {
 			isLightAttack = true;
 			isAttackFin = false;
 		}
-		//“–‚½‚è”»’è‚ÌÁ¸Ad’¼
+		//å½“ãŸã‚Šåˆ¤å®šã®æ¶ˆå¤±ã€ç¡¬ç›´
 		else if (lightAttackTimer <= lightAttackDeathTime[0] && lightAttackTimer > 0) {
 			isLightAttack = false;
 		}
-		//UŒ‚‚ÌI—¹
+		//æ”»æ’ƒã®çµ‚äº†
 		else if (lightAttackTimer <= 0) {
 			if (nextAttack) {
-				//Ÿ‚ÌaŒ‚İ’è
+				//æ¬¡ã®æ–¬æ’ƒè¨­å®š
 				lightAttackCount++;
 				lightAttackTimer = lightAttackLimit[lightAttackCount];
 				isLightAttack = false;
@@ -362,39 +590,39 @@ void Player::LightAttack() {
 			}
 		}
 
-		//“–‚½‚è”»’è‚ÌˆÚ“®
+		//å½“ãŸã‚Šåˆ¤å®šã®ç§»å‹•
 		if (isLightAttack) {
-			//ˆÚ“®
+			//ç§»å‹•
 			lightAttackLPos = { 0.5f,0,2.0f };
-			//XV
+			//æ›´æ–°
 			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = lightAttackWPos;
 		}
 
-		//Ÿ‚ÌaŒ‚“ü—Í
+		//æ¬¡ã®æ–¬æ’ƒå…¥åŠ›
 		if (input_->PButtonTrigger(X)) {
-			//“ü—Íó•tŠÔ
+			//å…¥åŠ›å—ä»˜æ™‚é–“
 			if (lightAttackTimer < lightAttackInput[lightAttackCount] && lightAttackTimer > 0) {
-				//Ÿ‚ÌaŒ‚İ’è
+				//æ¬¡ã®æ–¬æ’ƒè¨­å®š
 				nextAttack = true;
 			}
 		}
 	}
-	//2Œ‚–Ú
+	//2æ’ƒç›®
 	else if (lightAttackCount == 1) {
-		//“–‚½‚è”»’è‚ÌoŒ»
+		//å½“ãŸã‚Šåˆ¤å®šã®å‡ºç¾
 		if (lightAttackTimer <= lightAttackPopTime[1] && lightAttackTimer > lightAttackDeathTime[1]) {
 			isLightAttack = true;
 			isAttackFin = false;
 		}
-		//“–‚½‚è”»’è‚ÌÁ¸Ad’¼
+		//å½“ãŸã‚Šåˆ¤å®šã®æ¶ˆå¤±ã€ç¡¬ç›´
 		else if (lightAttackTimer <= lightAttackDeathTime[1] && lightAttackTimer > 0) {
 			isLightAttack = false;
 		}
-		//UŒ‚‚ÌI—¹
+		//æ”»æ’ƒã®çµ‚äº†
 		else if (lightAttackTimer <= 0) {
 			if (nextAttack) {
-				//Ÿ‚ÌaŒ‚İ’è
+				//æ¬¡ã®æ–¬æ’ƒè¨­å®š
 				lightAttackCount++;
 				lightAttackTimer = lightAttackLimit[lightAttackCount];
 				isLightAttack = false;
@@ -408,39 +636,39 @@ void Player::LightAttack() {
 			}
 		}
 
-		//“–‚½‚è”»’è‚ÌˆÚ“®
+		//å½“ãŸã‚Šåˆ¤å®šã®ç§»å‹•
 		if (isLightAttack) {
-			//ˆÚ“®
+			//ç§»å‹•
 			lightAttackLPos = { -0.5f,0,2.0f };
-			//XV
+			//æ›´æ–°
 			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = lightAttackWPos;
 		}
 
-		//Ÿ‚ÌaŒ‚“ü—Í
+		//æ¬¡ã®æ–¬æ’ƒå…¥åŠ›
 		if (input_->PButtonTrigger(X)) {
-			//“ü—Íó•tŠÔ
+			//å…¥åŠ›å—ä»˜æ™‚é–“
 			if (lightAttackTimer < lightAttackInput[lightAttackCount] && lightAttackTimer > 0) {
-				//Ÿ‚ÌaŒ‚İ’è
+				//æ¬¡ã®æ–¬æ’ƒè¨­å®š
 				nextAttack = true;
 			}
 		}
 	}
-	//3Œ‚–Ú
+	//3æ’ƒç›®
 	else if (lightAttackCount == 2) {
-		//“–‚½‚è”»’è‚ÌoŒ»
+		//å½“ãŸã‚Šåˆ¤å®šã®å‡ºç¾
 		if (lightAttackTimer <= lightAttackPopTime[2] && lightAttackTimer > lightAttackDeathTime[2]) {
 			isLightAttack = true;
 			isAttackFin = false;
 		}
-		//“–‚½‚è”»’è‚ÌÁ¸Ad’¼
+		//å½“ãŸã‚Šåˆ¤å®šã®æ¶ˆå¤±ã€ç¡¬ç›´
 		else if (lightAttackTimer <= lightAttackDeathTime[2] && lightAttackTimer > 0) {
 			isLightAttack = false;
 		}
-		//UŒ‚‚ÌI—¹
+		//æ”»æ’ƒã®çµ‚äº†
 		else if (lightAttackTimer <= 0) {
 			if (nextAttack) {
-				//Ÿ‚ÌaŒ‚İ’è
+				//æ¬¡ã®æ–¬æ’ƒè¨­å®š
 				lightAttackCount++;
 				lightAttackTimer = lightAttackLimit[lightAttackCount];
 				isLightAttack = false;
@@ -454,47 +682,47 @@ void Player::LightAttack() {
 			}
 		}
 
-		//“–‚½‚è”»’è‚ÌˆÚ“®
+		//å½“ãŸã‚Šåˆ¤å®šã®ç§»å‹•
 		if (isLightAttack) {
-			//ˆÚ“®
+			//ç§»å‹•
 			lightAttackLPos = { 0.5f,0,2.0f };
-			//XV
+			//æ›´æ–°
 			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = lightAttackWPos;
 		}
 
-		//Ÿ‚ÌaŒ‚“ü—Í
+		//æ¬¡ã®æ–¬æ’ƒå…¥åŠ›
 		if (input_->PButtonTrigger(X)) {
-			//“ü—Íó•tŠÔ
+			//å…¥åŠ›å—ä»˜æ™‚é–“
 			if (lightAttackTimer < lightAttackInput[lightAttackCount] && lightAttackTimer > 0) {
-				//Ÿ‚ÌaŒ‚İ’è
+				//æ¬¡ã®æ–¬æ’ƒè¨­å®š
 				nextAttack = true;
 			}
 		}
 	}
-	//4Œ‚–Ú
+	//4æ’ƒç›®
 	else if (lightAttackCount == 3) {
-		//“–‚½‚è”»’è‚ÌoŒ»
+		//å½“ãŸã‚Šåˆ¤å®šã®å‡ºç¾
 		if (lightAttackTimer <= lightAttackPopTime[0] && lightAttackTimer > lightAttackDeathTime[0]) {
 			isLightAttack = true;
 			isAttackFin = false;
 		}
-		//“–‚½‚è”»’è‚ÌÁ¸Ad’¼
+		//å½“ãŸã‚Šåˆ¤å®šã®æ¶ˆå¤±ã€ç¡¬ç›´
 		else if (lightAttackTimer <= lightAttackDeathTime[0] && lightAttackTimer > 0) {
 			isLightAttack = false;
 		}
-		//UŒ‚‚ÌI—¹
+		//æ”»æ’ƒã®çµ‚äº†
 		else if (lightAttackTimer <= 0) {
 			isAction = 0;
 			isAttackFin = true;
 			nextAttack = false;
 		}
 
-		//“–‚½‚è”»’è‚ÌˆÚ“®
+		//å½“ãŸã‚Šåˆ¤å®šã®ç§»å‹•
 		if (isLightAttack) {
-			//ˆÚ“®
+			//ç§»å‹•
 			lightAttackLPos = { 0,0,4.0f };
-			//XV
+			//æ›´æ–°
 			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = lightAttackWPos;
 		}
@@ -504,21 +732,21 @@ void Player::LightAttack() {
 void Player::HeavyAttack() {
 	heavyAttackTimer--;
 
-	//1Œ‚–Ú
+	//1æ’ƒç›®
 	if (heavyAttackCount == 0) {
-		//“–‚½‚è”»’è‚ÌoŒ»
+		//å½“ãŸã‚Šåˆ¤å®šã®å‡ºç¾
 		if (heavyAttackTimer <= heavyAttackPopTime[0] && heavyAttackTimer > heavyAttackDeathTime[0]) {
 			isHeavyAttack = true;
 			isAttackFin = false;
 		}
-		//“–‚½‚è”»’è‚ÌÁ¸Ad’¼
+		//å½“ãŸã‚Šåˆ¤å®šã®æ¶ˆå¤±ã€ç¡¬ç›´
 		else if (heavyAttackTimer <= heavyAttackDeathTime[0] && heavyAttackTimer > 0) {
 			isHeavyAttack = false;
 		}
-		//UŒ‚‚ÌI—¹
+		//æ”»æ’ƒã®çµ‚äº†
 		else if (heavyAttackTimer <= 0) {
 			if (nextAttack) {
-				//Ÿ‚ÌaŒ‚İ’è
+				//æ¬¡ã®æ–¬æ’ƒè¨­å®š
 				heavyAttackCount++;
 				heavyAttackTimer = heavyAttackLimit[heavyAttackCount];
 				isHeavyAttack = false;
@@ -532,47 +760,47 @@ void Player::HeavyAttack() {
 			}
 		}
 
-		//“–‚½‚è”»’è‚ÌˆÚ“®
+		//å½“ãŸã‚Šåˆ¤å®šã®ç§»å‹•
 		if (isHeavyAttack) {
-			//ˆÚ“®
+			//ç§»å‹•
 			heavyAttackLPos = { 0,0,4.0f };
-			//XV
+			//æ›´æ–°
 			heavyAttackWPos = heavyAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = heavyAttackWPos;
 		}
 
-		//Ÿ‚ÌaŒ‚“ü—Í
+		//æ¬¡ã®æ–¬æ’ƒå…¥åŠ›
 		if (input_->PButtonTrigger(Y)) {
-			//“ü—Íó•tŠÔ
+			//å…¥åŠ›å—ä»˜æ™‚é–“
 			if (heavyAttackTimer < heavyAttackInput[heavyAttackCount] && heavyAttackTimer > 0) {
-				//Ÿ‚ÌaŒ‚İ’è
+				//æ¬¡ã®æ–¬æ’ƒè¨­å®š
 				nextAttack = true;
 			}
 		}
 	}
-	//2Œ‚–Ú
+	//2æ’ƒç›®
 	else if (heavyAttackCount == 1) {
-		//“–‚½‚è”»’è‚ÌoŒ»
+		//å½“ãŸã‚Šåˆ¤å®šã®å‡ºç¾
 		if (heavyAttackTimer <= heavyAttackPopTime[1] && heavyAttackTimer > heavyAttackDeathTime[1]) {
 			isHeavyAttack = true;
 			isAttackFin = false;
 		}
-		//“–‚½‚è”»’è‚ÌÁ¸Ad’¼
+		//å½“ãŸã‚Šåˆ¤å®šã®æ¶ˆå¤±ã€ç¡¬ç›´
 		else if (heavyAttackTimer <= heavyAttackDeathTime[1] && heavyAttackTimer > 0) {
 			isHeavyAttack = false;
 		}
-		//UŒ‚‚ÌI—¹
+		//æ”»æ’ƒã®çµ‚äº†
 		else if (heavyAttackTimer <= 0) {
 			isAction = 0;
 			isAttackFin = true;
 			nextAttack = false;
 		}
 
-		//“–‚½‚è”»’è‚ÌˆÚ“®
+		//å½“ãŸã‚Šåˆ¤å®šã®ç§»å‹•
 		if (isHeavyAttack) {
-			//ˆÚ“®
+			//ç§»å‹•
 			heavyAttackLPos = { 0,0,8.0f };
-			//XV
+			//æ›´æ–°
 			heavyAttackWPos = heavyAttackLPos * bodyObj_->wtf.matWorld;
 			debugObj_->wtf.position = heavyAttackWPos;
 		}
@@ -583,12 +811,12 @@ void Player::Dodge() {
 	dodgeTimer--;
 
 	if (dodgeTimer > dodgeStun) {
-		//‰ñ”ğ
-		//ˆÚ“®‘¬“x•ÏX
+		//å›é¿æ™‚
+		//ç§»å‹•é€Ÿåº¦å¤‰æ›´
 		dodgeMoveVec = dodgeMoveVecNomal * (0.4f * pow((30 / dodgeLimit), 2));
 	}
 	else {
-		//d’¼
+		//ç¡¬ç›´
 		isDodge = false;
 		dodgeMoveVec = { 0,0,0 };
 	}

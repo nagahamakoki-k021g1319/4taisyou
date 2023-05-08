@@ -37,6 +37,7 @@ public:
 	void Dodge();
 
 	bool CheckAttack2Enemy(Vector3 enemyPos, float& damage);
+	bool CheckBody2Enemy(Vector3 enemyPos);
 
 
 	Vector3 bVelocity(Vector3& velocity, Transform& worldTransform);
@@ -45,17 +46,22 @@ public:
 	Vector3 GetWorldPosition();
 
 	float GetHp() { return hp; };
+	float GetMp() { return mp; };
 	bool GetIsDodge() { return isDodge; };
-
+	Vector3 GetCamShake() { return camShakeVec; };
+	Vector3 GetMoveBack();
 	bool GetIsAttackFin() { return isAttackFin; };
-
 	Vector3 GetDodgeMoveVec() { return dodgeMoveVec; };
+	void MpUpdate(float mp) { this->mp += mp; };
 
 	/// <summary>
 	/// ポジション
 	/// </summary>
 	/// <param name="pos"></param>
 	void SetPos(Vector3 pos) { bodyObj_->wtf.position = pos; };
+
+	int EffTimer = 0;
+	int isEffFlag = 0;
 
 public:
 	//音を止める関数
@@ -72,6 +78,31 @@ private:
 	const float moveSpeed_ = 0.1f;
 	const float rotaSpeed_ = 0.1f;
 
+	//プレイヤーの移動
+	Model* dash1Model_ = nullptr;
+	Object3d* dash1Obj_ = nullptr;
+
+	Model* dash2Model_ = nullptr;
+	Object3d* dash2Obj_ = nullptr;
+
+	Model* dash3Model_ = nullptr;
+	Object3d* dash3Obj_ = nullptr;
+
+	Model* dash4Model_ = nullptr;
+	Object3d* dash4Obj_ = nullptr;
+
+	//プレイヤーの移動
+	Model* attack1Model_ = nullptr;
+	Object3d* attack1Obj_ = nullptr;
+
+	Model* attack2Model_ = nullptr;
+	Object3d* attack2Obj_ = nullptr;
+
+	Model* attack3Model_ = nullptr;
+	Object3d* attack3Obj_ = nullptr;
+
+	Model* attack4Model_ = nullptr;
+	Object3d* attack4Obj_ = nullptr;
 	//ステータス
 	const int defaultHp = 100;
 	int hp;
@@ -79,10 +110,30 @@ private:
 	bool isAttackFin;
 	bool nextAttack;
 
+	//MP関連
+	float mp;
+	const float mpRegen = 0.5f / 60;
+	const float mpPuls = 5;
+	//小回復
+	const int heal = defaultHp * 0.2;
+	const int healMp = 20;
+	//大回復
+	const int megaHeal = defaultHp * 0.6;
+	const int megaHealMp = 60;
+	//MP攻撃
+	const int bulletMp = 40;
+
 	//無敵時間
 	bool isInvincible;
 	const float invincibleLimit = 15;
 	float invincibleTimer = invincibleLimit;
+
+	//画面シェイク
+	bool isCamShake;
+	const int camShakeLimit = 20;
+	int camShakeTimer = camShakeLimit;
+	Vector3 camShakeVec;
+	Vector3 moveBack;
 
 	//弱攻撃
 	Vector3 lightAttackLPos;
@@ -119,7 +170,6 @@ private:
 	//次の連撃への入力受付開始時間
 	float heavyAttackInput[2] = { 15,0 };
 
-
 	//回避
 	bool isDodge;
 	const int dodgeLimit = 20;
@@ -129,16 +179,22 @@ private:
 	Vector3 dodgeMoveVec;
 	Vector3 dodgeMoveVecNomal;
 
+	//OBJ関係
+	//移動した時のplayerOBJを変える
+	int objRotaTimer;
+	//攻撃した時のplayerOBJを変える
+	int attackFlag = 0;
+	int objAttackTimer;
 
 	//敵
 	Transform* enemyPos_ = nullptr;
 
 	//パーティクルクラスの初期化 
 	std::unique_ptr<ParticleManager> particleManager;
-	//当たった時のエフェクト発生
-	int isEffFlag = 0;
-	int EffTimer = 0;
-
+	//ワールド座標を入れる変数
+	Vector3 worldPos;
+	
+	
 	//デバッグ用
 	Model* debugModel_ = nullptr;
 	Object3d* debugObj_ = nullptr;

@@ -83,8 +83,10 @@ private:	//メンバ変数
 	Transform targetWtf;
 	float targetTheta;
 	float targetDistance = 10;
-	float camMoveSpeed = 0.1f;
+	float camMoveSpeed = 0.2f;
 	float camRotaSpeed = PI / 180;
+	float dashSpeed = 0.4f;
+	const float dashMP = 1 / 60;
 
 	//プレイヤー
 	Player* player_ = nullptr;
@@ -98,7 +100,8 @@ private:	//メンバ変数
 	Model* floorMD = nullptr;
 	Object3d* skydome = nullptr;
 	Model* skydomeMD = nullptr;
-
+	Object3d* field = nullptr;
+	Model* fieldMD = nullptr;
 
 	//UI
 	Sprite* UI = nullptr;
@@ -106,6 +109,8 @@ private:	//メンバ変数
 	Sprite* buttomPng2 = nullptr;
 	Sprite* hpGauge = nullptr;
 	Vector2 hpPosition;
+	Sprite* mpGauge = nullptr;
+	Vector2 mpPosition;
 	Sprite* unionGauge = nullptr;
 	Vector2 unionScale;
 	Sprite* avoidUI = nullptr;
@@ -122,7 +127,6 @@ private:	//メンバ変数
 	Sprite* srd = nullptr;
 	Vector2 srdPosition;
 
-
 	//ゲームフロー
 	enum class Scene
 	{
@@ -134,13 +138,19 @@ private:	//メンバ変数
 	};
 	Scene scene;
 	int stage;
+	//カミングスーン用フラグ
+	int cmsoon = 0;
 	Sprite* titlePic;
 	Sprite* selectPic;
 	Sprite* clearPic;
 	Sprite* gameoverPic;
 
-
-
+	//攻撃する前のわかりやすいエッフェクト(なぜか敵に持たせられない)
+	Sprite* CdUI = nullptr;
+	Sprite* CdUI1 = nullptr;
+	Sprite* CdUI2 = nullptr;
+	int  CdTimer = 0;
+	int  isCdFlag = 0;
 
 	//音関係まとめ
 	int soundCheckFlag = 0;

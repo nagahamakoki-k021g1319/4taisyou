@@ -18,8 +18,6 @@ public:
 	void Update();
 	void Draw();
 
-	void EffUpdate();
-
 	void SetPlayer(Player* player) { player_ = player; };
 
 	void CreatDaggerBullet(int bulletNum);
@@ -55,10 +53,25 @@ private:
 
 	Object3d* enemyObj_ = nullptr;
 	Model* enemyModel_ = nullptr;
+	//攻撃のobj
+	Object3d* enemyAttack1Obj_ = nullptr;
+	Model* enemyAttack1Model_ = nullptr;
+	Object3d* enemyAttack2Obj_ = nullptr;
+	Model* enemyAttack2Model_ = nullptr;
+	Object3d* enemyAttack3Obj_ = nullptr;
+	Model* enemyAttack3Model_ = nullptr;
+	Object3d* enemyAttack4Obj_ = nullptr;
+	Model* enemyAttack4Model_ = nullptr;
+	Object3d* enemyAttack5Obj_ = nullptr;
+	Model* enemyAttack5Model_ = nullptr;
+	Object3d* enemyAttack6Obj_ = nullptr;
+	Model* enemyAttack6Model_ = nullptr;
+	
 	bool isLive = true;
-	const int hpMax = 10;
+	const int hpMax = 30;
 	int hp = hpMax;
 
+	EnemyBullet* enemyBullet = nullptr;
 
 	//無敵時間
 	bool isHitPlayer;
@@ -104,8 +117,11 @@ private:
 
 	int enemyResetTimer = 0;
 
+	//OBJを変更させる
+	int enemyAttackRoteTimer = 0;
+
 	//パーティクル
 	std::unique_ptr<ParticleManager> DamageParticle;
 
-
+	
 };

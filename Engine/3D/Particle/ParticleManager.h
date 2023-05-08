@@ -183,6 +183,9 @@ public: // メンバ関数
 	void SetTransform(Transform wtf) { wtf_ = wtf; };
 
 	void Setposition(Vector3 position) { wtf_.position = position; };
+
+	void Setrotation(Vector3 rotation) { wtf_.rotation = rotation; };
+
 private: // メンバ変数
 	static Camera* camera;
 	// ローカルスケール
