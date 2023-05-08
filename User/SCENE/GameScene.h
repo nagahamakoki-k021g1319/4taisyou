@@ -85,6 +85,8 @@ private:	//メンバ変数
 	float targetDistance = 10;
 	float camMoveSpeed = 0.2f;
 	float camRotaSpeed = PI / 180;
+	float dashSpeed = 0.4f;
+	const float dashMP = 1 / 60;
 
 	//プレイヤー
 	Player* player_ = nullptr;
@@ -107,6 +109,8 @@ private:	//メンバ変数
 	Sprite* buttomPng2 = nullptr;
 	Sprite* hpGauge = nullptr;
 	Vector2 hpPosition;
+	Sprite* mpGauge = nullptr;
+	Vector2 mpPosition;
 	Sprite* unionGauge = nullptr;
 	Vector2 unionScale;
 	Sprite* avoidUI = nullptr;
