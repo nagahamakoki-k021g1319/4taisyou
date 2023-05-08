@@ -52,7 +52,7 @@ public:
 	Vector3 GetMoveBack();
 	bool GetIsAttackFin() { return isAttackFin; };
 	Vector3 GetDodgeMoveVec() { return dodgeMoveVec; };
-	void MpUpdate(float mp) { this->mp += mp; };
+	void MpUpdate(float mp);
 
 	/// <summary>
 	/// ƒ|ƒWƒVƒ‡ƒ“
