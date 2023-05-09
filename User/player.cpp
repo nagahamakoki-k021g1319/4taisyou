@@ -222,7 +222,7 @@ void Player::Attack() {
 				isAttackFin = false;
 			}
 			//回避
-			if (input_->PushKey(DIK_3) || input_->ButtonInput(B)) {
+			if (input_->PushKey(DIK_3) || input_->PButtonTrigger(B)) {
 				if (input_->LeftStickInput()) {
 					isAction = 3;
 					isDodge = true;
@@ -817,15 +817,14 @@ void Player::Dodge() {
 	if (dodgeTimer > dodgeStun) {
 		//回避時
 		//移動速度変更
-		dodgeMoveVec = dodgeMoveVecNomal * (0.4f * pow((30 / dodgeLimit), 2));
-	}
-	else {
+		dodgeMoveVec = dodgeMoveVecNomal;
+	
+	}else if (dodgeTimer > 0) {
 		//硬直
-		isDodge = false;
 		dodgeMoveVec = { 0,0,0 };
-	}
-
-	if (dodgeTimer < 0) {
+	
+	}else if (dodgeTimer <= 0) {
+		isDodge = false;
 		isAction = 0;
 	}
 }

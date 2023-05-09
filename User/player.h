@@ -172,10 +172,10 @@ private:
 
 	//‰ñ”ğ
 	bool isDodge;
-	const int dodgeLimit = 20;
+	const int dodgeLimit = 60;
 	int dodgeTimer;
 	//‰ñ”ğŒãd’¼ŠÔ
-	const int dodgeStun = 8;
+	const int dodgeStun = 1;
 	Vector3 dodgeMoveVec;
 	Vector3 dodgeMoveVecNomal;
 
