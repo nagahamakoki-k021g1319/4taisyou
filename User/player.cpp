@@ -526,8 +526,8 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 			//当たり判定
 			if (col.CircleCollisionXZ(lightAttackWPos, enemyPos, 0.5f, 1.0f)) {
 				damage = 3;
+				MpUpdate(mpPuls);
 				return true;
-				MpUpdate(healMp);
 			}
 		}
 	}
@@ -539,8 +539,8 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 			//当たり判定
 			if (col.CircleCollisionXZ(heavyAttackWPos, enemyPos, 1.0f, 1.0f)) {
 				damage = 7;
+				MpUpdate(mpPuls);
 				return true;
-				MpUpdate(healMp);
 			}
 		}
 	}
