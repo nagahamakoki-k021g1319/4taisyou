@@ -35,6 +35,8 @@ public:
 
 	void AttackInterval();
 
+
+
 	////ƒ[ƒ‹ƒhÀ•W‚ğæ“¾
 	Vector3 GetWorldPosition();
 
