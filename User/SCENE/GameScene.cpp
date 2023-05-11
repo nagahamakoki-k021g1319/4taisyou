@@ -76,7 +76,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	fieldMD = Model::LoadFromOBJ("field");
 	field = Object3d::Create();
 	field->SetModel(fieldMD);
-	field->wtf.scale = (Vector3{ 10, 10, 10 });
+	field->wtf.scale = (Vector3{ 2, 2, 2 });
 
 	//プレイヤー
 	player_ = new Player();
@@ -214,7 +214,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	srd->SetTextureIndex(14);
 	spriteCommon->LoadTexture(15, "mpGauge.png");
 	mpGauge->SetTextureIndex(15);
-
 
 	audio = new Audio();
 	audio->Initialize();
@@ -515,24 +514,26 @@ void GameScene::CamMove() {
 		//移動ベクトルを向いてる方向に合わせる
 		eyeVelocity = bVelocity(eyeVelocity, camWtf);
 
-		Vector3 pos = player_->GetWorldPosition() + eyeVelocity;
-		if (pos.x > 50) {
-			eyeVelocity += {-0.2, 0, 0};
+		Vector3 pos = player_->GetWorldPosition();
+		Vector3 newPos = pos + eyeVelocity;
+
+		if (newPos.x > 50) {
+			eyeVelocity.x = 50 - pos.x;
 		}
-		else if (pos.x < -50) {
-			eyeVelocity += {0.2, 0, 0};
+		else if (newPos.x < -50) {
+			eyeVelocity.x = -50 - pos.x;
 		}
-		if (pos.z > 50) {
-			eyeVelocity += {0, 0, -0.2};
+
+		if (newPos.z > 50) {
+			eyeVelocity.z = 50 - pos.z;
 		}
-		else if (pos.z < -50) {
-			eyeVelocity += {0, 0, 0.2};
+		else if (newPos.z < -50) {
+			eyeVelocity.z = -50 - pos.z;
 		}
 
 		//更新
 		camWtf.position += eyeVelocity + player_->GetMoveBack();
 	}
-
 }
 
 void GameScene::CamRota() {
