@@ -349,13 +349,13 @@ void Player::Rota() {
 
 			dash4Obj_->wtf.rotation.y = theta + camTransForm->rotation.y;
 
-			attack1Obj_->wtf.rotation.y = theta;
+			attack1Obj_->wtf.rotation.y = theta + camTransForm->rotation.y;
 
-			attack2Obj_->wtf.rotation.y = theta;
+			attack2Obj_->wtf.rotation.y = theta + camTransForm->rotation.y;
 
-			attack3Obj_->wtf.rotation.y = theta;
+			attack3Obj_->wtf.rotation.y = theta + camTransForm->rotation.y;
 
-			attack4Obj_->wtf.rotation.y = theta;
+			attack4Obj_->wtf.rotation.y = theta + camTransForm->rotation.y;
 
 		}
 	}
