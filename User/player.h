@@ -19,8 +19,10 @@ public:
 	void Initialize(Input* input);
 	void Reset();
 
-	void Update(Transform* cam);
+	void Update();
 	void Rota();
+	void Move();
+	void camUpdate();
 
 	void Attack();
 
@@ -59,6 +61,7 @@ public:
 	/// </summary>
 	/// <param name="pos"></param>
 	void SetPos(Vector3 pos) { bodyObj_->wtf.position = pos; };
+	void SetCamera(Camera* cam) { camera = cam; };
 
 	int EffTimer = 0;
 	int isEffFlag = 0;
@@ -77,6 +80,17 @@ private:
 	Object3d* bodyObj_ = nullptr;
 	const float moveSpeed_ = 0.1f;
 	const float rotaSpeed_ = 0.1f;
+
+	Camera* camera = nullptr;
+	Transform* camTransForm = nullptr;
+	Vector3 targetPos;
+	Vector3 eyePos;
+	float targetTheta;
+	float targetDistance = 10;
+	float camMoveSpeed = 0.2f;
+	float camRotaSpeed = PI / 180;
+	float dashSpeed = 0.4f;
+	const float dashMP = 1 / 60;
 
 	//プレイヤーの移動
 	Model* dash1Model_ = nullptr;
@@ -151,7 +165,6 @@ private:
 	float lightAttackDeathTime[4] = { 13,12,14,22 };
 	//次の連撃への入力受付開始時間
 	float lightAttackInput[4] = { 20,20,20,0 };
-
 
 	//強攻撃
 	Vector3 heavyAttackLPos;

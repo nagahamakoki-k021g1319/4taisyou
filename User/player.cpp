@@ -1,10 +1,5 @@
 #include"player.h"
 
-
-
-
-
-
 Player::Player() {
 
 }
@@ -37,6 +32,7 @@ Player::~Player() {
 
 void Player::Initialize(Input* input) {
 	input_ = input;
+	camTransForm = new Transform();
 
 	//プレイヤー設定
 	bodyModel_ = Model::LoadFromOBJ("player");
@@ -101,32 +97,27 @@ void Player::Initialize(Input* input) {
 }
 
 void Player::Reset() {
+	camTransForm->Initialize();
+	eyePos = { 0.0f, 3.0f, -8.0f };
+	targetPos = { 0.0f,0.0f,targetDistance };
+
 	bodyObj_->wtf.Initialize();
-	bodyObj_->wtf.position = { 0,-3,8 };
 
 	dash1Obj_->wtf.Initialize();
-	dash1Obj_->wtf.position = { 0,-3,8 };
 
 	dash2Obj_->wtf.Initialize();
-	dash2Obj_->wtf.position = { 0,-3,8 };
 
 	dash3Obj_->wtf.Initialize();
-	dash3Obj_->wtf.position = { 0,-3,8 };
 
 	dash4Obj_->wtf.Initialize();
-	dash4Obj_->wtf.position = { 0,-3,8 };
 
 	attack1Obj_->wtf.Initialize();
-	attack1Obj_->wtf.position = { 0,-3,8 };
 	
 	attack2Obj_->wtf.Initialize();
-	attack2Obj_->wtf.position = { 0,-3,8 };
 	
 	attack3Obj_->wtf.Initialize();
-	attack3Obj_->wtf.position = { 0,-3,8 };
 	
 	attack4Obj_->wtf.Initialize();
-	attack4Obj_->wtf.position = { 0,-3,8 };
 
 	hp = defaultHp;
 	isAction = 0;
@@ -278,6 +269,69 @@ void Player::OnCollision() {
 	}
 }
 
+void Player::Move() {
+	if (input_->LeftStickInput()) {
+		//移動量
+		Vector3 velocity = { 0,0,0 };
+
+		//移動速度
+		float speed = camMoveSpeed;
+		if (input_->ButtonInput(RT)) {
+			speed = dashSpeed;
+			MpUpdate(dashMP);
+		}
+
+		//通常移動
+		if (isAction == 0) {
+			//入力
+			Vector2 stickVec = input_->GetLeftStickVec();
+
+			velocity.x = stickVec.x;
+			velocity.z = stickVec.y;
+
+			velocity = velocity.nomalize();
+
+			velocity *= speed;
+		}
+		//回避時移動
+		else if (isAction == 3) {
+			velocity = GetDodgeMoveVec();
+
+		}
+
+		//移動ベクトルを向いてる方向に合わせる
+		velocity = bVelocity(velocity, *camTransForm);
+
+		Vector3 pos = GetWorldPosition();
+		Vector3 newPos = pos + velocity;
+
+		if (newPos.x > 50) {
+			velocity.x = 50 - pos.x;
+		}
+		else if (newPos.x < -50) {
+			velocity.x = -50 - pos.x;
+		}
+
+		if (newPos.z > 50) {
+			velocity.z = 50 - pos.z;
+		}
+		else if (newPos.z < -50) {
+			velocity.z = -50 - pos.z;
+		}
+
+		//更新
+		bodyObj_->wtf.position += velocity;
+		dash1Obj_->wtf.position += velocity;
+		dash2Obj_->wtf.position += velocity;
+		dash3Obj_->wtf.position += velocity;
+		dash4Obj_->wtf.position += velocity;
+		attack1Obj_->wtf.position += velocity;
+		attack2Obj_->wtf.position += velocity;
+		attack3Obj_->wtf.position += velocity;
+		attack4Obj_->wtf.position += velocity;
+	}
+}
+
 void Player::Rota() {
 	if (isAction == 0) {
 		if (input_->LeftStickInput()) {
@@ -285,15 +339,15 @@ void Player::Rota() {
 
 			float theta = atan2(stickVec.x, stickVec.y);
 
-			bodyObj_->wtf.rotation.y = theta;
+			bodyObj_->wtf.rotation.y = theta+camTransForm->rotation.y;
 
-			dash1Obj_->wtf.rotation.y = theta;
+			dash1Obj_->wtf.rotation.y = theta + camTransForm->rotation.y;
 
-			dash2Obj_->wtf.rotation.y = theta;
+			dash2Obj_->wtf.rotation.y = theta + camTransForm->rotation.y;
 
-			dash3Obj_->wtf.rotation.y = theta;
+			dash3Obj_->wtf.rotation.y = theta + camTransForm->rotation.y;
 
-			dash4Obj_->wtf.rotation.y = theta;
+			dash4Obj_->wtf.rotation.y = theta + camTransForm->rotation.y;
 
 			attack1Obj_->wtf.rotation.y = theta;
 
@@ -307,7 +361,50 @@ void Player::Rota() {
 	}
 }
 
-void Player::Update(Transform* cam) {
+void Player::camUpdate() {
+	camTransForm->position = bodyObj_->wtf.position;
+	//視点移動
+	//左右
+	Vector3 theta;
+	if (input_->StickInput(R_LEFT)) {
+		theta.y = -camRotaSpeed;
+	}else if (input_->StickInput(R_RIGHT)) {
+		theta.y = camRotaSpeed;
+	}
+	camTransForm->rotation += theta;
+
+	//上下
+	if (input_->StickInput(R_UP)) {
+		targetTheta += camRotaSpeed;
+	}
+	else if (input_->StickInput(R_DOWN)) {
+		targetTheta += -camRotaSpeed;
+	}
+
+	//角度制限
+	if (targetTheta < -PI / 5 * 2) {//下の制限
+		targetTheta = -PI / 5 * 2;
+	}
+	else if (targetTheta > PI / 3) { //上の制限
+		targetTheta = PI / 3;
+	}
+
+	//視点は一定の距離
+	targetPos.z = cos(targetTheta) * targetDistance;
+	targetPos.y = sin(targetTheta) * targetDistance;
+
+	targetPos += GetCamShake();
+
+
+	camTransForm->UpdateMat();
+
+	camera->SetEye(eyePos * camTransForm->matWorld);
+	camera->SetTarget(targetPos * camTransForm->matWorld);
+
+	camera->Update();
+}
+
+void Player::Update() {
 	if (isInvincible) {
 		invincibleTimer--;
 		if (invincibleTimer < 0) {
@@ -316,6 +413,10 @@ void Player::Update(Transform* cam) {
 	}
 
 	Rota();
+	Move();
+
+	camUpdate();
+
 	Attack();
 
 	if (isEffFlag == 1) {
@@ -349,15 +450,15 @@ void Player::Update(Transform* cam) {
 			camShakeVec = { 0,0,0 };
 		}
 	}
-	bodyObj_->Update(cam);
-	dash1Obj_->Update(cam);
-	dash2Obj_->Update(cam);
-	dash3Obj_->Update(cam);
-	dash4Obj_->Update(cam);
-	attack1Obj_->Update(cam);
-	attack2Obj_->Update(cam);
-	attack3Obj_->Update(cam);
-	attack4Obj_->Update(cam);
+	bodyObj_->Update();
+	dash1Obj_->Update();
+	dash2Obj_->Update();
+	dash3Obj_->Update();
+	dash4Obj_->Update();
+	attack1Obj_->Update();
+	attack2Obj_->Update();
+	attack3Obj_->Update();
+	attack4Obj_->Update();
 
 	wolf_->Update(enemyPos_);
 	MpUpdate(mpRegen);

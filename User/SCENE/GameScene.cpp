@@ -54,12 +54,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	// カメラ生成
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
 
-	camWtf.Initialize();
-	camWtf.position = { 0.0f, 3.0f, -8.0f };
-
-	targetWtf.Initialize();
-	targetWtf.position = { 0.0f,0.0f,targetDistance };
-
 	ParticleManager::SetCamera(camera);
 	Object3d::SetCamera(camera);
 
@@ -81,6 +75,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	//プレイヤー
 	player_ = new Player();
 	player_->Initialize(input);
+	player_->SetCamera(camera);
 
 	//エネミー
 	enemyManager_ = new EnemyManager();
@@ -227,12 +222,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 }
 
 void GameScene::Reset() {
-	camWtf.Initialize();
-	camWtf.position = { 0.0f, 3.0f, -8.0f };
-
-	targetWtf.Initialize();
-	targetWtf.position = { 0.0f,0.0f,targetDistance };
-
 	player_->Reset();
 }
 
@@ -323,7 +312,6 @@ void GameScene::Update() {
 			pSourceVoice[1]->SetVolume(0.1f);
 			soundCheckFlag2 = 1;
 		}
-		CamUpdate();
 		CdTimer++;
 	
 		srrPosition.x -= 30.0f;
@@ -335,7 +323,7 @@ void GameScene::Update() {
 		
 		enemyManager_->Update();
 		
-		player_->Update(&camWtf);
+		player_->Update();
 
 
 
@@ -347,7 +335,7 @@ void GameScene::Update() {
 		}else{
 			hitStopTimer = hitStopLimit;
 			enemyManager_->Update();
-			player_->Update(&camWtf);
+			player_->Update();
 		}
 
 		hpGauge->SetPozition({ -400.0f + player_->GetHp() * 4 ,0 });
@@ -478,116 +466,6 @@ void GameScene::Draw() {
 
 		break;
 	}
-}
-
-
-void GameScene::CamMove() {
-	if (input->LeftStickInput()) {
-		//カメラの移動
-		Vector3 eyeVelocity = { 0,0,0 };
-		
-		//移動速度
-		float speed = camMoveSpeed;
-		if (input->ButtonInput(RT)) {
-			speed = dashSpeed;
-			player_->MpUpdate(-dashMP);
-		}
-
-		//通常移動
-		if (player_->isAction == 0) {
-			//入力
-			Vector2 stickVec = input->GetLeftStickVec();
-
-			eyeVelocity.x = stickVec.x;
-			eyeVelocity.z = stickVec.y;
-
-			eyeVelocity = eyeVelocity.nomalize();
-
-			eyeVelocity *= speed;
-		}
-		//回避時移動
-		else if (player_->isAction == 3) {
-			eyeVelocity = player_->GetDodgeMoveVec();
-
-		}
-		
-		//移動ベクトルを向いてる方向に合わせる
-		eyeVelocity = bVelocity(eyeVelocity, camWtf);
-
-		Vector3 pos = player_->GetWorldPosition();
-		Vector3 newPos = pos + eyeVelocity;
-
-		if (newPos.x > 50) {
-			eyeVelocity.x = 50 - pos.x;
-		}
-		else if (newPos.x < -50) {
-			eyeVelocity.x = -50 - pos.x;
-		}
-
-		if (newPos.z > 50) {
-			eyeVelocity.z = 50 - pos.z;
-		}
-		else if (newPos.z < -50) {
-			eyeVelocity.z = -50 - pos.z;
-		}
-
-		//更新
-		camWtf.position += eyeVelocity + player_->GetMoveBack();
-	}
-}
-
-void GameScene::CamRota() {
-	//視点移動
-
-	//左右
-	Vector3 theta;
-	if (input->StickInput(R_LEFT)) {
-		theta.y = -camRotaSpeed;
-	}else if (input->StickInput(R_RIGHT)) {
-		theta.y = camRotaSpeed;
-	}
-	camWtf.rotation += theta;
-
-	//上下
-	if (input->StickInput(R_UP)) {
-		targetTheta += camRotaSpeed;
-	}else if (input->StickInput(R_DOWN)) {
-		targetTheta += -camRotaSpeed;
-	}
-	
-	//角度制限
-	if (targetTheta < -PI / 5 * 2) {//下の制限
-		targetTheta = -PI / 5 * 2;
-	}else if (targetTheta > PI / 3) { //上の制限
-		targetTheta = PI / 3;
-	}
-	
-
-	//視点は一定の距離
-	targetWtf.position.z = cos(targetTheta) * targetDistance;
-	targetWtf.position.y = sin(targetTheta) * targetDistance;
-
-
-	targetWtf.position += player_->GetCamShake();
-}
-
-void GameScene::CamUpdate() {
-	CamMove();
-	CamRota();
-
-	camWtf.UpdateMat();
-
-	camera->SetEye(camWtf.position);
-
-	targetWtf.UpdateMat();
-	targetWtf.matWorld *= camWtf.matWorld;
-	//y方向の制限
-	if (targetWtf.matWorld.m[3][1] < 0) {
-		targetWtf.matWorld.m[3][1] = 0;
-	}
-	camera->SetTarget({ targetWtf.matWorld.m[3][0],targetWtf.matWorld.m[3][1] ,targetWtf.matWorld.m[3][2] });
-
-	camera->Update();
 }
 
 Vector3 GameScene::bVelocity(Vector3& velocity, Transform& worldTransform)
