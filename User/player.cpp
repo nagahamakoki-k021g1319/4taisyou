@@ -276,9 +276,12 @@ void Player::Move() {
 
 		//移動速度
 		float speed = camMoveSpeed;
+
 		if (input_->ButtonInput(RT)) {
-			speed = dashSpeed;
-			MpUpdate(dashMP);
+			if (mp > dashMP) {
+				speed = dashSpeed;
+				MpUpdate(-dashMP);
+			}
 		}
 
 		//通常移動
@@ -462,9 +465,6 @@ void Player::Update() {
 
 	wolf_->Update(enemyPos_);
 	MpUpdate(mpRegen);
-	if (mp > 100) {
-		mp = 100;
-	}
 	
 
 	debugObj_->Update();
@@ -627,7 +627,7 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 			//当たり判定
 			if (col.CircleCollisionXZ(lightAttackWPos, enemyPos, 0.5f, 1.0f)) {
 				damage = 3;
-				MpUpdate(mpPuls);
+				MpUpdate(lightMpPuls);
 				return true;
 			}
 		}
@@ -640,7 +640,7 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 			//当たり判定
 			if (col.CircleCollisionXZ(heavyAttackWPos, enemyPos, 1.0f, 1.0f)) {
 				damage = 7;
-				MpUpdate(mpPuls);
+				MpUpdate(heavyMpPuls);
 				return true;
 			}
 		}
@@ -932,7 +932,7 @@ void Player::Dodge() {
 
 void Player::MpUpdate(float mp) {
 	this->mp += mp;
-	if (mp > 100) {
-		mp = 100;
+	if (this->mp > 100) {
+		this->mp = 100;
 	}
 }

@@ -90,7 +90,7 @@ private:
 	float camMoveSpeed = 0.2f;
 	float camRotaSpeed = PI / 180;
 	float dashSpeed = 0.4f;
-	const float dashMP = 1 / 60;
+	const float dashMP = 2.0f / 60.0f;
 
 	//プレイヤーの移動
 	Model* dash1Model_ = nullptr;
@@ -126,7 +126,7 @@ private:
 
 	//MP関連
 	float mp;
-	const float mpRegen = 0.5f / 60;
+	const float mpRegen = 0.5f / 60.0f;
 	const float mpPuls = 5;
 	//小回復
 	const int heal = defaultHp * 0.2;
@@ -152,6 +152,7 @@ private:
 	//弱攻撃
 	Vector3 lightAttackLPos;
 	Vector3 lightAttackWPos;
+	const float lightMpPuls = 3;
 	//何回めの連撃か
 	int lightAttackCount;
 	//一回の攻撃全体の時間
@@ -169,6 +170,7 @@ private:
 	//強攻撃
 	Vector3 heavyAttackLPos;
 	Vector3 heavyAttackWPos;
+	const float heavyMpPuls = 8;
 	//何回めの連撃か
 	int heavyAttackCount;
 	//一回の攻撃全体の時間
