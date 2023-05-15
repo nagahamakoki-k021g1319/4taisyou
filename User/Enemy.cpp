@@ -37,27 +37,27 @@ void Enemy::Initialize(Vector3 pos) {
 	enemyAttack1Obj_ = Object3d::Create();
 	enemyAttack1Obj_->SetModel(enemyAttack1Model_);
 	enemyAttack1Obj_->wtf.position = pos;
-		
+
 	enemyAttack2Model_ = Model::LoadFromOBJ("enemyattack2");
 	enemyAttack2Obj_ = Object3d::Create();
 	enemyAttack2Obj_->SetModel(enemyAttack2Model_);
 	enemyAttack2Obj_->wtf.position = pos;
-		
+
 	enemyAttack3Model_ = Model::LoadFromOBJ("enemyattack3");
 	enemyAttack3Obj_ = Object3d::Create();
 	enemyAttack3Obj_->SetModel(enemyAttack3Model_);
 	enemyAttack3Obj_->wtf.position = pos;
-		
+
 	enemyAttack4Model_ = Model::LoadFromOBJ("enemyattack4");
 	enemyAttack4Obj_ = Object3d::Create();
 	enemyAttack4Obj_->SetModel(enemyAttack4Model_);
 	enemyAttack4Obj_->wtf.position = pos;
-		 
+
 	enemyAttack5Model_ = Model::LoadFromOBJ("enemyattack5");
 	enemyAttack5Obj_ = Object3d::Create();
 	enemyAttack5Obj_->SetModel(enemyAttack5Model_);
 	enemyAttack5Obj_->wtf.position = pos;
-		
+
 	enemyAttack6Model_ = Model::LoadFromOBJ("enemyattack6");
 	enemyAttack6Obj_ = Object3d::Create();
 	enemyAttack6Obj_->SetModel(enemyAttack6Model_);
@@ -143,40 +143,40 @@ void Enemy::Update() {
 		}
 
 
-			//攻撃するまで移動
-			if (enemyAttackTimer >= 0 && enemyAttackTimer <= 9) {
-				enemyObj_->wtf.position.z += 0.1f;
+		//攻撃するまで移動
+		if (enemyAttackTimer >= 0 && enemyAttackTimer <= 9) {
+			enemyObj_->wtf.position.z += 0.1f;
 
-				enemyAttack1Obj_->wtf.position.z += 0.1f;
-				enemyAttack2Obj_->wtf.position.z += 0.1f;
-				enemyAttack3Obj_->wtf.position.z += 0.1f;
-				enemyAttack4Obj_->wtf.position.z += 0.1f;
-				enemyAttack5Obj_->wtf.position.z += 0.1f;
-				enemyAttack6Obj_->wtf.position.z += 0.1f;
-			}
-			//攻撃するまで移動
-			if (enemyAttackTimer >= 150 && enemyAttackTimer <= 190) {
-				enemyObj_->wtf.position.z += 0.05f;
-				enemyObj_->wtf.position.x += 0.1f;
+			enemyAttack1Obj_->wtf.position.z += 0.1f;
+			enemyAttack2Obj_->wtf.position.z += 0.1f;
+			enemyAttack3Obj_->wtf.position.z += 0.1f;
+			enemyAttack4Obj_->wtf.position.z += 0.1f;
+			enemyAttack5Obj_->wtf.position.z += 0.1f;
+			enemyAttack6Obj_->wtf.position.z += 0.1f;
+		}
+		//攻撃するまで移動
+		if (enemyAttackTimer >= 150 && enemyAttackTimer <= 190) {
+			enemyObj_->wtf.position.z += 0.05f;
+			enemyObj_->wtf.position.x += 0.1f;
 
-				enemyAttack1Obj_->wtf.position.z += 0.05f;
-				enemyAttack1Obj_->wtf.position.x += 0.1f;
+			enemyAttack1Obj_->wtf.position.z += 0.05f;
+			enemyAttack1Obj_->wtf.position.x += 0.1f;
 
-				enemyAttack2Obj_->wtf.position.z += 0.05f;
-				enemyAttack2Obj_->wtf.position.x += 0.1f;
+			enemyAttack2Obj_->wtf.position.z += 0.05f;
+			enemyAttack2Obj_->wtf.position.x += 0.1f;
 
-				enemyAttack3Obj_->wtf.position.z += 0.05f;
-				enemyAttack3Obj_->wtf.position.x += 0.1f;
+			enemyAttack3Obj_->wtf.position.z += 0.05f;
+			enemyAttack3Obj_->wtf.position.x += 0.1f;
 
-				enemyAttack4Obj_->wtf.position.z += 0.05f;
-				enemyAttack4Obj_->wtf.position.x += 0.1f;
+			enemyAttack4Obj_->wtf.position.z += 0.05f;
+			enemyAttack4Obj_->wtf.position.x += 0.1f;
 
-				enemyAttack5Obj_->wtf.position.z += 0.05f;
-				enemyAttack5Obj_->wtf.position.x += 0.1f;
+			enemyAttack5Obj_->wtf.position.z += 0.05f;
+			enemyAttack5Obj_->wtf.position.x += 0.1f;
 
-				enemyAttack6Obj_->wtf.position.z += 0.05f;
-				enemyAttack6Obj_->wtf.position.x += 0.1f;
-			}
+			enemyAttack6Obj_->wtf.position.z += 0.05f;
+			enemyAttack6Obj_->wtf.position.x += 0.1f;
+		}
 
 		//ダガーファンネルを秒数で攻撃させる
 		if (enemyAttackTimer == 10 || enemyAttackTimer == 200 || enemyAttackTimer == 250) {
@@ -195,34 +195,34 @@ void Enemy::Update() {
 		}
 
 
-			//攻撃するまで移動
-			if (enemyAttackTimer2 >= 0 && enemyAttackTimer2 <= 9) {
-				enemyObj_->wtf.position.z -= 0.05f;
-				enemyObj_->wtf.position.x -= 0.1f;
+		//攻撃するまで移動
+		if (enemyAttackTimer2 >= 0 && enemyAttackTimer2 <= 9) {
+			enemyObj_->wtf.position.z -= 0.05f;
+			enemyObj_->wtf.position.x -= 0.1f;
 
-				enemyAttack1Obj_->wtf.position.z -= 0.05f;
-				enemyAttack1Obj_->wtf.position.x -= 0.1f;
+			enemyAttack1Obj_->wtf.position.z -= 0.05f;
+			enemyAttack1Obj_->wtf.position.x -= 0.1f;
 
-				enemyAttack2Obj_->wtf.position.z -= 0.05f;
-				enemyAttack2Obj_->wtf.position.x -= 0.1f;
+			enemyAttack2Obj_->wtf.position.z -= 0.05f;
+			enemyAttack2Obj_->wtf.position.x -= 0.1f;
 
-				enemyAttack3Obj_->wtf.position.z -= 0.05f;
-				enemyAttack3Obj_->wtf.position.x -= 0.1f;
-				
-				enemyAttack4Obj_->wtf.position.z -= 0.05f;
-				enemyAttack4Obj_->wtf.position.x -= 0.1f;
-				
-				enemyAttack5Obj_->wtf.position.z -= 0.05f;
-				enemyAttack5Obj_->wtf.position.x -= 0.1f;
-				
-				enemyAttack6Obj_->wtf.position.z -= 0.05f;
-				enemyAttack6Obj_->wtf.position.x -= 0.1f;
+			enemyAttack3Obj_->wtf.position.z -= 0.05f;
+			enemyAttack3Obj_->wtf.position.x -= 0.1f;
 
-			}
-			//順番に攻撃する弾を秒数で攻撃させる
-			if (enemyAttackTimer2 == 10) {
-				CreatCrystalBullet();
-			}
+			enemyAttack4Obj_->wtf.position.z -= 0.05f;
+			enemyAttack4Obj_->wtf.position.x -= 0.1f;
+
+			enemyAttack5Obj_->wtf.position.z -= 0.05f;
+			enemyAttack5Obj_->wtf.position.x -= 0.1f;
+
+			enemyAttack6Obj_->wtf.position.z -= 0.05f;
+			enemyAttack6Obj_->wtf.position.x -= 0.1f;
+
+		}
+		//順番に攻撃する弾を秒数で攻撃させる
+		if (enemyAttackTimer2 == 10) {
+			CreatCrystalBullet();
+		}
 
 
 		break;
@@ -231,13 +231,14 @@ void Enemy::Update() {
 		//if (enemyResetTimer >= 50) {
 		//	phase_ = Phase::Random;
 		//}
-		if (attackInterval <= 0) {
+		if (attackInterval <= 0 && playerAngleNmb == 0) {
 			enemyAttackTimer = 0;
 			enemyAttackTimer2 = 0;
 			enemyAttackTimer3 = 0;
 			enemyAttackTimer4 = 0;
 			//近距離
 			if (AttckNmb == 1) {
+				playerDirectionToCorrect();
 				if (randomAttck <= 5) {
 					phase_ = Phase::Approach;
 				}
@@ -250,6 +251,7 @@ void Enemy::Update() {
 			}
 			//中距離
 			else if (AttckNmb == 2) {
+				playerDirectionToCorrect();
 				if (randomAttck <= 4) {
 					phase_ = Phase::Leave;
 				}
@@ -265,20 +267,21 @@ void Enemy::Update() {
 			}
 			//遠距離
 			else if (AttckNmb == 3) {
+				playerDirectionToCorrect();
 				if (randomAttck <= 4) {
 					phase_ = Phase::ShortAttack;
 				}
 				else if (5 <= randomAttck <= 6) {
 					phase_ = Phase::Approach;
 				}
-				else if (7 <= randomAttck<=8) {
+				else if (7 <= randomAttck <= 8) {
 					phase_ = Phase::Leave;
 				}
 				else if (9 <= randomAttck) {
 					phase_ = Phase::Explosion;
 				}
 			}
-		break;
+			break;
 	case Phase::Explosion:
 		enemyAttackTimer4++;
 		explosion->Update(player_->GetWorldPosition(), enemyObj_);
@@ -289,30 +292,30 @@ void Enemy::Update() {
 			phase_ = Phase::ReLeave;
 		}
 		break;
-		case Phase::ShortAttack:
-			enemyAttackTimer3++;
-			shortRenge->Update(player_->GetWorldPosition(), enemyObj_);
-			shortRenge->Update(player_->GetWorldPosition(), enemyAttack1Obj_);
-			shortRenge->Update(player_->GetWorldPosition(), enemyAttack2Obj_);
-			shortRenge->Update(player_->GetWorldPosition(), enemyAttack3Obj_);
-			shortRenge->Update(player_->GetWorldPosition(), enemyAttack4Obj_);
-			shortRenge->Update(player_->GetWorldPosition(), enemyAttack5Obj_);
-			shortRenge->Update(player_->GetWorldPosition(), enemyAttack6Obj_);
-			if (enemyAttackTimer3 >= 120) {
-				shortRenge->ResetAttack();
-				numberOfAttacks++;
-				AttackInterval();
-				phase_ = Phase::ReLeave;
-			}
+	case Phase::ShortAttack:
+		enemyAttackTimer3++;
+		shortRenge->Update(player_->GetWorldPosition(), enemyObj_);
+		shortRenge->Update(player_->GetWorldPosition(), enemyAttack1Obj_);
+		shortRenge->Update(player_->GetWorldPosition(), enemyAttack2Obj_);
+		shortRenge->Update(player_->GetWorldPosition(), enemyAttack3Obj_);
+		shortRenge->Update(player_->GetWorldPosition(), enemyAttack4Obj_);
+		shortRenge->Update(player_->GetWorldPosition(), enemyAttack5Obj_);
+		shortRenge->Update(player_->GetWorldPosition(), enemyAttack6Obj_);
+		if (enemyAttackTimer3 >= 120) {
+			shortRenge->ResetAttack();
+			numberOfAttacks++;
+			AttackInterval();
+			phase_ = Phase::ReLeave;
+		}
 
-			break;
-      }
+		break;
+		}
 	}
 	if (numberOfAttacks >= 3) {
 		AttckNmb = 0;
 		numberOfAttacks = 0;
 	}
-
+	playerDirection();
 }
 
 void Enemy::CreatDaggerBullet(int bulletNum) {
@@ -425,6 +428,113 @@ void Enemy::AttackInterval()
 {
 	attackInterval = 250;
 
+}
+
+void Enemy::playerDirection()
+{
+
+	playerBeforeAngle = playerAngle;
+
+
+
+
+
+	if (playerAngleNmb == 1) {
+		playerVecSpeed = 1 / PI;
+
+		enemyObj_->wtf.rotation.y += playerVecSpeed;
+		enemyAttack1Obj_->wtf.rotation.y += playerVecSpeed;
+		enemyAttack2Obj_->wtf.rotation.y += playerVecSpeed;
+		enemyAttack3Obj_->wtf.rotation.y += playerVecSpeed;
+		enemyAttack4Obj_->wtf.rotation.y += playerVecSpeed;
+		enemyAttack5Obj_->wtf.rotation.y += playerVecSpeed;
+		enemyAttack6Obj_->wtf.rotation.y += playerVecSpeed;
+
+		if (playerAngle + PI <= enemyObj_->wtf.rotation.y) {
+			playerAngleNmb = 0;
+			enemyObj_->wtf.rotation.y = playerAngle + PI;
+			enemyAttack1Obj_->wtf.rotation.y = playerAngle + PI;
+			enemyAttack2Obj_->wtf.rotation.y = playerAngle + PI;
+			enemyAttack3Obj_->wtf.rotation.y = playerAngle + PI;
+			enemyAttack4Obj_->wtf.rotation.y = playerAngle + PI;
+			enemyAttack5Obj_->wtf.rotation.y = playerAngle + PI;
+			enemyAttack6Obj_->wtf.rotation.y = playerAngle + PI;
+		}
+	}
+	if (playerAngleNmb == 2) {
+		playerVecSpeed = 1 / PI;
+		enemyObj_->wtf.rotation.y -= playerVecSpeed;
+		enemyAttack1Obj_->wtf.rotation.y -= playerVecSpeed;
+		enemyAttack2Obj_->wtf.rotation.y -= playerVecSpeed;
+		enemyAttack3Obj_->wtf.rotation.y -= playerVecSpeed;
+		enemyAttack4Obj_->wtf.rotation.y -= playerVecSpeed;
+		enemyAttack5Obj_->wtf.rotation.y -= playerVecSpeed;
+		enemyAttack6Obj_->wtf.rotation.y -= playerVecSpeed;
+		if (playerAngle >= enemyObj_->wtf.rotation.y + PI) {
+			playerAngleNmb = 0;
+			enemyObj_->wtf.rotation.y = playerAngle + PI;
+			enemyAttack1Obj_->wtf.rotation.y = playerAngle + PI;
+			enemyAttack2Obj_->wtf.rotation.y = playerAngle + PI;
+			enemyAttack3Obj_->wtf.rotation.y = playerAngle + PI;
+			enemyAttack4Obj_->wtf.rotation.y = playerAngle + PI;
+			enemyAttack5Obj_->wtf.rotation.y = playerAngle + PI;
+			enemyAttack6Obj_->wtf.rotation.y = playerAngle + PI;
+		}
+	}
+	enemyObj_->Update();
+	enemyAttack1Obj_->Update();
+	enemyAttack2Obj_->Update();
+	enemyAttack3Obj_->Update();
+	enemyAttack4Obj_->Update();
+	enemyAttack5Obj_->Update();
+	enemyAttack6Obj_->Update();
+}
+
+void Enemy::playerDirectionToCorrect()
+{
+
+	playerVector = player_->GetWorldPosition() - enemyObj_->wtf.position;
+	playerAngle = atan2(playerVector.x, playerVector.z);
+	float i = playerAngle + (2 / PI);
+
+	playerAngleNmb = 0;
+	enemyObj_->wtf.rotation.y = playerAngle + PI;
+	enemyAttack1Obj_->wtf.rotation.y = playerAngle + PI;
+	enemyAttack2Obj_->wtf.rotation.y = playerAngle + PI;
+	enemyAttack3Obj_->wtf.rotation.y = playerAngle + PI;
+	enemyAttack4Obj_->wtf.rotation.y = playerAngle + PI;
+	enemyAttack5Obj_->wtf.rotation.y = playerAngle + PI;
+	enemyAttack6Obj_->wtf.rotation.y = playerAngle + PI;
+
+	enemyObj_->Update();
+	enemyAttack1Obj_->Update();
+	enemyAttack2Obj_->Update();
+	enemyAttack3Obj_->Update();
+	enemyAttack4Obj_->Update();
+	enemyAttack5Obj_->Update();
+	enemyAttack6Obj_->Update();
+
+	//if (playerBeforeAngle < playerAngle) {
+	//	if (playerBeforeAngle < i) {
+	//		playerAngleNmb = 2;
+	//	}
+	//	else if (playerBeforeAngle > i)
+	//	{
+	//		playerAngleNmb = 1;
+	//	}
+
+
+	//}
+	//else if (playerBeforeAngle > playerAngle)
+	//{
+	//	if (playerBeforeAngle > i) {
+	//		playerAngleNmb = 1;
+	//	}
+	//	else if (playerBeforeAngle < i)
+	//	{
+	//		playerAngleNmb = 2;
+	//	}
+	//}
 }
 
 Vector3 Enemy::GetWorldPosition()
