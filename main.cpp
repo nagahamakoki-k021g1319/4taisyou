@@ -6,8 +6,8 @@
 #include "ImGuiManager.h"
 #include <imgui.h>
 
-
 #include "GameScene.h"
+#include <fbxsdk.h>
 
 
 
@@ -51,7 +51,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	Object3d::StaticInitialize(dxCommon->GetDevice(), WinApp::window_width, WinApp::window_height);
 	//パーティクル静的初期化
 	ParticleManager::StaticInitialize(dxCommon->GetDevice(), dxCommon->GetCommandList());
-	
+	// FBX関連静的初期化
+	FbxLoader::GetInstance()->Initialize(dxCommon->GetDevice());
 
 #pragma endregion
 

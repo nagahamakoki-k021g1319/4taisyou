@@ -33,10 +33,37 @@ Player::~Player() {
 
 	delete debugObj_;
 	delete debugModel_;
+
+	//FBXオブジェクト解放
+	delete fbxObject3d_;
+	delete fbxModel_;
+
 }
 
-void Player::Initialize(Input* input) {
+void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
+	// nullptrチェック
+	assert(dxCommon);
+	assert(input);
+
+	this->dxCommon = dxCommon;
 	input_ = input;
+
+	// カメラ生成
+	camera = new Camera(1280, 720);
+	FBXObject3d::SetCamera(camera);
+
+	fbxModel_ = FbxLoader::GetInstance()->LoadModelFromFile("playerRun");
+	// デバイスをセット
+	FBXObject3d::SetDevice(dxCommon->GetDevice());
+	// グラフィックスパイプライン生成
+	FBXObject3d::CreateGraphicsPipeline();
+
+	fbxObject3d_ = new FBXObject3d;
+	fbxObject3d_->Initialize();
+	fbxObject3d_->SetModel(fbxModel_);
+	fbxObject3d_->SetScale({ 0.01,0.01,0.01 });
+	fbxObject3d_->SetPosition({ 0,0,40 });
+	fbxObject3d_->PlayAnimation();
 
 	//プレイヤー設定
 	bodyModel_ = Model::LoadFromOBJ("player");
@@ -359,6 +386,8 @@ void Player::Update(Transform* cam) {
 	attack3Obj_->Update(cam);
 	attack4Obj_->Update(cam);
 
+	fbxObject3d_->Update();
+
 	wolf_->Update(enemyPos_);
 	MpUpdate(mpRegen);
 	if (mp > 100) {
@@ -434,6 +463,8 @@ void Player::Draw() {
 			}
 		}
 
+		
+
 		wolf_->Draw();
 
 		////デバッグ用
@@ -444,6 +475,11 @@ void Player::Draw() {
 		//	debugObj_->Draw();
 		//}
 	}
+}
+
+void Player::FbxDraw()
+{
+	fbxObject3d_->Draw(dxCommon->GetCommandList());
 }
 
 void Player::EffUpdate()
@@ -526,8 +562,8 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 			//当たり判定
 			if (col.CircleCollisionXZ(lightAttackWPos, enemyPos, 0.5f, 1.0f)) {
 				damage = 3;
+				MpUpdate(mpPuls);
 				return true;
-				MpUpdate(healMp);
 			}
 		}
 	}
@@ -540,10 +576,12 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 			if (col.CircleCollisionXZ(heavyAttackWPos, enemyPos, 1.0f, 1.0f)) {
 				damage = 7;
 				return true;
-				MpUpdate(healMp);
+				MpUpdate(mpPuls);
 			}
 		}
 	}
+
+	return false;
 
 	return false;
 }

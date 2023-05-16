@@ -199,6 +199,15 @@
     <ClCompile Include="User\player.cpp">
       <Filter>user\ソース</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\3D\FbxLoader.cpp">
+      <Filter>Engine\ソースファイル\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3D\FBXModel.cpp">
+      <Filter>Engine\ソースファイル\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3D\FBXObject3d.cpp">
+      <Filter>Engine\ソースファイル\3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BASE\FPS.h">
@@ -303,6 +312,15 @@
     <ClInclude Include="User\player.h">
       <Filter>user\ヘッダー</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\3D\FbxLoader.h">
+      <Filter>Engine\ヘッダーファイル\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3D\FBXModel.h">
+      <Filter>Engine\ヘッダーファイル\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3D\FBXObject3d.h">
+      <Filter>Engine\ヘッダーファイル\3D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\SHADER\Sprite.hlsli">
@@ -312,6 +330,9 @@
       <Filter>Engine\シェーダーファイル</Filter>
     </None>
     <None Include="Engine\SHADER\Particle.hlsli">
+      <Filter>Engine\シェーダーファイル</Filter>
+    </None>
+    <None Include="Engine\SHADER\FBX.hlsli">
       <Filter>Engine\シェーダーファイル</Filter>
     </None>
   </ItemGroup>
@@ -335,6 +356,12 @@
       <Filter>Engine\シェーダーファイル</Filter>
     </FxCompile>
     <FxCompile Include="Engine\SHADER\ParticleVS.hlsl">
+      <Filter>Engine\シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\SHADER\FBXPS.hlsl">
+      <Filter>Engine\シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\SHADER\FBXVS.hlsl">
       <Filter>Engine\シェーダーファイル</Filter>
     </FxCompile>
   </ItemGroup>
