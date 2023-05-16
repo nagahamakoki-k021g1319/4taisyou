@@ -19,8 +19,10 @@ public:
 	void Initialize(Input* input);
 	void Reset();
 
-	void Update(Transform* cam);
+	void Update();
 	void Rota();
+	void Move();
+	void camUpdate();
 
 	void Attack();
 
@@ -59,6 +61,7 @@ public:
 	/// </summary>
 	/// <param name="pos"></param>
 	void SetPos(Vector3 pos) { bodyObj_->wtf.position = pos; };
+	void SetCamera(Camera* cam) { camera = cam; };
 
 	int EffTimer = 0;
 	int isEffFlag = 0;
@@ -77,6 +80,17 @@ private:
 	Object3d* bodyObj_ = nullptr;
 	const float moveSpeed_ = 0.1f;
 	const float rotaSpeed_ = 0.1f;
+
+	Camera* camera = nullptr;
+	Transform* camTransForm = nullptr;
+	Vector3 targetPos;
+	Vector3 eyePos;
+	float targetTheta;
+	float targetDistance = 10;
+	float camMoveSpeed = 0.2f;
+	float camRotaSpeed = PI / 180;
+	float dashSpeed = 0.4f;
+	const float dashMP = 2.0f / 60.0f;
 
 	//プレイヤーの移動
 	Model* dash1Model_ = nullptr;
@@ -112,7 +126,7 @@ private:
 
 	//MP関連
 	float mp;
-	const float mpRegen = 0.5f / 60;
+	const float mpRegen = 0.5f / 60.0f;
 	const float mpPuls = 5;
 	//小回復
 	const int heal = defaultHp * 0.2;
@@ -138,6 +152,7 @@ private:
 	//弱攻撃
 	Vector3 lightAttackLPos;
 	Vector3 lightAttackWPos;
+	const float lightMpPuls = 3;
 	//何回めの連撃か
 	int lightAttackCount;
 	//一回の攻撃全体の時間
@@ -152,10 +167,10 @@ private:
 	//次の連撃への入力受付開始時間
 	float lightAttackInput[4] = { 20,20,20,0 };
 
-
 	//強攻撃
 	Vector3 heavyAttackLPos;
 	Vector3 heavyAttackWPos;
+	const float heavyMpPuls = 8;
 	//何回めの連撃か
 	int heavyAttackCount;
 	//一回の攻撃全体の時間
@@ -172,10 +187,10 @@ private:
 
 	//回避
 	bool isDodge;
-	const int dodgeLimit = 20;
+	const int dodgeLimit = 60;
 	int dodgeTimer;
 	//回避後硬直時間
-	const int dodgeStun = 8;
+	const int dodgeStun = 1;
 	Vector3 dodgeMoveVec;
 	Vector3 dodgeMoveVecNomal;
 
