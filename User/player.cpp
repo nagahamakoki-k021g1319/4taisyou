@@ -54,7 +54,7 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	fbxObject3d_->Initialize();
 	fbxObject3d_->SetModel(fbxModel_);
 	fbxObject3d_->SetScale({ 0.01,0.01,0.01 });
-	fbxObject3d_->SetPosition({ 0,0,40 });
+	fbxObject3d_->SetPosition({ 0,0,0 });
 	fbxObject3d_->PlayAnimation();
 
 	//プレイヤー設定
@@ -81,15 +81,15 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	attack1Model_ = Model::LoadFromOBJ("attack1");
 	attack1Obj_ = Object3d::Create();
 	attack1Obj_->SetModel(attack1Model_);
-	
+
 	attack2Model_ = Model::LoadFromOBJ("attack2");
 	attack2Obj_ = Object3d::Create();
 	attack2Obj_->SetModel(attack2Model_);
-	
+
 	attack3Model_ = Model::LoadFromOBJ("attack3");
 	attack3Obj_ = Object3d::Create();
 	attack3Obj_->SetModel(attack3Model_);
-	
+
 	attack4Model_ = Model::LoadFromOBJ("attack4");
 	attack4Obj_ = Object3d::Create();
 	attack4Obj_->SetModel(attack4Model_);
@@ -124,6 +124,9 @@ void Player::Reset() {
 	eyePos = { 0.0f, 3.0f, -8.0f };
 	targetPos = { 0.0f,0.0f,targetDistance };
 
+	fbxObject3d_->wtf.Initialize();
+	fbxObject3d_->wtf.scale = { 0.01,0.01,0.01 };
+
 	bodyObj_->wtf.Initialize();
 
 	dash1Obj_->wtf.Initialize();
@@ -135,11 +138,11 @@ void Player::Reset() {
 	dash4Obj_->wtf.Initialize();
 
 	attack1Obj_->wtf.Initialize();
-	
+
 	attack2Obj_->wtf.Initialize();
-	
+
 	attack3Obj_->wtf.Initialize();
-	
+
 	attack4Obj_->wtf.Initialize();
 
 	hp = defaultHp;
@@ -346,6 +349,7 @@ void Player::Move() {
 		}
 
 		//更新
+		fbxObject3d_->wtf.position += velocity;
 		bodyObj_->wtf.position += velocity;
 		dash1Obj_->wtf.position += velocity;
 		dash2Obj_->wtf.position += velocity;
@@ -364,8 +368,9 @@ void Player::Rota() {
 			Vector2 stickVec = input_->GetLeftStickVec();
 
 			float theta = atan2(stickVec.x, stickVec.y);
+			fbxObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
 
-			bodyObj_->wtf.rotation.y = theta+camTransForm->rotation.y;
+			bodyObj_->wtf.rotation.y = theta + camTransForm->rotation.y;
 
 			dash1Obj_->wtf.rotation.y = theta + camTransForm->rotation.y;
 
@@ -394,7 +399,8 @@ void Player::camUpdate() {
 	Vector3 theta;
 	if (input_->StickInput(R_LEFT)) {
 		theta.y = -camRotaSpeed;
-	}else if (input_->StickInput(R_RIGHT)) {
+	}
+	else if (input_->StickInput(R_RIGHT)) {
 		theta.y = camRotaSpeed;
 	}
 	camTransForm->rotation += theta;
@@ -462,20 +468,25 @@ void Player::Update() {
 		if (camShakeTimer <= camShakeLimit && camShakeTimer > camShakeLimit * 3 / 4) {
 			camShakeVec.y += 0.05f;
 			camShakeVec.z += 0.05f;
-		}else if (camShakeTimer <= camShakeLimit * 3 / 4 && camShakeTimer > camShakeLimit * 2 / 4) {
+		}
+		else if (camShakeTimer <= camShakeLimit * 3 / 4 && camShakeTimer > camShakeLimit * 2 / 4) {
 			camShakeVec.y -= 0.05f;
 			camShakeVec.z -= 0.05f;
-		}else if (camShakeTimer <= camShakeLimit * 2 / 4 && camShakeTimer > camShakeLimit * 1 / 4) {
+		}
+		else if (camShakeTimer <= camShakeLimit * 2 / 4 && camShakeTimer > camShakeLimit * 1 / 4) {
 			camShakeVec.y += 0.05f;
 			camShakeVec.z += 0.05f;
-		}else if (camShakeTimer <= camShakeLimit * 1 / 4 && camShakeTimer > 0) {
+		}
+		else if (camShakeTimer <= camShakeLimit * 1 / 4 && camShakeTimer > 0) {
 			camShakeVec.y -= 0.05f;
 			camShakeVec.z -= 0.05f;
-		}else if (camShakeTimer <= 0) {
+		}
+		else if (camShakeTimer <= 0) {
 			isCamShake = false;
 			camShakeVec = { 0,0,0 };
 		}
 	}
+	fbxObject3d_->Update();
 	bodyObj_->Update();
 	dash1Obj_->Update();
 	dash2Obj_->Update();
@@ -486,18 +497,17 @@ void Player::Update() {
 	attack3Obj_->Update();
 	attack4Obj_->Update();
 
-	fbxObject3d_->Update();
 
 	wolf_->Update(enemyPos_);
 	MpUpdate(mpRegen);
-	
+
 
 	debugObj_->Update();
 }
 
 void Player::Draw() {
 	if (isLive) {
-		
+
 		//弱攻撃のモーション
 		if (input_->PButtonTrigger(X) || input_->PButtonTrigger(Y)) {
 
@@ -553,24 +563,16 @@ void Player::Draw() {
 			}
 			else {
 				if (attackFlag == 0) {
-					bodyObj_->Draw();
+					//bodyObj_->Draw();
 				}
 
 				objRotaTimer = 0;
 			}
 		}
 
-		
+
 
 		wolf_->Draw();
-
-		////デバッグ用
-		//if (isLightAttack) {
-		//	debugObj_->Draw();
-		//}
-		//if (isHeavyAttack) {
-		//	debugObj_->Draw();
-		//}
 	}
 }
 
@@ -685,7 +687,7 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 
 bool Player::CheckBody2Enemy(Vector3 enemyPos) {
 	if (col.CircleCollisionXZ(GetWorldPosition(), enemyPos, 1.0f, 1.0f)) {
-		moveBack += { 0,0,-0.2 };
+		moveBack += { 0, 0, -0.2 };
 		moveBack = bVelocity(moveBack, bodyObj_->wtf);
 		return true;
 	}
@@ -953,12 +955,14 @@ void Player::Dodge() {
 		//回避時
 		//移動速度変更
 		dodgeMoveVec = dodgeMoveVecNomal;
-	
-	}else if (dodgeTimer > 0) {
+
+	}
+	else if (dodgeTimer > 0) {
 		//硬直
 		dodgeMoveVec = { 0,0,0 };
-	
-	}else if (dodgeTimer <= 0) {
+
+	}
+	else if (dodgeTimer <= 0) {
 		isDodge = false;
 		isAction = 0;
 	}

@@ -206,10 +206,24 @@ void FBXObject3d::Initialize()
 	//1フレーム分の時間を60FPSで設定
 	frameTime.SetTime(0, 0, 0, 1, 0, FbxTime::EMode::eFrames120);
 
+	wtf.Initialize();
 }
 
 void FBXObject3d::Update()
 {
+	//transformからxmにコピー
+	position.x = wtf.position.x;
+	position.y = wtf.position.y;
+	position.z = wtf.position.z;
+
+	rotation.x = wtf.rotation.x;
+	rotation.y = wtf.rotation.y;
+	rotation.z = wtf.rotation.z;
+
+	scale.x = wtf.scale.x;
+	scale.y = wtf.scale.y;
+	scale.z = wtf.scale.z;
+
 	XMMATRIX matScale, matRot, matTrans;
 
 	// スケール、回転、平行移動行列の計算
@@ -217,7 +231,7 @@ void FBXObject3d::Update()
 	matRot = XMMatrixIdentity();
 	matRot *= XMMatrixRotationZ(XMConvertToRadians(rotation.z));
 	matRot *= XMMatrixRotationX(XMConvertToRadians(rotation.x));
-	matRot *= XMMatrixRotationY(XMConvertToRadians(rotation.y));
+	matRot *= XMMatrixRotationY(rotation.y);
 	matTrans = XMMatrixTranslation(position.x, position.y, position.z);
 
 	// ワールド行列の合成

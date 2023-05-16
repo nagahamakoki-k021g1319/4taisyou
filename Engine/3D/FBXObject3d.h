@@ -10,6 +10,7 @@
 #include <string>
 #include "FbxLoader.h"
 
+#include "Transform.h"
 
 class FBXObject3d
 {
@@ -128,5 +129,8 @@ protected: // メンバ変数
 	FbxTime currentTime;
 	//アニメーション再生中
 	bool isPlay = false;
+
+public:
+	Transform wtf;
 };
 
