@@ -101,7 +101,7 @@ private:
 	float camMoveSpeed = 0.2f;
 	float camRotaSpeed = PI / 180;
 	float dashSpeed = 0.4f;
-	const float dashMP = 2.0f / 60.0f;
+	const float dashMP = 3.0f / 60.0f;
 
 	//ƒvƒŒƒCƒ„[‚ÌˆÚ“®
 	Model* dash1Model_ = nullptr;
