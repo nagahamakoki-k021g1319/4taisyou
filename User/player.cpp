@@ -44,10 +44,6 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	input_ = input;
 	camTransForm = new Transform();
 
-	// カメラ生成
-	camera = new Camera(1280, 720);
-	FBXObject3d::SetCamera(camera);
-
 	fbxModel_ = FbxLoader::GetInstance()->LoadModelFromFile("playerRun");
 	// デバイスをセット
 	FBXObject3d::SetDevice(dxCommon->GetDevice());

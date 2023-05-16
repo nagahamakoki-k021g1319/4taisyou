@@ -86,8 +86,6 @@ private:
 	Model* bodyModel_ = nullptr;
 	Object3d* bodyObj_ = nullptr;
 
-	//ÉJÉÅÉâ
-	Camera* camera = nullptr;
 	FBXModel* fbxModel_ = nullptr;
 	FBXObject3d* fbxObject3d_ = nullptr;
 
