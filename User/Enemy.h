@@ -35,6 +35,10 @@ public:
 
 	void AttackInterval();
 
+	void playerDirection();
+
+	void playerDirectionToCorrect();
+
 	////ワールド座標を取得
 	Vector3 GetWorldPosition();
 
@@ -123,5 +127,11 @@ private:
 	//パーティクル
 	std::unique_ptr<ParticleManager> DamageParticle;
 
-	
+	float playerBeforeAngle = 0;
+	float playerAngle = 0;
+	float playerAngleNmb = 0;
+	float PI = 3.141592;
+	float playerVecSpeed;
+
+	Vector3 playerVector = {};
 };

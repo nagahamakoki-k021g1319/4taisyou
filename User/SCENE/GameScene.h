@@ -54,11 +54,6 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
-	void CamMove();
-	void CamRota();
-	void CamUpdate();
-
-
 	Vector3 bVelocity(Vector3& velocity, Transform& worldTransform);
 
 public:
@@ -79,14 +74,6 @@ private:	//メンバ変数
 
 	//カメラ
 	Camera* camera = nullptr;
-	Transform camWtf;
-	Transform targetWtf;
-	float targetTheta;
-	float targetDistance = 10;
-	float camMoveSpeed = 0.2f;
-	float camRotaSpeed = PI / 180;
-	float dashSpeed = 0.4f;
-	const float dashMP = 1 / 60;
 
 	//プレイヤー
 	Player* player_ = nullptr;
