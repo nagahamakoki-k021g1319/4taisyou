@@ -497,44 +497,44 @@ void Enemy::playerDirectionToCorrect()
 	playerAngle = atan2(playerVector.x, playerVector.z);
 	float i = playerAngle + (2 / PI);
 
-	playerAngleNmb = 0;
-	enemyObj_->wtf.rotation.y = playerAngle + PI;
-	enemyAttack1Obj_->wtf.rotation.y = playerAngle + PI;
-	enemyAttack2Obj_->wtf.rotation.y = playerAngle + PI;
-	enemyAttack3Obj_->wtf.rotation.y = playerAngle + PI;
-	enemyAttack4Obj_->wtf.rotation.y = playerAngle + PI;
-	enemyAttack5Obj_->wtf.rotation.y = playerAngle + PI;
-	enemyAttack6Obj_->wtf.rotation.y = playerAngle + PI;
+	//playerAngleNmb = 0;
+	//enemyObj_->wtf.rotation.y = playerAngle + PI;
+	//enemyAttack1Obj_->wtf.rotation.y = playerAngle + PI;
+	//enemyAttack2Obj_->wtf.rotation.y = playerAngle + PI;
+	//enemyAttack3Obj_->wtf.rotation.y = playerAngle + PI;
+	//enemyAttack4Obj_->wtf.rotation.y = playerAngle + PI;
+	//enemyAttack5Obj_->wtf.rotation.y = playerAngle + PI;
+	//enemyAttack6Obj_->wtf.rotation.y = playerAngle + PI;
 
-	enemyObj_->Update();
-	enemyAttack1Obj_->Update();
-	enemyAttack2Obj_->Update();
-	enemyAttack3Obj_->Update();
-	enemyAttack4Obj_->Update();
-	enemyAttack5Obj_->Update();
-	enemyAttack6Obj_->Update();
+	//enemyObj_->Update();
+	//enemyAttack1Obj_->Update();
+	//enemyAttack2Obj_->Update();
+	//enemyAttack3Obj_->Update();
+	//enemyAttack4Obj_->Update();
+	//enemyAttack5Obj_->Update();
+	//enemyAttack6Obj_->Update();
 
-	//if (playerBeforeAngle < playerAngle) {
-	//	if (playerBeforeAngle < i) {
-	//		playerAngleNmb = 2;
-	//	}
-	//	else if (playerBeforeAngle > i)
-	//	{
-	//		playerAngleNmb = 1;
-	//	}
+	if (playerBeforeAngle < playerAngle) {
+		if (playerBeforeAngle < i) {
+			playerAngleNmb = 2;
+		}
+		else if (playerBeforeAngle > i)
+		{
+			playerAngleNmb = 1;
+		}
 
 
-	//}
-	//else if (playerBeforeAngle > playerAngle)
-	//{
-	//	if (playerBeforeAngle > i) {
-	//		playerAngleNmb = 1;
-	//	}
-	//	else if (playerBeforeAngle < i)
-	//	{
-	//		playerAngleNmb = 2;
-	//	}
-	//}
+	}
+	else if (playerBeforeAngle > playerAngle)
+	{
+		if (playerBeforeAngle > i) {
+			playerAngleNmb = 1;
+		}
+		else if (playerBeforeAngle < i)
+		{
+			playerAngleNmb = 2;
+		}
+	}
 }
 
 Vector3 Enemy::GetWorldPosition()
