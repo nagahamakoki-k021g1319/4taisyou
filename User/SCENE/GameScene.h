@@ -77,6 +77,7 @@ private:	//メンバ変数
 
 	//プレイヤー
 	Player* player_ = nullptr;
+
 	//エネミー
 	EnemyManager* enemyManager_ = nullptr;
 	const int hitStopLimit = 10;

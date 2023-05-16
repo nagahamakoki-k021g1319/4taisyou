@@ -56,6 +56,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 
 	ParticleManager::SetCamera(camera);
 	Object3d::SetCamera(camera);
+	FBXObject3d::SetCamera(camera);
 
 	floorMD = Model::LoadFromOBJ("floor");
 	floor = Object3d::Create();
@@ -74,7 +75,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 
 	//プレイヤー
 	player_ = new Player();
-	player_->Initialize(input);
+	player_->Initialize(dxCommon,input);
 	player_->SetCamera(camera);
 
 	//エネミー
@@ -416,6 +417,8 @@ void GameScene::Draw() {
 	Object3d::PostDraw();
 
 
+
+
 	//// パーティクル UI スプライト描画
 	switch (scene)
 	{
@@ -455,6 +458,8 @@ void GameScene::Draw() {
 
 		srr->Draw();
 		srl->Draw();
+
+		player_->FbxDraw();
 
 		break;
 	case Scene::Clear:

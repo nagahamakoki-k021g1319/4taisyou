@@ -28,11 +28,38 @@ Player::~Player() {
 
 	delete debugObj_;
 	delete debugModel_;
+
+	//FBXオブジェクト解放
+	delete fbxObject3d_;
+	delete fbxModel_;
+
 }
 
-void Player::Initialize(Input* input) {
+void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
+	// nullptrチェック
+	assert(dxCommon);
+	assert(input);
+
+	this->dxCommon = dxCommon;
 	input_ = input;
 	camTransForm = new Transform();
+
+	// カメラ生成
+	camera = new Camera(1280, 720);
+	FBXObject3d::SetCamera(camera);
+
+	fbxModel_ = FbxLoader::GetInstance()->LoadModelFromFile("playerRun");
+	// デバイスをセット
+	FBXObject3d::SetDevice(dxCommon->GetDevice());
+	// グラフィックスパイプライン生成
+	FBXObject3d::CreateGraphicsPipeline();
+
+	fbxObject3d_ = new FBXObject3d;
+	fbxObject3d_->Initialize();
+	fbxObject3d_->SetModel(fbxModel_);
+	fbxObject3d_->SetScale({ 0.01,0.01,0.01 });
+	fbxObject3d_->SetPosition({ 0,0,40 });
+	fbxObject3d_->PlayAnimation();
 
 	//プレイヤー設定
 	bodyModel_ = Model::LoadFromOBJ("player");
@@ -463,6 +490,8 @@ void Player::Update() {
 	attack3Obj_->Update();
 	attack4Obj_->Update();
 
+	fbxObject3d_->Update();
+
 	wolf_->Update(enemyPos_);
 	MpUpdate(mpRegen);
 	
@@ -535,6 +564,8 @@ void Player::Draw() {
 			}
 		}
 
+		
+
 		wolf_->Draw();
 
 		////デバッグ用
@@ -545,6 +576,11 @@ void Player::Draw() {
 		//	debugObj_->Draw();
 		//}
 	}
+}
+
+void Player::FbxDraw()
+{
+	fbxObject3d_->Draw(dxCommon->GetCommandList());
 }
 
 void Player::EffUpdate()
@@ -645,6 +681,8 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 			}
 		}
 	}
+
+	return false;
 
 	return false;
 }

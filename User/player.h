@@ -1,12 +1,17 @@
 #pragma once
-#include"Object3d.h"
+#include "DirectXCommon.h"
+#include "Object3d.h"
 #include "Input.h"
-
-#include"Wolf.h"
+#include "Camera.h"
+#include "Wolf.h"
 
 #include "Gorilla.h"
 #include "ParticleManager.h"
 #include "Audio.h"
+
+#include "FBXModel.h"
+#include "FbxLoader.h"
+#include "FBXObject3d.h"
 
 
 class Player {
@@ -16,7 +21,7 @@ public:
 	Player();
 	~Player();
 
-	void Initialize(Input* input);
+	void Initialize(DirectXCommon* dxCommon, Input* input);
 	void Reset();
 
 	void Update();
@@ -27,6 +32,7 @@ public:
 	void Attack();
 
 	void Draw();
+	void FbxDraw();
 	void EffUpdate();
 	void EffDraw();
 
@@ -73,11 +79,18 @@ public:
 private:
 	const float PI = 3.141592;
 	Input* input_ = nullptr;
+	DirectXCommon* dxCommon = nullptr;
 	Collision col;
 	Audio* audio = nullptr;
 	//プレイヤー
 	Model* bodyModel_ = nullptr;
 	Object3d* bodyObj_ = nullptr;
+
+	//カメラ
+	Camera* camera = nullptr;
+	FBXModel* fbxModel_ = nullptr;
+	FBXObject3d* fbxObject3d_ = nullptr;
+
 	const float moveSpeed_ = 0.1f;
 	const float rotaSpeed_ = 0.1f;
 

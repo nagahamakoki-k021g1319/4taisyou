@@ -243,11 +243,13 @@ void Enemy::Update() {
 					phase_ = Phase::Approach;
 				}
 				else if (1 <= randomAttck <= 10) {
-					phase_ = Phase::Leave;
+					/*phase_ = Phase::Leave;*/
+					phase_ = Phase::Explosion;
 				}
 				else if (9 <= randomAttck) {
 					phase_ = Phase::ShortAttack;
 				}
+
 			}
 			//中距離
 			else if (AttckNmb == 2) {
