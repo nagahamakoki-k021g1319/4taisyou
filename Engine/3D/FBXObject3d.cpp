@@ -1,5 +1,6 @@
 #include "FBXObject3d.h"
 #include <d3dcompiler.h>
+#include"ConvertXM.h"
 #pragma comment(lib, "d3dcompiler.lib")
 
 using namespace Microsoft::WRL;
@@ -150,7 +151,7 @@ void FBXObject3d::CreateGraphicsPipeline()
 	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
 	// SRV（テクスチャ）
 	rootparams[1].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
-	
+
 	//CBV(スキニング用)
 	rootparams[2].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);
 
@@ -180,7 +181,7 @@ void FBXObject3d::Initialize()
 {
 	HRESULT result;
 	CD3DX12_HEAP_PROPERTIES unt6 = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	CD3DX12_RESOURCE_DESC unt7 = CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataTransform) + 0xff) & ~0xff);
+	CD3DX12_RESOURCE_DESC unt7 = CD3DX12_RESOURCE_DESC::Buffer((sizeof(constBuffB0) + 0xff) & ~0xff);
 
 	// 定数バッファの生成
 	result = device->CreateCommittedResource(
@@ -189,7 +190,7 @@ void FBXObject3d::Initialize()
 		&unt7,
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
-		IID_PPV_ARGS(&constBuffTransform));
+		IID_PPV_ARGS(&constBuffB0));
 
 	CD3DX12_HEAP_PROPERTIES unt8 = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 	CD3DX12_RESOURCE_DESC unt9 = CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataSkin) + 0xff) & ~0xff);
@@ -206,57 +207,37 @@ void FBXObject3d::Initialize()
 	//1フレーム分の時間を60FPSで設定
 	frameTime.SetTime(0, 0, 0, 1, 0, FbxTime::EMode::eFrames120);
 
-	wtf.Initialize();
 }
 
-void FBXObject3d::Update()
-{
-	//transformからxmにコピー
-	position.x = wtf.position.x;
-	position.y = wtf.position.y;
-	position.z = wtf.position.z;
-
-	rotation.x = wtf.rotation.x;
-	rotation.y = wtf.rotation.y;
-	rotation.z = wtf.rotation.z;
-
-	scale.x = wtf.scale.x;
-	scale.y = wtf.scale.y;
-	scale.z = wtf.scale.z;
-
-	XMMATRIX matScale, matRot, matTrans;
-
+void  FBXObject3d::UpdateMat() {
+	Matrix4 matScale, matRot, matTrans;
 	// スケール、回転、平行移動行列の計算
-	matScale = XMMatrixScaling(scale.x, scale.y, scale.z);
-	matRot = XMMatrixIdentity();
-	matRot *= XMMatrixRotationZ(XMConvertToRadians(rotation.z));
-	matRot *= XMMatrixRotationX(XMConvertToRadians(rotation.x));
-	matRot *= XMMatrixRotationY(rotation.y);
-	matTrans = XMMatrixTranslation(position.x, position.y, position.z);
+	matScale = Affin::matScale(wtf.scale.x, wtf.scale.y, wtf.scale.z);
+	matRot = Affin::matUnit();
+	matRot *= Affin::matRotation(wtf.rotation);
+	matTrans = Affin::matTrans(wtf.position.x, wtf.position.y, wtf.position.z);
 
 	// ワールド行列の合成
-	matWorld = XMMatrixIdentity(); // 変形をリセット
-	matWorld *= matScale; // ワールド行列にスケーリングを反映
-	matWorld *= matRot; // ワールド行列に回転を反映
-	matWorld *= matTrans; // ワールド行列に平行移動を反映
+	wtf.matWorld = Affin::matUnit(); // 変形をリセット
+	wtf.matWorld *= matScale; // ワールド行列にスケーリングを反映
+	wtf.matWorld *= matRot; // ワールド行列に回転を反映
+	wtf.matWorld *= matTrans; // ワールド行列に平行移動を反映
+}
 
-	// ビュープロジェクション行列
-	const Matrix4& matViewProjection = camera->GetViewProjectionMatrix();
-	// モデルのメッシュトランスフォーム
-	const XMMATRIX& modelTransform = fbxmodel->GetModelTransform();
-	// カメラ座標
-	const Vector3& cameraPos = camera->GetEye();
-
+void FBXObject3d::Update() {
 	HRESULT result;
+	Matrix4 resultMat;
+	resultMat = Affin::matUnit();
+
+	UpdateMat();
+
 	// 定数バッファへデータ転送
-	ConstBufferDataTransform* constMap = nullptr;
-	result = constBuffTransform->Map(0, nullptr, (void**)&constMap);
-	if (SUCCEEDED(result)) {
-		constMap->viewproj = matViewProjection;
-		constMap->world = modelTransform * matWorld;
-		constMap->cameraPos = cameraPos;
-		constBuffTransform->Unmap(0, nullptr);
-	}
+	ConstBufferDataB0* constMap = nullptr;
+	result = constBuffB0->Map(0, nullptr, (void**)&constMap);
+	resultMat = wtf.matWorld * camera->GetViewProjectionMatrix();	// 行列の合成
+
+	constMap->mat = resultMat;
+	constBuffB0->Unmap(0, nullptr);
 
 	std::vector<FBXModel::Bone>& bones = fbxmodel->GetBones();
 
@@ -269,7 +250,6 @@ void FBXObject3d::Update()
 			currentTime = startTime;
 		}
 	}
-
 
 	//定数バッファへのデータ転送
 	ConstBufferDataSkin* constMapSkin = nullptr;
@@ -285,9 +265,6 @@ void FBXObject3d::Update()
 		constMapSkin->bones[i] = bones[i].invInitialPose * matCurrentPose;
 	}
 	constBuffSkin->Unmap(0, nullptr);
-
-
-
 }
 
 void FBXObject3d::Draw(ID3D12GraphicsCommandList* cmdList)
@@ -304,7 +281,7 @@ void FBXObject3d::Draw(ID3D12GraphicsCommandList* cmdList)
 	// プリミティブ形状を設定
 	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	// 定数バッファビューをセット
-	cmdList->SetGraphicsRootConstantBufferView(0, constBuffTransform->GetGPUVirtualAddress());
+	cmdList->SetGraphicsRootConstantBufferView(0, constBuffB0->GetGPUVirtualAddress());
 	// 定数バッファビューをセット
 	cmdList->SetGraphicsRootConstantBufferView(2, constBuffSkin->GetGPUVirtualAddress());
 	// モデル描画

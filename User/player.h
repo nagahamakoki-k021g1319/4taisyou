@@ -86,8 +86,13 @@ private:
 	Model* bodyModel_ = nullptr;
 	Object3d* bodyObj_ = nullptr;
 
+	//‘Ò‹@
 	FBXModel* fbxModel_ = nullptr;
 	FBXObject3d* fbxObject3d_ = nullptr;
+	
+
+
+
 
 	const float moveSpeed_ = 0.1f;
 	const float rotaSpeed_ = 0.1f;

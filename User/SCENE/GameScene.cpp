@@ -400,9 +400,9 @@ void GameScene::Draw() {
 		enemyManager_->Draw();
 		
     
-		floor->Draw();
+		//floor->Draw();
 		skydome->Draw();
-		field->Draw();
+		//field->Draw();
 		break;
 	case Scene::Clear:
 
@@ -438,7 +438,8 @@ void GameScene::Draw() {
 		srd->Draw();
 		break;
 	case Scene::Play:
-		
+		player_->FbxDraw();
+
 		// パーティクル描画前処理
 	/*	ParticleManager::PreDraw(dxCommon->GetCommandList());*/
 		player_->EffDraw();
@@ -459,7 +460,7 @@ void GameScene::Draw() {
 		srr->Draw();
 		srl->Draw();
 
-		player_->FbxDraw();
+	
 
 		break;
 	case Scene::Clear:

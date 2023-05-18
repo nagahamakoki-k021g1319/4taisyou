@@ -44,7 +44,7 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	input_ = input;
 	camTransForm = new Transform();
 
-	fbxModel_ = FbxLoader::GetInstance()->LoadModelFromFile("playerRun");
+	fbxModel_ = FbxLoader::GetInstance()->LoadModelFromFile("stand");
 	// デバイスをセット
 	FBXObject3d::SetDevice(dxCommon->GetDevice());
 	// グラフィックスパイプライン生成
@@ -53,8 +53,8 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	fbxObject3d_ = new FBXObject3d;
 	fbxObject3d_->Initialize();
 	fbxObject3d_->SetModel(fbxModel_);
-	fbxObject3d_->SetScale({ 0.01,0.01,0.01 });
-	fbxObject3d_->SetPosition({ 0,0,0 });
+	fbxObject3d_->wtf.position = { 0,10,0 };
+	fbxObject3d_->wtf.scale = { 10,10,10 };
 	fbxObject3d_->PlayAnimation();
 
 	//プレイヤー設定
@@ -125,7 +125,7 @@ void Player::Reset() {
 	targetPos = { 0.0f,0.0f,targetDistance };
 
 	fbxObject3d_->wtf.Initialize();
-	fbxObject3d_->wtf.scale = { 0.01,0.01,0.01 };
+	/*fbxObject3d_->wtf.scale = { 0.01,0.01,0.01 };*/
 
 	bodyObj_->wtf.Initialize();
 
