@@ -187,6 +187,8 @@ void Player::Reset() {
 	mp = 100;
 
 	centerPos = { 0,2,0 };
+	isActionStop = true;
+
 }
 
 void Player::Attack() {
@@ -438,55 +440,61 @@ void Player::camUpdate() {
 }
 
 void Player::Update() {
-	if (isInvincible) {
-		invincibleTimer--;
-		if (invincibleTimer < 0) {
-			isInvincible = false;
+	if (isActionStop == false) {
+
+		if (isInvincible) {
+			invincibleTimer--;
+			if (invincibleTimer < 0) {
+				isInvincible = false;
+			}
 		}
+
+		Rota();
+		Move();
+
+		camUpdate();
+
+		Attack();
+
+		if (isEffFlag == 1) {
+			EffTimer++;
+		}
+		if (EffTimer <= 10 && EffTimer >= 1) {
+			EffUpdate();
+		}
+		if (EffTimer >= 11) {
+			isEffFlag = 0;
+			EffTimer = 0;
+		}
+
+		//��ʃV�F�C�N
+		if (isCamShake == true) {
+			camShakeTimer--;
+			if (camShakeTimer <= camShakeLimit && camShakeTimer > camShakeLimit * 3 / 4) {
+				camShakeVec.y += 0.05f;
+				camShakeVec.z += 0.05f;
+			}
+			else if (camShakeTimer <= camShakeLimit * 3 / 4 && camShakeTimer > camShakeLimit * 2 / 4) {
+				camShakeVec.y -= 0.05f;
+				camShakeVec.z -= 0.05f;
+			}
+			else if (camShakeTimer <= camShakeLimit * 2 / 4 && camShakeTimer > camShakeLimit * 1 / 4) {
+				camShakeVec.y += 0.05f;
+				camShakeVec.z += 0.05f;
+			}
+			else if (camShakeTimer <= camShakeLimit * 1 / 4 && camShakeTimer > 0) {
+				camShakeVec.y -= 0.05f;
+				camShakeVec.z -= 0.05f;
+			}
+			else if (camShakeTimer <= 0) {
+				isCamShake = false;
+				camShakeVec = { 0,0,0 };
+			}
+		}
+
+		MpUpdate(mpRegen);
 	}
 
-	Rota();
-	Move();
-
-	camUpdate();
-
-	Attack();
-
-	if (isEffFlag == 1) {
-		EffTimer++;
-	}
-	if (EffTimer <= 10 && EffTimer >= 1) {
-		EffUpdate();
-	}
-	if (EffTimer >= 11) {
-		isEffFlag = 0;
-		EffTimer = 0;
-	}
-
-	//��ʃV�F�C�N
-	if (isCamShake == true) {
-		camShakeTimer--;
-		if (camShakeTimer <= camShakeLimit && camShakeTimer > camShakeLimit * 3 / 4) {
-			camShakeVec.y += 0.05f;
-			camShakeVec.z += 0.05f;
-		}
-		else if (camShakeTimer <= camShakeLimit * 3 / 4 && camShakeTimer > camShakeLimit * 2 / 4) {
-			camShakeVec.y -= 0.05f;
-			camShakeVec.z -= 0.05f;
-		}
-		else if (camShakeTimer <= camShakeLimit * 2 / 4 && camShakeTimer > camShakeLimit * 1 / 4) {
-			camShakeVec.y += 0.05f;
-			camShakeVec.z += 0.05f;
-		}
-		else if (camShakeTimer <= camShakeLimit * 1 / 4 && camShakeTimer > 0) {
-			camShakeVec.y -= 0.05f;
-			camShakeVec.z -= 0.05f;
-		}
-		else if (camShakeTimer <= 0) {
-			isCamShake = false;
-			camShakeVec = { 0,0,0 };
-		}
-	}
 	fbxObject3d_->Update();
 	bodyObj_->Update();
 	dash1Obj_->Update();
@@ -497,11 +505,7 @@ void Player::Update() {
 	attack2Obj_->Update();
 	attack3Obj_->Update();
 	attack4Obj_->Update();
-
-
 	wolf_->Update(enemyPos_);
-	MpUpdate(mpRegen);
-
 
 	debugObj_->Update();
 }

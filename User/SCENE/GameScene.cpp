@@ -224,6 +224,11 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 
 void GameScene::Reset() {
 	player_->Reset();
+	player_->camUpdate();
+	actionStopTimer = actionStopLimit;
+	isActionStop = true;
+	player_->isActionStop = isActionStop;
+	enemyManager_->isActionStop = isActionStop;
 }
 
 /// <summary>
@@ -304,6 +309,14 @@ void GameScene::Update() {
 		}
 		break;
 	case Scene::Play:
+		if (actionStopTimer > 0) {
+			actionStopTimer--;
+		}else if (actionStopTimer <= 0) {
+			isActionStop = false;
+			player_->isActionStop = isActionStop;
+			enemyManager_->isActionStop = isActionStop;
+		}
+
 		pSourceVoice[0]->Stop();
 		soundCheckFlag = 0;
 		//音声再生
@@ -415,9 +428,6 @@ void GameScene::Draw() {
 	}
 	//3Dオブジェクト描画後処理
 	Object3d::PostDraw();
-
-
-
 
 	//// パーティクル UI スプライト描画
 	switch (scene)

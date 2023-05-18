@@ -232,6 +232,7 @@ private:
 
 
 public:
+	bool isActionStop;
 	int isAction;
 	//ƒoƒfƒB
 	Wolf* wolf_ = nullptr;
