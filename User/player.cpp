@@ -186,6 +186,7 @@ void Player::Reset() {
 	//MP関連
 	mp = 100;
 
+	centerPos = { 0,2,0 };
 }
 
 void Player::Attack() {
