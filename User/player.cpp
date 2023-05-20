@@ -32,7 +32,22 @@ Player::~Player() {
 	//FBXオブジェクト解放
 	delete fbxObject3d_;
 	delete fbxModel_;
-
+	delete fbxDashObject3d_;
+	delete fbxDashModel_;
+	delete fbxWeak1Object3d_;
+	delete fbxWeak1Model_;
+	delete fbxWeak2Object3d_;
+	delete fbxWeak2Model_;
+	delete fbxWeak3Object3d_;
+	delete fbxWeak3Model_;
+	delete fbxWeak4Object3d_;
+	delete fbxWeak4Model_;
+	delete fbxRollObject3d_;
+	delete fbxRollModel_;
+	delete fbxWalkObject3d_;
+	delete fbxWalkModel_;
+	delete fbxStrongObject3d_;
+	delete fbxStrongModel_;
 }
 
 void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
@@ -45,19 +60,16 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	camTransForm = new Transform();
 
 	fbxModel_ = FbxLoader::GetInstance()->LoadModelFromFile("stand");
-	
 	fbxRollModel_ = FbxLoader::GetInstance()->LoadModelFromFile("roll");
-
 	fbxWalkModel_ = FbxLoader::GetInstance()->LoadModelFromFile("walk");
-
 	fbxDashModel_ = FbxLoader::GetInstance()->LoadModelFromFile("dash");
-
 	fbxWeak1Model_ = FbxLoader::GetInstance()->LoadModelFromFile("weakAttack1");
 	fbxWeak2Model_ = FbxLoader::GetInstance()->LoadModelFromFile("weakAttack2");
 	fbxWeak3Model_ = FbxLoader::GetInstance()->LoadModelFromFile("weakAttack3");
 	fbxWeak4Model_ = FbxLoader::GetInstance()->LoadModelFromFile("weakAttack4");
-
 	fbxStrongModel_ = FbxLoader::GetInstance()->LoadModelFromFile("strongAttack");
+	fbxMeraModel_ = FbxLoader::GetInstance()->LoadModelFromFile("mera");
+	fbxHealModel_ = FbxLoader::GetInstance()->LoadModelFromFile("heal");
 	// デバイスをセット
 	FBXObject3d::SetDevice(dxCommon->GetDevice());
 	// グラフィックスパイプライン生成
@@ -66,10 +78,9 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	fbxObject3d_ = new FBXObject3d;
 	fbxObject3d_->Initialize();
 	fbxObject3d_->SetModel(fbxModel_);
-	/*fbxObject3d_->SetScale({ 0.001,0.001,0.001 });*/
+	/*fbxObject3d_->wtf.scale = { 0.001,0.001,0.001 };*/
 	fbxObject3d_->SetPosition({ 0,0,0 });
 	fbxObject3d_->PlayAnimation();
-
 	//回避
 	fbxRollObject3d_ = new FBXObject3d;
 	fbxRollObject3d_->Initialize();
@@ -126,7 +137,20 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	fbxStrongObject3d_->wtf.position = { 0,10,0 };
 	fbxStrongObject3d_->wtf.scale = { 10,10,10 };
 	fbxStrongObject3d_->PlayAnimation();
-	
+	//メラ
+	fbxMeraObject3d_ = new FBXObject3d;
+	fbxMeraObject3d_->Initialize();
+	fbxMeraObject3d_->SetModel(fbxStrongModel_);
+	fbxMeraObject3d_->wtf.position = { 0,10,0 };
+	fbxMeraObject3d_->wtf.scale = { 10,10,10 };
+	fbxMeraObject3d_->PlayAnimation();
+	//回復
+	fbxHealObject3d_ = new FBXObject3d;
+	fbxHealObject3d_->Initialize();
+	fbxHealObject3d_->SetModel(fbxStrongModel_);
+	fbxHealObject3d_->wtf.position = { 0,10,0 };
+	fbxHealObject3d_->wtf.scale = { 10,10,10 };
+	fbxHealObject3d_->PlayAnimation();
 	//プレイヤー設定
 	bodyModel_ = Model::LoadFromOBJ("player");
 	bodyObj_ = Object3d::Create();
@@ -206,15 +230,17 @@ void Player::Reset() {
 
 	fbxObject3d_->wtf.Initialize();
 	/*fbxObject3d_->wtf.scale = { 0.001,0.001,0.001 };*/
-	/*fbxObject3d_->wtf.scale = { 0.01,0.01,0.01 };*/
-	fbxDashObject3d_->wtf.Initialize();
+	fbxWalkObject3d_->wtf.Initialize();
 	/*fbxWeak1Object3d_->wtf.Initialize();
 	fbxWeak2Object3d_->wtf.Initialize();
 	fbxWeak3Object3d_->wtf.Initialize();
-	fbxWeak4Object3d_->wtf.Initialize();*/
-	/*fbxRollObject3d_->wtf.Initialize();
-	fbxWalkObject3d_->wtf.Initialize();
-	fbxStrongObject3d_->wtf.Initialize();*/
+	fbxWeak4Object3d_->wtf.Initialize();
+	fbxRollObject3d_->wtf.Initialize();
+	fbxDashObject3d_->wtf.Initialize();
+	fbxStrongObject3d_->wtf.Initialize();
+	fbxMeraObject3d_->wtf.Initialize();
+	fbxHealObject3d_->wtf.Initialize();*/
+	
 	bodyObj_->wtf.Initialize();
 
 	dash1Obj_->wtf.Initialize();
@@ -443,11 +469,18 @@ void Player::Move() {
 
 		//更新
 		fbxObject3d_->wtf.position += velocity;
-		fbxDashObject3d_->wtf.position += velocity;
-		/*fbxRollObject3d_->wtf.position += velocity;
 		fbxWalkObject3d_->wtf.position += velocity;
-		fbxStrongObject3d_->wtf.position += velocity;*/
-		bodyObj_->wtf.position += velocity;
+		/*fbxRollObject3d_->wtf.position += velocity;
+		fbxDashObject3d_->wtf.position += velocity;
+		fbxStrongObject3d_->wtf.position += velocity;
+		fbxWeak1Object3d_->wtf.position += velocity;
+		fbxWeak2Object3d_->wtf.position += velocity;
+		fbxWeak3Object3d_->wtf.position += velocity;
+		fbxWeak4Object3d_->wtf.position += velocity;
+		fbxMeraObject3d_->wtf.position += velocity;
+		fbxHealObject3d_->wtf.position += velocity;
+		
+		*/
 		bodyObj_->wtf.position += velocity;
 		dash1Obj_->wtf.position += velocity;
 		dash2Obj_->wtf.position += velocity;
@@ -468,16 +501,19 @@ void Player::Rota() {
 			float theta = atan2(stickVec.x, stickVec.y);
 			fbxObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
 
-			fbxDashObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
+			fbxWalkObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
+
 			/*fbxWeak1Object3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
 			fbxWeak2Object3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
 			fbxWeak3Object3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
-			fbxWeak4Object3d_->wtf.rotation.y = theta + camTransForm->rotation.y;*/
-			/*fbxRollObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
-			fbxWalkObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
-			fbxStrongObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;*/
-
+			fbxWeak4Object3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
+			fbxRollObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
+			fbxDashObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
+			fbxStrongObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
 			bodyObj_->wtf.rotation.y = theta + camTransForm->rotation.y;
+			fbxMeraObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
+			fbxHealObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
+			*/
 
 			dash1Obj_->wtf.rotation.y = theta + camTransForm->rotation.y;
 
@@ -624,14 +660,16 @@ void Player::Update() {
 	}
 
 	fbxObject3d_->Update();
-	fbxDashObject3d_->Update();
+	fbxWalkObject3d_->Update();
 	/*fbxWeak1Object3d_->Update();
 	fbxWeak2Object3d_->Update();
 	fbxWeak3Object3d_->Update();
-	fbxWeak4Object3d_->Update();*/
-	/*fbxRollObject3d_->Update();
-	fbxWalkObject3d_->Update();
-	fbxStrongObject3d_->Update();*/
+	fbxWeak4Object3d_->Update();
+	fbxRollObject3d_->Update();
+	fbxDashObject3d_->Update();
+	fbxStrongObject3d_->Update();
+	fbxMeraObject3d_->Update();
+	fbxHealObject3d_->Update();*/
 	bodyObj_->Update();
 	dash1Obj_->Update();
 	dash2Obj_->Update();
@@ -649,7 +687,6 @@ void Player::Update() {
 void Player::Draw() {
 	if (isLive) {
 
-
 		wolf_->Draw();
 	}
 }
@@ -657,7 +694,7 @@ void Player::Draw() {
 void Player::FbxDraw()
 {
 	if (input_->LeftStickInput()) {
-		fbxDashObject3d_->Draw(dxCommon->GetCommandList());
+		fbxWalkObject3d_->Draw(dxCommon->GetCommandList());
 	}
 	else {
 		fbxObject3d_->Draw(dxCommon->GetCommandList());

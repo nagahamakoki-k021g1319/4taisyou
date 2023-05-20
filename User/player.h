@@ -93,9 +93,6 @@ private:
 	//プレイヤー
 	Model* bodyModel_ = nullptr;
 	Object3d* bodyObj_ = nullptr;
-
-	FBXModel* fbxModel_ = nullptr;
-	FBXObject3d* fbxObject3d_ = nullptr;
 	//待機
 	FBXModel* fbxModel_ = nullptr;
 	FBXObject3d* fbxObject3d_ = nullptr;
@@ -120,6 +117,12 @@ private:
 	//強攻撃
 	FBXModel* fbxStrongModel_ = nullptr;
 	FBXObject3d* fbxStrongObject3d_ = nullptr;
+	//回復
+	FBXModel* fbxHealModel_ = nullptr;
+	FBXObject3d* fbxHealObject3d_ = nullptr;
+	//メラ
+	FBXModel* fbxMeraModel_ = nullptr;
+	FBXObject3d* fbxMeraObject3d_ = nullptr;
 
 	const float moveSpeed_ = 0.1f;
 	const float rotaSpeed_ = 0.1f;
