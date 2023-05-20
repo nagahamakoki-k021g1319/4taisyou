@@ -134,4 +134,6 @@ private:
 	float playerVecSpeed;
 
 	Vector3 playerVector = {};
+public:
+	bool isActionStop;
 };

@@ -143,4 +143,9 @@ private:	//ƒƒ“ƒo•Ï”
 	//‰¹ŠÖŒW‚Ü‚Æ‚ß
 	int soundCheckFlag = 0;
 	int soundCheckFlag2 = 0;
+	
+	//í“¬ŠJn
+	bool isActionStop;
+	int actionStopTimer;
+	const int actionStopLimit = 4 * 60;
 };
