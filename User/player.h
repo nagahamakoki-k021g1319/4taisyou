@@ -96,7 +96,9 @@ private:
 
 	FBXModel* fbxModel_ = nullptr;
 	FBXObject3d* fbxObject3d_ = nullptr;
-
+	//•à‚«
+	FBXModel* fbxWalkModel_ = nullptr;
+	FBXObject3d* fbxWalkObject3d_ = nullptr;
 	//‘–‚é
 	FBXModel* fbxDashModel_ = nullptr;
 	FBXObject3d* fbxDashObject3d_ = nullptr;
