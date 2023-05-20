@@ -97,6 +97,9 @@ private:
 	FBXModel* fbxModel_ = nullptr;
 	FBXObject3d* fbxObject3d_ = nullptr;
 
+	//‘–‚é
+	FBXModel* fbxDashModel_ = nullptr;
+	FBXObject3d* fbxDashObject3d_ = nullptr;
 	const float moveSpeed_ = 0.1f;
 	const float rotaSpeed_ = 0.1f;
 

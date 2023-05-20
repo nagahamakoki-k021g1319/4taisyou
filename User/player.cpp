@@ -32,7 +32,8 @@ Player::~Player() {
 	//FBXオブジェクト解放
 	delete fbxObject3d_;
 	delete fbxModel_;
-
+	delete fbxDashObject3d_;
+	delete fbxDashModel_;
 }
 
 void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
@@ -44,7 +45,9 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	input_ = input;
 	camTransForm = new Transform();
 
-	fbxModel_ = FbxLoader::GetInstance()->LoadModelFromFile("playerRun");
+	fbxModel_ = FbxLoader::GetInstance()->LoadModelFromFile("stand");
+	
+	fbxDashModel_ = FbxLoader::GetInstance()->LoadModelFromFile("dash");
 	// デバイスをセット
 	FBXObject3d::SetDevice(dxCommon->GetDevice());
 	// グラフィックスパイプライン生成
@@ -53,10 +56,16 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	fbxObject3d_ = new FBXObject3d;
 	fbxObject3d_->Initialize();
 	fbxObject3d_->SetModel(fbxModel_);
-	fbxObject3d_->SetScale({ 0.001,0.001,0.001 });
+	/*fbxObject3d_->SetScale({ 0.001,0.001,0.001 });*/
 	fbxObject3d_->SetPosition({ 0,0,0 });
 	fbxObject3d_->PlayAnimation();
-	 
+	//走る
+	fbxDashObject3d_ = new FBXObject3d;
+	fbxDashObject3d_->Initialize();
+	fbxDashObject3d_->SetModel(fbxDashModel_);
+	fbxDashObject3d_->wtf.position = { 0,10,0 };
+	fbxDashObject3d_->wtf.scale = { 10,10,10 };
+	fbxDashObject3d_->PlayAnimation();
 	//プレイヤー設定
 	bodyModel_ = Model::LoadFromOBJ("player");
 	bodyObj_ = Object3d::Create();
@@ -135,7 +144,8 @@ void Player::Reset() {
 	targetPos = { 0.0f,0.0f,targetDistance };
 
 	fbxObject3d_->wtf.Initialize();
-	fbxObject3d_->wtf.scale = { 0.001,0.001,0.001 };
+	/*fbxObject3d_->wtf.scale = { 0.001,0.001,0.001 };*/
+	fbxDashObject3d_->wtf.Initialize();
 
 	bodyObj_->wtf.Initialize();
 
@@ -365,6 +375,7 @@ void Player::Move() {
 
 		//更新
 		fbxObject3d_->wtf.position += velocity;
+		fbxDashObject3d_->wtf.position += velocity;
 		bodyObj_->wtf.position += velocity;
 		dash1Obj_->wtf.position += velocity;
 		dash2Obj_->wtf.position += velocity;
@@ -384,6 +395,8 @@ void Player::Rota() {
 
 			float theta = atan2(stickVec.x, stickVec.y);
 			fbxObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
+
+			fbxDashObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
 
 			bodyObj_->wtf.rotation.y = theta + camTransForm->rotation.y;
 
@@ -532,6 +545,7 @@ void Player::Update() {
 	}
 
 	fbxObject3d_->Update();
+	fbxDashObject3d_->Update();
 	bodyObj_->Update();
 	dash1Obj_->Update();
 	dash2Obj_->Update();
@@ -619,7 +633,12 @@ void Player::Draw() {
 
 void Player::FbxDraw()
 {
-	fbxObject3d_->Draw(dxCommon->GetCommandList());
+	if (input_->LeftStickInput()) {
+		fbxDashObject3d_->Draw(dxCommon->GetCommandList());
+	}
+	else {
+		fbxObject3d_->Draw(dxCommon->GetCommandList());
+	}
 }
 
 //ダメージエフェクト
