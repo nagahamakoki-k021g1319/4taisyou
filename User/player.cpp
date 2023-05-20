@@ -53,7 +53,7 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	fbxObject3d_ = new FBXObject3d;
 	fbxObject3d_->Initialize();
 	fbxObject3d_->SetModel(fbxModel_);
-	fbxObject3d_->SetScale({ 0.01,0.01,0.01 });
+	fbxObject3d_->SetScale({ 0.001,0.001,0.001 });
 	fbxObject3d_->SetPosition({ 0,0,0 });
 	fbxObject3d_->PlayAnimation();
 
@@ -101,6 +101,16 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	particleManager->LoadTexture("blod.png");
 	particleManager->Update();
 
+	particleHealManager = std::make_unique<ParticleManager>();
+	particleHealManager.get()->Initialize();
+	particleHealManager->LoadTexture("hill.png");
+	particleHealManager->Update();
+
+	particleHiHealManager = std::make_unique<ParticleManager>();
+	particleHiHealManager.get()->Initialize();
+	particleHiHealManager->LoadTexture("hihill.png");
+	particleHiHealManager->Update();
+
 	//バディ
 	wolf_ = new Wolf();
 	wolf_->Initialize();
@@ -125,7 +135,7 @@ void Player::Reset() {
 	targetPos = { 0.0f,0.0f,targetDistance };
 
 	fbxObject3d_->wtf.Initialize();
-	fbxObject3d_->wtf.scale = { 0.01,0.01,0.01 };
+	fbxObject3d_->wtf.scale = { 0.001,0.001,0.001 };
 
 	bodyObj_->wtf.Initialize();
 
@@ -208,6 +218,7 @@ void Player::Attack() {
 				//大回復
 				if (mp >= megaHealMp) {
 					mp -= megaHealMp;
+					isEffHiHealFlag = 1;
 					hp += megaHeal;
 					if (hp > 100) {
 						hp = 100;
@@ -218,6 +229,7 @@ void Player::Attack() {
 				//小回復
 				if (mp >= healMp) {
 					mp -= healMp;
+					isEffHealFlag = 1;
 					hp += heal;
 					if (hp > 100) {
 						hp = 100;
@@ -456,6 +468,7 @@ void Player::Update() {
 
 		Attack();
 
+		//ダメージエフェクト
 		if (isEffFlag == 1) {
 			EffTimer++;
 		}
@@ -465,6 +478,29 @@ void Player::Update() {
 		if (EffTimer >= 11) {
 			isEffFlag = 0;
 			EffTimer = 0;
+		}
+
+		//回復エフェクト
+		if (isEffHealFlag == 1) {
+			EffHealTimer++;
+		}
+		if (EffHealTimer <= 10 && EffHealTimer >= 1) {
+			EffHealUpdate();
+		}
+		if (EffHealTimer >= 11) {
+			isEffHealFlag = 0;
+			EffHealTimer = 0;
+		}
+		//回復エフェクト(大)
+		if (isEffHiHealFlag == 1) {
+			EffHiHealTimer++;
+		}
+		if (EffHiHealTimer <= 10 && EffHiHealTimer >= 1) {
+			EffHiHealUpdate();
+		}
+		if (EffHiHealTimer >= 11) {
+			isEffHiHealFlag = 0;
+			EffHiHealTimer = 0;
 		}
 
 		//��ʃV�F�C�N
@@ -586,6 +622,7 @@ void Player::FbxDraw()
 	fbxObject3d_->Draw(dxCommon->GetCommandList());
 }
 
+//ダメージエフェクト
 void Player::EffUpdate()
 {
 	//パーティクル範囲
@@ -619,12 +656,91 @@ void Player::EffUpdate()
 
 }
 
+//回復エフェクト
+void Player::EffHealUpdate()
+{
+	//パーティクル範囲
+	for (int i = 0; i < 2; i++) {
+		//X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
+		const float rnd_pos = 0.01f;
+		Vector3 pos{};
+		pos.x += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 3.0f;
+		pos.y += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 3.0f;
+		pos.z += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 3.0f;
+		pos += GetWorldPosition();
+		pos.y += 1.0f;
+		//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
+		const float rnd_vel = 0.1f;
+		Vector3 vel{};
+		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		//重力に見立ててYのみ[-0.001f,0]でランダムに分布
+		const float rnd_acc = 0.000001f;
+		Vector3 acc{};
+		acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+		acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+
+		//追加
+		particleHealManager->Add(60, pos, vel, acc, 0.3f, 0.0f);
+
+		particleHealManager->Update();
+	}
+
+}
+
+void Player::EffHiHealUpdate()
+{
+	//パーティクル範囲
+	for (int i = 0; i < 2; i++) {
+		//X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
+		const float rnd_pos = 5.0f;
+		Vector3 pos{};
+		pos.x += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 3.0f;
+		pos.y += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 3.0f;
+		pos.z += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 3.0f;
+		pos += GetWorldPosition();
+		pos.y += 1.0f;
+		//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
+		const float rnd_vel = 0.1f;
+		Vector3 vel{};
+		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		//重力に見立ててYのみ[-0.001f,0]でランダムに分布
+		const float rnd_acc = 0.001f;
+		Vector3 acc{};
+		acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+		acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+
+		//追加
+		particleHiHealManager->Add(60, pos, vel, acc, 0.3f, 0.0f);
+
+		particleHiHealManager->Update();
+	}
+
+}
+
 void Player::EffDraw()
 {
+	//ダメージエフェクト
 	if (isEffFlag == 1) {
 		// 3Dオブクジェクトの描画
 		particleManager->Draw();
 	}
+
+	//回復エフェクト
+	if (isEffHealFlag == 1) {
+		// 3Dオブクジェクトの描画
+		particleHealManager->Draw();
+	}
+
+	//回復エフェクト(大)
+	if (isEffHiHealFlag == 1) {
+		// 3Dオブクジェクトの描画
+		particleHiHealManager->Draw();
+	}
+
 
 }
 

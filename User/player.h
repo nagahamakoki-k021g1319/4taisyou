@@ -34,6 +34,8 @@ public:
 	void Draw();
 	void FbxDraw();
 	void EffUpdate();
+	void EffHealUpdate();
+	void EffHiHealUpdate();
 	void EffDraw();
 
 	void OnCollision();
@@ -71,6 +73,12 @@ public:
 
 	int EffTimer = 0;
 	int isEffFlag = 0;
+	
+	int EffHealTimer = 0;
+	int isEffHealFlag = 0;
+	
+	int EffHiHealTimer = 0;
+	int isEffHiHealFlag = 0;
 
 public:
 	//音を止める関数
@@ -217,7 +225,11 @@ private:
 	Transform* enemyPos_ = nullptr;
 
 	//パーティクルクラスの初期化 
+	//ダメージ
 	std::unique_ptr<ParticleManager> particleManager;
+	//回復
+	std::unique_ptr<ParticleManager> particleHealManager;
+	std::unique_ptr<ParticleManager> particleHiHealManager;
 	//ワールド座標を入れる変数
 	Vector3 worldPos;
 	
