@@ -34,6 +34,11 @@ GameScene::~GameScene() {
 	delete srl;
 	delete sru;
 	delete srd;
+	delete std3;
+	delete std2;
+	delete std1;
+	delete stdgo;
+	delete stdgo2;
 }
 
 /// <summary>
@@ -177,7 +182,34 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	srd->SetPozition(srdPosition);
 	srd->SetSize({ 1280.0f, 720.0f });
 
-	
+	std3 = new Sprite();
+	std3->Initialize(spriteCommon);
+	std3->SetPozition({ 0,0 });
+	std3->SetSize({ 1280,720 });
+
+	std2 = new Sprite();
+	std2->Initialize(spriteCommon);
+	std2->SetPozition({ 0,0 });
+	std2->SetSize({ 1280,720 });
+
+	std1 = new Sprite();
+	std1->Initialize(spriteCommon);
+	std1->SetPozition({ 0,0 });
+	std1->SetSize({ 1280,720 });
+
+	stdgo = new Sprite();
+	stdgo->Initialize(spriteCommon);
+	stdgo->SetPozition({ 0,0 });
+	stdgo->SetSize({ 1280,720 });
+
+	stdgo2 = new Sprite();
+	stdgo2->Initialize(spriteCommon);
+	stdgo2->SetPozition({ 0,0 });
+	stdgo2->SetSize({ 1280,720 });
+
+
+
+
 	spriteCommon->LoadTexture(0, "UI.png");
 	UI->SetTextureIndex(0);
 	spriteCommon->LoadTexture(1, "buttom1.png");
@@ -210,6 +242,17 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	srd->SetTextureIndex(14);
 	spriteCommon->LoadTexture(15, "mpGauge.png");
 	mpGauge->SetTextureIndex(15);
+	
+	spriteCommon->LoadTexture(16, "std3.png");
+	std3->SetTextureIndex(16);
+	spriteCommon->LoadTexture(17, "std2.png");
+	std2->SetTextureIndex(17);
+	spriteCommon->LoadTexture(18, "std1.png");
+	std1->SetTextureIndex(18);
+	spriteCommon->LoadTexture(19, "stdgo.png");
+	stdgo->SetTextureIndex(19);
+	spriteCommon->LoadTexture(20, "stdgo2.png");
+	stdgo2->SetTextureIndex(20);
 
 	audio = new Audio();
 	audio->Initialize();
@@ -229,6 +272,15 @@ void GameScene::Reset() {
 	isActionStop = true;
 	player_->isActionStop = isActionStop;
 	enemyManager_->isActionStop = isActionStop;
+
+	enemyManager_->EffTimer = 0;
+	enemyManager_->isEffFlag = 0;
+	player_->EffTimer = 0;
+	player_->isEffFlag = 0;
+
+	player_->EffHealTimer = 0;
+	player_->isEffHealFlag = 0;
+
 }
 
 /// <summary>
@@ -268,10 +320,7 @@ void GameScene::Update() {
 		srlPosition.x = 0.0f;
 		srl->SetPozition(srlPosition);
 
-		enemyManager_->EffTimer = 0;
-		enemyManager_->isEffFlag = 0;
-		player_->EffTimer = 0;
-		player_->isEffFlag = 0;
+		
 		
 		break;
 	case Scene::Select:
@@ -429,7 +478,7 @@ void GameScene::Draw() {
 	//3Dオブジェクト描画後処理
 	Object3d::PostDraw();
 
-	//// パーティクル UI スプライト描画
+	//// パーティクル UI FBX スプライト描画
 	switch (scene)
 	{
 	case Scene::Title:
@@ -471,6 +520,27 @@ void GameScene::Draw() {
 
 		player_->FbxDraw();
 
+		//カウントダウン40フレーム
+		if (actionStopTimer < 150  && actionStopTimer >= 110) {
+			//3
+			std3->Draw();
+		}
+		else if (actionStopTimer < 109 && actionStopTimer >= 70) {
+			//2
+			std2->Draw();
+		}
+		else if (actionStopTimer < 69 && actionStopTimer >= 30) {
+			//1
+			std1->Draw();
+		}
+		else if (actionStopTimer < 29 && actionStopTimer >= 5) {
+			//go
+			stdgo->Draw();
+		}
+		else if (actionStopTimer < 4 && actionStopTimer >= 1) {
+			//go2
+			stdgo2->Draw();
+		}
 		break;
 	case Scene::Clear:
 		clearPic->Draw();

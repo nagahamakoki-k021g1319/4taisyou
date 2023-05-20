@@ -147,5 +147,10 @@ private:	//ƒƒ“ƒo•Ï”
 	//í“¬ŠJn
 	bool isActionStop;
 	int actionStopTimer;
-	const int actionStopLimit = 4 * 60;
+	const int actionStopLimit = 4 * 40;
+	Sprite* std3 = nullptr;
+	Sprite* std2 = nullptr;
+	Sprite* std1 = nullptr;
+	Sprite* stdgo = nullptr;
+	Sprite* stdgo2 = nullptr;
 };
