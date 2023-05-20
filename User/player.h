@@ -96,6 +96,30 @@ private:
 
 	FBXModel* fbxModel_ = nullptr;
 	FBXObject3d* fbxObject3d_ = nullptr;
+	//ë“ã@
+	FBXModel* fbxModel_ = nullptr;
+	FBXObject3d* fbxObject3d_ = nullptr;
+	//âÒî
+	FBXModel* fbxRollModel_ = nullptr;
+	FBXObject3d* fbxRollObject3d_ = nullptr;
+	//ï‡Ç´
+	FBXModel* fbxWalkModel_ = nullptr;
+	FBXObject3d* fbxWalkObject3d_ = nullptr;
+	//ëñÇÈ
+	FBXModel* fbxDashModel_ = nullptr;
+	FBXObject3d* fbxDashObject3d_ = nullptr;
+	//é„çUåÇ
+	FBXModel* fbxWeak1Model_ = nullptr;
+	FBXObject3d* fbxWeak1Object3d_ = nullptr;
+	FBXModel* fbxWeak2Model_ = nullptr;
+	FBXObject3d* fbxWeak2Object3d_ = nullptr;
+	FBXModel* fbxWeak3Model_ = nullptr;
+	FBXObject3d* fbxWeak3Object3d_ = nullptr;
+	FBXModel* fbxWeak4Model_ = nullptr;
+	FBXObject3d* fbxWeak4Object3d_ = nullptr;
+	//ã≠çUåÇ
+	FBXModel* fbxStrongModel_ = nullptr;
+	FBXObject3d* fbxStrongObject3d_ = nullptr;
 
 	const float moveSpeed_ = 0.1f;
 	const float rotaSpeed_ = 0.1f;
