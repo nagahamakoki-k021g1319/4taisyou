@@ -15,8 +15,6 @@
 
 
 class Player {
-
-
 public:
 	Player();
 	~Player();
@@ -68,7 +66,7 @@ public:
 	/// ポジション
 	/// </summary>
 	/// <param name="pos"></param>
-	void SetPos(Vector3 pos) { bodyObj_->wtf.position = pos; };
+	void SetPos(Vector3 pos) {wtf.position = pos; };
 	void SetCamera(Camera* cam) { camera = cam; };
 
 	int EffTimer = 0;
@@ -91,8 +89,7 @@ private:
 	Collision col;
 	Audio* audio = nullptr;
 	//プレイヤー
-	Model* bodyModel_ = nullptr;
-	Object3d* bodyObj_ = nullptr;
+	Transform wtf;
 	//待機
 	FBXModel* fbxModel_ = nullptr;
 	FBXObject3d* fbxObject3d_ = nullptr;
@@ -139,31 +136,6 @@ private:
 	float dashSpeed = 0.4f;
 	const float dashMP = 2.0f / 60.0f;
 
-	//プレイヤーの移動
-	Model* dash1Model_ = nullptr;
-	Object3d* dash1Obj_ = nullptr;
-
-	Model* dash2Model_ = nullptr;
-	Object3d* dash2Obj_ = nullptr;
-
-	Model* dash3Model_ = nullptr;
-	Object3d* dash3Obj_ = nullptr;
-
-	Model* dash4Model_ = nullptr;
-	Object3d* dash4Obj_ = nullptr;
-
-	//プレイヤーの移動
-	Model* attack1Model_ = nullptr;
-	Object3d* attack1Obj_ = nullptr;
-
-	Model* attack2Model_ = nullptr;
-	Object3d* attack2Obj_ = nullptr;
-
-	Model* attack3Model_ = nullptr;
-	Object3d* attack3Obj_ = nullptr;
-
-	Model* attack4Model_ = nullptr;
-	Object3d* attack4Obj_ = nullptr;
 	//ステータス
 	const int defaultHp = 100;
 	int hp;
@@ -259,11 +231,6 @@ private:
 	std::unique_ptr<ParticleManager> particleHiHealManager;
 	//ワールド座標を入れる変数
 	Vector3 worldPos;
-	
-	
-	//デバッグ用
-	Model* debugModel_ = nullptr;
-	Object3d* debugObj_ = nullptr;
 
 	//音関係まとめ
 	int soundCheckFlag = 0;
