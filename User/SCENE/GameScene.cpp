@@ -12,7 +12,10 @@ GameScene::GameScene() {
 /// </summary>
 GameScene::~GameScene() {
 	delete spriteCommon;
-	delete camera;
+	delete mainCamera;
+	delete camera1;
+	delete camera2;
+	delete camera3;
 	delete player_;
 	delete enemyManager_;
 
@@ -52,11 +55,21 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	spriteCommon->Initialize(dxCommon);
 
 	// カメラ生成
-	camera = new Camera(WinApp::window_width, WinApp::window_height);
+	mainCamera = new Camera(WinApp::window_width, WinApp::window_height);
+	camera1 = new Camera(WinApp::window_width, WinApp::window_height);
+	camera2 = new Camera(WinApp::window_width, WinApp::window_height);
+	camera3 = new Camera(WinApp::window_width, WinApp::window_height);
 
-	ParticleManager::SetCamera(camera);
-	Object3d::SetCamera(camera);
-	FBXObject3d::SetCamera(camera);
+	camera1->SetEye({ 0, 3, 6 });
+	camera1->SetTarget({ 0,3,0 });
+	camera2->SetEye({ -4, 3, 4 });
+	camera2->SetTarget({ 0,3,0 });
+	camera3->SetEye({ 4, 3, 4 });
+	camera3->SetTarget({ 0,3,0 });
+
+	ParticleManager::SetCamera(mainCamera);
+	Object3d::SetCamera(mainCamera);
+	FBXObject3d::SetCamera(mainCamera);
 
 	floorMD = Model::LoadFromOBJ("floor");
 	floor = Object3d::Create();
@@ -76,7 +89,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	//プレイヤー
 	player_ = new Player();
 	player_->Initialize(dxCommon,input);
-	player_->SetCamera(camera);
+	player_->SetCamera(mainCamera);
 
 	//エネミー
 	enemyManager_ = new EnemyManager();
@@ -224,7 +237,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 
 void GameScene::Reset() {
 	player_->Reset();
-	player_->camUpdate();
 	actionStopTimer = actionStopLimit;
 	isActionStop = true;
 	player_->isActionStop = isActionStop;
@@ -309,9 +321,27 @@ void GameScene::Update() {
 		}
 		break;
 	case Scene::Play:
-		if (actionStopTimer > 0) {
-			actionStopTimer--;
+
+		actionStopTimer--;
+		camera1->Update();
+		camera2->Update();
+		camera3->Update();
+		if (actionStopTimer > 60*2) {
+			ParticleManager::SetCamera(camera1);
+			Object3d::SetCamera(camera2);
+			FBXObject3d::SetCamera(camera1);
+		}else if (actionStopTimer > 60 * 1) {
+			ParticleManager::SetCamera(camera2);
+			Object3d::SetCamera(camera2);
+			FBXObject3d::SetCamera(camera2);
+		}else if (actionStopTimer > 0) {
+			ParticleManager::SetCamera(camera3);
+			Object3d::SetCamera(camera3);
+			FBXObject3d::SetCamera(camera3);
 		}else if (actionStopTimer <= 0) {
+			ParticleManager::SetCamera(mainCamera);
+			Object3d::SetCamera(mainCamera);
+			FBXObject3d::SetCamera(mainCamera);
 			isActionStop = false;
 			player_->isActionStop = isActionStop;
 			enemyManager_->isActionStop = isActionStop;

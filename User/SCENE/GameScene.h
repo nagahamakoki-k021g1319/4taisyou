@@ -73,7 +73,10 @@ private:	//メンバ変数
 	const float PI = 3.141592;
 
 	//カメラ
-	Camera* camera = nullptr;
+	Camera* mainCamera = nullptr;
+	Camera* camera1 = nullptr;
+	Camera* camera2 = nullptr;
+	Camera* camera3 = nullptr;
 
 	//プレイヤー
 	Player* player_ = nullptr;
@@ -147,5 +150,5 @@ private:	//メンバ変数
 	//戦闘開始時
 	bool isActionStop;
 	int actionStopTimer;
-	const int actionStopLimit = 4 * 60;
+	const int actionStopLimit = 3 * 60;
 };
