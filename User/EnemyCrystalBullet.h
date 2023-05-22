@@ -61,6 +61,6 @@ private:
 	int bulletNum;
 
 	Vector3 A_BVecNolm;
-	const float speed = 0.5f;
+	const float speed = 0.2f;
 };
 

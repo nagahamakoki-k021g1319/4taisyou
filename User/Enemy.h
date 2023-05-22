@@ -39,8 +39,6 @@ public:
 
 	void playerDirectionToCorrect();
 
-	void EnemyProvisional();
-
 	////ワールド座標を取得
 	Vector3 GetWorldPosition();
 
@@ -134,10 +132,6 @@ private:
 	float playerAngleNmb = 0;
 	float PI = 3.141592;
 	float playerVecSpeed;
-	float anglePI = 0;
-
-	//敵の仮想の球座標
-	Object3d* enemyProvisional[5];
 
 	Vector3 playerVector = {};
 public:
