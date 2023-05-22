@@ -148,7 +148,7 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	//バディ
 	wolf_ = new Wolf();
 	wolf_->Initialize();
-	wolf_->SetPlayerWtf(&wtf);
+	wolf_->SetPlayerWtf(&fbxObject3d_->wtf);
 
 	audio = new Audio();
 
@@ -159,20 +159,18 @@ void Player::Reset() {
 	camTransForm->Initialize();
 	eyePos = { 0.0f, 3.0f, -8.0f };
 	targetPos = { 0.0f,0.0f,targetDistance };
-
-	fbxObject3d_->wtf.Initialize();
-	fbxWalkObject3d_->wtf.Initialize();
-	fbxWeak1Object3d_->wtf.Initialize();
-	fbxWeak2Object3d_->wtf.Initialize();
-	fbxWeak3Object3d_->wtf.Initialize();
-	fbxWeak4Object3d_->wtf.Initialize();
-	fbxRollObject3d_->wtf.Initialize();
-	fbxDashObject3d_->wtf.Initialize();
-	fbxStrongObject3d_->wtf.Initialize();
-	fbxMeraObject3d_->wtf.Initialize();
-	fbxHealObject3d_->wtf.Initialize();
 	
-	wtf.Initialize();
+	fbxObject3d_->Initialize();
+	fbxRollObject3d_->Initialize();
+	fbxWalkObject3d_->Initialize();
+	fbxDashObject3d_->Initialize();
+	fbxWeak1Object3d_->Initialize();
+	fbxWeak2Object3d_->Initialize();
+	fbxWeak3Object3d_->Initialize();
+	fbxWeak4Object3d_->Initialize();
+	fbxStrongObject3d_->Initialize();
+	fbxMeraObject3d_->Initialize();
+	fbxHealObject3d_->Initialize();
 
 	hp = defaultHp;
 	isAction = 0;
@@ -359,7 +357,6 @@ void Player::Move() {
 		//回避時移動
 		else if (isAction == 3) {
 			velocity = GetDodgeMoveVec();
-
 		}
 
 		//移動ベクトルを向いてる方向に合わせる
@@ -383,8 +380,6 @@ void Player::Move() {
 		}
 
 		//更新
-		wtf.position += velocity;
-
 		fbxObject3d_->wtf.position += velocity;
 		fbxWalkObject3d_->wtf.position += velocity;
 		fbxRollObject3d_->wtf.position += velocity;
@@ -406,10 +401,9 @@ void Player::Rota() {
 			Vector2 stickVec = input_->GetLeftStickVec();
 
 			float theta = atan2(stickVec.x, stickVec.y);
+
 			fbxObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
-
 			fbxWalkObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
-
 			fbxWeak1Object3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
 			fbxWeak2Object3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
 			fbxWeak3Object3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
@@ -425,7 +419,7 @@ void Player::Rota() {
 }
 
 void Player::camUpdate() {
-	camTransForm->position = wtf.position;
+	camTransForm->position = fbxObject3d_->wtf.position;
 	//視点移動
 	//左右
 	Vector3 theta;
@@ -551,7 +545,11 @@ void Player::Update() {
 
 	if (isLive) {
 		if (isAction == 0) {
-			if (input_->LeftStickInput()) {
+			if (isEffHealFlag) {
+				fbxHealObject3d_->Update();
+			}else if (isEffHiHealFlag) {
+				fbxHealObject3d_->Update();
+			}else if (input_->LeftStickInput()) {
 				if (input_->ButtonInput(RT)) {
 					//ダッシュ
 					fbxDashObject3d_->Update();
@@ -588,21 +586,7 @@ void Player::Update() {
 		}
 	}
 
-	//fbxObject3d_->Update();
-	//fbxWalkObject3d_->Update();
-	//fbxWeak1Object3d_->Update();
-	//fbxWeak2Object3d_->Update();
-	//fbxWeak3Object3d_->Update();
-	//fbxWeak4Object3d_->Update();
-	//fbxRollObject3d_->Update();
-	//fbxDashObject3d_->Update();
-	//fbxStrongObject3d_->Update();
-	//fbxMeraObject3d_->Update();
-	//fbxHealObject3d_->Update();
-	//bodyObj_->Update();
-
 	wolf_->Update(enemyPos_);
-
 }
 
 void Player::Draw() {
@@ -615,8 +599,12 @@ void Player::Draw() {
 void Player::FbxDraw(){
 	if (isLive) {
 		if (isAction == 0) {
-			if (isActionStop == false) {
-				if (input_->LeftStickInput()) {
+			if (isEffHealFlag) {
+				fbxHealObject3d_->Draw(dxCommon->GetCommandList());
+			}else if (isEffHiHealFlag) {
+				fbxHealObject3d_->Draw(dxCommon->GetCommandList());
+			}else if (input_->LeftStickInput()) {
+				if (isActionStop == false) {
 					if (input_->ButtonInput(RT)) {
 						//ダッシュ
 						fbxDashObject3d_->Draw(dxCommon->GetCommandList());
@@ -624,11 +612,14 @@ void Player::FbxDraw(){
 						//歩き
 						fbxWalkObject3d_->Draw(dxCommon->GetCommandList());
 					}
+				}else {
+					//待機
+					fbxObject3d_->Draw(dxCommon->GetCommandList());
 				}
 			}else {
 				//待機
 				fbxObject3d_->Draw(dxCommon->GetCommandList());
-			}
+			}		
 		}else if (isAction == 1) {
 			//弱攻撃
 			if (lightAttackCount == 0) {
@@ -651,7 +642,6 @@ void Player::FbxDraw(){
 		}else if (isAction == 3) {
 			//回避
 			fbxRollObject3d_->Draw(dxCommon->GetCommandList());
-		
 		}
 	}
 }
@@ -799,11 +789,11 @@ Vector3 Player::bVelocity(Vector3& velocity, Transform& worldTransform)
 }
 
 Vector3 Player::GetWorldPosition(){
-	wtf.UpdateMat();
+	fbxObject3d_->wtf.UpdateMat();
 	//ワールド行列の平行移動成分
-	worldPos.x = wtf.matWorld.m[3][0];
-	worldPos.y = wtf.matWorld.m[3][1];
-	worldPos.z = wtf.matWorld.m[3][2];
+	worldPos.x = fbxObject3d_->wtf.matWorld.m[3][0];
+	worldPos.y = fbxObject3d_->wtf.matWorld.m[3][1];
+	worldPos.z = fbxObject3d_->wtf.matWorld.m[3][2];
 
 	return worldPos;
 }
@@ -843,7 +833,7 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 bool Player::CheckBody2Enemy(Vector3 enemyPos) {
 	if (col.CircleCollisionXZ(GetWorldPosition(), enemyPos, 1.0f, 1.0f)) {
 		moveBack += { 0, 0, -0.2 };
-		moveBack = bVelocity(moveBack, wtf);
+		moveBack = bVelocity(moveBack, fbxObject3d_->wtf);
 		return true;
 	}
 	return false;
@@ -891,7 +881,7 @@ void Player::LightAttack() {
 			//移動
 			lightAttackLPos = { 0.5f,0,2.0f };
 			//更新
-			lightAttackWPos = lightAttackLPos * wtf.matWorld;
+			lightAttackWPos = lightAttackLPos * fbxObject3d_->wtf.matWorld;
 		}
 
 		//次の斬撃入力
@@ -936,7 +926,7 @@ void Player::LightAttack() {
 			//移動
 			lightAttackLPos = { -0.5f,0,2.0f };
 			//更新
-			lightAttackWPos = lightAttackLPos * wtf.matWorld;
+			lightAttackWPos = lightAttackLPos * fbxObject3d_->wtf.matWorld;
 		}
 
 		//次の斬撃入力
@@ -981,7 +971,7 @@ void Player::LightAttack() {
 			//移動
 			lightAttackLPos = { 0.5f,0,2.0f };
 			//更新
-			lightAttackWPos = lightAttackLPos * wtf.matWorld;
+			lightAttackWPos = lightAttackLPos * fbxObject3d_->wtf.matWorld;
 		}
 
 		//次の斬撃入力
@@ -1016,7 +1006,7 @@ void Player::LightAttack() {
 			//移動
 			lightAttackLPos = { 0,0,4.0f };
 			//更新
-			lightAttackWPos = lightAttackLPos * wtf.matWorld;
+			lightAttackWPos = lightAttackLPos * fbxObject3d_->wtf.matWorld;
 		}
 	}
 }
@@ -1057,7 +1047,7 @@ void Player::HeavyAttack() {
 			//移動
 			heavyAttackLPos = { 0,0,4.0f };
 			//更新
-			heavyAttackWPos = heavyAttackLPos * wtf.matWorld;
+			heavyAttackWPos = heavyAttackLPos * fbxObject3d_->wtf.matWorld;
 		}
 
 		//次の斬撃入力
@@ -1092,7 +1082,7 @@ void Player::HeavyAttack() {
 			//移動
 			heavyAttackLPos = { 0,0,8.0f };
 			//更新
-			heavyAttackWPos = heavyAttackLPos * wtf.matWorld;
+			heavyAttackWPos = heavyAttackLPos * fbxObject3d_->wtf.matWorld;
 		}
 	}
 }

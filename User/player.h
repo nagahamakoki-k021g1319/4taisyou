@@ -66,7 +66,7 @@ public:
 	/// ポジション
 	/// </summary>
 	/// <param name="pos"></param>
-	void SetPos(Vector3 pos) {wtf.position = pos; };
+	void SetPos(Vector3 pos) {fbxObject3d_->wtf.position = pos; };
 	void SetCamera(Camera* cam) { camera = cam; };
 
 	int EffTimer = 0;
@@ -88,8 +88,6 @@ private:
 	DirectXCommon* dxCommon = nullptr;
 	Collision col;
 	Audio* audio = nullptr;
-	//プレイヤー
-	Transform wtf;
 	//待機
 	FBXModel* fbxModel_ = nullptr;
 	FBXObject3d* fbxObject3d_ = nullptr;
