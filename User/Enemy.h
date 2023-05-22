@@ -140,4 +140,6 @@ private:
 	Object3d* enemyProvisional[5];
 
 	Vector3 playerVector = {};
+public:
+	bool isActionStop;
 };

@@ -18,50 +18,50 @@
 #include"EnemyManager.h"
 
 /// <summary>
-/// ƒQ[ƒ€ƒV[ƒ“
+/// ã‚²ãƒ¼ãƒ ã‚·ãƒ¼ãƒ³
 /// </summary>
 class GameScene
 {
-private: // Ã“Iƒƒ“ƒo•Ï”
+private: // é™çš„ãƒ¡ãƒ³ãƒå¤‰æ•°
 	//static const int debugTextTexNumber = 0;
 
-public: // ƒƒ“ƒoŠÖ”
+public: // ãƒ¡ãƒ³ãƒé–¢æ•°
 
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒNƒ‰ƒ^
+	/// ã‚³ãƒ³ã‚¹ãƒˆã‚¯ãƒ©ã‚¿
 	/// </summary>
 	GameScene();
 
 	/// <summary>
-	/// ƒfƒXƒgƒ‰ƒNƒ^
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
 	~GameScene();
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	void Initialize(DirectXCommon* dxCommon, Input* input);
 
 	void Reset();
 
 	/// <summary>
-	/// –ˆƒtƒŒ[ƒ€ˆ—
+	/// æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
 	void Draw();
 
 	Vector3 bVelocity(Vector3& velocity, Transform& worldTransform);
 
 public:
-	//‰¹‚ğ~‚ß‚éŠÖ”
+	//éŸ³ã‚’æ­¢ã‚ã‚‹é–¢æ•°
 	IXAudio2SourceVoice* pSourceVoice[10] = { 0 };
 
 
-private: // ƒƒ“ƒo•Ï” (ŒÅ’è)
+private: // ãƒ¡ãƒ³ãƒå¤‰æ•° (å›ºå®š)
 	DirectXCommon* dxCommon = nullptr;
 	Input* input = nullptr;
 
@@ -69,21 +69,24 @@ private: // ƒƒ“ƒo•Ï” (ŒÅ’è)
 	Audio* audio = nullptr;
 
 
-private:	//ƒƒ“ƒo•Ï”
+private:	//ãƒ¡ãƒ³ãƒå¤‰æ•°
 	const float PI = 3.141592;
 
-	//ƒJƒƒ‰
-	Camera* camera = nullptr;
+	//ã‚«ãƒ¡ãƒ©
+	Camera* mainCamera = nullptr;
+	Camera* camera1 = nullptr;
+	Camera* camera2 = nullptr;
+	Camera* camera3 = nullptr;
 
-	//ƒvƒŒƒCƒ„[
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼
 	Player* player_ = nullptr;
 
-	//ƒGƒlƒ~[
+	//ã‚¨ãƒãƒŸãƒ¼
 	EnemyManager* enemyManager_ = nullptr;
 	const int hitStopLimit = 10;
 	int hitStopTimer = hitStopLimit;
 
-	//”wŒi‚â°
+	//èƒŒæ™¯ã‚„åºŠ
 	Object3d* floor = nullptr;
 	Model* floorMD = nullptr;
 	Object3d* skydome = nullptr;
@@ -115,7 +118,7 @@ private:	//ƒƒ“ƒo•Ï”
 	Sprite* srd = nullptr;
 	Vector2 srdPosition;
 
-	//ƒQ[ƒ€ƒtƒ[
+	//ã‚²ãƒ¼ãƒ ãƒ•ãƒ­ãƒ¼
 	enum class Scene
 	{
 			Title,
@@ -126,21 +129,31 @@ private:	//ƒƒ“ƒo•Ï”
 	};
 	Scene scene;
 	int stage;
-	//ƒJƒ~ƒ“ƒOƒX[ƒ“—pƒtƒ‰ƒO
+	//ã‚«ãƒŸãƒ³ã‚°ã‚¹ãƒ¼ãƒ³ç”¨ãƒ•ãƒ©ã‚°
 	int cmsoon = 0;
 	Sprite* titlePic;
 	Sprite* selectPic;
 	Sprite* clearPic;
 	Sprite* gameoverPic;
 
-	//UŒ‚‚·‚é‘O‚Ì‚í‚©‚è‚â‚·‚¢ƒGƒbƒtƒFƒNƒg(‚È‚º‚©“G‚É‚½‚¹‚ç‚ê‚È‚¢)
+	//æ”»æ’ƒã™ã‚‹å‰ã®ã‚ã‹ã‚Šã‚„ã™ã„ã‚¨ãƒƒãƒ•ã‚§ã‚¯ãƒˆ(ãªãœã‹æ•µã«æŒãŸã›ã‚‰ã‚Œãªã„)
 	Sprite* CdUI = nullptr;
 	Sprite* CdUI1 = nullptr;
 	Sprite* CdUI2 = nullptr;
 	int  CdTimer = 0;
 	int  isCdFlag = 0;
 
-	//‰¹ŠÖŒW‚Ü‚Æ‚ß
+	//éŸ³é–¢ä¿‚ã¾ã¨ã‚
 	int soundCheckFlag = 0;
 	int soundCheckFlag2 = 0;
+	
+	//æˆ¦é—˜é–‹å§‹æ™‚
+	bool isActionStop;
+	int actionStopTimer;
+	const int actionStopLimit = 3 * 60;
+	Sprite* std3 = nullptr;
+	Sprite* std2 = nullptr;
+	Sprite* std1 = nullptr;
+	Sprite* stdgo = nullptr;
+	Sprite* stdgo2 = nullptr;
 };

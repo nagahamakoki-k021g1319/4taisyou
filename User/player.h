@@ -34,6 +34,8 @@ public:
 	void Draw();
 	void FbxDraw();
 	void EffUpdate();
+	void EffHealUpdate();
+	void EffHiHealUpdate();
 	void EffDraw();
 
 	void OnCollision();
@@ -71,6 +73,12 @@ public:
 
 	int EffTimer = 0;
 	int isEffFlag = 0;
+	
+	int EffHealTimer = 0;
+	int isEffHealFlag = 0;
+	
+	int EffHiHealTimer = 0;
+	int isEffHiHealFlag = 0;
 
 public:
 	//音を止める関数
@@ -85,9 +93,36 @@ private:
 	//プレイヤー
 	Model* bodyModel_ = nullptr;
 	Object3d* bodyObj_ = nullptr;
-
+	//待機
 	FBXModel* fbxModel_ = nullptr;
 	FBXObject3d* fbxObject3d_ = nullptr;
+	//回避
+	FBXModel* fbxRollModel_ = nullptr;
+	FBXObject3d* fbxRollObject3d_ = nullptr;
+	//歩き
+	FBXModel* fbxWalkModel_ = nullptr;
+	FBXObject3d* fbxWalkObject3d_ = nullptr;
+	//走る
+	FBXModel* fbxDashModel_ = nullptr;
+	FBXObject3d* fbxDashObject3d_ = nullptr;
+	//弱攻撃
+	FBXModel* fbxWeak1Model_ = nullptr;
+	FBXObject3d* fbxWeak1Object3d_ = nullptr;
+	FBXModel* fbxWeak2Model_ = nullptr;
+	FBXObject3d* fbxWeak2Object3d_ = nullptr;
+	FBXModel* fbxWeak3Model_ = nullptr;
+	FBXObject3d* fbxWeak3Object3d_ = nullptr;
+	FBXModel* fbxWeak4Model_ = nullptr;
+	FBXObject3d* fbxWeak4Object3d_ = nullptr;
+	//強攻撃
+	FBXModel* fbxStrongModel_ = nullptr;
+	FBXObject3d* fbxStrongObject3d_ = nullptr;
+	//回復
+	FBXModel* fbxHealModel_ = nullptr;
+	FBXObject3d* fbxHealObject3d_ = nullptr;
+	//メラ
+	FBXModel* fbxMeraModel_ = nullptr;
+	FBXObject3d* fbxMeraObject3d_ = nullptr;
 
 	const float moveSpeed_ = 0.1f;
 	const float rotaSpeed_ = 0.1f;
@@ -96,6 +131,7 @@ private:
 	Transform* camTransForm = nullptr;
 	Vector3 targetPos;
 	Vector3 eyePos;
+	Vector3 centerPos;
 	float targetTheta;
 	float targetDistance = 10;
 	float camMoveSpeed = 0.2f;
@@ -216,7 +252,11 @@ private:
 	Transform* enemyPos_ = nullptr;
 
 	//パーティクルクラスの初期化 
+	//ダメージ
 	std::unique_ptr<ParticleManager> particleManager;
+	//回復
+	std::unique_ptr<ParticleManager> particleHealManager;
+	std::unique_ptr<ParticleManager> particleHiHealManager;
 	//ワールド座標を入れる変数
 	Vector3 worldPos;
 	
@@ -231,6 +271,7 @@ private:
 
 
 public:
+	bool isActionStop;
 	int isAction;
 	//バディ
 	Wolf* wolf_ = nullptr;
