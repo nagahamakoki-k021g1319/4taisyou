@@ -11,7 +11,7 @@ public:
 	///< summary>
 	///初期化
 	///</summary>
-	void Initialize(int timer, Model* model_);
+	void Initialize(int timer, Model* model_, Vector3 playerVec);
 	
 	///< summary>
 	///更新
@@ -58,13 +58,15 @@ private:
 	int daggerTimer;
 	bool isLive = false;
 	int shotTimer;
-	float EnemyBulletSpeed = 0.2;
+	Vector3 EnemyBulletSpeed = {};
 	//////////////////////////////
 
 	//攻撃する前のわかりやすいエッフェクト
 	Sprite* CdUI = nullptr;
 	Sprite* CdUI1 = nullptr;
 	Sprite* CdUI2 = nullptr;
+
+	
 
 public:
 	bool isPop = false;

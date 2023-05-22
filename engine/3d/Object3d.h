@@ -149,6 +149,8 @@ public: // メンバ関数
 	//setter
 	void SetModel(Model* model) { this->model = model; }
 
+	Vector3 GetWorldPosition();
+
 private: // メンバ変数
 	public:
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
