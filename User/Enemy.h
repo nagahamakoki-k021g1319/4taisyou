@@ -1,4 +1,5 @@
 #pragma once
+#include "DirectXCommon.h"
 #include "EnemyBullet.h"
 #include "EnemyCrystalBullet.h"
 #include "EnemyShortRenge.h"
@@ -8,15 +9,20 @@ class Player;
 #include "Collision.h"
 #include "ParticleManager.h"
 
+#include "FBXModel.h"
+#include "FbxLoader.h"
+#include "FBXObject3d.h"
+
 class Enemy {
 public:
 	Enemy();
 
 	~Enemy();
 
-	void Initialize(Vector3 pos);
+	void Initialize(DirectXCommon* dxCommon, Vector3 pos);
 	void Update();
 	void Draw();
+	void FbxDraw();
 
 	void SetPlayer(Player* player) { player_ = player; };
 
@@ -52,9 +58,16 @@ public:
 	};
 
 private:
+	DirectXCommon* dxCommon = nullptr;
 	Player* player_ = nullptr;
 	Collision coll;
 
+	//ë“ã@
+	FBXModel* fbxModel_ = nullptr;
+	FBXObject3d* fbxObject3d_ = nullptr;
+	
+	
+	
 	Object3d* enemyObj_ = nullptr;
 	Model* enemyModel_ = nullptr;
 	//çUåÇÇÃobj

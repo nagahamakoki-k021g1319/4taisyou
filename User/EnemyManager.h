@@ -1,5 +1,6 @@
 #pragma once
-#include"Enemy.h"
+#include "DirectXCommon.h"
+#include "Enemy.h"
 #include "Audio.h"
 
 class Player;
@@ -9,11 +10,12 @@ public:
 	EnemyManager();
 	~EnemyManager();
 
-	void Initialize();
+	void Initialize(DirectXCommon* dxCommon);
 
 	void Update();
 
 	void Draw();
+	void FbxDraw();
 
 	void EffUpdate();
 	void EffDraw();
@@ -32,6 +34,7 @@ public:
 	IXAudio2SourceVoice* pSourceVoice[10] = { 0 };
 
 private:
+	DirectXCommon* dxCommon = nullptr;
 	Audio* audio = nullptr;
 	Transform* origin = nullptr;
 

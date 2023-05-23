@@ -27,7 +27,23 @@ Enemy::~Enemy() {
 	delete explosion;
 }
 
-void Enemy::Initialize(Vector3 pos) {
+void Enemy::Initialize(DirectXCommon* dxCommon, Vector3 pos) {
+	// nullptrチェック
+	assert(dxCommon);
+	this->dxCommon = dxCommon;
+
+
+	fbxModel_ = FbxLoader::GetInstance()->LoadModelFromFile("stand");
+	// デバイスをセット
+	FBXObject3d::SetDevice(dxCommon->GetDevice());
+	// グラフィックスパイプライン生成
+	FBXObject3d::CreateGraphicsPipeline();
+
+	fbxObject3d_ = new FBXObject3d;
+	fbxObject3d_->Initialize();
+	fbxObject3d_->SetModel(fbxModel_);
+	fbxObject3d_->PlayAnimation();
+
 	enemyModel_ = Model::LoadFromOBJ("enemy");
 	enemyObj_ = Object3d::Create();
 	enemyObj_->SetModel(enemyModel_);
@@ -57,7 +73,7 @@ void Enemy::Initialize(Vector3 pos) {
 	enemyAttack5Obj_ = Object3d::Create();
 	enemyAttack5Obj_->SetModel(enemyAttack5Model_);
 	enemyAttack5Obj_->wtf.position = pos;
-
+	
 	enemyAttack6Model_ = Model::LoadFromOBJ("enemyattack6");
 	enemyAttack6Obj_ = Object3d::Create();
 	enemyAttack6Obj_->SetModel(enemyAttack6Model_);
@@ -310,6 +326,8 @@ void Enemy::Update() {
 		playerDirection();
 	}
 	enemyObj_->Update();
+	//待機
+	fbxObject3d_->Update();
 
 	enemyAttack1Obj_->Update();
 	enemyAttack2Obj_->Update();
@@ -425,6 +443,12 @@ void Enemy::Draw() {
 
 }
 
+void Enemy::FbxDraw()
+{
+	//待機
+	fbxObject3d_->Draw(dxCommon->GetCommandList());
+}
+
 void Enemy::AttackInterval()
 {
 	attackInterval = 250;
@@ -435,9 +459,6 @@ void Enemy::playerDirection()
 {
 
 	playerBeforeAngle = playerAngle;
-
-
-
 
 
 	if (playerAngleNmb == 1) {
