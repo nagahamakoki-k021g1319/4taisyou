@@ -223,8 +223,9 @@ void Player::Attack() {
 		//バディ指示
 		if (input_->PushKey(DIK_LSHIFT) || input_->ButtonInput(LT)) {
 			if (input_->PushKey(DIK_1) || input_->PButtonTrigger(B)) {
-				//弾を前方に出す
+				//メラ
 				if (mp >= bulletMp) {
+					isAction = 4;
 					wolf_->Attack(1, GetWorldPosition());
 					mp -= bulletMp;
 				}
@@ -299,6 +300,10 @@ void Player::Attack() {
 	//回避
 	else if (isAction == 3) {
 		Dodge();
+	}
+	//メラ
+	else if (isAction = 4) {
+		isAction = 0;
 	}
 }
 
@@ -583,6 +588,9 @@ void Player::Update() {
 		}else if (isAction == 3) {
 			//回避
 			fbxRollObject3d_->Update();
+		}else if (isAction == 4) {
+			//メラ
+			fbxMeraObject3d_->Update();
 		}
 	}
 
@@ -642,6 +650,9 @@ void Player::FbxDraw(){
 		}else if (isAction == 3) {
 			//回避
 			fbxRollObject3d_->Draw(dxCommon->GetCommandList());
+		}else if (isAction == 4) {
+			//メラ
+			fbxMeraObject3d_->Draw(dxCommon->GetCommandList());
 		}
 	}
 }

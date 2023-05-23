@@ -136,6 +136,12 @@ private:	//メンバ変数
 	Sprite* clearPic;
 	Sprite* gameoverPic;
 
+	//ポーズ画面
+	bool isPause;
+	int pauseSelect;
+	Sprite* pauseBg;
+
+
 	//攻撃する前のわかりやすいエッフェクト(なぜか敵に持たせられない)
 	Sprite* CdUI = nullptr;
 	Sprite* CdUI1 = nullptr;
