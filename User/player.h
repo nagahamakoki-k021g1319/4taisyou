@@ -173,7 +173,7 @@ private:
 	//何回めの連撃か
 	int lightAttackCount;
 	//一回の攻撃全体の時間
-	float lightAttackLimit[4] = { 17,18,20,30 };
+	float lightAttackLimit[4] = { 52,24,44,50 };
 	float lightAttackTimer;
 	//攻撃の当たり判定の有無
 	bool isLightAttack;
@@ -182,7 +182,7 @@ private:
 	//判定が消える時間
 	float lightAttackDeathTime[4] = { 13,12,14,22 };
 	//次の連撃への入力受付開始時間
-	float lightAttackInput[4] = { 20,20,20,0 };
+	float lightAttackInput[4] = { 30,30,30,0 };
 
 	//強攻撃
 	Vector3 heavyAttackLPos;
@@ -233,7 +233,6 @@ private:
 	//音関係まとめ
 	int soundCheckFlag = 0;
 	int soundCheckFlag2 = 0;
-
 
 public:
 	bool isActionStop;

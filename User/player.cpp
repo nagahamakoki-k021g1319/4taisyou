@@ -262,6 +262,7 @@ void Player::Attack() {
 				isAction = 1;
 				lightAttackCount = 0;
 				lightAttackTimer = lightAttackLimit[0];
+				fbxWeak1Object3d_->PlayAnimation();
 				isAttackFin = false;
 			}
 			//強攻撃
@@ -555,12 +556,17 @@ void Player::Update() {
 			}else if (isEffHiHealFlag) {
 				fbxHealObject3d_->Update();
 			}else if (input_->LeftStickInput()) {
-				if (input_->ButtonInput(RT)) {
-					//ダッシュ
-					fbxDashObject3d_->Update();
+				if (isActionStop == false) {
+					if (input_->ButtonInput(RT)) {
+						//ダッシュ
+						fbxDashObject3d_->Update();
+					}else {
+						//歩き
+						fbxWalkObject3d_->Update();
+					}
 				}else {
-					//歩き
-					fbxWalkObject3d_->Update();
+					//待機
+					fbxObject3d_->Update();
 				}
 			}else {
 				//待機
@@ -876,6 +882,7 @@ void Player::LightAttack() {
 				//次の斬撃設定
 				lightAttackCount++;
 				lightAttackTimer = lightAttackLimit[lightAttackCount];
+				fbxWeak2Object3d_->PlayAnimation();
 				isLightAttack = false;
 				isAttackFin = true;
 				nextAttack = false;
@@ -921,6 +928,7 @@ void Player::LightAttack() {
 				//次の斬撃設定
 				lightAttackCount++;
 				lightAttackTimer = lightAttackLimit[lightAttackCount];
+				fbxWeak3Object3d_->PlayAnimation();
 				isLightAttack = false;
 				isAttackFin = true;
 				nextAttack = false;
@@ -966,6 +974,7 @@ void Player::LightAttack() {
 				//次の斬撃設定
 				lightAttackCount++;
 				lightAttackTimer = lightAttackLimit[lightAttackCount];
+				fbxWeak4Object3d_->PlayAnimation();
 				isLightAttack = false;
 				isAttackFin = true;
 				nextAttack = false;

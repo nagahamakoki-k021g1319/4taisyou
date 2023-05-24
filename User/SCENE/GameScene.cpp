@@ -304,6 +304,8 @@ void GameScene::Reset() {
 	player_->isEffHealFlag = 0;
 
 	isPause = false;
+
+
 }
 
 /// <summary>
@@ -314,7 +316,7 @@ void GameScene::Update() {
 	{
 	case Scene::Title:
 		//シーン切り替え
-		if (input->PButtonTrigger(B)) {
+		if (input->PButtonTrigger(B) || input->TriggerKey(DIK_SPACE)) {
 			scene = Scene::Select;
 			pSourceVoice[3] = audio->PlayWave("open.wav");
 			pSourceVoice[3]->SetVolume(0.4f);
@@ -370,7 +372,7 @@ void GameScene::Update() {
 		}
 
 		//シーン切り替え
-		if (input->PButtonTrigger(B)) {
+		if (input->PButtonTrigger(B) || input->TriggerKey(DIK_SPACE)) {
 			if (stage == 0) {
 				enemyManager_->creatEnemy(stage);
 				Reset();
@@ -477,13 +479,6 @@ void GameScene::Update() {
 
 			srlPosition.x += 30.0f;
 			srl->SetPozition(srlPosition);
-
-
-			enemyManager_->Update();
-
-			player_->Update();
-
-
 
 			if (enemyManager_->isHitStop) {
 				hitStopTimer--;

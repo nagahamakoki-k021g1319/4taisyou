@@ -203,8 +203,8 @@ void FBXObject3d::Initialize()
 		IID_PPV_ARGS(&constBuffSkin));
 
 
-	//1フレーム分の時間を60FPSで設定
-	frameTime.SetTime(0, 0, 0, 1, 0, FbxTime::EMode::eFrames120);
+	//アニメーションを30FPSで設定
+	frameTime.SetTime(0, 0, 0, 1, 0, FbxTime::EMode::eFrames60);
 
 	wtf.Initialize();
 }
@@ -215,7 +215,7 @@ void FBXObject3d::Update()
 	position.x = wtf.position.x;
 	position.y = wtf.position.y;
 	position.z = wtf.position.z;
-
+	
 	rotation.x = wtf.rotation.x;
 	rotation.y = wtf.rotation.y;
 	rotation.z = wtf.rotation.z;
