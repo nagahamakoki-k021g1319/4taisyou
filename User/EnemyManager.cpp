@@ -22,7 +22,6 @@ void EnemyManager::Initialize() {
 
 	audio->LoadWave("slash.wav");
 
-	isActionStop = true;
 }
 
 void EnemyManager::creatEnemy(int round) {
@@ -74,33 +73,31 @@ void EnemyManager::Update() {
 
 	enemys_.remove_if([](std::unique_ptr<Enemy>& enemy) { return enemy->IsDead(); });
 	for (std::unique_ptr<Enemy>& enemy : enemys_) {
-		enemy->isActionStop = isActionStop;
-		if (isActionStop == false) {
-			//敵の無敵時間解除
-			if (player_->GetIsAttackFin()) {
-				enemy->ResetHit2player();
-			}
-
-			//敵とプレイヤーの衝突
-			if (player_->CheckBody2Enemy(enemy->GetWorldPosition())) {
-
-			}
-
-			float damage = 0;
-			//敵とプレイヤー攻撃衝突
-			if (player_->CheckAttack2Enemy(enemy->GetWorldPosition(), damage)) {
-				enemy->OnColision(damage);
-				pSourceVoice[0] = audio->PlayWave("slash.wav");
-				pSourceVoice[0]->SetVolume(0.6f);
-				isEffFlag = 1;
-
-				isHitStop = true;
-			}
-
-			if (player_->wolf_->CheckAttack2Enemy(enemy->GetWorldPosition(), damage)) {
-				enemy->OnColision(damage);
-			}
+		//敵の無敵時間解除
+		if (player_->GetIsAttackFin()) {
+			enemy->ResetHit2player();
 		}
+
+		//敵とプレイヤーの衝突
+		if (player_->CheckBody2Enemy(enemy->GetWorldPosition())) {
+
+		}
+
+		float damage = 0;
+		//敵とプレイヤー攻撃衝突
+		if (player_->CheckAttack2Enemy(enemy->GetWorldPosition(), damage)) {
+			enemy->OnColision(damage);
+			pSourceVoice[0] = audio->PlayWave("slash.wav");
+			pSourceVoice[0]->SetVolume(0.6f);
+			isEffFlag = 1;
+
+			isHitStop = true;
+		}
+
+		if (player_->wolf_->CheckAttack2Enemy(enemy->GetWorldPosition(), damage)) {
+			enemy->OnColision(damage);
+		}
+
 		enemy->Update();
 	}
 

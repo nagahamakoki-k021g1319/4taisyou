@@ -74,241 +74,32 @@ void Enemy::Initialize(Vector3 pos) {
 	explosion = new EnemyExplosionAttack();
 	explosion->Initialize(enemyCBModel_);
 
+	for (int i = 0; i < 5; i++) {
+		enemyProvisional[i] = Object3d::Create();
+		enemyProvisional[i]->SetModel(enemyCBModel_);
+		enemyProvisional[i]->wtf.position = { -6.0f + 3.0f * i,0,0 };
+	}
+	for (int i = 0; i < 5; i++) {
+		if (i != 2) {
+			enemyProvisional[i]->parent = enemyProvisional[2];
+		}
+	}
+
 	isActionStop = true;
 }
 
 void Enemy::Update() {
-	if (isActionStop == false) {
-
-		{//仮でプレイヤーとのやり取り
-			player_->SetEnemyPos(&enemyObj_->wtf);
-		}
-		AttackDistance();
-		//各種球更新
-		//ダガーバレット
-		daggerBullets_.remove_if([](std::unique_ptr<EnemyBullet>& bullet) { return bullet->IsDead(); });
-		for (std::unique_ptr<EnemyBullet>& bullet : daggerBullets_) {
-			bullet->Update();
-			if (bullet->isPop) {
-				//仮でプレイヤーとのやり取り
-				if (coll.CircleCollision(player_->GetWorldPosition(), bullet->GetPos(), 1.0f, 1.0f)) {
-					player_->OnCollision();
-					bullet->OnCollision();
-				}
-			}
-		}
-		//クリスタルバレット
-		crystalBullets_.remove_if([](std::unique_ptr<EnemyCrystalBullet>& bullet) { return bullet->IsDead(); });
-		for (std::unique_ptr<EnemyCrystalBullet>& bullet : crystalBullets_) {
-			bullet->Update();
-			{//仮でプレイヤーとのやり取り
-				if (coll.CircleCollision(player_->GetWorldPosition(), bullet->GetWorldPosition(), 2.0f, 2.0f)) {
-					player_->OnCollision();
-					bullet->OnCollision();
-				}
-			}
-		}
-		if (shortRenge->GetCollision()) {
-			player_->OnCollision();
-			shortRenge->ResetAttackColl();
-		}
-
-		if (explosion->GetCollision()) {
-			player_->OnCollision();
-			explosion->ResetHit();
-		}
-
-		attackInterval--;
-
-		switch (phase_) {
-		case Phase::Approach:
-			enemyResetTimer = 0;
-			enemyAttackTimer++;
-
-			//フェーズ移行
-			if (enemyAttackTimer >= 450) {
-				phase_ = Phase::ReLeave;
-				numberOfAttacks++;
-				AttackInterval();
-			}
 
 
-			//攻撃するまで移動
-			if (enemyAttackTimer >= 0 && enemyAttackTimer <= 9) {
-				enemyObj_->wtf.position.z += 0.1f;
 
-				enemyAttack1Obj_->wtf.position.z += 0.1f;
-				enemyAttack2Obj_->wtf.position.z += 0.1f;
-				enemyAttack3Obj_->wtf.position.z += 0.1f;
-				enemyAttack4Obj_->wtf.position.z += 0.1f;
-				enemyAttack5Obj_->wtf.position.z += 0.1f;
-				enemyAttack6Obj_->wtf.position.z += 0.1f;
-			}
-			//攻撃するまで移動
-			if (enemyAttackTimer >= 150 && enemyAttackTimer <= 190) {
-				enemyObj_->wtf.position.z += 0.05f;
-				enemyObj_->wtf.position.x += 0.1f;
+	Vector3 enemyVec = player_->GetWorldPosition() - enemyObj_->wtf.position;
+	enemyVec.nomalize();
 
-				enemyAttack1Obj_->wtf.position.z += 0.05f;
-				enemyAttack1Obj_->wtf.position.x += 0.1f;
-
-				enemyAttack2Obj_->wtf.position.z += 0.05f;
-				enemyAttack2Obj_->wtf.position.x += 0.1f;
-
-				enemyAttack3Obj_->wtf.position.z += 0.05f;
-				enemyAttack3Obj_->wtf.position.x += 0.1f;
-
-				enemyAttack4Obj_->wtf.position.z += 0.05f;
-				enemyAttack4Obj_->wtf.position.x += 0.1f;
-
-				enemyAttack5Obj_->wtf.position.z += 0.05f;
-				enemyAttack5Obj_->wtf.position.x += 0.1f;
-
-				enemyAttack6Obj_->wtf.position.z += 0.05f;
-				enemyAttack6Obj_->wtf.position.x += 0.1f;
-			}
-
-			//ダガーファンネルを秒数で攻撃させる
-			if (enemyAttackTimer == 10 || enemyAttackTimer == 200 || enemyAttackTimer == 250) {
-				CreatDaggerBullet(5);
-			}
-
-
-			break;
-		case Phase::Leave:
-
-			enemyAttackTimer2++;
-			if (enemyAttackTimer2 >= 300) {
-				phase_ = Phase::ReLeave;
-				numberOfAttacks++;
-				AttackInterval();
-			}
-
-
-			//攻撃するまで移動
-			if (enemyAttackTimer2 >= 0 && enemyAttackTimer2 <= 9) {
-				enemyObj_->wtf.position.z -= 0.05f;
-				enemyObj_->wtf.position.x -= 0.1f;
-
-				enemyAttack1Obj_->wtf.position.z -= 0.05f;
-				enemyAttack1Obj_->wtf.position.x -= 0.1f;
-
-				enemyAttack2Obj_->wtf.position.z -= 0.05f;
-				enemyAttack2Obj_->wtf.position.x -= 0.1f;
-
-				enemyAttack3Obj_->wtf.position.z -= 0.05f;
-				enemyAttack3Obj_->wtf.position.x -= 0.1f;
-
-				enemyAttack4Obj_->wtf.position.z -= 0.05f;
-				enemyAttack4Obj_->wtf.position.x -= 0.1f;
-
-				enemyAttack5Obj_->wtf.position.z -= 0.05f;
-				enemyAttack5Obj_->wtf.position.x -= 0.1f;
-
-				enemyAttack6Obj_->wtf.position.z -= 0.05f;
-				enemyAttack6Obj_->wtf.position.x -= 0.1f;
-
-			}
-			//順番に攻撃する弾を秒数で攻撃させる
-			if (enemyAttackTimer2 == 10) {
-				CreatCrystalBullet();
-			}
-
-
-			break;
-		case Phase::ReLeave:
-			//enemyResetTimer++;
-			//if (enemyResetTimer >= 50) {
-			//	phase_ = Phase::Random;
-			//}
-			if (attackInterval <= 0 && playerAngleNmb == 0) {
-				enemyAttackTimer = 0;
-				enemyAttackTimer2 = 0;
-				enemyAttackTimer3 = 0;
-				enemyAttackTimer4 = 0;
-				//近距離
-				if (AttckNmb == 1) {
-					playerDirectionToCorrect();
-					if (randomAttck <= 5) {
-						phase_ = Phase::Approach;
-					}
-					else if (1 <= randomAttck <= 10) {
-						/*phase_ = Phase::Leave;*/
-						phase_ = Phase::Explosion;
-					}
-					else if (9 <= randomAttck) {
-						phase_ = Phase::ShortAttack;
-					}
-
-				}
-				//中距離
-				else if (AttckNmb == 2) {
-					playerDirectionToCorrect();
-					if (randomAttck <= 4) {
-						phase_ = Phase::Leave;
-					}
-					else if (5 <= randomAttck <= 7) {
-						phase_ = Phase::ShortAttack;
-					}
-					else if (8 <= randomAttck <= 9) {
-						phase_ = Phase::Approach;
-					}
-					else if (randomAttck == 10) {
-						phase_ = Phase::Explosion;
-					}
-				}
-				//遠距離
-				else if (AttckNmb == 3) {
-					playerDirectionToCorrect();
-					if (randomAttck <= 4) {
-						phase_ = Phase::ShortAttack;
-					}
-					else if (5 <= randomAttck <= 6) {
-						phase_ = Phase::Approach;
-					}
-					else if (7 <= randomAttck <= 8) {
-						phase_ = Phase::Leave;
-					}
-					else if (9 <= randomAttck) {
-						phase_ = Phase::Explosion;
-					}
-				}
-				break;
-		case Phase::Explosion:
-			enemyAttackTimer4++;
-			explosion->Update(player_->GetWorldPosition(), enemyObj_);
-			if (enemyAttackTimer4 >= 350) {
-				explosion->ResetColl();
-				numberOfAttacks++;
-				AttackInterval();
-				phase_ = Phase::ReLeave;
-			}
-			break;
-		case Phase::ShortAttack:
-			enemyAttackTimer3++;
-			shortRenge->Update(player_->GetWorldPosition(), enemyObj_);
-			shortRenge->Update(player_->GetWorldPosition(), enemyAttack1Obj_);
-			shortRenge->Update(player_->GetWorldPosition(), enemyAttack2Obj_);
-			shortRenge->Update(player_->GetWorldPosition(), enemyAttack3Obj_);
-			shortRenge->Update(player_->GetWorldPosition(), enemyAttack4Obj_);
-			shortRenge->Update(player_->GetWorldPosition(), enemyAttack5Obj_);
-			shortRenge->Update(player_->GetWorldPosition(), enemyAttack6Obj_);
-			if (enemyAttackTimer3 >= 120) {
-				shortRenge->ResetAttack();
-				numberOfAttacks++;
-				AttackInterval();
-				phase_ = Phase::ReLeave;
-			}
-
-			break;
-			}
-		}
-		if (numberOfAttacks >= 3) {
-			AttckNmb = 0;
-			numberOfAttacks = 0;
-		}
-		playerDirection();
+	{//仮でプレイヤーとのやり取り
+		player_->SetEnemyPos(&enemyObj_->wtf);
 	}
+	AttackDistance();
+
 	enemyObj_->Update();
 
 	enemyAttack1Obj_->Update();
@@ -317,6 +108,235 @@ void Enemy::Update() {
 	enemyAttack4Obj_->Update();
 	enemyAttack5Obj_->Update();
 	enemyAttack6Obj_->Update();
+
+
+	//各種球更新
+	//ダガーバレット
+	daggerBullets_.remove_if([](std::unique_ptr<EnemyBullet>& bullet) { return bullet->IsDead(); });
+	for (std::unique_ptr<EnemyBullet>& bullet : daggerBullets_) {
+		bullet->Update();
+		if (bullet->isPop) {
+			//仮でプレイヤーとのやり取り
+			if (coll.CircleCollision(player_->GetWorldPosition(), bullet->GetPos(), 1.0f, 1.0f)) {
+				player_->OnCollision();
+				bullet->OnCollision();
+			}
+		}
+	}
+	//クリスタルバレット
+	crystalBullets_.remove_if([](std::unique_ptr<EnemyCrystalBullet>& bullet) { return bullet->IsDead(); });
+	for (std::unique_ptr<EnemyCrystalBullet>& bullet : crystalBullets_) {
+		bullet->Update();
+		{//仮でプレイヤーとのやり取り
+			if (coll.CircleCollision(player_->GetWorldPosition(), bullet->GetWorldPosition(), 2.0f, 2.0f)) {
+				player_->OnCollision();
+				bullet->OnCollision();
+			}
+		}
+	}
+	if (shortRenge->GetCollision()) {
+		player_->OnCollision();
+		shortRenge->ResetAttackColl();
+	}
+
+	if (explosion->GetCollision()) {
+		player_->OnCollision();
+		explosion->ResetHit();
+	}
+
+	attackInterval--;
+
+	EnemyProvisional();
+
+	switch (phase_) {
+	case Phase::Approach:
+		enemyResetTimer = 0;
+		enemyAttackTimer++;
+
+		//フェーズ移行
+		if (enemyAttackTimer >= 450) {
+			phase_ = Phase::ReLeave;
+			numberOfAttacks++;
+			AttackInterval();
+		}
+
+
+		//攻撃するまで移動
+		if (enemyAttackTimer >= 0 && enemyAttackTimer <= 9) {
+			enemyObj_->wtf.position.z += 0.1f;
+
+			enemyAttack1Obj_->wtf.position.z += 0.1f;
+			enemyAttack2Obj_->wtf.position.z += 0.1f;
+			enemyAttack3Obj_->wtf.position.z += 0.1f;
+			enemyAttack4Obj_->wtf.position.z += 0.1f;
+			enemyAttack5Obj_->wtf.position.z += 0.1f;
+			enemyAttack6Obj_->wtf.position.z += 0.1f;
+		}
+		//攻撃するまで移動
+		if (enemyAttackTimer >= 150 && enemyAttackTimer <= 190) {
+			enemyObj_->wtf.position.z += 0.05f;
+			enemyObj_->wtf.position.x += 0.1f;
+
+			enemyAttack1Obj_->wtf.position.z += 0.05f;
+			enemyAttack1Obj_->wtf.position.x += 0.1f;
+
+			enemyAttack2Obj_->wtf.position.z += 0.05f;
+			enemyAttack2Obj_->wtf.position.x += 0.1f;
+
+			enemyAttack3Obj_->wtf.position.z += 0.05f;
+			enemyAttack3Obj_->wtf.position.x += 0.1f;
+
+			enemyAttack4Obj_->wtf.position.z += 0.05f;
+			enemyAttack4Obj_->wtf.position.x += 0.1f;
+
+			enemyAttack5Obj_->wtf.position.z += 0.05f;
+			enemyAttack5Obj_->wtf.position.x += 0.1f;
+
+			enemyAttack6Obj_->wtf.position.z += 0.05f;
+			enemyAttack6Obj_->wtf.position.x += 0.1f;
+		}
+
+		//ダガーファンネルを秒数で攻撃させる
+		if (enemyAttackTimer == 10 || enemyAttackTimer == 200 || enemyAttackTimer == 250) {
+			CreatDaggerBullet(5);
+		}
+
+
+		break;
+	case Phase::Leave:
+
+		enemyAttackTimer2++;
+		if (enemyAttackTimer2 >= 300) {
+			phase_ = Phase::ReLeave;
+			numberOfAttacks++;
+			AttackInterval();
+		}
+
+
+		//攻撃するまで移動
+		if (enemyAttackTimer2 >= 0 && enemyAttackTimer2 <= 9) {
+			enemyObj_->wtf.position.z -= 0.05f;
+			enemyObj_->wtf.position.x -= 0.1f;
+
+			enemyAttack1Obj_->wtf.position.z -= 0.05f;
+			enemyAttack1Obj_->wtf.position.x -= 0.1f;
+
+			enemyAttack2Obj_->wtf.position.z -= 0.05f;
+			enemyAttack2Obj_->wtf.position.x -= 0.1f;
+
+			enemyAttack3Obj_->wtf.position.z -= 0.05f;
+			enemyAttack3Obj_->wtf.position.x -= 0.1f;
+
+			enemyAttack4Obj_->wtf.position.z -= 0.05f;
+			enemyAttack4Obj_->wtf.position.x -= 0.1f;
+
+			enemyAttack5Obj_->wtf.position.z -= 0.05f;
+			enemyAttack5Obj_->wtf.position.x -= 0.1f;
+
+			enemyAttack6Obj_->wtf.position.z -= 0.05f;
+			enemyAttack6Obj_->wtf.position.x -= 0.1f;
+
+		}
+		//順番に攻撃する弾を秒数で攻撃させる
+		if (enemyAttackTimer2 == 30) {
+			CreatCrystalBullet();
+		}
+
+
+		break;
+	case Phase::ReLeave:
+		//enemyResetTimer++;
+		//if (enemyResetTimer >= 50) {
+		//	phase_ = Phase::Random;
+		//}
+		if (attackInterval <= 0 && playerAngleNmb == 0) {
+			enemyAttackTimer = 0;
+			enemyAttackTimer2 = 0;
+			enemyAttackTimer3 = 0;
+			enemyAttackTimer4 = 0;
+			//近距離
+			if (AttckNmb == 1) {
+				playerDirectionToCorrect();
+				if (randomAttck <= 5) {
+					phase_ = Phase::Approach;
+				}
+				else if (6 <= randomAttck <= 8) {
+					phase_ = Phase::Leave;
+					/*phase_ = Phase::Explosion;*/
+				}
+				else if (9 <= randomAttck) {
+					phase_ = Phase::ShortAttack;
+				}
+
+
+			}
+			//中距離
+			else if (AttckNmb == 2) {
+				playerDirectionToCorrect();
+				if (randomAttck <= 4) {
+					phase_ = Phase::Leave;
+				}
+				else if (5 <= randomAttck <= 7) {
+					phase_ = Phase::ShortAttack;
+				}
+				else if (8 <= randomAttck <= 9) {
+					phase_ = Phase::Approach;
+				}
+				else if (randomAttck == 10) {
+					phase_ = Phase::Explosion;
+				}
+			}
+			//遠距離
+			else if (AttckNmb == 3) {
+				playerDirectionToCorrect();
+				if (randomAttck <= 4) {
+					phase_ = Phase::ShortAttack;
+				}
+				else if (5 <= randomAttck <= 6) {
+					phase_ = Phase::Approach;
+				}
+				else if (7 <= randomAttck <= 8) {
+					phase_ = Phase::Leave;
+				}
+				else if (9 <= randomAttck) {
+					phase_ = Phase::Explosion;
+				}
+			}
+			break;
+	case Phase::Explosion:
+		enemyAttackTimer4++;
+		explosion->Update(player_->GetWorldPosition(), enemyObj_);
+		if (enemyAttackTimer4 >= 350) {
+			explosion->ResetColl();
+			numberOfAttacks++;
+			AttackInterval();
+			phase_ = Phase::ReLeave;
+		}
+		break;
+	case Phase::ShortAttack:
+		enemyAttackTimer3++;
+		shortRenge->Update(player_->GetWorldPosition(), enemyObj_);
+		shortRenge->Update(player_->GetWorldPosition(), enemyAttack1Obj_);
+		shortRenge->Update(player_->GetWorldPosition(), enemyAttack2Obj_);
+		shortRenge->Update(player_->GetWorldPosition(), enemyAttack3Obj_);
+		shortRenge->Update(player_->GetWorldPosition(), enemyAttack4Obj_);
+		shortRenge->Update(player_->GetWorldPosition(), enemyAttack5Obj_);
+		shortRenge->Update(player_->GetWorldPosition(), enemyAttack6Obj_);
+		if (enemyAttackTimer3 >= 120) {
+			shortRenge->ResetAttack();
+			numberOfAttacks++;
+			AttackInterval();
+			phase_ = Phase::ReLeave;
+		}
+
+		break;
+		}
+	}
+	if (numberOfAttacks >= 3) {
+		AttckNmb = 0;
+		numberOfAttacks = 0;
+	}
+	playerDirection();
 }
 
 void Enemy::CreatDaggerBullet(int bulletNum) {
@@ -433,15 +453,12 @@ void Enemy::AttackInterval()
 
 void Enemy::playerDirection()
 {
-
-	playerBeforeAngle = playerAngle;
-
-
-
-
+	playerVector = player_->GetWorldPosition() - enemyObj_->wtf.position;
+	playerAngle = atan2(playerVector.x, playerVector.z);
+	anglePI = playerAngle + PI;
 
 	if (playerAngleNmb == 1) {
-		playerVecSpeed = 1 / PI;
+		playerVecSpeed = 3 * (PI / 180);
 
 		enemyObj_->wtf.rotation.y += playerVecSpeed;
 		enemyAttack1Obj_->wtf.rotation.y += playerVecSpeed;
@@ -463,7 +480,7 @@ void Enemy::playerDirection()
 		}
 	}
 	if (playerAngleNmb == 2) {
-		playerVecSpeed = 1 / PI;
+		playerVecSpeed = 3 * (PI / 180);
 		enemyObj_->wtf.rotation.y -= playerVecSpeed;
 		enemyAttack1Obj_->wtf.rotation.y -= playerVecSpeed;
 		enemyAttack2Obj_->wtf.rotation.y -= playerVecSpeed;
@@ -471,7 +488,7 @@ void Enemy::playerDirection()
 		enemyAttack4Obj_->wtf.rotation.y -= playerVecSpeed;
 		enemyAttack5Obj_->wtf.rotation.y -= playerVecSpeed;
 		enemyAttack6Obj_->wtf.rotation.y -= playerVecSpeed;
-		if (playerAngle >= enemyObj_->wtf.rotation.y + PI) {
+		if (playerAngle - PI  >= enemyObj_->wtf.rotation.y ) {
 			playerAngleNmb = 0;
 			enemyObj_->wtf.rotation.y = playerAngle + PI;
 			enemyAttack1Obj_->wtf.rotation.y = playerAngle + PI;
@@ -493,10 +510,9 @@ void Enemy::playerDirection()
 
 void Enemy::playerDirectionToCorrect()
 {
-
-	playerVector = player_->GetWorldPosition() - enemyObj_->wtf.position;
-	playerAngle = atan2(playerVector.x, playerVector.z);
-	float i = playerAngle + (2 / PI);
+	enemyDot = playerBeforVec.dot({ playerVector.x,playerVector.z });
+	playerBeforVec = { playerVector.x ,playerVector.z };
+	enemyDot = enemyDot * (PI / 180);
 
 	//playerAngleNmb = 0;
 	//enemyObj_->wtf.rotation.y = playerAngle + PI;
@@ -515,27 +531,32 @@ void Enemy::playerDirectionToCorrect()
 	//enemyAttack5Obj_->Update();
 	//enemyAttack6Obj_->Update();
 
-	if (playerBeforeAngle < playerAngle) {
-		if (playerBeforeAngle < i) {
-			playerAngleNmb = 2;
-		}
-		else if (playerBeforeAngle > i)
-		{
-			playerAngleNmb = 1;
-		}
 
+	float playerCompare1 = (playerBeforeAngle + enemyDot) * (playerBeforeAngle + enemyDot) - playerAngle * playerAngle;
+	float playerCompare2 = (playerBeforeAngle - enemyDot) * (playerBeforeAngle - enemyDot) - playerAngle * playerAngle;
 
+	if (playerCompare1 < playerCompare2) {
+		playerAngleNmb = 1;
 	}
-	else if (playerBeforeAngle > playerAngle)
+	else if (playerCompare2 < playerCompare1)
 	{
-		if (playerBeforeAngle > i) {
-			playerAngleNmb = 1;
-		}
-		else if (playerBeforeAngle < i)
-		{
-			playerAngleNmb = 2;
-		}
+		playerAngleNmb = 2;
 	}
+	playerBeforeAngle = playerAngle;
+
+}
+
+void Enemy::EnemyProvisional()
+{
+  Vector3 enemyVec = player_->GetWorldPosition() - enemyObj_->wtf.position;
+	enemyVec.nomalize();
+	enemyProvisional[2]->wtf.position = { enemyObj_->wtf.position.x + -enemyVec.x * 4.0f ,enemyObj_->wtf.position.y + 1.0f,enemyObj_->wtf.position.z + -enemyVec.z * 8.0f };
+	enemyProvisional[2]->wtf.rotation.y = anglePI;
+
+	for (int i = 0; i < 5; i++) {
+		enemyProvisional[i]->Update();
+	}
+
 }
 
 Vector3 Enemy::GetWorldPosition()

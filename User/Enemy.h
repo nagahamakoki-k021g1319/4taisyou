@@ -70,7 +70,7 @@ private:
 	Model* enemyAttack5Model_ = nullptr;
 	Object3d* enemyAttack6Obj_ = nullptr;
 	Model* enemyAttack6Model_ = nullptr;
-	
+
 	bool isLive = true;
 	const int hpMax = 30;
 	int hp = hpMax;
@@ -134,6 +134,6 @@ private:
 	float playerVecSpeed;
 
 	Vector3 playerVector = {};
-public:
-	bool isActionStop;
+	Vector2 playerBeforVec = {};
+	float enemyDot = 0;
 };
