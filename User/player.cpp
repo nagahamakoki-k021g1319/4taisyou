@@ -32,22 +32,7 @@ Player::~Player() {
 	//FBXオブジェクト解放
 	delete fbxObject3d_;
 	delete fbxModel_;
-	delete fbxDashObject3d_;
-	delete fbxDashModel_;
-	delete fbxWeak1Object3d_;
-	delete fbxWeak1Model_;
-	delete fbxWeak2Object3d_;
-	delete fbxWeak2Model_;
-	delete fbxWeak3Object3d_;
-	delete fbxWeak3Model_;
-	delete fbxWeak4Object3d_;
-	delete fbxWeak4Model_;
-	delete fbxRollObject3d_;
-	delete fbxRollModel_;
-	delete fbxWalkObject3d_;
-	delete fbxWalkModel_;
-	delete fbxStrongObject3d_;
-	delete fbxStrongModel_;
+
 }
 
 void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
@@ -59,17 +44,7 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	input_ = input;
 	camTransForm = new Transform();
 
-	fbxModel_ = FbxLoader::GetInstance()->LoadModelFromFile("stand");
-	fbxRollModel_ = FbxLoader::GetInstance()->LoadModelFromFile("roll");
-	fbxWalkModel_ = FbxLoader::GetInstance()->LoadModelFromFile("walk");
-	fbxDashModel_ = FbxLoader::GetInstance()->LoadModelFromFile("dash");
-	fbxWeak1Model_ = FbxLoader::GetInstance()->LoadModelFromFile("weakAttack1");
-	fbxWeak2Model_ = FbxLoader::GetInstance()->LoadModelFromFile("weakAttack2");
-	fbxWeak3Model_ = FbxLoader::GetInstance()->LoadModelFromFile("weakAttack3");
-	fbxWeak4Model_ = FbxLoader::GetInstance()->LoadModelFromFile("weakAttack4");
-	fbxStrongModel_ = FbxLoader::GetInstance()->LoadModelFromFile("strongAttack");
-	fbxMeraModel_ = FbxLoader::GetInstance()->LoadModelFromFile("mera");
-	fbxHealModel_ = FbxLoader::GetInstance()->LoadModelFromFile("heal");
+	fbxModel_ = FbxLoader::GetInstance()->LoadModelFromFile("playerRun");
 	// デバイスをセット
 	FBXObject3d::SetDevice(dxCommon->GetDevice());
 	// グラフィックスパイプライン生成
@@ -78,79 +53,10 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	fbxObject3d_ = new FBXObject3d;
 	fbxObject3d_->Initialize();
 	fbxObject3d_->SetModel(fbxModel_);
-	/*fbxObject3d_->wtf.scale = { 0.001,0.001,0.001 };*/
-	fbxObject3d_->SetPosition({ 0,0,0 });
+	fbxObject3d_->SetScale({ 0.01,0.01,0.01 });
+	fbxObject3d_->SetPosition({ 0,0,40 });
 	fbxObject3d_->PlayAnimation();
-	//回避
-	fbxRollObject3d_ = new FBXObject3d;
-	fbxRollObject3d_->Initialize();
-	fbxRollObject3d_->SetModel(fbxRollModel_);
-	fbxRollObject3d_->wtf.position = { 0,10,0 };
-	fbxRollObject3d_->wtf.scale = { 10,10,10 };
-	fbxRollObject3d_->PlayAnimation();
-	//歩き
-	fbxWalkObject3d_ = new FBXObject3d;
-	fbxWalkObject3d_->Initialize();
-	fbxWalkObject3d_->SetModel(fbxWalkModel_);
-	fbxWalkObject3d_->wtf.position = { 0,10,0 };
-	fbxWalkObject3d_->wtf.scale = { 10,10,10 };
-	fbxWalkObject3d_->PlayAnimation();
-	//走る
-	fbxDashObject3d_ = new FBXObject3d;
-	fbxDashObject3d_->Initialize();
-	fbxDashObject3d_->SetModel(fbxDashModel_);
-	fbxDashObject3d_->wtf.position = { 0,10,0 };
-	fbxDashObject3d_->wtf.scale = { 10,10,10 };
-	fbxDashObject3d_->PlayAnimation();
-	//弱攻撃1
-	fbxWeak1Object3d_ = new FBXObject3d;
-	fbxWeak1Object3d_->Initialize();
-	fbxWeak1Object3d_->SetModel(fbxWeak1Model_);
-	fbxWeak1Object3d_->wtf.position = { 0,10,0 };
-	fbxWeak1Object3d_->wtf.scale = { 10,10,10 };
-	fbxWeak1Object3d_->PlayAnimation();
-	//弱攻撃2
-	fbxWeak2Object3d_ = new FBXObject3d;
-	fbxWeak2Object3d_->Initialize();
-	fbxWeak2Object3d_->SetModel(fbxWeak2Model_);
-	fbxWeak2Object3d_->wtf.position = { 0,10,0 };
-	fbxWeak2Object3d_->wtf.scale = { 10,10,10 };
-	fbxWeak2Object3d_->PlayAnimation();
-	//弱攻撃3
-	fbxWeak3Object3d_ = new FBXObject3d;
-	fbxWeak3Object3d_->Initialize();
-	fbxWeak3Object3d_->SetModel(fbxWeak3Model_);
-	fbxWeak3Object3d_->wtf.position = { 0,10,0 };
-	fbxWeak3Object3d_->wtf.scale = { 10,10,10 };
-	fbxWeak3Object3d_->PlayAnimation();
-	//弱攻撃4
-	fbxWeak4Object3d_ = new FBXObject3d;
-	fbxWeak4Object3d_->Initialize();
-	fbxWeak4Object3d_->SetModel(fbxWeak4Model_);
-	fbxWeak4Object3d_->wtf.position = { 0,10,0 };
-	fbxWeak4Object3d_->wtf.scale = { 10,10,10 };
-	fbxWeak4Object3d_->PlayAnimation();
-	//強攻撃
-	fbxStrongObject3d_ = new FBXObject3d;
-	fbxStrongObject3d_->Initialize();
-	fbxStrongObject3d_->SetModel(fbxStrongModel_);
-	fbxStrongObject3d_->wtf.position = { 0,10,0 };
-	fbxStrongObject3d_->wtf.scale = { 10,10,10 };
-	fbxStrongObject3d_->PlayAnimation();
-	//メラ
-	fbxMeraObject3d_ = new FBXObject3d;
-	fbxMeraObject3d_->Initialize();
-	fbxMeraObject3d_->SetModel(fbxStrongModel_);
-	fbxMeraObject3d_->wtf.position = { 0,10,0 };
-	fbxMeraObject3d_->wtf.scale = { 10,10,10 };
-	fbxMeraObject3d_->PlayAnimation();
-	//回復
-	fbxHealObject3d_ = new FBXObject3d;
-	fbxHealObject3d_->Initialize();
-	fbxHealObject3d_->SetModel(fbxStrongModel_);
-	fbxHealObject3d_->wtf.position = { 0,10,0 };
-	fbxHealObject3d_->wtf.scale = { 10,10,10 };
-	fbxHealObject3d_->PlayAnimation();
+
 	//プレイヤー設定
 	bodyModel_ = Model::LoadFromOBJ("player");
 	bodyObj_ = Object3d::Create();
@@ -195,16 +101,6 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	particleManager->LoadTexture("blod.png");
 	particleManager->Update();
 
-	particleHealManager = std::make_unique<ParticleManager>();
-	particleHealManager.get()->Initialize();
-	particleHealManager->LoadTexture("hill.png");
-	particleHealManager->Update();
-
-	particleHiHealManager = std::make_unique<ParticleManager>();
-	particleHiHealManager.get()->Initialize();
-	particleHiHealManager->LoadTexture("hihill.png");
-	particleHiHealManager->Update();
-
 	//バディ
 	wolf_ = new Wolf();
 	wolf_->Initialize();
@@ -228,19 +124,6 @@ void Player::Reset() {
 	eyePos = { 0.0f, 3.0f, -8.0f };
 	targetPos = { 0.0f,0.0f,targetDistance };
 
-	fbxObject3d_->wtf.Initialize();
-	/*fbxObject3d_->wtf.scale = { 0.001,0.001,0.001 };*/
-	fbxWalkObject3d_->wtf.Initialize();
-	/*fbxWeak1Object3d_->wtf.Initialize();
-	fbxWeak2Object3d_->wtf.Initialize();
-	fbxWeak3Object3d_->wtf.Initialize();
-	fbxWeak4Object3d_->wtf.Initialize();
-	fbxRollObject3d_->wtf.Initialize();
-	fbxDashObject3d_->wtf.Initialize();
-	fbxStrongObject3d_->wtf.Initialize();
-	fbxMeraObject3d_->wtf.Initialize();
-	fbxHealObject3d_->wtf.Initialize();*/
-	
 	bodyObj_->wtf.Initialize();
 
 	dash1Obj_->wtf.Initialize();
@@ -300,9 +183,6 @@ void Player::Reset() {
 	//MP関連
 	mp = 100;
 
-	centerPos = { 0,2,0 };
-	isActionStop = true;
-
 }
 
 void Player::Attack() {
@@ -322,7 +202,6 @@ void Player::Attack() {
 				//大回復
 				if (mp >= megaHealMp) {
 					mp -= megaHealMp;
-					isEffHiHealFlag = 1;
 					hp += megaHeal;
 					if (hp > 100) {
 						hp = 100;
@@ -333,7 +212,6 @@ void Player::Attack() {
 				//小回復
 				if (mp >= healMp) {
 					mp -= healMp;
-					isEffHealFlag = 1;
 					hp += heal;
 					if (hp > 100) {
 						hp = 100;
@@ -468,19 +346,6 @@ void Player::Move() {
 		}
 
 		//更新
-		fbxObject3d_->wtf.position += velocity;
-		fbxWalkObject3d_->wtf.position += velocity;
-		/*fbxRollObject3d_->wtf.position += velocity;
-		fbxDashObject3d_->wtf.position += velocity;
-		fbxStrongObject3d_->wtf.position += velocity;
-		fbxWeak1Object3d_->wtf.position += velocity;
-		fbxWeak2Object3d_->wtf.position += velocity;
-		fbxWeak3Object3d_->wtf.position += velocity;
-		fbxWeak4Object3d_->wtf.position += velocity;
-		fbxMeraObject3d_->wtf.position += velocity;
-		fbxHealObject3d_->wtf.position += velocity;
-		
-		*/
 		bodyObj_->wtf.position += velocity;
 		dash1Obj_->wtf.position += velocity;
 		dash2Obj_->wtf.position += velocity;
@@ -499,21 +364,8 @@ void Player::Rota() {
 			Vector2 stickVec = input_->GetLeftStickVec();
 
 			float theta = atan2(stickVec.x, stickVec.y);
-			fbxObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
 
-			fbxWalkObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
-
-			/*fbxWeak1Object3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
-			fbxWeak2Object3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
-			fbxWeak3Object3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
-			fbxWeak4Object3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
-			fbxRollObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
-			fbxDashObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
-			fbxStrongObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
 			bodyObj_->wtf.rotation.y = theta + camTransForm->rotation.y;
-			fbxMeraObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
-			fbxHealObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
-			*/
 
 			dash1Obj_->wtf.rotation.y = theta + camTransForm->rotation.y;
 
@@ -580,96 +432,55 @@ void Player::camUpdate() {
 }
 
 void Player::Update() {
-	if (isActionStop == false) {
-
-		if (isInvincible) {
-			invincibleTimer--;
-			if (invincibleTimer < 0) {
-				isInvincible = false;
-			}
+	if (isInvincible) {
+		invincibleTimer--;
+		if (invincibleTimer < 0) {
+			isInvincible = false;
 		}
-
-		Rota();
-		Move();
-
-		camUpdate();
-
-		Attack();
-
-		//ダメージエフェクト
-		if (isEffFlag == 1) {
-			EffTimer++;
-		}
-		if (EffTimer <= 10 && EffTimer >= 1) {
-			EffUpdate();
-		}
-		if (EffTimer >= 11) {
-			isEffFlag = 0;
-			EffTimer = 0;
-		}
-
-		//回復エフェクト
-		if (isEffHealFlag == 1) {
-			EffHealTimer++;
-		}
-		if (EffHealTimer <= 10 && EffHealTimer >= 1) {
-			EffHealUpdate();
-		}
-		if (EffHealTimer >= 11) {
-			isEffHealFlag = 0;
-			EffHealTimer = 0;
-		}
-		//回復エフェクト(大)
-		if (isEffHiHealFlag == 1) {
-			EffHiHealTimer++;
-		}
-		if (EffHiHealTimer <= 10 && EffHiHealTimer >= 1) {
-			EffHiHealUpdate();
-		}
-		if (EffHiHealTimer >= 11) {
-			isEffHiHealFlag = 0;
-			EffHiHealTimer = 0;
-		}
-
-		//��ʃV�F�C�N
-		if (isCamShake == true) {
-			camShakeTimer--;
-			if (camShakeTimer <= camShakeLimit && camShakeTimer > camShakeLimit * 3 / 4) {
-				camShakeVec.y += 0.05f;
-				camShakeVec.z += 0.05f;
-			}
-			else if (camShakeTimer <= camShakeLimit * 3 / 4 && camShakeTimer > camShakeLimit * 2 / 4) {
-				camShakeVec.y -= 0.05f;
-				camShakeVec.z -= 0.05f;
-			}
-			else if (camShakeTimer <= camShakeLimit * 2 / 4 && camShakeTimer > camShakeLimit * 1 / 4) {
-				camShakeVec.y += 0.05f;
-				camShakeVec.z += 0.05f;
-			}
-			else if (camShakeTimer <= camShakeLimit * 1 / 4 && camShakeTimer > 0) {
-				camShakeVec.y -= 0.05f;
-				camShakeVec.z -= 0.05f;
-			}
-			else if (camShakeTimer <= 0) {
-				isCamShake = false;
-				camShakeVec = { 0,0,0 };
-			}
-		}
-
-		MpUpdate(mpRegen);
 	}
 
-	fbxObject3d_->Update();
-	fbxWalkObject3d_->Update();
-	/*fbxWeak1Object3d_->Update();
-	fbxWeak2Object3d_->Update();
-	fbxWeak3Object3d_->Update();
-	fbxWeak4Object3d_->Update();
-	fbxRollObject3d_->Update();
-	fbxDashObject3d_->Update();
-	fbxStrongObject3d_->Update();
-	fbxMeraObject3d_->Update();
-	fbxHealObject3d_->Update();*/
+	Rota();
+	Move();
+
+	camUpdate();
+
+	Attack();
+
+	if (isEffFlag == 1) {
+		EffTimer++;
+	}
+	if (EffTimer <= 10 && EffTimer >= 1) {
+		EffUpdate();
+	}
+	if (EffTimer >= 11) {
+		isEffFlag = 0;
+		EffTimer = 0;
+	}
+
+	//��ʃV�F�C�N
+	if (isCamShake == true) {
+		camShakeTimer--;
+		if (camShakeTimer <= camShakeLimit && camShakeTimer > camShakeLimit * 3 / 4) {
+			camShakeVec.y += 0.05f;
+			camShakeVec.z += 0.05f;
+		}
+		else if (camShakeTimer <= camShakeLimit * 3 / 4 && camShakeTimer > camShakeLimit * 2 / 4) {
+			camShakeVec.y -= 0.05f;
+			camShakeVec.z -= 0.05f;
+		}
+		else if (camShakeTimer <= camShakeLimit * 2 / 4 && camShakeTimer > camShakeLimit * 1 / 4) {
+			camShakeVec.y += 0.05f;
+			camShakeVec.z += 0.05f;
+		}
+		else if (camShakeTimer <= camShakeLimit * 1 / 4 && camShakeTimer > 0) {
+			camShakeVec.y -= 0.05f;
+			camShakeVec.z -= 0.05f;
+		}
+		else if (camShakeTimer <= 0) {
+			isCamShake = false;
+			camShakeVec = { 0,0,0 };
+		}
+	}
 	bodyObj_->Update();
 	dash1Obj_->Update();
 	dash2Obj_->Update();
@@ -679,7 +490,12 @@ void Player::Update() {
 	attack2Obj_->Update();
 	attack3Obj_->Update();
 	attack4Obj_->Update();
+
+	fbxObject3d_->Update();
+
 	wolf_->Update(enemyPos_);
+	MpUpdate(mpRegen);
+
 
 	debugObj_->Update();
 }
@@ -687,21 +503,87 @@ void Player::Update() {
 void Player::Draw() {
 	if (isLive) {
 
+		//弱攻撃のモーション
+		if (input_->PButtonTrigger(X) || input_->PButtonTrigger(Y)) {
+
+			attackFlag = 1;
+		}
+		if (attackFlag == 1) {
+			objAttackTimer--;
+
+			if (objAttackTimer >= 12 && objAttackTimer <= 16) {
+				attack1Obj_->Draw();
+			}
+			else if (objAttackTimer >= 8 && objAttackTimer <= 11) {
+				attack2Obj_->Draw();
+			}
+			else if (objAttackTimer >= 4 && objAttackTimer <= 7) {
+				attack3Obj_->Draw();
+			}
+			else if (objAttackTimer >= 0 && objAttackTimer <= 3) {
+				attack4Obj_->Draw();
+			}
+			if (objAttackTimer <= 0) {
+				attackFlag = 0;
+				objAttackTimer = 16;
+			}
+		}
+		if (attackFlag == 0) {
+			//移動のモーション
+			if (input_->LeftStickInput()) {
+
+				objRotaTimer--;
+				if (objRotaTimer >= 25 && objRotaTimer <= 30) {
+					dash1Obj_->Draw();
+				}
+				else if (objRotaTimer >= 20 && objRotaTimer <= 24) {
+					dash2Obj_->Draw();
+				}
+				else if (objRotaTimer >= 15 && objRotaTimer <= 19) {
+					dash3Obj_->Draw();
+				}
+				else if (objRotaTimer >= 10 && objRotaTimer <= 14) {
+					dash4Obj_->Draw();
+				}
+				else if (objRotaTimer >= 5 && objRotaTimer <= 9) {
+					dash3Obj_->Draw();
+				}
+				else if (objRotaTimer >= 0 && objRotaTimer <= 4) {
+					dash2Obj_->Draw();
+				}
+
+				if (objRotaTimer <= 0) {
+					objRotaTimer = 30;
+				}
+			}
+			else {
+				if (attackFlag == 0) {
+					bodyObj_->Draw();
+				}
+
+				objRotaTimer = 0;
+			}
+		}
+
+
+
 		wolf_->Draw();
+
+		////デバッグ用
+		//if (isLightAttack) {
+		//	debugObj_->Draw();
+		//}
+		//if (isHeavyAttack) {
+		//	debugObj_->Draw();
+		//}
 	}
 }
 
 void Player::FbxDraw()
 {
-	if (input_->LeftStickInput()) {
-		fbxWalkObject3d_->Draw(dxCommon->GetCommandList());
-	}
-	else {
-		fbxObject3d_->Draw(dxCommon->GetCommandList());
-	}
+	/*fbxObject3d_->Draw(dxCommon->GetCommandList());*/
 }
 
-//ダメージエフェクト
 void Player::EffUpdate()
 {
 	//パーティクル範囲
@@ -735,91 +617,12 @@ void Player::EffUpdate()
 
 }
 
-//回復エフェクト
-void Player::EffHealUpdate()
-{
-	//パーティクル範囲
-	for (int i = 0; i < 2; i++) {
-		//X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
-		const float rnd_pos = 0.01f;
-		Vector3 pos{};
-		pos.x += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 3.0f;
-		pos.y += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 3.0f;
-		pos.z += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 3.0f;
-		pos += GetWorldPosition();
-		pos.y += 1.0f;
-		//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
-		const float rnd_vel = 0.1f;
-		Vector3 vel{};
-		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		//重力に見立ててYのみ[-0.001f,0]でランダムに分布
-		const float rnd_acc = 0.000001f;
-		Vector3 acc{};
-		acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
-		acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
-
-		//追加
-		particleHealManager->Add(60, pos, vel, acc, 0.3f, 0.0f);
-
-		particleHealManager->Update();
-	}
-
-}
-
-void Player::EffHiHealUpdate()
-{
-	//パーティクル範囲
-	for (int i = 0; i < 2; i++) {
-		//X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
-		const float rnd_pos = 5.0f;
-		Vector3 pos{};
-		pos.x += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 3.0f;
-		pos.y += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 3.0f;
-		pos.z += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 3.0f;
-		pos += GetWorldPosition();
-		pos.y += 1.0f;
-		//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
-		const float rnd_vel = 0.1f;
-		Vector3 vel{};
-		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		//重力に見立ててYのみ[-0.001f,0]でランダムに分布
-		const float rnd_acc = 0.001f;
-		Vector3 acc{};
-		acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
-		acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
-
-		//追加
-		particleHiHealManager->Add(60, pos, vel, acc, 0.3f, 0.0f);
-
-		particleHiHealManager->Update();
-	}
-
-}
-
 void Player::EffDraw()
 {
-	//ダメージエフェクト
 	if (isEffFlag == 1) {
 		// 3Dオブクジェクトの描画
 		particleManager->Draw();
 	}
-
-	//回復エフェクト
-	if (isEffHealFlag == 1) {
-		// 3Dオブクジェクトの描画
-		particleHealManager->Draw();
-	}
-
-	//回復エフェクト(大)
-	if (isEffHiHealFlag == 1) {
-		// 3Dオブクジェクトの描画
-		particleHiHealManager->Draw();
-	}
-
 
 }
 

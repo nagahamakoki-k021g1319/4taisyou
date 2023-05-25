@@ -12,10 +12,7 @@ GameScene::GameScene() {
 /// </summary>
 GameScene::~GameScene() {
 	delete spriteCommon;
-	delete mainCamera;
-	delete camera1;
-	delete camera2;
-	delete camera3;
+	delete camera;
 	delete player_;
 	delete enemyManager_;
 
@@ -37,11 +34,6 @@ GameScene::~GameScene() {
 	delete srl;
 	delete sru;
 	delete srd;
-	delete std3;
-	delete std2;
-	delete std1;
-	delete stdgo;
-	delete stdgo2;
 }
 
 /// <summary>
@@ -60,21 +52,11 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	spriteCommon->Initialize(dxCommon);
 
 	// カメラ生成
-	mainCamera = new Camera(WinApp::window_width, WinApp::window_height);
-	camera1 = new Camera(WinApp::window_width, WinApp::window_height);
-	camera2 = new Camera(WinApp::window_width, WinApp::window_height);
-	camera3 = new Camera(WinApp::window_width, WinApp::window_height);
+	camera = new Camera(WinApp::window_width, WinApp::window_height);
 
-	camera1->SetEye({ 0, 3, 6 });
-	camera1->SetTarget({ 0,3,0 });
-	camera2->SetEye({ -4, 3, 4 });
-	camera2->SetTarget({ 0,3,0 });
-	camera3->SetEye({ 4, 3, 4 });
-	camera3->SetTarget({ 0,3,0 });
-
-	ParticleManager::SetCamera(mainCamera);
-	Object3d::SetCamera(mainCamera);
-	FBXObject3d::SetCamera(mainCamera);
+	ParticleManager::SetCamera(camera);
+	Object3d::SetCamera(camera);
+	FBXObject3d::SetCamera(camera);
 
 	floorMD = Model::LoadFromOBJ("floor");
 	floor = Object3d::Create();
@@ -93,8 +75,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 
 	//プレイヤー
 	player_ = new Player();
-	player_->Initialize(dxCommon,input);
-	player_->SetCamera(mainCamera);
+	player_->Initialize(dxCommon, input);
+	player_->SetCamera(camera);
 
 	//エネミー
 	enemyManager_ = new EnemyManager();
@@ -105,7 +87,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	UI = new Sprite();
 	UI->Initialize(spriteCommon);
 	UI->SetPozition({ 0,0 });
-	UI->SetSize({1280.0f, 720.0f});
+	UI->SetSize({ 1280.0f, 720.0f });
 
 	buttomPng1 = new Sprite();
 	buttomPng1->Initialize(spriteCommon);
@@ -195,33 +177,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	srd->SetPozition(srdPosition);
 	srd->SetSize({ 1280.0f, 720.0f });
 
-	std3 = new Sprite();
-	std3->Initialize(spriteCommon);
-	std3->SetPozition({ 0,0 });
-	std3->SetSize({ 1280,720 });
-
-	std2 = new Sprite();
-	std2->Initialize(spriteCommon);
-	std2->SetPozition({ 0,0 });
-	std2->SetSize({ 1280,720 });
-
-	std1 = new Sprite();
-	std1->Initialize(spriteCommon);
-	std1->SetPozition({ 0,0 });
-	std1->SetSize({ 1280,720 });
-
-	stdgo = new Sprite();
-	stdgo->Initialize(spriteCommon);
-	stdgo->SetPozition({ 0,0 });
-	stdgo->SetSize({ 1280,720 });
-
-	stdgo2 = new Sprite();
-	stdgo2->Initialize(spriteCommon);
-	stdgo2->SetPozition({ 0,0 });
-	stdgo2->SetSize({ 1280,720 });
-
-
-
 
 	spriteCommon->LoadTexture(0, "UI.png");
 	UI->SetTextureIndex(0);
@@ -255,17 +210,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	srd->SetTextureIndex(14);
 	spriteCommon->LoadTexture(15, "mpGauge.png");
 	mpGauge->SetTextureIndex(15);
-	
-	spriteCommon->LoadTexture(16, "std3.png");
-	std3->SetTextureIndex(16);
-	spriteCommon->LoadTexture(17, "std2.png");
-	std2->SetTextureIndex(17);
-	spriteCommon->LoadTexture(18, "std1.png");
-	std1->SetTextureIndex(18);
-	spriteCommon->LoadTexture(19, "stdgo.png");
-	stdgo->SetTextureIndex(19);
-	spriteCommon->LoadTexture(20, "stdgo2.png");
-	stdgo2->SetTextureIndex(20);
 
 	audio = new Audio();
 	audio->Initialize();
@@ -280,19 +224,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 
 void GameScene::Reset() {
 	player_->Reset();
-	actionStopTimer = actionStopLimit;
-	isActionStop = true;
-	player_->isActionStop = isActionStop;
-	enemyManager_->isActionStop = isActionStop;
-
-	enemyManager_->EffTimer = 0;
-	enemyManager_->isEffFlag = 0;
-	player_->EffTimer = 0;
-	player_->isEffFlag = 0;
-
-	player_->EffHealTimer = 0;
-	player_->isEffHealFlag = 0;
-
 }
 
 /// <summary>
@@ -325,15 +256,18 @@ void GameScene::Update() {
 		srdPosition.x = 0.0f;
 		srdPosition.y = 0.0f;
 		srd->SetPozition(srdPosition);
-		
+
 		srrPosition.x = 0.0f;
 		srr->SetPozition(srrPosition);
 
 		srlPosition.x = 0.0f;
 		srl->SetPozition(srlPosition);
 
-		
-		
+		enemyManager_->EffTimer = 0;
+		enemyManager_->isEffFlag = 0;
+		player_->EffTimer = 0;
+		player_->isEffFlag = 0;
+
 		break;
 	case Scene::Select:
 		sruPosition.x -= 50.0f;
@@ -344,13 +278,14 @@ void GameScene::Update() {
 		srdPosition.y += 10.0f;
 		srd->SetPozition(srdPosition);
 		//ステージの選択
-		if(input->LeftStickInput()) {
+		if (input->LeftStickInput()) {
 			if (input->PStickTrigger(L_LEFT)) {
 				//音声再生
 				pSourceVoice[2] = audio->PlayWave("serect.wav");
 				pSourceVoice[2]->SetVolume(0.6f);
 				stage = 0;
-			}else if (input->PStickTrigger(L_RIGHT)){
+			}
+			else if (input->PStickTrigger(L_RIGHT)) {
 				//音声再生
 				pSourceVoice[2] = audio->PlayWave("serect.wav");
 				pSourceVoice[2]->SetVolume(0.6f);
@@ -370,32 +305,6 @@ void GameScene::Update() {
 		}
 		break;
 	case Scene::Play:
-
-		actionStopTimer--;
-		camera1->Update();
-		camera2->Update();
-		camera3->Update();
-		if (actionStopTimer > 60*2) {
-			ParticleManager::SetCamera(camera1);
-			Object3d::SetCamera(camera2);
-			FBXObject3d::SetCamera(camera1);
-		}else if (actionStopTimer > 60 * 1) {
-			ParticleManager::SetCamera(camera2);
-			Object3d::SetCamera(camera2);
-			FBXObject3d::SetCamera(camera2);
-		}else if (actionStopTimer > 0) {
-			ParticleManager::SetCamera(camera3);
-			Object3d::SetCamera(camera3);
-			FBXObject3d::SetCamera(camera3);
-		}else if (actionStopTimer <= 0) {
-			ParticleManager::SetCamera(mainCamera);
-			Object3d::SetCamera(mainCamera);
-			FBXObject3d::SetCamera(mainCamera);
-			isActionStop = false;
-			player_->isActionStop = isActionStop;
-			enemyManager_->isActionStop = isActionStop;
-		}
-
 		pSourceVoice[0]->Stop();
 		soundCheckFlag = 0;
 		//音声再生
@@ -406,16 +315,16 @@ void GameScene::Update() {
 			soundCheckFlag2 = 1;
 		}
 		CdTimer++;
-	
+
 		srrPosition.x -= 30.0f;
 		srr->SetPozition(srrPosition);
-		
+
 		srlPosition.x += 30.0f;
 		srl->SetPozition(srlPosition);
 
-		
+
 		enemyManager_->Update();
-		
+
 		player_->Update();
 
 
@@ -425,7 +334,8 @@ void GameScene::Update() {
 			if (hitStopTimer < 0) {
 				enemyManager_->isHitStop = false;
 			}
-		}else{
+		}
+		else {
 			hitStopTimer = hitStopLimit;
 			enemyManager_->Update();
 			player_->Update();
@@ -433,7 +343,7 @@ void GameScene::Update() {
 
 		hpGauge->SetPozition({ -400.0f + player_->GetHp() * 4 ,0 });
 		mpGauge->SetPozition({ -300.0f + player_->GetMp() * 3,0 });
-    
+
 
 		floor->Update();
 		skydome->Update();
@@ -442,7 +352,8 @@ void GameScene::Update() {
 		//シーン切り替え
 		if (player_->GetHp() < 0) {
 			scene = Scene::Gameover;
-		}else if (enemyManager_->IsAllEnemyDead()) {
+		}
+		else if (enemyManager_->IsAllEnemyDead()) {
 			scene = Scene::Clear;
 		}
 		break;
@@ -487,11 +398,11 @@ void GameScene::Draw() {
 
 		break;
 	case Scene::Play:
-		
+
 		player_->Draw();
 		enemyManager_->Draw();
-		
-    
+
+
 		floor->Draw();
 		skydome->Draw();
 		field->Draw();
@@ -508,7 +419,10 @@ void GameScene::Draw() {
 	//3Dオブジェクト描画後処理
 	Object3d::PostDraw();
 
-	//// パーティクル UI FBX スプライト描画
+
+
+
+	//// パーティクル UI スプライト描画
 	switch (scene)
 	{
 	case Scene::Title:
@@ -517,24 +431,24 @@ void GameScene::Draw() {
 		break;
 	case Scene::Select:
 		selectPic->Draw();
-		
+
 		//ステージ選択わかりやすく
-		if (stage == 0) {sordUI->Draw();}
+		if (stage == 0) { sordUI->Draw(); }
 		else if (stage == 1) { sord2UI->Draw(); }
 
-		
+
 		sru->Draw();
 		srd->Draw();
 		break;
 	case Scene::Play:
-		
+
 		// パーティクル描画前処理
 	/*	ParticleManager::PreDraw(dxCommon->GetCommandList());*/
 		player_->EffDraw();
 		enemyManager_->EffDraw();
 		//// パーティクル描画後処理
 		//ParticleManager::PostDraw();
-		
+
 		UI->Draw();
 		if (input->ButtonInput(LT)) {
 			buttomPng2->Draw();
@@ -550,27 +464,6 @@ void GameScene::Draw() {
 
 		player_->FbxDraw();
 
-		//カウントダウン40フレーム
-		if (actionStopTimer < 150  && actionStopTimer >= 110) {
-			//3
-			std3->Draw();
-		}
-		else if (actionStopTimer < 109 && actionStopTimer >= 70) {
-			//2
-			std2->Draw();
-		}
-		else if (actionStopTimer < 69 && actionStopTimer >= 30) {
-			//1
-			std1->Draw();
-		}
-		else if (actionStopTimer < 29 && actionStopTimer >= 5) {
-			//go
-			stdgo->Draw();
-		}
-		else if (actionStopTimer < 4 && actionStopTimer >= 1) {
-			//go2
-			stdgo2->Draw();
-		}
 		break;
 	case Scene::Clear:
 		clearPic->Draw();

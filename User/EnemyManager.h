@@ -46,5 +46,4 @@ private:
 
 public:
 	bool isHitStop;
-	bool isActionStop;
 };
