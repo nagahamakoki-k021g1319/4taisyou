@@ -85,6 +85,7 @@ void Enemy::Initialize(Vector3 pos) {
 		}
 	}
 
+	isActionStop = true;
 }
 
 void Enemy::Update() {
@@ -267,6 +268,7 @@ void Enemy::Update() {
 					phase_ = Phase::ShortAttack;
 				}
 
+
 			}
 			//中距離
 			else if (AttckNmb == 2) {
@@ -338,31 +340,25 @@ void Enemy::Update() {
 }
 
 void Enemy::CreatDaggerBullet(int bulletNum) {
-	Vector3 enemyVec = player_->GetWorldPosition() - enemyObj_->wtf.position;
-	enemyVec.nomalize();
 	for (int i = 0; i < bulletNum; i++) {
 		std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
-		newBullet->Initialize(20 + 20 * i, daggerBulletModel_, enemyVec);
-		newBullet->SetPos(enemyProvisional[i]->GetWorldPosition());
+		newBullet->Initialize(20 + 20 * i, daggerBulletModel_);
+		newBullet->SetPos({ enemyObj_->wtf.position.x - 4.0f + 2.0f * i,enemyObj_->wtf.position.y,enemyObj_->wtf.position.z + 8.0f });
 		newBullet->SetScale({ 0.5f,0.5f, 0.5f });
 		daggerBullets_.push_back(std::move(newBullet));
 	}
-
 }
 
 void Enemy::CreatCrystalBullet() {
-	Vector3 enemyVec = player_->GetWorldPosition() - enemyObj_->wtf.position;
-	enemyVec.nomalize();
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 2; i++) {
 		std::unique_ptr<EnemyCrystalBullet> newCrystalBullet = std::make_unique<EnemyCrystalBullet>();
 		newCrystalBullet->Initialize(i, enemyCBModel_);
-
-		newCrystalBullet->SetPos({ enemyObj_->wtf.position.x + -enemyVec.x * 2.0f,enemyObj_->wtf.position.y - enemyVec.y + 4.0f,enemyObj_->wtf.position.z + -enemyVec.z * 2.0f });
+		newCrystalBullet->SetPos({ enemyObj_->wtf.position.x - 2.0f + 4.0f * i,enemyObj_->wtf.position.y - 3.0f,enemyObj_->wtf.position.z + 15.0f });
 		newCrystalBullet->Vec(player_->GetWorldPosition());
 		crystalBullets_.push_back(std::move(newCrystalBullet));
 	}
 
-	/*std::unique_ptr<EnemyCrystalBullet> newCrystalBullet = std::make_unique<EnemyCrystalBullet>();
+	std::unique_ptr<EnemyCrystalBullet> newCrystalBullet = std::make_unique<EnemyCrystalBullet>();
 	newCrystalBullet->Initialize(2, enemyCBModel_);
 	newCrystalBullet->SetPos({ enemyObj_->wtf.position.x - 4.0f,enemyObj_->wtf.position.y + 1.0f, enemyObj_->wtf.position.z + 15.0f });
 	newCrystalBullet->Vec(player_->GetWorldPosition());
@@ -378,7 +374,7 @@ void Enemy::CreatCrystalBullet() {
 	newCrystalBullet3->Initialize(4, enemyCBModel_);
 	newCrystalBullet3->SetPos({ enemyObj_->wtf.position.x,enemyObj_->wtf.position.y + 4.0f,enemyObj_->wtf.position.z + 15.0f });
 	newCrystalBullet3->Vec(player_->GetWorldPosition());
-	crystalBullets_.push_back(std::move(newCrystalBullet3));*/
+	crystalBullets_.push_back(std::move(newCrystalBullet3));
 }
 
 void Enemy::Draw() {
@@ -445,9 +441,7 @@ void Enemy::Draw() {
 		explosion->Draw();
 		break;
 	}
-	//for (int i = 0; i < 5; i++) {
-	//	enemyProvisional[i]->Draw();
-	//}
+
 
 }
 
@@ -537,6 +531,7 @@ void Enemy::playerDirectionToCorrect()
 	//enemyAttack5Obj_->Update();
 	//enemyAttack6Obj_->Update();
 
+
 	float playerCompare1 = (playerBeforeAngle + enemyDot) * (playerBeforeAngle + enemyDot) - playerAngle * playerAngle;
 	float playerCompare2 = (playerBeforeAngle - enemyDot) * (playerBeforeAngle - enemyDot) - playerAngle * playerAngle;
 
@@ -553,9 +548,7 @@ void Enemy::playerDirectionToCorrect()
 
 void Enemy::EnemyProvisional()
 {
-
-
-	Vector3 enemyVec = player_->GetWorldPosition() - enemyObj_->wtf.position;
+  Vector3 enemyVec = player_->GetWorldPosition() - enemyObj_->wtf.position;
 	enemyVec.nomalize();
 	enemyProvisional[2]->wtf.position = { enemyObj_->wtf.position.x + -enemyVec.x * 4.0f ,enemyObj_->wtf.position.y + 1.0f,enemyObj_->wtf.position.z + -enemyVec.z * 8.0f };
 	enemyProvisional[2]->wtf.rotation.y = anglePI;

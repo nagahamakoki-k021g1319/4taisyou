@@ -5,29 +5,7 @@ Player::Player() {
 }
 
 Player::~Player() {
-	delete bodyObj_;
-	delete bodyModel_;
-	delete dash1Obj_;
-	delete dash1Model_;
-	delete dash2Obj_;
-	delete dash2Model_;
-	delete dash3Obj_;
-	delete dash3Model_;
-	delete dash4Obj_;
-	delete dash4Model_;
-	delete attack1Obj_;
-	delete attack1Model_;
-	delete attack2Obj_;
-	delete attack2Model_;
-	delete attack3Obj_;
-	delete attack3Model_;
-	delete attack4Obj_;
-	delete attack4Model_;
-
 	delete wolf_;
-
-	delete debugObj_;
-	delete debugModel_;
 
 	//FBXオブジェクト解放
 	delete fbxObject3d_;
@@ -53,47 +31,81 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	fbxObject3d_ = new FBXObject3d;
 	fbxObject3d_->Initialize();
 	fbxObject3d_->SetModel(fbxModel_);
-	fbxObject3d_->SetScale({ 0.01,0.01,0.01 });
-	fbxObject3d_->SetPosition({ 0,0,40 });
-	fbxObject3d_->PlayAnimation();
+
 
 	//プレイヤー設定
-	bodyModel_ = Model::LoadFromOBJ("player");
-	bodyObj_ = Object3d::Create();
-	bodyObj_->SetModel(bodyModel_);
-
-	dash1Model_ = Model::LoadFromOBJ("Ldash1");
-	dash1Obj_ = Object3d::Create();
-	dash1Obj_->SetModel(dash1Model_);
-
-	dash2Model_ = Model::LoadFromOBJ("Ldash2");
-	dash2Obj_ = Object3d::Create();
-	dash2Obj_->SetModel(dash2Model_);
-
-	dash3Model_ = Model::LoadFromOBJ("Rdash1");
-	dash3Obj_ = Object3d::Create();
-	dash3Obj_->SetModel(dash3Model_);
-
-	dash4Model_ = Model::LoadFromOBJ("Rdash2");
-	dash4Obj_ = Object3d::Create();
-	dash4Obj_->SetModel(dash4Model_);
-
-	attack1Model_ = Model::LoadFromOBJ("attack1");
-	attack1Obj_ = Object3d::Create();
-	attack1Obj_->SetModel(attack1Model_);
-
-	attack2Model_ = Model::LoadFromOBJ("attack2");
-	attack2Obj_ = Object3d::Create();
-	attack2Obj_->SetModel(attack2Model_);
-
-	attack3Model_ = Model::LoadFromOBJ("attack3");
-	attack3Obj_ = Object3d::Create();
-	attack3Obj_->SetModel(attack3Model_);
-
-	attack4Model_ = Model::LoadFromOBJ("attack4");
-	attack4Obj_ = Object3d::Create();
-	attack4Obj_->SetModel(attack4Model_);
-
+	fbxObject3d_->SetPosition({ 0,0,0 });
+	fbxObject3d_->PlayAnimation();
+	//回避
+	fbxRollObject3d_ = new FBXObject3d;
+	fbxRollObject3d_->Initialize();
+	fbxRollObject3d_->SetModel(fbxRollModel_);
+	fbxRollObject3d_->wtf.position = { 0,10,0 };
+	fbxRollObject3d_->wtf.scale = { 10,10,10 };
+	fbxRollObject3d_->PlayAnimation();
+	//歩き
+	fbxWalkObject3d_ = new FBXObject3d;
+	fbxWalkObject3d_->Initialize();
+	fbxWalkObject3d_->SetModel(fbxWalkModel_);
+	fbxWalkObject3d_->wtf.position = { 0,10,0 };
+	fbxWalkObject3d_->wtf.scale = { 10,10,10 };
+	fbxWalkObject3d_->PlayAnimation();
+	//走る
+	fbxDashObject3d_ = new FBXObject3d;
+	fbxDashObject3d_->Initialize();
+	fbxDashObject3d_->SetModel(fbxDashModel_);
+	fbxDashObject3d_->wtf.position = { 0,10,0 };
+	fbxDashObject3d_->wtf.scale = { 10,10,10 };
+	fbxDashObject3d_->PlayAnimation();
+	//弱攻撃1
+	fbxWeak1Object3d_ = new FBXObject3d;
+	fbxWeak1Object3d_->Initialize();
+	fbxWeak1Object3d_->SetModel(fbxWeak1Model_);
+	fbxWeak1Object3d_->wtf.position = { 0,10,0 };
+	fbxWeak1Object3d_->wtf.scale = { 10,10,10 };
+	fbxWeak1Object3d_->PlayAnimation();
+	//弱攻撃2
+	fbxWeak2Object3d_ = new FBXObject3d;
+	fbxWeak2Object3d_->Initialize();
+	fbxWeak2Object3d_->SetModel(fbxWeak2Model_);
+	fbxWeak2Object3d_->wtf.position = { 0,10,0 };
+	fbxWeak2Object3d_->wtf.scale = { 10,10,10 };
+	fbxWeak2Object3d_->PlayAnimation();
+	//弱攻撃3
+	fbxWeak3Object3d_ = new FBXObject3d;
+	fbxWeak3Object3d_->Initialize();
+	fbxWeak3Object3d_->SetModel(fbxWeak3Model_);
+	fbxWeak3Object3d_->wtf.position = { 0,10,0 };
+	fbxWeak3Object3d_->wtf.scale = { 10,10,10 };
+	fbxWeak3Object3d_->PlayAnimation();
+	//弱攻撃4
+	fbxWeak4Object3d_ = new FBXObject3d;
+	fbxWeak4Object3d_->Initialize();
+	fbxWeak4Object3d_->SetModel(fbxWeak4Model_);
+	fbxWeak4Object3d_->wtf.position = { 0,10,0 };
+	fbxWeak4Object3d_->wtf.scale = { 10,10,10 };
+	fbxWeak4Object3d_->PlayAnimation();
+	//強攻撃
+	fbxStrongObject3d_ = new FBXObject3d;
+	fbxStrongObject3d_->Initialize();
+	fbxStrongObject3d_->SetModel(fbxStrongModel_);
+	fbxStrongObject3d_->wtf.position = { 0,10,0 };
+	fbxStrongObject3d_->wtf.scale = { 10,10,10 };
+	fbxStrongObject3d_->PlayAnimation();
+	//メラ
+	fbxMeraObject3d_ = new FBXObject3d;
+	fbxMeraObject3d_->Initialize();
+	fbxMeraObject3d_->SetModel(fbxStrongModel_);
+	fbxMeraObject3d_->wtf.position = { 0,10,0 };
+	fbxMeraObject3d_->wtf.scale = { 10,10,10 };
+	fbxMeraObject3d_->PlayAnimation();
+	//回復
+	fbxHealObject3d_ = new FBXObject3d;
+	fbxHealObject3d_->Initialize();
+	fbxHealObject3d_->SetModel(fbxStrongModel_);
+	fbxHealObject3d_->wtf.position = { 0,10,0 };
+	fbxHealObject3d_->wtf.scale = { 10,10,10 };
+	fbxHealObject3d_->PlayAnimation();
 
 	//パーティクル生成
 	particleManager = std::make_unique<ParticleManager>();
@@ -104,15 +116,7 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	//バディ
 	wolf_ = new Wolf();
 	wolf_->Initialize();
-	wolf_->SetPlayerWtf(&bodyObj_->wtf);
-
-	//デバッグ用
-	debugModel_ = Model::LoadFromOBJ("boll");
-	debugObj_ = Object3d::Create();
-	debugObj_->wtf.scale.x = 2;
-	debugObj_->wtf.scale.y = 2;
-	debugObj_->wtf.scale.z = 2;
-	debugObj_->SetModel(debugModel_);
+	wolf_->SetPlayerWtf(&fbxObject3d_->wtf);
 
 	audio = new Audio();
 
@@ -123,24 +127,18 @@ void Player::Reset() {
 	camTransForm->Initialize();
 	eyePos = { 0.0f, 3.0f, -8.0f };
 	targetPos = { 0.0f,0.0f,targetDistance };
-
-	bodyObj_->wtf.Initialize();
-
-	dash1Obj_->wtf.Initialize();
-
-	dash2Obj_->wtf.Initialize();
-
-	dash3Obj_->wtf.Initialize();
-
-	dash4Obj_->wtf.Initialize();
-
-	attack1Obj_->wtf.Initialize();
-
-	attack2Obj_->wtf.Initialize();
-
-	attack3Obj_->wtf.Initialize();
-
-	attack4Obj_->wtf.Initialize();
+	
+	fbxObject3d_->Initialize();
+	fbxRollObject3d_->Initialize();
+	fbxWalkObject3d_->Initialize();
+	fbxDashObject3d_->Initialize();
+	fbxWeak1Object3d_->Initialize();
+	fbxWeak2Object3d_->Initialize();
+	fbxWeak3Object3d_->Initialize();
+	fbxWeak4Object3d_->Initialize();
+	fbxStrongObject3d_->Initialize();
+	fbxMeraObject3d_->Initialize();
+	fbxHealObject3d_->Initialize();
 
 	hp = defaultHp;
 	isAction = 0;
@@ -322,7 +320,6 @@ void Player::Move() {
 		//回避時移動
 		else if (isAction == 3) {
 			velocity = GetDodgeMoveVec();
-
 		}
 
 		//移動ベクトルを向いてる方向に合わせる
@@ -346,15 +343,18 @@ void Player::Move() {
 		}
 
 		//更新
-		bodyObj_->wtf.position += velocity;
-		dash1Obj_->wtf.position += velocity;
-		dash2Obj_->wtf.position += velocity;
-		dash3Obj_->wtf.position += velocity;
-		dash4Obj_->wtf.position += velocity;
-		attack1Obj_->wtf.position += velocity;
-		attack2Obj_->wtf.position += velocity;
-		attack3Obj_->wtf.position += velocity;
-		attack4Obj_->wtf.position += velocity;
+		fbxObject3d_->wtf.position += velocity;
+		fbxWalkObject3d_->wtf.position += velocity;
+		fbxRollObject3d_->wtf.position += velocity;
+		fbxDashObject3d_->wtf.position += velocity;
+		fbxStrongObject3d_->wtf.position += velocity;
+		fbxWeak1Object3d_->wtf.position += velocity;
+		fbxWeak2Object3d_->wtf.position += velocity;
+		fbxWeak3Object3d_->wtf.position += velocity;
+		fbxWeak4Object3d_->wtf.position += velocity;
+		fbxMeraObject3d_->wtf.position += velocity;
+		fbxHealObject3d_->wtf.position += velocity;
+
 	}
 }
 
@@ -365,30 +365,25 @@ void Player::Rota() {
 
 			float theta = atan2(stickVec.x, stickVec.y);
 
-			bodyObj_->wtf.rotation.y = theta + camTransForm->rotation.y;
 
-			dash1Obj_->wtf.rotation.y = theta + camTransForm->rotation.y;
-
-			dash2Obj_->wtf.rotation.y = theta + camTransForm->rotation.y;
-
-			dash3Obj_->wtf.rotation.y = theta + camTransForm->rotation.y;
-
-			dash4Obj_->wtf.rotation.y = theta + camTransForm->rotation.y;
-
-			attack1Obj_->wtf.rotation.y = theta + camTransForm->rotation.y;
-
-			attack2Obj_->wtf.rotation.y = theta + camTransForm->rotation.y;
-
-			attack3Obj_->wtf.rotation.y = theta + camTransForm->rotation.y;
-
-			attack4Obj_->wtf.rotation.y = theta + camTransForm->rotation.y;
-
+			fbxObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
+			fbxWalkObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
+			fbxWeak1Object3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
+			fbxWeak2Object3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
+			fbxWeak3Object3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
+			fbxWeak4Object3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
+			fbxRollObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
+			fbxDashObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
+			fbxStrongObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
+			fbxMeraObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
+			fbxHealObject3d_->wtf.rotation.y = theta + camTransForm->rotation.y;
+			
 		}
 	}
 }
 
 void Player::camUpdate() {
-	camTransForm->position = bodyObj_->wtf.position;
+	camTransForm->position = fbxObject3d_->wtf.position;
 	//視点移動
 	//左右
 	Vector3 theta;
@@ -481,23 +476,55 @@ void Player::Update() {
 			camShakeVec = { 0,0,0 };
 		}
 	}
-	bodyObj_->Update();
-	dash1Obj_->Update();
-	dash2Obj_->Update();
-	dash3Obj_->Update();
-	dash4Obj_->Update();
-	attack1Obj_->Update();
-	attack2Obj_->Update();
-	attack3Obj_->Update();
-	attack4Obj_->Update();
 
-	fbxObject3d_->Update();
-
-	wolf_->Update(enemyPos_);
 	MpUpdate(mpRegen);
 
 
-	debugObj_->Update();
+
+	if (isLive) {
+		if (isAction == 0) {
+			if (isEffHealFlag) {
+				fbxHealObject3d_->Update();
+			}else if (isEffHiHealFlag) {
+				fbxHealObject3d_->Update();
+			}else if (input_->LeftStickInput()) {
+				if (input_->ButtonInput(RT)) {
+					//ダッシュ
+					fbxDashObject3d_->Update();
+				}else {
+					//歩き
+					fbxWalkObject3d_->Update();
+				}
+			}else {
+				//待機
+				fbxObject3d_->Update();
+			}
+		}else if (isAction == 1) {
+			//弱攻撃
+			if (lightAttackCount == 0) {
+				fbxWeak1Object3d_->Update();
+			}else if (lightAttackCount == 1) {
+				fbxWeak2Object3d_->Update();
+			}else if (lightAttackCount == 2) {
+				fbxWeak3Object3d_->Update();
+			}else if (lightAttackCount == 3) {
+				fbxWeak4Object3d_->Update();
+			}
+		}else if (isAction == 2) {
+			//強攻撃
+			if (heavyAttackCount == 0) {
+				fbxStrongObject3d_->Update();
+			}else if (heavyAttackCount == 1) {
+				//1撃目と同じFBXになってる
+				fbxStrongObject3d_->Update();
+			}
+		}else if (isAction == 3) {
+			//回避
+			fbxRollObject3d_->Update();
+		}
+	}
+
+	wolf_->Update(enemyPos_);
 }
 
 void Player::Draw() {
@@ -579,9 +606,54 @@ void Player::Draw() {
 	}
 }
 
-void Player::FbxDraw()
-{
-	/*fbxObject3d_->Draw(dxCommon->GetCommandList());*/
+void Player::FbxDraw(){
+	if (isLive) {
+		if (isAction == 0) {
+			if (isEffHealFlag) {
+				fbxHealObject3d_->Draw(dxCommon->GetCommandList());
+			}else if (isEffHiHealFlag) {
+				fbxHealObject3d_->Draw(dxCommon->GetCommandList());
+			}else if (input_->LeftStickInput()) {
+				if (isActionStop == false) {
+					if (input_->ButtonInput(RT)) {
+						//ダッシュ
+						fbxDashObject3d_->Draw(dxCommon->GetCommandList());
+					}else {
+						//歩き
+						fbxWalkObject3d_->Draw(dxCommon->GetCommandList());
+					}
+				}else {
+					//待機
+					fbxObject3d_->Draw(dxCommon->GetCommandList());
+				}
+			}else {
+				//待機
+				fbxObject3d_->Draw(dxCommon->GetCommandList());
+			}		
+		}else if (isAction == 1) {
+			//弱攻撃
+			if (lightAttackCount == 0) {
+				fbxWeak1Object3d_->Draw(dxCommon->GetCommandList());
+			}else if (lightAttackCount == 1) {
+				fbxWeak2Object3d_->Draw(dxCommon->GetCommandList());
+			}else if (lightAttackCount == 2) {
+				fbxWeak3Object3d_->Draw(dxCommon->GetCommandList());
+			}else if (lightAttackCount == 3) {
+				fbxWeak4Object3d_->Draw(dxCommon->GetCommandList());
+			}
+		}else if (isAction == 2) {
+			//強攻撃
+			if (heavyAttackCount == 0) {
+				fbxStrongObject3d_->Draw(dxCommon->GetCommandList());
+			}else if (heavyAttackCount == 1) {
+				//1撃目と同じFBXになってる
+				fbxStrongObject3d_->Draw(dxCommon->GetCommandList());
+			}
+		}else if (isAction == 3) {
+			//回避
+			fbxRollObject3d_->Draw(dxCommon->GetCommandList());
+		}
+	}
 }
 
 void Player::EffUpdate()
@@ -646,12 +718,12 @@ Vector3 Player::bVelocity(Vector3& velocity, Transform& worldTransform)
 	return result;
 }
 
-Vector3 Player::GetWorldPosition()
-{
+Vector3 Player::GetWorldPosition(){
+	fbxObject3d_->wtf.UpdateMat();
 	//ワールド行列の平行移動成分
-	worldPos.x = bodyObj_->wtf.matWorld.m[3][0];
-	worldPos.y = bodyObj_->wtf.matWorld.m[3][1];
-	worldPos.z = bodyObj_->wtf.matWorld.m[3][2];
+	worldPos.x = fbxObject3d_->wtf.matWorld.m[3][0];
+	worldPos.y = fbxObject3d_->wtf.matWorld.m[3][1];
+	worldPos.z = fbxObject3d_->wtf.matWorld.m[3][2];
 
 	return worldPos;
 }
@@ -691,7 +763,7 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 bool Player::CheckBody2Enemy(Vector3 enemyPos) {
 	if (col.CircleCollisionXZ(GetWorldPosition(), enemyPos, 1.0f, 1.0f)) {
 		moveBack += { 0, 0, -0.2 };
-		moveBack = bVelocity(moveBack, bodyObj_->wtf);
+		moveBack = bVelocity(moveBack, fbxObject3d_->wtf);
 		return true;
 	}
 	return false;
@@ -739,8 +811,7 @@ void Player::LightAttack() {
 			//移動
 			lightAttackLPos = { 0.5f,0,2.0f };
 			//更新
-			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
-			debugObj_->wtf.position = lightAttackWPos;
+			lightAttackWPos = lightAttackLPos * fbxObject3d_->wtf.matWorld;
 		}
 
 		//次の斬撃入力
@@ -785,8 +856,7 @@ void Player::LightAttack() {
 			//移動
 			lightAttackLPos = { -0.5f,0,2.0f };
 			//更新
-			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
-			debugObj_->wtf.position = lightAttackWPos;
+			lightAttackWPos = lightAttackLPos * fbxObject3d_->wtf.matWorld;
 		}
 
 		//次の斬撃入力
@@ -831,8 +901,7 @@ void Player::LightAttack() {
 			//移動
 			lightAttackLPos = { 0.5f,0,2.0f };
 			//更新
-			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
-			debugObj_->wtf.position = lightAttackWPos;
+			lightAttackWPos = lightAttackLPos * fbxObject3d_->wtf.matWorld;
 		}
 
 		//次の斬撃入力
@@ -867,8 +936,7 @@ void Player::LightAttack() {
 			//移動
 			lightAttackLPos = { 0,0,4.0f };
 			//更新
-			lightAttackWPos = lightAttackLPos * bodyObj_->wtf.matWorld;
-			debugObj_->wtf.position = lightAttackWPos;
+			lightAttackWPos = lightAttackLPos * fbxObject3d_->wtf.matWorld;
 		}
 	}
 }
@@ -909,8 +977,7 @@ void Player::HeavyAttack() {
 			//移動
 			heavyAttackLPos = { 0,0,4.0f };
 			//更新
-			heavyAttackWPos = heavyAttackLPos * bodyObj_->wtf.matWorld;
-			debugObj_->wtf.position = heavyAttackWPos;
+			heavyAttackWPos = heavyAttackLPos * fbxObject3d_->wtf.matWorld;
 		}
 
 		//次の斬撃入力
@@ -945,8 +1012,7 @@ void Player::HeavyAttack() {
 			//移動
 			heavyAttackLPos = { 0,0,8.0f };
 			//更新
-			heavyAttackWPos = heavyAttackLPos * bodyObj_->wtf.matWorld;
-			debugObj_->wtf.position = heavyAttackWPos;
+			heavyAttackWPos = heavyAttackLPos * fbxObject3d_->wtf.matWorld;
 		}
 	}
 }
