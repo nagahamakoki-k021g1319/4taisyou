@@ -73,7 +73,10 @@ private:	//メンバ変数
 	const float PI = 3.141592;
 
 	//カメラ
-	Camera* camera = nullptr;
+	Camera* mainCamera = nullptr;
+	Camera* camera1 = nullptr;
+	Camera* camera2 = nullptr;
+	Camera* camera3 = nullptr;
 
 	//プレイヤー
 	Player* player_ = nullptr;
@@ -118,11 +121,11 @@ private:	//メンバ変数
 	//ゲームフロー
 	enum class Scene
 	{
-		Title,
-		Select,
-		Play,
-		Clear,
-		Gameover,
+			Title,
+			Select,
+			Play,
+			Clear,
+			Gameover,
 	};
 	Scene scene;
 	int stage;
@@ -143,4 +146,14 @@ private:	//メンバ変数
 	//音関係まとめ
 	int soundCheckFlag = 0;
 	int soundCheckFlag2 = 0;
+	
+	//戦闘開始時
+	bool isActionStop;
+	int actionStopTimer;
+	const int actionStopLimit = 3 * 60;
+	Sprite* std3 = nullptr;
+	Sprite* std2 = nullptr;
+	Sprite* std1 = nullptr;
+	Sprite* stdgo = nullptr;
+	Sprite* stdgo2 = nullptr;
 };
