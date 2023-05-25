@@ -5,7 +5,9 @@ EnemyBullet::~EnemyBullet() {
 }
 
 
-void EnemyBullet::Initialize(int timer, Model* model_){
+void EnemyBullet::Initialize(int timer, Model* model_, Vector3 playerVec) {
+	EnemyBulletSpeed = playerVec;
+	EnemyBulletSpeed *= 1.0f;
 	// ダガーファンネル
 	obj_ = Object3d::Create();
 	obj_->SetModel(model_);
@@ -15,10 +17,10 @@ void EnemyBullet::Initialize(int timer, Model* model_){
 	isPop = false;
 	shotTimer = 120;
 
-	
+
 }
 
-void EnemyBullet::DaggerFAttack(){
+void EnemyBullet::DaggerFAttack() {
 	//表示まで
 	daggerTimer--;
 	if (daggerTimer < 0) {
@@ -30,7 +32,7 @@ void EnemyBullet::DaggerFAttack(){
 
 	if (isLive) {
 		if (shotTimer <= 0) {
-			obj_->wtf.position.z -= EnemyBulletSpeed;
+			obj_->wtf.position += EnemyBulletSpeed;
 		}
 	}
 	if (obj_->wtf.position.z <= -1000) {
@@ -38,17 +40,18 @@ void EnemyBullet::DaggerFAttack(){
 	}
 }
 
-void EnemyBullet::Update(){
+void EnemyBullet::Update() {
+
 	DaggerFAttack();
 	obj_->Update();
-	
+
 }
 
-void EnemyBullet::Draw(){
+void EnemyBullet::Draw() {
 	if (isPop) {
 		obj_->Draw();
 	}
-	
+
 
 }
 

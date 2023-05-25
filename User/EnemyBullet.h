@@ -11,8 +11,8 @@ public:
 	///< summary>
 	///初期化
 	///</summary>
-	void Initialize(int timer, Model* model_);
-	
+	void Initialize(int timer, Model* model_, Vector3 playerVec);
+
 	///< summary>
 	///更新
 	///</summary>
@@ -44,10 +44,10 @@ public:
 	/// </summary>
 	/// <param name="pos"></param>
 	void SetScale(Vector3 scale) { obj_->wtf.scale = scale; };
-  
+
 	Vector3 GetPos() { return obj_->wtf.position; };
 
-	bool IsDead() const {if (isLive) { return false; }else { return true; }};
+	bool IsDead() const { if (isLive) { return false; } else { return true; } };
 
 	void OnCollision();
 
@@ -58,13 +58,15 @@ private:
 	int daggerTimer;
 	bool isLive = false;
 	int shotTimer;
-	float EnemyBulletSpeed = 0.2;
+	Vector3 EnemyBulletSpeed = {};
 	//////////////////////////////
 
 	//攻撃する前のわかりやすいエッフェクト
 	Sprite* CdUI = nullptr;
 	Sprite* CdUI1 = nullptr;
 	Sprite* CdUI2 = nullptr;
+
+
 
 public:
 	bool isPop = false;
