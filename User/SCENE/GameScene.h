@@ -126,6 +126,7 @@ private:	//メンバ変数
 			Play,
 			Clear,
 			Gameover,
+			Option,
 	};
 	Scene scene;
 	int stage;
@@ -136,11 +137,17 @@ private:	//メンバ変数
 	Sprite* clearPic;
 	Sprite* gameoverPic;
 
+	//選択画面
+	int selectMode;
+
 	//ポーズ画面
 	bool isPause;
 	int pauseSelect;
 	Sprite* pauseBg;
 
+	//オプション
+	int Sensitivity;
+	Sprite* optionPic;
 
 	//攻撃する前のわかりやすいエッフェクト(なぜか敵に持たせられない)
 	Sprite* CdUI = nullptr;

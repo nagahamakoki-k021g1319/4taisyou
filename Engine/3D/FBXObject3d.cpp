@@ -210,27 +210,12 @@ void FBXObject3d::Initialize()
 	wtf.Initialize();
 }
 
-void  FBXObject3d::UpdateMat() {
-	Matrix4 matScale, matRot, matTrans;
-	// スケール、回転、平行移動行列の計算
-	matScale = Affin::matScale(wtf.scale.x, wtf.scale.y, wtf.scale.z);
-	matRot = Affin::matUnit();
-	matRot *= Affin::matRotation(wtf.rotation);
-	matTrans = Affin::matTrans(wtf.position.x, wtf.position.y, wtf.position.z);
-
-	// ワールド行列の合成
-	wtf.matWorld = Affin::matUnit(); // 変形をリセット
-	wtf.matWorld *= matScale; // ワールド行列にスケーリングを反映
-	wtf.matWorld *= matRot; // ワールド行列に回転を反映
-	wtf.matWorld *= matTrans; // ワールド行列に平行移動を反映
-}
-
 void FBXObject3d::Update() {
 	HRESULT result;
 	Matrix4 resultMat;
 	resultMat = Affin::matUnit();
 
-	UpdateMat();
+	wtf.UpdateMat();
 
 	// 定数バッファへデータ転送
 	ConstBufferDataB0* constMap = nullptr;
@@ -253,6 +238,7 @@ void FBXObject3d::Update() {
 			}
 			else {
 				isPlay = false;
+				isFin = true;
 			}
 		}
 	}
@@ -311,6 +297,7 @@ void FBXObject3d::PlayAnimation(bool isLoop) {
 	currentTime = startTime;
 	//再生中にする
 	isPlay = true;
+	isFin = false;
 	//ループ再生する
 	this->isLoop = isLoop;
 }

@@ -219,6 +219,10 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	pauseBg->SetPozition({ 0,0 });
 	pauseBg->SetSize({ 1280,720 });
 
+	optionPic = new Sprite();
+	optionPic->Initialize(spriteCommon);
+	optionPic->SetPozition({ 0,0 });
+	optionPic->SetSize({ 1280,720 });
 
 
 	spriteCommon->LoadTexture(0, "UI.png");
@@ -268,6 +272,10 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	//ポーズ画面
 	spriteCommon->LoadTexture(21, "pauseBg.png");
 	pauseBg->SetTextureIndex(21);
+
+	//オプション画面
+	spriteCommon->LoadTexture(22, "option.png");
+	optionPic->SetTextureIndex(22);
 
 	audio = new Audio();
 	audio->Initialize();
@@ -381,6 +389,39 @@ void GameScene::Update() {
 				pSourceVoice[3]->SetVolume(0.4f);
 			}
 		}
+
+
+	////-------------新規---------------
+	//	//0.ゲームプレイ、1.オプション、2.タイトルへ
+	//	if (input->LeftStickInput()) {
+	//		if (input->PStickTrigger(L_LEFT)) {
+	//			selectMode = 1;
+	//		}else if(input->PStickTrigger(L_RIGHT)) {
+	//			selectMode = 2;
+	//		}else if (input->PStickTrigger(L_UP)) {
+	//			selectMode = 0;
+	//		}else if (input->PStickTrigger(L_DOWN)) {
+	//			selectMode = 1;
+	//		}
+	//	}
+
+	//	if (input->PButtonTrigger(B)) {
+	//		if (selectMode == 0) {
+	//			//ゲームプレイ
+	//			enemyManager_->creatEnemy(stage);
+	//			Reset();
+	//			pSourceVoice[3] = audio->PlayWave("open.wav");
+	//			pSourceVoice[3]->SetVolume(0.4f);
+	//			scene = Scene::Play;
+	//		}else if (selectMode == 1) {
+	//			//オプション
+	//			scene = Scene::Option;
+	//		}else if (selectMode == 2) {
+	//			//タイトルへ
+	//			scene = Scene::Title;
+	//		}
+	//	}
+
 		break;
 	case Scene::Play:
 		//ポーズ切り替え
@@ -529,6 +570,14 @@ void GameScene::Update() {
 			pSourceVoice[2]->SetVolume(0.6f);
 		}
 		break;
+	case Scene::Option:
+		if (input->PButtonTrigger(B)) {
+
+
+		}
+		
+
+		break;
 	}
 }
 
@@ -638,6 +687,10 @@ void GameScene::Draw() {
 		break;
 	case Scene::Gameover:
 		gameoverPic->Draw();
+
+		break;
+	case Scene::Option:
+		optionPic->Draw();
 
 		break;
 	}
