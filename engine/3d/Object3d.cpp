@@ -375,5 +375,10 @@ void Object3d::Draw()
 	model->Draw(cmdList.Get(), 1);
 }
 
+Vector3 Object3d::GetWorldPosition()
+{
+	return { wtf.matWorld.m[3][0],wtf.matWorld.m[3][1] ,wtf.matWorld.m[3][2] };
+}
+
 
 
