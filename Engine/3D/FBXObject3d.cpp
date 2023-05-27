@@ -230,7 +230,7 @@ void FBXObject3d::Update() {
 	//アニメーション
 	if (isPlay) {
 		//1フレーム進める
-		currentTime += frameTime;
+		currentTime += animationTime;
 		//最後まで進めたら先頭に戻る
 		if (currentTime > endTime) {
 			if (isLoop) {
@@ -280,7 +280,8 @@ void FBXObject3d::Draw(ID3D12GraphicsCommandList* cmdList)
 	fbxmodel->Draw(cmdList);
 }
 
-void FBXObject3d::PlayAnimation(bool isLoop) {
+void FBXObject3d::PlayAnimation(float speed, bool isLoop) {
+	animationTime = frameTime * speed;
 	FbxScene* fbxScene = fbxmodel->GetFbxScene();
 	//0番のアニメーションを取得
 	FbxAnimStack* animstack = fbxScene->GetSrcObject<FbxAnimStack>(0);
