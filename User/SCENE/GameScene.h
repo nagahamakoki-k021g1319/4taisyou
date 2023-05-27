@@ -98,6 +98,9 @@ private:	//メンバ変数
 	Sprite* UI = nullptr;
 	Sprite* buttomPng1 = nullptr;
 	Sprite* buttomPng2 = nullptr;
+	Sprite* buttomx = nullptr;
+	Sprite* buttomy = nullptr;
+	Sprite* buttomb = nullptr;
 	Sprite* hpGauge = nullptr;
 	Vector2 hpPosition;
 	Sprite* mpGauge = nullptr;
@@ -159,7 +162,9 @@ private:	//メンバ変数
 	//音関係まとめ
 	int soundCheckFlag = 0;
 	int soundCheckFlag2 = 0;
-	
+	int soundCheckFlag3 = 0;
+	int soundCheckFlag4 = 0;
+
 	//戦闘開始時
 	bool isActionStop;
 	int actionStopTimer;

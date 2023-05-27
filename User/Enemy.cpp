@@ -431,6 +431,8 @@ void Enemy::Draw() {
 		bullet->Draw();
 	}
 
+
+
 	switch (phase_) {
 	case Phase::Approach:
 

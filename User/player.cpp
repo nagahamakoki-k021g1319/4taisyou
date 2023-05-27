@@ -130,6 +130,10 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	wolf_->SetPlayerWtf(&fbxObject3d_->wtf);
 
 	audio = new Audio();
+	audio->Initialize();
+	audio->LoadWave("col.wav");
+	audio->LoadWave("kaihi.wav");
+	audio->LoadWave("heal.wav");
 
 	Reset();
 }
@@ -182,11 +186,6 @@ void Player::Reset() {
 	dodgeTimer = dodgeLimit;
 	isDodge = false;
 
-
-	audio->Initialize();
-	audio->LoadWave("col.wav");
-	audio->LoadWave("kaihi.wav");
-
 	objRotaTimer = 0;
 
 	//MP関連
@@ -215,6 +214,8 @@ void Player::Attack() {
 				//大回復
 				if (mp >= megaHealMp) {
 					mp -= megaHealMp;
+					pSourceVoice[3] = audio->PlayWave("heal.wav");
+					pSourceVoice[3]->SetVolume(0.4f);
 					isEffHiHealFlag = 1;
 					hp += megaHeal;
 					if (hp > 100) {
@@ -226,6 +227,8 @@ void Player::Attack() {
 				//小回復
 				if (mp >= healMp) {
 					mp -= healMp;
+					pSourceVoice[2] = audio->PlayWave("heal.wav");
+					pSourceVoice[2]->SetVolume(0.4f);
 					isEffHealFlag = 1;
 					hp += heal;
 					if (hp > 100) {
