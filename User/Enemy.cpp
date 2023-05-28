@@ -67,6 +67,11 @@ void Enemy::Initialize(Vector3 pos) {
 	//順番に弾が飛んでくる攻撃
 	enemyCBModel_ = Model::LoadFromOBJ("boll");
 
+	//攻撃演出
+	enemySter = Model::LoadFromOBJ("ster");
+	enemyAttackOmen = Object3d::Create();
+	enemyAttackOmen->SetModel(enemySter);
+	enemyAttackOmen->parent = enemyObj_;
 
 	shortRenge = new EnemyShortRenge();
 	shortRenge->Initialize(enemyCBModel_);
@@ -100,7 +105,7 @@ void Enemy::Update() {
 		}
 		AttackDistance();
 
-		
+
 
 
 		//各種球更新
@@ -247,9 +252,10 @@ void Enemy::Update() {
 				enemyAttackTimer2 = 0;
 				enemyAttackTimer3 = 0;
 				enemyAttackTimer4 = 0;
+				isEnemyAttackOmen = true;
+				playerDirectionToCorrect();
 				//近距離
 				if (AttckNmb == 1) {
-					playerDirectionToCorrect();
 					if (randomAttck <= 5) {
 						phase_ = Phase::Approach;
 					}
@@ -264,7 +270,6 @@ void Enemy::Update() {
 				}
 				//中距離
 				else if (AttckNmb == 2) {
-					playerDirectionToCorrect();
 					if (randomAttck <= 4) {
 						phase_ = Phase::Leave;
 					}
@@ -280,7 +285,8 @@ void Enemy::Update() {
 				}
 				//遠距離
 				else if (AttckNmb == 3) {
-					playerDirectionToCorrect();
+
+
 					if (randomAttck <= 4) {
 						phase_ = Phase::ShortAttack;
 					}
@@ -330,6 +336,8 @@ void Enemy::Update() {
 		}
 		playerDirection();
 	}
+
+	EnemyAttackSter(omenMaxSize, omenMaxTime, omenRotSpeed);
 	enemyObj_->Update();
 
 	enemyAttack1Obj_->Update();
@@ -453,7 +461,7 @@ void Enemy::Draw() {
 	//for (int i = 0; i < 5; i++) {
 	//	enemyProvisional[i]->Draw();
 	//}
-
+	enemyAttackOmen->Draw();
 }
 
 void Enemy::AttackInterval()
@@ -569,6 +577,31 @@ void Enemy::EnemyProvisional()
 		enemyProvisional[i]->Update();
 	}
 
+}
+
+void Enemy::EnemyAttackSter(float maxSterSize, float time, float rotationSpeed)
+{
+	enemyAttackOmen->wtf.position = { 0,2.5f,-2.0f };
+
+	if (isEnemyAttackOmen == true) {
+
+
+		omenTime++;
+		if (omenTime <= time / 2) {
+			omenSize += maxSterSize/(time/2);
+		}
+		else if (omenTime > time / 2) {
+			omenSize -= maxSterSize / time;
+		}
+		if (omenTime >= time) {
+			isEnemyAttackOmen = false;
+			omenTime = 0;
+			omenSize = 0;
+		}
+		enemyAttackOmen->wtf.scale = { omenSize,omenSize,omenSize };
+		enemyAttackOmen->wtf.rotation.z += rotationSpeed;
+		enemyAttackOmen->Update();
+	}
 }
 
 Vector3 Enemy::GetWorldPosition()
