@@ -41,6 +41,8 @@ public:
 
 	void EnemyProvisional();
 
+	void EnemyAttackSter(float maxSterSize, float time, float rotationSpeed);
+
 	////ワールド座標を取得
 	Vector3 GetWorldPosition();
 
@@ -142,6 +144,17 @@ private:
 	Vector3 playerVector = {};
 	Vector2 playerBeforVec = {};
 	float enemyDot = 0;
+
+	//敵の攻撃前演出
+	Object3d* enemyAttackOmen;
+	Model* enemySter;
+	bool isEnemyAttackOmen = false;
+	float omenTime = 0;
+	float omenSize = 0;
+	float omenMaxTime = 20.0f;
+	float omenMaxSize = 3.0f;
+	float omenRotSpeed = 20 * (PI / 180);
+
 public:
 	bool isActionStop;
 };
