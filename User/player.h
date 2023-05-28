@@ -21,6 +21,7 @@ public:
 
 	void Initialize(DirectXCommon* dxCommon, Input* input);
 	void Reset();
+	void SetSensitivity(float newSensitivity) { sensitivity = newSensitivity; };
 
 	void Update();
 	void Rota();
@@ -131,6 +132,7 @@ private:
 	float targetDistance = 10;
 	float camMoveSpeed = 0.2f;
 	float camRotaSpeed = PI / 180;
+	float sensitivity;
 	float dashSpeed = 0.4f;
 	const float dashMP = 2.0f / 60.0f;
 

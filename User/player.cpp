@@ -130,10 +130,14 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	wolf_->SetPlayerWtf(&fbxObject3d_->wtf);
 
 	audio = new Audio();
+
 	audio->Initialize();
 	audio->LoadWave("col.wav");
 	audio->LoadWave("kaihi.wav");
 	audio->LoadWave("heal.wav");
+
+	sensitivity = 1;
+
 
 	Reset();
 }
@@ -412,19 +416,19 @@ void Player::camUpdate() {
 	//左右
 	Vector3 theta;
 	if (input_->StickInput(R_LEFT)) {
-		theta.y = -camRotaSpeed;
+		theta.y = -camRotaSpeed * sensitivity;
 	}
 	else if (input_->StickInput(R_RIGHT)) {
-		theta.y = camRotaSpeed;
+		theta.y = camRotaSpeed * sensitivity;
 	}
 	camTransForm->rotation += theta;
 
 	//上下
 	if (input_->StickInput(R_UP)) {
-		targetTheta += camRotaSpeed;
+		targetTheta += camRotaSpeed * sensitivity;
 	}
 	else if (input_->StickInput(R_DOWN)) {
-		targetTheta += -camRotaSpeed;
+		targetTheta += -camRotaSpeed * sensitivity;
 	}
 
 	//角度制限

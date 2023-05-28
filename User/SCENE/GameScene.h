@@ -149,7 +149,9 @@ private:	//メンバ変数
 	Sprite* pauseBg;
 
 	//オプション
-	int Sensitivity;
+	float Sensitivity;
+	int selecOtption;
+	bool isChangeSensitivity;
 	Sprite* optionPic;
 
 	//攻撃する前のわかりやすいエッフェクト(なぜか敵に持たせられない)

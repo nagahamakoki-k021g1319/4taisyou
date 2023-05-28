@@ -310,6 +310,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	audio->LoadWave("clear.wav");
 	audio->LoadWave("over.wav");
 
+	Sensitivity = 1;
+
 	Reset();
 }
 
@@ -394,29 +396,61 @@ void GameScene::Update() {
 		srdPosition.x += 50.0f;
 		srdPosition.y += 10.0f;
 		srd->SetPozition(srdPosition);
-		//ステージの選択
-		if(input->LeftStickInput()) {
+		////ステージの選択
+		//if(input->LeftStickInput()) {
+		//	if (input->PStickTrigger(L_LEFT)) {
+		//		//音声再生
+		//		pSourceVoice[2] = audio->PlayWave("serect.wav");
+		//		pSourceVoice[2]->SetVolume(0.6f);
+		//		stage = 0;
+		//	}else if (input->PStickTrigger(L_RIGHT)){
+		//		//音声再生
+		//		pSourceVoice[2] = audio->PlayWave("serect.wav");
+		//		pSourceVoice[2]->SetVolume(0.6f);
+		//		stage = 1;
+		//	}
+		//}
+
+		////シーン切り替え
+		//if (input->PButtonTrigger(B) || input->TriggerKey(DIK_SPACE)) {
+		//	if (stage == 0) {
+		//		enemyManager_->creatEnemy(stage);
+		//		Reset();
+		//		scene = Scene::Play;
+		//		pSourceVoice[3] = audio->PlayWave("open.wav");
+		//		pSourceVoice[3]->SetVolume(0.4f);
+		//	}
+		//}
+
+
+	//-------------新規---------------
+		//0.ゲームプレイ、1.オプション、2.タイトルへ
+		if (input->LeftStickInput()) {
 			if (input->PStickTrigger(L_LEFT)) {
-				//音声再生
-				pSourceVoice[2] = audio->PlayWave("serect.wav");
-				pSourceVoice[2]->SetVolume(0.6f);
-				stage = 0;
-			}else if (input->PStickTrigger(L_RIGHT)){
-				//音声再生
-				pSourceVoice[2] = audio->PlayWave("serect.wav");
-				pSourceVoice[2]->SetVolume(0.6f);
-				stage = 1;
+				selectMode = 1;
+			}else if(input->PStickTrigger(L_RIGHT)) {
+				selectMode = 2;
+			}else if (input->PStickTrigger(L_UP)) {
+				selectMode = 0;
+			}else if (input->PStickTrigger(L_DOWN)) {
+				selectMode = 1;
 			}
 		}
 
-		//シーン切り替え
-		if (input->PButtonTrigger(B) || input->TriggerKey(DIK_SPACE)) {
-			if (stage == 0) {
+		if (input->PButtonTrigger(B)) {
+			if (selectMode == 0) {
+				//ゲームプレイ
 				enemyManager_->creatEnemy(stage);
 				Reset();
-				scene = Scene::Play;
 				pSourceVoice[3] = audio->PlayWave("open.wav");
 				pSourceVoice[3]->SetVolume(0.4f);
+				scene = Scene::Play;
+			}else if (selectMode == 1) {
+				//オプション
+				scene = Scene::Option;
+			}else if (selectMode == 2) {
+				//タイトルへ
+				scene = Scene::Title;
 			}
 		}
 
@@ -586,12 +620,44 @@ void GameScene::Update() {
 		}
 		break;
 	case Scene::Option:
-		if (input->PButtonTrigger(B)) {
 
+		if (isChangeSensitivity) {
+			//感度変更
+			if (input->LeftStickInput()) {
+				float add = 0.01;
+				if (input->StickInput(L_LEFT)) {
+					Sensitivity -= add;
+				}else if (input->StickInput(L_RIGHT)) {
+					Sensitivity += add;
+				}
+				//感度更新
+				player_->SetSensitivity(Sensitivity);
+			}
 
+			//変更終り
+			if (input->PButtonTrigger(B)) {
+				isChangeSensitivity = false;
+			}
+		}else {
+			//オプション画面操作
+			if (input->LeftStickInput()) {
+				if (input->PStickTrigger(L_UP)) {
+					selecOtption = 0;
+				}else if (input->PStickTrigger(L_DOWN)) {
+					selecOtption = 1;
+				}
+			}
+
+			if (input->PButtonTrigger(B)) {
+				if (selecOtption == 0) {
+					//感度変更へ
+					isChangeSensitivity = true;
+				}else if (selecOtption==1) {
+					//セレクト画面へ戻る
+					scene = Scene::Select;
+				}
+			}
 		}
-		
-
 		break;
 	}
 }
