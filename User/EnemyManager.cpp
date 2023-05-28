@@ -17,10 +17,16 @@ void EnemyManager::Initialize() {
 	DamageParticle->LoadTexture("doge.png");
 	DamageParticle->Update();
 
+	FireParticle = std::make_unique<ParticleManager>();
+	FireParticle.get()->Initialize();
+	FireParticle->LoadTexture("fire.png");
+	FireParticle->Update();
+
 	audio = new Audio();
 	audio->Initialize();
 
 	audio->LoadWave("slash.wav");
+	audio->LoadWave("fire.wav");
 
 	isActionStop = true;
 }
@@ -72,6 +78,17 @@ void EnemyManager::Update() {
 		EffTimer = 0;
 	}
 
+	if (isEffFireFlag == 1) {
+		EffFireTimer++;
+	}
+	if (EffFireTimer <= 10 && EffFireTimer >= 1) {
+		EffFireUpdate();
+	}
+	if (EffFireTimer >= 11) {
+		isEffFireFlag = 0;
+		EffFireTimer = 0;
+	}
+
 	enemys_.remove_if([](std::unique_ptr<Enemy>& enemy) { return enemy->IsDead(); });
 	for (std::unique_ptr<Enemy>& enemy : enemys_) {
 		enemy->isActionStop = isActionStop;
@@ -99,6 +116,9 @@ void EnemyManager::Update() {
 
 			if (player_->wolf_->CheckAttack2Enemy(enemy->GetWorldPosition(), damage)) {
 				enemy->OnColision(damage);
+				pSourceVoice[1] = audio->PlayWave("fire.wav");
+				pSourceVoice[1]->SetVolume(0.6f);
+				isEffFireFlag = 1;
 			}
 		}
 		enemy->Update();
@@ -148,11 +168,52 @@ void EnemyManager::EffUpdate()
 
 }
 
+void EnemyManager::EffFireUpdate()
+{
+	//パーティクル範囲
+	for (int i = 0; i < 20; i++) {
+		for (std::unique_ptr<Enemy>& enemy : enemys_) {
+			//X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
+			const float rnd_pos = 5.0f;
+			Vector3 pos{};
+			pos.x += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+			pos.y += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+			pos.z += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+			pos += enemy->GetWorldPosition();
+			pos.y += 2.0f;
+			//速度
+			//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
+			const float rnd_vel = 0.1f;
+			Vector3 vel{};
+			vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			//重力に見立ててYのみ[-0.001f,0]でランダムに分布
+			const float rnd_acc = 0.00001f;
+			Vector3 acc{};
+			acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+			acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+
+			//追加
+			FireParticle->Add(60, pos, vel, acc, 1.0f, 0.0f);
+
+			FireParticle->Update();
+		}
+	}
+
+
+}
+
 void EnemyManager::EffDraw()
 {
 	if (isEffFlag == 1) {
 		// 3Dオブクジェクトの描画
 		DamageParticle->Draw();
+	}
+
+	if (isEffFireFlag == 1) {
+		// 3Dオブクジェクトの描画
+		FireParticle->Draw();
 	}
 }
 

@@ -4,6 +4,7 @@
 #include "Matrix4.h"
 #include "Affin.h"
 #include"Transform.h"
+#include "ConvertXM.h"
 
 /// <summary>
 /// カメラ基本機能
@@ -161,15 +162,15 @@ public: // メンバ関数
 
 protected: // メンバ変数
 	// ビュー行列
-	Matrix4 matView = Affin::matUnit();
+	Matrix4 matView = ConvertXM::ConvertXMMATtoMat4(DirectX::XMMatrixIdentity());
 	// ビルボード行列
-	Matrix4 matBillboard = Affin::matUnit();
+	Matrix4 matBillboard = ConvertXM::ConvertXMMATtoMat4(DirectX::XMMatrixIdentity());
 	// Y軸回りビルボード行列
-	Matrix4 matBillboardY = Affin::matUnit();
+	Matrix4 matBillboardY = ConvertXM::ConvertXMMATtoMat4(DirectX::XMMatrixIdentity());
 	// 射影行列
-	Matrix4 matProjection = Affin::matUnit();
+	Matrix4 matProjection = ConvertXM::ConvertXMMATtoMat4(DirectX::XMMatrixIdentity());
 	// ビュー射影行列
-	Matrix4 matViewProjection = Affin::matUnit();
+	Matrix4 matViewProjection = ConvertXM::ConvertXMMATtoMat4(DirectX::XMMatrixIdentity());
 	// ビュー行列ダーティフラグ
 	bool viewDirty = false;
 	// 射影行列ダーティフラグ

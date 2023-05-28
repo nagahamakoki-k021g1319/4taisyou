@@ -111,6 +111,21 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	buttomPng2->SetPozition({ 0,0 });
 	buttomPng2->SetSize({ 1280.0f, 720.0f });
 
+	buttomx = new Sprite();
+	buttomx->Initialize(spriteCommon);
+	buttomx->SetPozition({ 0,0 });
+	buttomx->SetSize({ 1280.0f, 720.0f });
+
+	buttomy = new Sprite();
+	buttomy->Initialize(spriteCommon);
+	buttomy->SetPozition({ 0,0 });
+	buttomy->SetSize({ 1280.0f, 720.0f });
+
+	buttomb = new Sprite();
+	buttomb->Initialize(spriteCommon);
+	buttomb->SetPozition({ 0,0 });
+	buttomb->SetSize({ 1280.0f, 720.0f });
+
 	hpGauge = new Sprite();
 	hpGauge->Initialize(spriteCommon);
 	hpPosition = hpGauge->GetPosition();
@@ -277,6 +292,14 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	spriteCommon->LoadTexture(22, "option.png");
 	optionPic->SetTextureIndex(22);
 
+	spriteCommon->LoadTexture(23, "botomx.png");
+	buttomx->SetTextureIndex(23);
+	spriteCommon->LoadTexture(24, "botomy.png");
+	buttomy->SetTextureIndex(24);
+	spriteCommon->LoadTexture(25, "botomb.png");
+	buttomb->SetTextureIndex(25);
+
+
 	audio = new Audio();
 	audio->Initialize();
 
@@ -284,6 +307,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	audio->LoadWave("bb.wav");
 	audio->LoadWave("serect.wav");
 	audio->LoadWave("open.wav");
+	audio->LoadWave("clear.wav");
+	audio->LoadWave("over.wav");
 
 	Sensitivity = 1;
 
@@ -307,6 +332,9 @@ void GameScene::Reset() {
 
 	enemyManager_->EffTimer = 0;
 	enemyManager_->isEffFlag = 0;
+	enemyManager_->EffFireTimer = 0;
+	enemyManager_->isEffFireFlag = 0;
+
 	player_->EffTimer = 0;
 	player_->isEffFlag = 0;
 
@@ -325,6 +353,8 @@ void GameScene::Update() {
 	switch (scene)
 	{
 	case Scene::Title:
+		soundCheckFlag3 = 0;
+		soundCheckFlag4 = 0;
 		//シーン切り替え
 		if (input->PButtonTrigger(B) || input->TriggerKey(DIK_SPACE)) {
 			scene = Scene::Select;
@@ -555,6 +585,15 @@ void GameScene::Update() {
 	case Scene::Clear:
 		pSourceVoice[1]->Stop();
 		soundCheckFlag2 = 0;
+		
+		//音声再生
+		if (soundCheckFlag3 == 0) {
+			//音声再生
+
+			pSourceVoice[2] = audio->PlayWave("clear.wav");
+			pSourceVoice[2]->SetVolume(0.3f);
+			soundCheckFlag3 = 1;
+		}
 		//シーン切り替え
 		if (input->PButtonTrigger(B)) {
 			scene = Scene::Title;
@@ -565,6 +604,14 @@ void GameScene::Update() {
 	case Scene::Gameover:
 		pSourceVoice[1]->Stop();
 		soundCheckFlag2 = 0;
+		//音声再生
+		if (soundCheckFlag4 == 0) {
+			//音声再生
+
+			pSourceVoice[3] = audio->PlayWave("over.wav");
+			pSourceVoice[3]->SetVolume(0.3f);
+			soundCheckFlag4 = 1;
+		}
 		//シーン切り替え
 		if (input->PButtonTrigger(B)) {
 			scene = Scene::Title;
@@ -682,12 +729,30 @@ void GameScene::Draw() {
 		//ParticleManager::PostDraw();
 		
 		UI->Draw();
+		if (input->ButtonInput(X)) {
+			buttomx->Draw();
+		}
+
+		if (input->ButtonInput(Y)) {
+			buttomy->Draw();
+		}
+
+
+		if (input->ButtonInput(B)) {
+			buttomb->Draw();
+		}
+
 		if (input->ButtonInput(LT)) {
 			buttomPng2->Draw();
 		}
 		else {
 			buttomPng1->Draw();
 		}
+
+		
+		
+
+
 		hpGauge->Draw();
 		mpGauge->Draw();
 
