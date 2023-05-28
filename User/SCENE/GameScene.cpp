@@ -357,6 +357,7 @@ void GameScene::Update() {
 		soundCheckFlag4 = 0;
 		//シーン切り替え
 		if (input->PButtonTrigger(B) || input->TriggerKey(DIK_SPACE)) {
+			selectMode = 0;
 			scene = Scene::Select;
 			pSourceVoice[3] = audio->PlayWave("open.wav");
 			pSourceVoice[3]->SetVolume(0.4f);
@@ -420,6 +421,7 @@ void GameScene::Update() {
 				scene = Scene::Play;
 			}else if (selectMode == 1) {
 				//オプション
+				selecOtption = 0;
 				scene = Scene::Option;
 			}else if (selectMode == 2) {
 				//タイトルへ
@@ -475,6 +477,7 @@ void GameScene::Update() {
 					}
 					else if (pauseSelect == 2) {
 						//キーコン
+						selecOtption = 0;
 						keycon = true;
 					}
 					else if (pauseSelect == 3) {
@@ -519,6 +522,7 @@ void GameScene::Update() {
 							isChangeSensitivity = true;
 						}else if (selecOtption == 1) {
 							//ポーズ画面へ戻る
+							pauseSelect = 0;
 							keycon = false;
 						}
 					}
@@ -675,6 +679,7 @@ void GameScene::Update() {
 					isChangeSensitivity = true;
 				}else if (selecOtption==1) {
 					//セレクト画面へ戻る
+					selectMode = 0;
 					scene = Scene::Select;
 				}
 			}
