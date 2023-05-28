@@ -145,6 +145,7 @@ private:	//メンバ変数
 
 	//ポーズ画面
 	bool isPause;
+	bool keycon;
 	int pauseSelect;
 	Sprite* pauseBg;
 
