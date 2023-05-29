@@ -593,10 +593,10 @@ void GameScene::Update() {
 			}
 			CdTimer++;
 
-			srrPosition.x -= 30.0f;
+			srrPosition.x -= 80.0f;
 			srr->SetPozition(srrPosition);
 
-			srlPosition.x += 30.0f;
+			srlPosition.x += 80.0f;
 			srl->SetPozition(srlPosition);
 
 			if (enemyManager_->isHitStop) {

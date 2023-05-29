@@ -595,6 +595,7 @@ void Enemy::EnemyAttackSter(float maxSterSize, float time, float rotationSpeed)
 		pSourceVoice[0] = audio->PlayWave("enemyat.wav");
 		pSourceVoice[0]->SetVolume(0.3f);
 
+
 		omenTime++;
 		if (omenTime <= time / 2) {
 			omenSize += maxSterSize/(time/2);
