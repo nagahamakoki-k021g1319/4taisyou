@@ -33,6 +33,7 @@ GameScene::~GameScene() {
 	delete skydome;
 	delete sordUI;
 	delete sord2UI;
+	delete sord3UI;
 	delete srr;
 	delete srl;
 	delete sru;
@@ -180,6 +181,11 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	sord2UI->SetPozition({ 0,0 });
 	sord2UI->SetSize({ 1280,720 });
 
+	sord3UI = new Sprite();
+	sord3UI->Initialize(spriteCommon);
+	sord3UI->SetPozition({ 0,0 });
+	sord3UI->SetSize({ 1280,720 });
+
 	srr = new Sprite();
 	srr->Initialize(spriteCommon);
 	srrPosition = srr->GetPosition();
@@ -252,19 +258,21 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	unionGauge->SetTextureIndex(4);
 	spriteCommon->LoadTexture(5, "title.png");
 	titlePic->SetTextureIndex(5);
-	spriteCommon->LoadTexture(6, "select.png");
+	spriteCommon->LoadTexture(6, "tuto.png");
 	selectPic->SetTextureIndex(6);
 	spriteCommon->LoadTexture(7, "clear.png");
 	clearPic->SetTextureIndex(7);
 	spriteCommon->LoadTexture(8, "gameover.png");
 	gameoverPic->SetTextureIndex(8);
-	spriteCommon->LoadTexture(9, "migi.png");
+	spriteCommon->LoadTexture(9, "tutoframe1.png");
 	sordUI->SetTextureIndex(9);
-	spriteCommon->LoadTexture(10, "migi2.png");
+	spriteCommon->LoadTexture(10, "tutoframe2.png");
 	sord2UI->SetTextureIndex(10);
-	spriteCommon->LoadTexture(11, "srr.png");
+	spriteCommon->LoadTexture(26, "tutoframe3.png");
+	sord3UI->SetTextureIndex(26);
+	spriteCommon->LoadTexture(11, "srr1.png");
 	srr->SetTextureIndex(11);
-	spriteCommon->LoadTexture(12, "srl.png");
+	spriteCommon->LoadTexture(12, "srl1.png");
 	srl->SetTextureIndex(12);
 	spriteCommon->LoadTexture(13, "sru.png");
 	sru->SetTextureIndex(13);
@@ -289,7 +297,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	pauseBg->SetTextureIndex(21);
 
 	//オプション画面
-	spriteCommon->LoadTexture(22, "option.png");
+	spriteCommon->LoadTexture(22, "option1.png");
 	optionPic->SetTextureIndex(22);
 
 	spriteCommon->LoadTexture(23, "botomx.png");
@@ -355,6 +363,8 @@ void GameScene::Update() {
 	case Scene::Title:
 		soundCheckFlag3 = 0;
 		soundCheckFlag4 = 0;
+		
+
 		//シーン切り替え
 		if (input->PButtonTrigger(B) || input->TriggerKey(DIK_SPACE)) {
 			selectMode = 0;
@@ -401,12 +411,21 @@ void GameScene::Update() {
 		//0.ゲームプレイ、1.オプション、2.タイトルへ
 		if (input->LeftStickInput()) {
 			if (input->PStickTrigger(L_LEFT)) {
+				pSourceVoice[2] = audio->PlayWave("serect.wav");
+				pSourceVoice[2]->SetVolume(0.6f);
 				selectMode = 1;
+
 			}else if(input->PStickTrigger(L_RIGHT)) {
+				pSourceVoice[2] = audio->PlayWave("serect.wav");
+				pSourceVoice[2]->SetVolume(0.6f);
 				selectMode = 2;
 			}else if (input->PStickTrigger(L_UP)) {
+				pSourceVoice[2] = audio->PlayWave("serect.wav");
+				pSourceVoice[2]->SetVolume(0.6f);
 				selectMode = 0;
 			}else if (input->PStickTrigger(L_DOWN)) {
+				pSourceVoice[2] = audio->PlayWave("serect.wav");
+				pSourceVoice[2]->SetVolume(0.6f);
 				selectMode = 1;
 			}
 		}
@@ -416,15 +435,24 @@ void GameScene::Update() {
 				//ゲームプレイ
 				enemyManager_->creatEnemy(stage);
 				Reset();
-				pSourceVoice[3] = audio->PlayWave("open.wav");
-				pSourceVoice[3]->SetVolume(0.4f);
+				pSourceVoice[4] = audio->PlayWave("open.wav");
+				pSourceVoice[4]->SetVolume(0.4f);
 				scene = Scene::Play;
 			}else if (selectMode == 1) {
 				//オプション
+
+				pSourceVoice[3] = audio->PlayWave("open.wav");
+				pSourceVoice[3]->SetVolume(0.4f);
+
 				selecOtption = 0;
+
 				scene = Scene::Option;
 			}else if (selectMode == 2) {
 				//タイトルへ
+				pSourceVoice[3] = audio->PlayWave("open.wav");
+				pSourceVoice[3]->SetVolume(0.4f);
+		
+				srd->SetPozition(srdPosition);
 				scene = Scene::Title;
 			}
 		}
@@ -572,10 +600,10 @@ void GameScene::Update() {
 			}
 			CdTimer++;
 
-			srrPosition.x -= 30.0f;
+			srrPosition.x -= 80.0f;
 			srr->SetPozition(srrPosition);
 
-			srlPosition.x += 30.0f;
+			srlPosition.x += 80.0f;
 			srl->SetPozition(srlPosition);
 
 			if (enemyManager_->isHitStop) {
@@ -615,10 +643,11 @@ void GameScene::Update() {
 		if (soundCheckFlag3 == 0) {
 			//音声再生
 
-			pSourceVoice[2] = audio->PlayWave("clear.wav");
-			pSourceVoice[2]->SetVolume(0.3f);
+			pSourceVoice[5] = audio->PlayWave("clear.wav");
+			pSourceVoice[5]->SetVolume(0.3f);
 			soundCheckFlag3 = 1;
 		}
+		
 		//シーン切り替え
 		if (input->PButtonTrigger(B)) {
 			scene = Scene::Title;
@@ -633,8 +662,8 @@ void GameScene::Update() {
 		if (soundCheckFlag4 == 0) {
 			//音声再生
 
-			pSourceVoice[3] = audio->PlayWave("over.wav");
-			pSourceVoice[3]->SetVolume(0.3f);
+			pSourceVoice[6] = audio->PlayWave("over.wav");
+			pSourceVoice[6]->SetVolume(0.3f);
 			soundCheckFlag4 = 1;
 		}
 		//シーン切り替え
@@ -665,27 +694,15 @@ void GameScene::Update() {
 			}
 		}else {
 			//オプション画面操作
-			if (input->LeftStickInput()) {
-				if (input->PStickTrigger(L_UP)) {
-					selecOtption = 0;
-				}else if (input->PStickTrigger(L_DOWN)) {
-					selecOtption = 1;
-				}
-			}
-
-			if (input->PButtonTrigger(B)) {
-				if (selecOtption == 0) {
-					//感度変更へ
-					isChangeSensitivity = true;
-				}else if (selecOtption==1) {
-					//セレクト画面へ戻る
-					selectMode = 0;
-					scene = Scene::Select;
-				}
+			if (input->PButtonTrigger(A)) {
+				//セレクト画面へ戻る
+				pSourceVoice[3] = audio->PlayWave("open.wav");
+				pSourceVoice[3]->SetVolume(0.4f);
+				scene = Scene::Select;
 			}
 		}
-		break;
 	}
+
 }
 
 /// <summary>
@@ -738,8 +755,9 @@ void GameScene::Draw() {
 		selectPic->Draw();
 		
 		//ステージ選択わかりやすく
-		if (stage == 0) {sordUI->Draw();}
-		else if (stage == 1) { sord2UI->Draw(); }
+		if (selectMode == 0) {sord3UI->Draw();}
+		else if (selectMode == 1) { sord2UI->Draw(); }
+		else if (selectMode == 2) { sordUI->Draw(); }
 
 		
 		sru->Draw();

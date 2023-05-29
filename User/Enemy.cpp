@@ -91,6 +91,12 @@ void Enemy::Initialize(Vector3 pos) {
 	}
 	isActionStop = true;
 
+
+	audio = new Audio();
+	audio->Initialize();
+
+	audio->LoadWave("enemyat.wav");
+
 }
 
 void Enemy::Update() {
@@ -582,8 +588,12 @@ void Enemy::EnemyProvisional()
 void Enemy::EnemyAttackSter(float maxSterSize, float time, float rotationSpeed)
 {
 	enemyAttackOmen->wtf.position = { 0,2.5f,-2.0f };
+	
 
 	if (isEnemyAttackOmen == true) {
+
+		pSourceVoice[0] = audio->PlayWave("enemyat.wav");
+		pSourceVoice[0]->SetVolume(0.3f);
 
 
 		omenTime++;
@@ -601,6 +611,8 @@ void Enemy::EnemyAttackSter(float maxSterSize, float time, float rotationSpeed)
 		enemyAttackOmen->wtf.scale = { omenSize,omenSize,omenSize };
 		enemyAttackOmen->wtf.rotation.z += rotationSpeed;
 		enemyAttackOmen->Update();
+
+		
 	}
 }
 

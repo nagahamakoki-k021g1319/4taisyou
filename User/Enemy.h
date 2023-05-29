@@ -3,6 +3,7 @@
 #include "EnemyCrystalBullet.h"
 #include "EnemyShortRenge.h"
 #include "EnemyExplosionAttack.h"
+#include "Audio.h"
 
 class Player;
 #include "Collision.h"
@@ -55,9 +56,15 @@ public:
 		Explosion,		//‡—î≠
 	};
 
+	//âπÇé~ÇﬂÇÈä÷êî
+	IXAudio2SourceVoice* pSourceVoice[10] = { 0 };
+
 private:
 	Player* player_ = nullptr;
 	Collision coll;
+
+
+	Audio* audio = nullptr;
 
 	Object3d* enemyObj_ = nullptr;
 	Model* enemyModel_ = nullptr;
