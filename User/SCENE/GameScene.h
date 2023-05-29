@@ -111,6 +111,7 @@ private:	//メンバ変数
 	Vector3 avoidScale;
 	Sprite* sordUI = nullptr;
 	Sprite* sord2UI = nullptr;
+	Sprite* sord3UI = nullptr;
 
 	Sprite* srr = nullptr;
 	Vector2 srrPosition;
@@ -120,6 +121,11 @@ private:	//メンバ変数
 	Vector2 sruPosition;
 	Sprite* srd = nullptr;
 	Vector2 srdPosition;
+
+	Sprite* tutoframe1 = nullptr;
+	Sprite* tutoframe2 = nullptr;
+	Sprite* tutoframe3 = nullptr;
+
 
 	//ゲームフロー
 	enum class Scene
