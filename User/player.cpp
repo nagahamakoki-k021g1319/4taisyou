@@ -807,7 +807,7 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 		//当たり判定が出てるか
 		if (isLightAttack) {
 			//当たり判定
-			if (col.CircleCollisionXZ(lightAttackWPos, enemyPos, 0.5f, 1.0f)) {
+			if (col.CircleCollisionXZ(lightAttackWPos, enemyPos, 1.0f, 3.0f)) {
 				damage = 3;
 				MpUpdate(lightMpPuls);
 				return true;
@@ -820,7 +820,7 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 		//当たり判定が出てるか
 		if (isHeavyAttack) {
 			//当たり判定
-			if (col.CircleCollisionXZ(heavyAttackWPos, enemyPos, 1.0f, 1.0f)) {
+			if (col.CircleCollisionXZ(heavyAttackWPos, enemyPos, 1.5f, 3.0f)) {
 				damage = 7;
 				MpUpdate(heavyMpPuls);
 				return true;

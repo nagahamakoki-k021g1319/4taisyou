@@ -76,7 +76,7 @@ private:
 	Model* enemyAttack6Model_ = nullptr;
 
 	bool isLive = true;
-	const int hpMax = 30;
+	const int hpMax = 500;
 	int hp = hpMax;
 
 	EnemyBullet* enemyBullet = nullptr;

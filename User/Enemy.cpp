@@ -25,6 +25,15 @@ Enemy::~Enemy() {
 	crystalBullets_.clear();
 	delete shortRenge;
 	delete explosion;
+
+	for (int i = 0; i < 5; i++) {
+		if (i != 2) {
+			delete enemyProvisional[i];
+		}
+	}
+	delete enemyAttackOmen;
+
+	delete enemySter;
 }
 
 void Enemy::Initialize(Vector3 pos) {
