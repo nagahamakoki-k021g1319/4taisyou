@@ -174,8 +174,10 @@ private:
 	const float lightMpPuls = 3;
 	//何回めの連撃か
 	int lightAttackCount;
+	//アニメーション速度
+	float lightAttackAnime[4] = { 1.0f,1.0f,1.0f,1.0f };
 	//一回の攻撃全体の時間
-	float lightAttackLimit[4] = { 52,24,44,50 };
+	float lightAttackLimit[4] = { 52 * lightAttackAnime[0],26 * lightAttackAnime[1],44 * lightAttackAnime[2],50 * lightAttackAnime[3]};
 	float lightAttackTimer;
 	//攻撃の当たり判定の有無
 	bool isLightAttack;
@@ -192,8 +194,10 @@ private:
 	const float heavyMpPuls = 8;
 	//何回めの連撃か
 	int heavyAttackCount;
+	//アニメーション速度
+	float heavyAttackAnime[2] = { 1.0f,1.0f };
 	//一回の攻撃全体の時間
-	float heavyAttackLimit[2] = { 30,30 };
+	float heavyAttackLimit[2] = { 20 * heavyAttackAnime[0],20 * heavyAttackAnime[1]};
 	float heavyAttackTimer;
 	//攻撃の当たり判定の有無
 	bool isHeavyAttack;
@@ -206,7 +210,8 @@ private:
 
 	//回避
 	bool isDodge;
-	const int dodgeLimit = 60;
+	float dodgeAnime = 1.0f;
+	const int dodgeLimit = 52 * dodgeAnime;
 	int dodgeTimer;
 	//回避後硬直時間
 	const int dodgeStun = 1;
