@@ -825,9 +825,6 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 			}
 		}
 	}
-
-	return false;
-
 	return false;
 }
 
