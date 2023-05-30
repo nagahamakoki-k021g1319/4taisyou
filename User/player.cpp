@@ -26,6 +26,10 @@ Player::~Player() {
 	delete fbxWalkModel_;
 	delete fbxStrongObject3d_;
 	delete fbxStrongModel_;
+	delete fbxMeraModel_;
+	delete fbxHealModel_;
+	delete fbxMeraObject3d_;
+	delete fbxHealObject3d_;
 }
 
 void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
@@ -95,7 +99,7 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	//メラ
 	fbxMeraObject3d_ = new FBXObject3d;
 	fbxMeraObject3d_->Initialize();
-	fbxMeraObject3d_->SetModel(fbxStrongModel_);
+	fbxMeraObject3d_->SetModel(fbxMeraModel_);
 	//回復
 	fbxHealObject3d_ = new FBXObject3d;
 	fbxHealObject3d_->Initialize();
@@ -201,9 +205,10 @@ void Player::Attack() {
 				//メラ
 				if (mp >= bulletMp) {
 					isAction = 4;
+					bulletTime = bulletLimit;
 					wolf_->Attack(1, GetWorldPosition());
 					mp -= bulletMp;
-					fbxMeraObject3d_->PlayAnimation(1.0f, false);
+					fbxMeraObject3d_->PlayAnimation(1.0, false);
 				}
 			}
 			else if (input_->PushKey(DIK_2) || input_->PButtonTrigger(A)) {
@@ -288,7 +293,10 @@ void Player::Attack() {
 	}
 	//メラ
 	else if (isAction = 4) {
-		isAction = 0;
+		bulletTime--;
+		if (bulletTime < 0) {
+			isAction = 0;
+		}
 	}
 }
 
@@ -414,27 +422,27 @@ void Player::camUpdate() {
 	//左右
 	Vector3 theta;
 	if (input_->StickInput(R_LEFT)) {
-		theta.y = -camRotaSpeed * sensitivity;
+		theta.y = -camRotaSpeed.x * sensitivity;
 	}
 	else if (input_->StickInput(R_RIGHT)) {
-		theta.y = camRotaSpeed * sensitivity;
+		theta.y = camRotaSpeed.x * sensitivity;
 	}
 	camTransForm->rotation += theta;
 
 	//上下
 	if (input_->StickInput(R_UP)) {
-		targetTheta += camRotaSpeed * sensitivity;
+		targetTheta += camRotaSpeed.y * sensitivity;
 	}
 	else if (input_->StickInput(R_DOWN)) {
-		targetTheta += -camRotaSpeed * sensitivity;
+		targetTheta += -camRotaSpeed.y * sensitivity;
 	}
 
 	//角度制限
-	if (targetTheta < -PI / 5 * 2) {//下の制限
-		targetTheta = -PI / 5 * 2;
+	if (targetTheta < -PI / 9 * 2) {//下の制限
+		targetTheta = -PI / 9 * 2;
 	}
-	else if (targetTheta > PI / 3) { //上の制限
-		targetTheta = PI / 3;
+	else if (targetTheta > PI / 9*2) { //上の制限
+		targetTheta = PI / 9*2;
 	}
 
 	//視点は一定の距離
