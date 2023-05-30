@@ -153,8 +153,10 @@ private:
 	//‘å‰ñ•œ
 	const int megaHeal = defaultHp * 0.6;
 	const int megaHealMp = 60;
-	//MPUŒ‚
+	//ƒƒ‰
 	const int bulletMp = 40;
+	const int bulletLimit = 10;
+	int bulletTime;
 
 	//–³“GŠÔ
 	bool isInvincible;
