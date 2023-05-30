@@ -54,6 +54,9 @@ GameScene::~GameScene() {
 	delete option4; 
 	delete option5;
 	delete optionco;
+
+	delete mouse;
+	delete markPointer;
 }
 
 /// <summary>
@@ -280,6 +283,28 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	optionco->SetPozition({ 0,0 });
 	optionco->SetSize({ 1280,720 });
 
+
+	Sensitivity = 10;
+
+	mouse = new Sprite();
+	mouse->Initialize(spriteCommon);
+	mousePosition = mouse->GetPosition();
+	mousePosition.x = Sensitivity * 24.35 + 460;
+	player_->SetSensitivity(Sensitivity);
+	mousePosition.y = 486.0f;
+	mouse->SetPozition(mousePosition);
+	mouse->SetSize({ 33,35 });
+
+	markPointer = new Sprite();
+	markPointer->Initialize(spriteCommon);
+	mapoPosition = markPointer->GetPosition();
+	mapoPosition.x = Sensitivity * 24.35 + 460;
+	player_->SetSensitivity(Sensitivity);
+	mapoPosition.y = 486.0f;
+	markPointer->SetPozition(mapoPosition);
+	markPointer->SetSize({ 33,35 });
+
+
 	spriteCommon->LoadTexture(0, "UI.png");
 	UI->SetTextureIndex(0);
 	spriteCommon->LoadTexture(1, "buttom1.png");
@@ -350,9 +375,14 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	spriteCommon->LoadTexture(30, "option5.png");
 	option5->SetTextureIndex(30);
 	
-	spriteCommon->LoadTexture(31, "optionco.png");
+	spriteCommon->LoadTexture(31, "optionco2.png");
 	optionco->SetTextureIndex(31);
 
+	spriteCommon->LoadTexture(32, "markpoint.png");
+	mouse->SetTextureIndex(32);
+
+	spriteCommon->LoadTexture(33, "markpoint.png");
+	markPointer->SetTextureIndex(33);
 
 	audio = new Audio();
 	audio->Initialize();
@@ -363,8 +393,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	audio->LoadWave("open.wav");
 	audio->LoadWave("clear.wav");
 	audio->LoadWave("over.wav");
-
-	Sensitivity = 1;
 
 	Reset();
 }
@@ -410,6 +438,14 @@ void GameScene::Update() {
 		soundCheckFlag3 = 0;
 		soundCheckFlag4 = 0;
 		
+		mapoPosition.x = Sensitivity * 24.35 + 460;
+		markPointer->SetPozition(mapoPosition);
+		//感度更新
+		player_->SetSensitivity(Sensitivity);
+		mousePosition.x = Sensitivity * 24.35 + 460;
+		mouse->SetPozition(mousePosition);
+		//感度更新
+		player_->SetSensitivity(Sensitivity);
 
 		//シーン切り替え
 		if (input->PButtonTrigger(B) || input->TriggerKey(DIK_SPACE)) {
@@ -515,6 +551,7 @@ void GameScene::Update() {
 				isPause = true;
 			}else {
 				isActionStop = false;
+				keycon = false;
 				player_->isActionStop = isActionStop;
 				enemyManager_->isActionStop = isActionStop;
 				isPause = false;
@@ -556,51 +593,48 @@ void GameScene::Update() {
 					}
 					else if (pauseSelect == 3) {
 						//タイトルへ
+						pSourceVoice[1]->Stop();
+						soundCheckFlag2 = 0;
 						scene = Scene::Title;
 					}
 				}
 			}else if (keycon == true) {
+				isChangeSensitivity = true;
 				//キーコン
 				if (isChangeSensitivity) {
 					//感度変更
 					if (input->LeftStickInput()) {
-						float add = 0.01;
+						float add = 0.1;
 						if (input->StickInput(L_LEFT)) {
 							Sensitivity -= add;
 						}
 						else if (input->StickInput(L_RIGHT)) {
 							Sensitivity += add;
+							
 						}
+						if (Sensitivity <= 0.01) {
+							Sensitivity = 0.01;
+						}
+						else if (Sensitivity >= 20.0) {
+							Sensitivity = 20.0;
+						}
+						mapoPosition.x = Sensitivity * 24.35 + 460;
+						markPointer->SetPozition(mapoPosition);
 						//感度更新
 						player_->SetSensitivity(Sensitivity);
 					}
 
-					//変更終り
-					if (input->PButtonTrigger(B)) {
-						isChangeSensitivity = false;
+					if (input->PButtonTrigger(A)) {
+						selecOtption = 1;
 					}
-				}else {
-					//オプション画面操作
-					if (input->LeftStickInput()) {
-						if (input->PStickTrigger(L_UP)) {
-							selecOtption = 0;
-						}
-						else if (input->PStickTrigger(L_DOWN)) {
-							selecOtption = 1;
-						}
+					if (selecOtption == 1) {
+						//ポーズ画面へ戻る
+						pauseSelect = 0;
+						keycon = false;
 					}
 
-					if (input->PButtonTrigger(B)) {
-						if (selecOtption == 0) {
-							//感度変更へ
-							isChangeSensitivity = true;
-						}else if (selecOtption == 1) {
-							//ポーズ画面へ戻る
-							pauseSelect = 0;
-							keycon = false;
-						}
-					}
 				}
+				
 			}
 		}else {
 			//ゲーム画面
@@ -707,7 +741,6 @@ void GameScene::Update() {
 		//音声再生
 		if (soundCheckFlag4 == 0) {
 			//音声再生
-
 			pSourceVoice[6] = audio->PlayWave("over.wav");
 			pSourceVoice[6]->SetVolume(0.3f);
 			soundCheckFlag4 = 1;
@@ -720,25 +753,30 @@ void GameScene::Update() {
 		}
 		break;
 	case Scene::Option:
-
+		isChangeSensitivity = true;
+		
 		if (isChangeSensitivity) {
 			//感度変更
 			if (input->LeftStickInput()) {
-				float add = 0.01;
+				float add = 0.1;
 				if (input->StickInput(L_LEFT)) {
 					Sensitivity -= add;
 				}else if (input->StickInput(L_RIGHT)) {
 					Sensitivity += add;
 				}
+				if (Sensitivity <= 0.01) {
+					Sensitivity = 0.01;
+				}
+				else if (Sensitivity >= 20.0) {
+					Sensitivity = 20.0;
+				}
+
+				mousePosition.x = Sensitivity * 24.35 + 460;
+				mouse->SetPozition(mousePosition);
 				//感度更新
 				player_->SetSensitivity(Sensitivity);
 			}
 
-			//変更終り
-			if (input->PButtonTrigger(B)) {
-				isChangeSensitivity = false;
-			}
-		}else {
 			//オプション画面操作
 			if (input->PButtonTrigger(A)) {
 				//セレクト画面へ戻る
@@ -886,6 +924,7 @@ void GameScene::Draw() {
 				}
 			}else if (keycon == true) {
 				optionco->Draw();
+				markPointer->Draw();
 			}
 
 			
@@ -903,8 +942,8 @@ void GameScene::Draw() {
 		break;
 	case Scene::Option:
 		optionPic->Draw();
+		mouse->Draw();
 
-		
 		break;
 	}
 }

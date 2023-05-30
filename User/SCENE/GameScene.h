@@ -83,7 +83,7 @@ private:	//メンバ変数
 
 	//エネミー
 	EnemyManager* enemyManager_ = nullptr;
-	const int hitStopLimit = 10;
+	const int hitStopLimit = 1;
 	int hitStopTimer = hitStopLimit;
 
 	//背景や床
@@ -132,7 +132,12 @@ private:	//メンバ変数
 	Sprite* option5 = nullptr;
 
 	Sprite* optionco = nullptr;
+	
+	Sprite* mouse = nullptr;
+	Vector2 mousePosition;
 
+	Sprite* markPointer = nullptr;
+	Vector2 mapoPosition;
 
 	//ゲームフロー
 	enum class Scene

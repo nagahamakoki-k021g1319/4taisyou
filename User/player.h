@@ -131,7 +131,7 @@ private:
 	float targetTheta;
 	float targetDistance = 10;
 	float camMoveSpeed = 0.2f;
-	float camRotaSpeed = PI / 180;
+	float camRotaSpeed = PI / 1800;
 	float sensitivity;
 	float dashSpeed = 0.4f;
 	const float dashMP = 2.0f / 60.0f;
