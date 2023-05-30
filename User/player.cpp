@@ -38,7 +38,7 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	camTransForm = new Transform();
 
 	fbxModel_ = FbxLoader::GetInstance()->LoadModelFromFile("stand");
-	fbxRollModel_ = FbxLoader::GetInstance()->LoadModelFromFile("roll");
+	fbxRollModel_ = FbxLoader::GetInstance()->LoadModelFromFile("playerRoll");
 	fbxWalkModel_ = FbxLoader::GetInstance()->LoadModelFromFile("walk");
 	fbxDashModel_ = FbxLoader::GetInstance()->LoadModelFromFile("dash");
 	fbxWeak1Model_ = FbxLoader::GetInstance()->LoadModelFromFile("weakAttack1");
