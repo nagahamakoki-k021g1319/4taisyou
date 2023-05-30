@@ -65,9 +65,20 @@ private:
 	//待機
 	FBXModel* fbxModel_ = nullptr;
 	FBXObject3d* fbxObject3d_ = nullptr;
-	
-	
-	
+	//横一列
+	FBXModel* fbxBesideModel_ = nullptr;
+	FBXObject3d* fbxBesideObject3d_ = nullptr;
+	//ファンネル
+	FBXModel* fbxFanneruModel_ = nullptr;
+	FBXObject3d* fbxFanneruObject3d_ = nullptr;
+	//移動
+	FBXModel* fbxMoveModel_ = nullptr;
+	FBXObject3d* fbxMoveObject3d_ = nullptr;
+	//突進
+	FBXModel* fbxRushModel_ = nullptr;
+	FBXObject3d* fbxRushObject3d_ = nullptr;
+
+
 	Object3d* enemyObj_ = nullptr;
 	Model* enemyModel_ = nullptr;
 	//攻撃のobj
@@ -83,7 +94,7 @@ private:
 	Model* enemyAttack5Model_ = nullptr;
 	Object3d* enemyAttack6Obj_ = nullptr;
 	Model* enemyAttack6Model_ = nullptr;
-	
+
 	bool isLive = true;
 	const int hpMax = 30;
 	int hp = hpMax;
