@@ -126,6 +126,13 @@ private:	//メンバ変数
 	Sprite* tutoframe2 = nullptr;
 	Sprite* tutoframe3 = nullptr;
 
+	Sprite* option2 = nullptr;
+	Sprite* option3 = nullptr;
+	Sprite* option4 = nullptr;
+	Sprite* option5 = nullptr;
+
+	Sprite* optionco = nullptr;
+
 
 	//ゲームフロー
 	enum class Scene
