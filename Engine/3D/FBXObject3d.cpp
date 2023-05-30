@@ -235,8 +235,7 @@ void FBXObject3d::Update() {
 		if (currentTime > endTime) {
 			if (isLoop) {
 				currentTime = startTime;
-			}
-			else {
+			}else {
 				isPlay = false;
 				isFin = true;
 			}

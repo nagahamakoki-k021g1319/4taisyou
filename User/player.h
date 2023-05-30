@@ -175,9 +175,9 @@ private:
 	//何回めの連撃か
 	int lightAttackCount;
 	//アニメーション速度
-	float lightAttackAnime[4] = { 1.0f,1.0f,1.0f,1.0f };
+	float lightAttackAnime[4] = { 2.5f,1.0f,1.7f,1.7f };
 	//一回の攻撃全体の時間
-	float lightAttackLimit[4] = { 52 * lightAttackAnime[0],26 * lightAttackAnime[1],44 * lightAttackAnime[2],50 * lightAttackAnime[3]};
+	float lightAttackLimit[4] = { 52 / lightAttackAnime[0],26 / lightAttackAnime[1],44 / lightAttackAnime[2],50 / lightAttackAnime[3]};
 	float lightAttackTimer;
 	//攻撃の当たり判定の有無
 	bool isLightAttack;
@@ -186,7 +186,7 @@ private:
 	//判定が消える時間
 	float lightAttackDeathTime[4] = { 13,12,14,22 };
 	//次の連撃への入力受付開始時間
-	float lightAttackInput[4] = { 30,30,30,0 };
+	float lightAttackInput[4] = { 20,20,20,0 };
 
 	//強攻撃
 	Vector3 heavyAttackLPos;
@@ -197,7 +197,7 @@ private:
 	//アニメーション速度
 	float heavyAttackAnime[2] = { 1.0f,1.0f };
 	//一回の攻撃全体の時間
-	float heavyAttackLimit[2] = { 20 * heavyAttackAnime[0],20 * heavyAttackAnime[1]};
+	float heavyAttackLimit[2] = { 20 / heavyAttackAnime[0],20 / heavyAttackAnime[1]};
 	float heavyAttackTimer;
 	//攻撃の当たり判定の有無
 	bool isHeavyAttack;
