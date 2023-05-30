@@ -242,25 +242,25 @@ bool Wolf::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 	if (isAttack == true) {
 		if (attackNmb_ == 1) {
 			if (coll.CircleCollisionXZ(bodyObj_->wtf.position, enemyPos, 2.0f, 2.0f)) {
-				damage = 5;
+				damage = 40;
 				return true;
 			}
 		}
 		else if (attackNmb_ == 2) {
 			if (coll.CircleCollisionXZ(bodyObj_->wtf.position, enemyPos, 2.0f, 2.0f)) {
-				damage = 10;
+				damage = 40;
 				return true;
 			}
 		}
 		else if (attackNmb_ == 3) {
 			if (coll.CircleCollisionXZ(bodyObj_->wtf.position, enemyPos, 2.0f, 2.0f)) {
-				damage = 3;
+				damage = 40;
 				return true;
 			}
 		}
 		else if (attackNmb_ == 4) {
 			if (coll.CircleCollisionXZ(bodyObj_->wtf.position, enemyPos, 2.0f, 2.0f)) {
-				damage = 7;
+				damage = 40;
 				return true;
 			}
 		}
