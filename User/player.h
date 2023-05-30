@@ -211,7 +211,7 @@ private:
 	//‰ñ”ğ
 	bool isDodge;
 	float dodgeAnime = 1.0f;
-	const int dodgeLimit = 52 * dodgeAnime;
+	const int dodgeLimit = 30 ;
 	int dodgeTimer;
 	//‰ñ”ğŒãd’¼ŠÔ
 	const int dodgeStun = 1;
