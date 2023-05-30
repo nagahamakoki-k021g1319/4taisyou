@@ -44,6 +44,16 @@ GameScene::~GameScene() {
 	delete stdgo;
 	delete stdgo2;
 	delete pauseBg;
+
+	delete buttomx;
+	delete buttomy;
+	delete buttomb;
+
+	delete option2;
+	delete option3; 
+	delete option4; 
+	delete option5;
+	delete optionco;
 }
 
 /// <summary>
@@ -245,6 +255,30 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	optionPic->SetPozition({ 0,0 });
 	optionPic->SetSize({ 1280,720 });
 
+	option2 = new Sprite();
+	option2->Initialize(spriteCommon);
+	option2->SetPozition({ 0,0 });
+	option2->SetSize({ 1280,720 });
+
+	option3 = new Sprite();
+	option3->Initialize(spriteCommon);
+	option3->SetPozition({ 0,0 });
+	option3->SetSize({ 1280,720 });
+
+	option4 = new Sprite();
+	option4->Initialize(spriteCommon);
+	option4->SetPozition({ 0,0 });
+	option4->SetSize({ 1280,720 });
+
+	option5 = new Sprite();
+	option5->Initialize(spriteCommon);
+	option5->SetPozition({ 0,0 });
+	option5->SetSize({ 1280,720 });
+
+	optionco = new Sprite();
+	optionco->Initialize(spriteCommon);
+	optionco->SetPozition({ 0,0 });
+	optionco->SetSize({ 1280,720 });
 
 	spriteCommon->LoadTexture(0, "UI.png");
 	UI->SetTextureIndex(0);
@@ -258,7 +292,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	unionGauge->SetTextureIndex(4);
 	spriteCommon->LoadTexture(5, "title.png");
 	titlePic->SetTextureIndex(5);
-	spriteCommon->LoadTexture(6, "tuto.png");
+	spriteCommon->LoadTexture(6, "tuto2.png");
 	selectPic->SetTextureIndex(6);
 	spriteCommon->LoadTexture(7, "clear.png");
 	clearPic->SetTextureIndex(7);
@@ -293,7 +327,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	stdgo2->SetTextureIndex(20);
 
 	//ポーズ画面
-	spriteCommon->LoadTexture(21, "pauseBg.png");
+	spriteCommon->LoadTexture(21, "asedt1.png");
 	pauseBg->SetTextureIndex(21);
 
 	//オプション画面
@@ -306,6 +340,18 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 	buttomy->SetTextureIndex(24);
 	spriteCommon->LoadTexture(25, "botomb.png");
 	buttomb->SetTextureIndex(25);
+
+	spriteCommon->LoadTexture(27, "option2.png");
+	option2->SetTextureIndex(27);
+	spriteCommon->LoadTexture(28, "option3.png");
+	option3->SetTextureIndex(28);
+	spriteCommon->LoadTexture(29, "option4.png");
+	option4->SetTextureIndex(29);
+	spriteCommon->LoadTexture(30, "option5.png");
+	option5->SetTextureIndex(30);
+	
+	spriteCommon->LoadTexture(31, "optionco.png");
+	optionco->SetTextureIndex(31);
 
 
 	audio = new Audio();
@@ -478,16 +524,16 @@ void GameScene::Update() {
 			if (keycon == false) {
 				if (input->LeftStickInput()) {
 					//選択切り替え
-					if (input->PStickTrigger(L_LEFT)) {
+					if (input->PStickTrigger(L_UP)) {
 						pauseSelect--;
 						if (pauseSelect < 0) {
-							pauseSelect = 0;
+							pauseSelect = 3;
 						}
 					}
-					else if (input->PStickTrigger(L_RIGHT)) {
+					else if (input->PStickTrigger(L_DOWN)) {
 						pauseSelect++;
 						if (pauseSelect > 3) {
-							pauseSelect = 3;
+							pauseSelect = 0;
 						}
 					}
 				}
@@ -822,9 +868,28 @@ void GameScene::Draw() {
 			//ポーズ画面
 			if (keycon == false) {
 				pauseBg->Draw();
+				if (pauseSelect == 0) {
+					//再開
+					option2->Draw();
+				}
+				else if (pauseSelect == 1) {
+					//再開
+					option3->Draw();
+				}
+				else if (pauseSelect == 2) {
+					//再開
+					option4->Draw();
+				}
+				else if (pauseSelect == 3) {
+					//再開
+					option5->Draw();
+				}
 			}else if (keycon == true) {
-				optionPic->Draw();
+				optionco->Draw();
 			}
+
+			
+
 		}
 
 		break;
@@ -839,6 +904,7 @@ void GameScene::Draw() {
 	case Scene::Option:
 		optionPic->Draw();
 
+		
 		break;
 	}
 }
