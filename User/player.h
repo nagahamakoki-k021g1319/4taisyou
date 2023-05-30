@@ -177,7 +177,7 @@ private:
 	//何回めの連撃か
 	int lightAttackCount;
 	//アニメーション速度
-	float lightAttackAnime[4] = { 2.5f,1.0f,1.7f,1.7f };
+	float lightAttackAnime[4] = { 2.5f,1.0f,1.5f,1.5f };
 	//一回の攻撃全体の時間
 	float lightAttackLimit[4] = { 52 / lightAttackAnime[0],26 / lightAttackAnime[1],44 / lightAttackAnime[2],50 / lightAttackAnime[3]};
 	float lightAttackTimer;

@@ -26,6 +26,10 @@ Player::~Player() {
 	delete fbxWalkModel_;
 	delete fbxStrongObject3d_;
 	delete fbxStrongModel_;
+	delete fbxMeraModel_;
+	delete fbxHealModel_;
+	delete fbxMeraObject3d_;
+	delete fbxHealObject3d_;
 }
 
 void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
