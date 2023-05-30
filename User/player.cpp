@@ -103,7 +103,7 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	//回復
 	fbxHealObject3d_ = new FBXObject3d;
 	fbxHealObject3d_->Initialize();
-	fbxHealObject3d_->SetModel(fbxStrongModel_);
+	fbxHealObject3d_->SetModel(fbxHealModel_);
 
 	//パーティクル生成
 	particleManager = std::make_unique<ParticleManager>();
@@ -133,7 +133,7 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	audio->LoadWave("kaihi.wav");
 	audio->LoadWave("heal.wav");
 
-	sensitivity = 1;
+	sensitivity = 10;
 
 
 	Reset();
