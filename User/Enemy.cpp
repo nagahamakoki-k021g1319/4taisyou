@@ -108,7 +108,9 @@ void Enemy::Initialize(DirectXCommon* dxCommon, Vector3 pos) {
 	enemyAttack6Obj_->SetModel(enemyAttack6Model_);
 	enemyAttack6Obj_->wtf.position = pos;
 	// ダガーファンネル
-	daggerBulletModel_ = Model::LoadFromOBJ("boll");
+	daggerBulletModel_ = Model::LoadFromOBJ("fanneru");
+
+	homingBulletModel_ = Model::LoadFromOBJ("boll");
 	//順番に弾が飛んでくる攻撃
 	enemyCBModel_ = Model::LoadFromOBJ("firewall");
 
@@ -421,26 +423,26 @@ void Enemy::CreatDaggerBullet(int bulletNum) {
 void Enemy::CreatCrystalBullet() {
 	for (int i = 0; i < 2; i++) {
 		std::unique_ptr<EnemyCrystalBullet> newCrystalBullet = std::make_unique<EnemyCrystalBullet>();
-		newCrystalBullet->Initialize(i, daggerBulletModel_);
+		newCrystalBullet->Initialize(i, homingBulletModel_);
 		newCrystalBullet->SetPos({ enemyObj_->wtf.position.x - 2.0f + 4.0f * i,enemyObj_->wtf.position.y - 3.0f,enemyObj_->wtf.position.z + 15.0f });
 		newCrystalBullet->Vec(player_->GetWorldPosition());
 		crystalBullets_.push_back(std::move(newCrystalBullet));
 	}
 
 	std::unique_ptr<EnemyCrystalBullet> newCrystalBullet = std::make_unique<EnemyCrystalBullet>();
-	newCrystalBullet->Initialize(2, daggerBulletModel_);
+	newCrystalBullet->Initialize(2, homingBulletModel_);
 	newCrystalBullet->SetPos({ enemyObj_->wtf.position.x - 4.0f,enemyObj_->wtf.position.y + 1.0f, enemyObj_->wtf.position.z + 15.0f });
 	newCrystalBullet->Vec(player_->GetWorldPosition());
 	crystalBullets_.push_back(std::move(newCrystalBullet));
 
 	std::unique_ptr<EnemyCrystalBullet> newCrystalBullet2 = std::make_unique<EnemyCrystalBullet>();
-	newCrystalBullet2->Initialize(3, daggerBulletModel_);
+	newCrystalBullet2->Initialize(3, homingBulletModel_);
 	newCrystalBullet2->SetPos({ enemyObj_->wtf.position.x + 4.0f,enemyObj_->wtf.position.y + 1.0f, enemyObj_->wtf.position.z + 15.0f });
 	newCrystalBullet2->Vec(player_->GetWorldPosition());
 	crystalBullets_.push_back(std::move(newCrystalBullet2));
 
 	std::unique_ptr<EnemyCrystalBullet> newCrystalBullet3 = std::make_unique<EnemyCrystalBullet>();
-	newCrystalBullet3->Initialize(4, daggerBulletModel_);
+	newCrystalBullet3->Initialize(4, homingBulletModel_);
 	newCrystalBullet3->SetPos({ enemyObj_->wtf.position.x,enemyObj_->wtf.position.y + 4.0f,enemyObj_->wtf.position.z + 15.0f });
 	newCrystalBullet3->Vec(player_->GetWorldPosition());
 	crystalBullets_.push_back(std::move(newCrystalBullet3));

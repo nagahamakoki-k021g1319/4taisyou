@@ -117,14 +117,14 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	//メラ
 	fbxMeraObject3d_ = new FBXObject3d;
 	fbxMeraObject3d_->Initialize();
-	fbxMeraObject3d_->SetModel(fbxHealModel_);
+	fbxMeraObject3d_->SetModel(fbxMeraModel_);
 	fbxMeraObject3d_->wtf.position = { 0,10,0 };
 	fbxMeraObject3d_->wtf.scale = { 10,10,10 };
 	fbxMeraObject3d_->PlayAnimation();
 	//回復
 	fbxHealObject3d_ = new FBXObject3d;
 	fbxHealObject3d_->Initialize();
-	fbxHealObject3d_->SetModel(fbxMeraModel_);
+	fbxHealObject3d_->SetModel(fbxHealModel_);
 	fbxHealObject3d_->wtf.position = { 0,10,0 };
 	fbxHealObject3d_->wtf.scale = { 10,10,10 };
 	fbxHealObject3d_->PlayAnimation();

@@ -112,6 +112,8 @@ private:
 	////-----ダガーファンネル------///
 	std::list<std::unique_ptr<EnemyBullet>> daggerBullets_;
 	Model* daggerBulletModel_ = nullptr;
+
+	Model* homingBulletModel_ = nullptr;
 	int enemyAttackTimer = 0;
 	//////////////////////////////
 
