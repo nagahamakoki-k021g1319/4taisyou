@@ -131,7 +131,7 @@ private:
 	float targetTheta;
 	float targetDistance = 10;
 	float camMoveSpeed = 0.2f;
-	float camRotaSpeed = PI / 180;
+	Vector2 camRotaSpeed = { PI / 180, PI / 180};
 	float sensitivity;
 	float dashSpeed = 0.4f;
 	const float dashMP = 2.0f / 60.0f;
@@ -197,7 +197,7 @@ private:
 	//アニメーション速度
 	float heavyAttackAnime[2] = { 1.0f,1.0f };
 	//一回の攻撃全体の時間
-	float heavyAttackLimit[2] = { 20 / heavyAttackAnime[0],20 / heavyAttackAnime[1]};
+	float heavyAttackLimit[2] = { 40 / heavyAttackAnime[0],40 / heavyAttackAnime[1]};
 	float heavyAttackTimer;
 	//攻撃の当たり判定の有無
 	bool isHeavyAttack;

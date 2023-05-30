@@ -414,27 +414,27 @@ void Player::camUpdate() {
 	//左右
 	Vector3 theta;
 	if (input_->StickInput(R_LEFT)) {
-		theta.y = -camRotaSpeed * sensitivity;
+		theta.y = -camRotaSpeed.x * sensitivity;
 	}
 	else if (input_->StickInput(R_RIGHT)) {
-		theta.y = camRotaSpeed * sensitivity;
+		theta.y = camRotaSpeed.x * sensitivity;
 	}
 	camTransForm->rotation += theta;
 
 	//上下
 	if (input_->StickInput(R_UP)) {
-		targetTheta += camRotaSpeed * sensitivity;
+		targetTheta += camRotaSpeed.y * sensitivity;
 	}
 	else if (input_->StickInput(R_DOWN)) {
-		targetTheta += -camRotaSpeed * sensitivity;
+		targetTheta += -camRotaSpeed.y * sensitivity;
 	}
 
 	//角度制限
-	if (targetTheta < -PI / 5 * 2) {//下の制限
-		targetTheta = -PI / 5 * 2;
+	if (targetTheta < -PI / 9 * 2) {//下の制限
+		targetTheta = -PI / 9 * 2;
 	}
-	else if (targetTheta > PI / 3) { //上の制限
-		targetTheta = PI / 3;
+	else if (targetTheta > PI / 9*2) { //上の制限
+		targetTheta = PI / 9*2;
 	}
 
 	//視点は一定の距離
