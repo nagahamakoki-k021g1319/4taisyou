@@ -22,7 +22,7 @@ public:
 	///< summary>
 	///
 	///</summary>
-	void Update(Vector3 playerPos, FBXObject3d* enemy);
+	void Update(Vector3 playerPos, FBXObject3d* enemy,Object3d* obj2);
 
 	///< summary>
 	///
@@ -42,7 +42,7 @@ public:
 private:
 	Collision* coll = nullptr;
 	FBXObject3d* obj_ = nullptr;
-
+	Object3d* obj2_ = nullptr;
 	FBXObject3d* attackRenge = nullptr;
 
 	Vector3 playerLen;

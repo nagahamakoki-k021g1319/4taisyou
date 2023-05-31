@@ -361,7 +361,7 @@ void Enemy::Update() {
 					}
 					else if (6 <= randomAttck <= 8) {
 						phase_ = Phase::Leave;
-						/*phase_ = Phase::Explosion;*/
+						phase_ = Phase::Explosion;
 					}
 					else if (9 <= randomAttck) {
 						phase_ = Phase::ShortAttack;
@@ -414,11 +414,11 @@ void Enemy::Update() {
 		case Phase::ShortAttack:
 			enemyAttackTimer3++;
 
-			shortRenge->Update(player_->GetWorldPosition(), fbxObject3d_);
-			shortRenge->Update(player_->GetWorldPosition(), fbxBesideObject3d_);
-			shortRenge->Update(player_->GetWorldPosition(), fbxFanneruObject3d_);
-			shortRenge->Update(player_->GetWorldPosition(), fbxMoveObject3d_);
-			shortRenge->Update(player_->GetWorldPosition(), fbxRushObject3d_);
+			shortRenge->Update(player_->GetWorldPosition(), fbxObject3d_, enemyObj_);
+			shortRenge->Update(player_->GetWorldPosition(), fbxBesideObject3d_, enemyAttack1Obj_);
+			shortRenge->Update(player_->GetWorldPosition(), fbxFanneruObject3d_, enemyAttack2Obj_);
+			shortRenge->Update(player_->GetWorldPosition(), fbxMoveObject3d_, enemyAttack3Obj_);
+			shortRenge->Update(player_->GetWorldPosition(), fbxRushObject3d_, enemyAttack4Obj_);
 
 			if (enemyAttackTimer3 >= 120) {
 				shortRenge->ResetAttack();
@@ -487,10 +487,9 @@ void Enemy::CreatCrystalBullet() {
 	enemyVec.nomalize();
 	for (int i = 0; i < 5; i++) {
 		std::unique_ptr<EnemyCrystalBullet> newCrystalBullet = std::make_unique<EnemyCrystalBullet>();
-
 		newCrystalBullet->Initialize(i, homingBulletModel_);
-		newCrystalBullet->SetPos({ enemyObj_->wtf.position.x - 2.0f + 4.0f * i,enemyObj_->wtf.position.y - 3.0f,enemyObj_->wtf.position.z + 15.0f });
 
+		newCrystalBullet->SetPos({ enemyObj_->wtf.position.x + -enemyVec.x * 2.0f,enemyObj_->wtf.position.y - enemyVec.y + 4.0f,enemyObj_->wtf.position.z + -enemyVec.z * 2.0f });
 		newCrystalBullet->Vec(player_->GetWorldPosition());
 		crystalBullets_.push_back(std::move(newCrystalBullet));
 	}
@@ -522,8 +521,8 @@ void Enemy::CreatCrystalBullet() {
 
 void Enemy::Draw() {
 	//“G‚Ìƒ‚[ƒVƒ‡ƒ“ŠÇ—
-	/*enemyAttackRoteTimer++;
-	if (enemyAttackRoteTimer >= 125 && enemyAttackRoteTimer <= 145) {
+	enemyAttackRoteTimer++;
+	/*if (enemyAttackRoteTimer >= 125 && enemyAttackRoteTimer <= 145) {
 		enemyAttack1Obj_->Draw();
 	}
 	else if (enemyAttackRoteTimer >= 146 && enemyAttackRoteTimer <= 165) {
@@ -552,11 +551,11 @@ void Enemy::Draw() {
 	}
 	else if (enemyAttackRoteTimer >= 401 && enemyAttackRoteTimer <= 420) {
 		enemyAttack6Obj_->Draw();
-	}
-	else {
-		enemyObj_->Draw();
-	}
-	if (enemyAttackRoteTimer >= 421) {
+	}*/
+	
+		
+	
+	/*if (enemyAttackRoteTimer >= 421) {
 		enemyAttackRoteTimer = 0;
 	}*/
 	for (std::unique_ptr<EnemyBullet>& bullet : daggerBullets_) {
@@ -583,6 +582,7 @@ void Enemy::Draw() {
 		/*shortRenge->Draw();*/
 		break;
 	case Phase::Explosion:
+		enemyObj_->Draw();
 		explosion->Draw();
 		break;
 	}
@@ -611,7 +611,7 @@ void Enemy::FbxDraw()
 		fbxMoveObject3d_->Draw(dxCommon->GetCommandList());
 		break;
 	case Phase::Explosion:
-		fbxRushObject3d_->Draw(dxCommon->GetCommandList());
+		/*fbxRushObject3d_->Draw(dxCommon->GetCommandList());*/
 		break;
 	}
 
