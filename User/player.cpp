@@ -100,10 +100,20 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	fbxMeraObject3d_ = new FBXObject3d;
 	fbxMeraObject3d_->Initialize();
 	fbxMeraObject3d_->SetModel(fbxMeraModel_);
+
+	fbxMeraObject3d_->wtf.position = { 0,10,0 };
+	fbxMeraObject3d_->wtf.scale = { 10,10,10 };
+	fbxMeraObject3d_->PlayAnimation();
+
 	//回復
 	fbxHealObject3d_ = new FBXObject3d;
 	fbxHealObject3d_->Initialize();
 	fbxHealObject3d_->SetModel(fbxHealModel_);
+
+	fbxHealObject3d_->wtf.position = { 0,10,0 };
+	fbxHealObject3d_->wtf.scale = { 10,10,10 };
+	fbxHealObject3d_->PlayAnimation();
+
 
 	//パーティクル生成
 	particleManager = std::make_unique<ParticleManager>();
@@ -179,7 +189,7 @@ void Player::Reset() {
 	isHeavyAttack = false;
 	heavyAttackTimer = 60;
 
-	//��ʃV�F�C�N
+	//  ʃV F C N
 	isCamShake = false;
 	camShakeTimer = camShakeLimit;
 
@@ -512,7 +522,7 @@ void Player::Update() {
 			EffHiHealTimer = 0;
 		}
 
-		//��ʃV�F�C�N
+		//  ʃV F C N
 		if (isCamShake == true) {
 			camShakeTimer--;
 			if (camShakeTimer <= camShakeLimit && camShakeTimer > camShakeLimit * 3 / 4) {

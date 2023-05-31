@@ -1,6 +1,9 @@
 ﻿#pragma once
 #include "Object3d.h"
 #include "Collision.h"
+#include "FBXObject3d.h"
+
+
 
 class EnemyShortRenge {
 public:
@@ -9,7 +12,7 @@ public:
 	///< summary>
 	///
 	///</summary>
-	void Initialize(Model* model_);
+	void Initialize(FBXObject3d* model_);
 
 	///< summary>
 	///
@@ -19,12 +22,12 @@ public:
 	///< summary>
 	///
 	///</summary>
-	void Update(Vector3 playerPos, Object3d* enemy);
+	void Update(Vector3 playerPos, FBXObject3d* enemy);
 
 	///< summary>
 	///
 	///</summary>
-	void Draw();
+	void Draw(ID3D12GraphicsCommandList* command);
 
 	void OnCollision();
 
@@ -38,9 +41,9 @@ public:
 
 private:
 	Collision* coll = nullptr;
-	Object3d* obj_ = nullptr;
+	FBXObject3d* obj_ = nullptr;
 
-	Object3d* attackRenge = nullptr;
+	FBXObject3d* attackRenge = nullptr;
 
 	Vector3 playerLen;
 	Vector3 playerPos;

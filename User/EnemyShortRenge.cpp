@@ -5,13 +5,11 @@ EnemyShortRenge::~EnemyShortRenge()
 	delete attackRenge;
 }
 
-void EnemyShortRenge::Initialize(Model* model_)
+void EnemyShortRenge::Initialize(FBXObject3d* obj)
 {
-	obj_ = Object3d::Create();
-	obj_->SetModel(model_);
+	obj_ = obj;
 
-	attackRenge = Object3d::Create();
-	attackRenge->SetModel(model_);
+	attackRenge = obj;
 	attackRenge->wtf.scale = { 2.0f,2.0f,2.0f };
 
 	obj_->wtf.position = { 0.0f,0.0f,10.0f };
@@ -30,7 +28,7 @@ void EnemyShortRenge::ShortAttack()
 }
 
 
-void EnemyShortRenge::Update(Vector3 PlayerPos, Object3d* enemy)
+void EnemyShortRenge::Update(Vector3 PlayerPos, FBXObject3d* enemy)
 {
 	obj_ = enemy;
 	playerPos = PlayerPos;
@@ -55,13 +53,10 @@ void EnemyShortRenge::Update(Vector3 PlayerPos, Object3d* enemy)
 	enemy = obj_;
 }
 
-void EnemyShortRenge::Draw()
+void EnemyShortRenge::Draw(ID3D12GraphicsCommandList* command)
 {
-	if (isAttack) {
-		if (attackAccumulate <= 0) {
-			attackRenge->Draw();
-		}
-	}
+
+	obj_->Draw(command);
 
 }
 

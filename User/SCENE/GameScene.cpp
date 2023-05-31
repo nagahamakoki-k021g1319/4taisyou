@@ -106,8 +106,10 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input) {
 
 	//エネミー
 	enemyManager_ = new EnemyManager();
-	enemyManager_->Initialize();
+	enemyManager_->Initialize(dxCommon);
 	enemyManager_->SetPlayer(player_);
+
+
 
 	//UI
 	UI = new Sprite();
@@ -888,6 +890,7 @@ void GameScene::Draw() {
 		srl->Draw();
 
 		player_->FbxDraw();
+		enemyManager_->FbxDraw();
 
 		//カウントダウン
 		if (actionStopTimer > 60 * 2) {

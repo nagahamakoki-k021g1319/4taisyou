@@ -7,7 +7,11 @@ EnemyManager::EnemyManager() {
 EnemyManager::~EnemyManager() {
 }
 
-void EnemyManager::Initialize() {
+void EnemyManager::Initialize(DirectXCommon* dxCommon) {
+	// nullptrチェック
+	assert(dxCommon);
+	this->dxCommon = dxCommon;
+	
 	origin = new Transform();
 	origin->Initialize();
 
@@ -40,7 +44,7 @@ void EnemyManager::creatEnemy(int round) {
 	if (round == 0) {
 		{
 			std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
-			newEnemy->Initialize({ 0,0,20 });
+			newEnemy->Initialize(dxCommon,{ 0,0,20 });
 			newEnemy->SetPlayer(player_);
 			enemys_.push_back(std::move(newEnemy));
 		}
@@ -49,12 +53,12 @@ void EnemyManager::creatEnemy(int round) {
 	else if (round == 1) {
 		{
 			std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
-			newEnemy->Initialize({ -3,0,5 });
+			newEnemy->Initialize(dxCommon,{ -3,0,5 });
 			newEnemy->SetPlayer(player_);
 			enemys_.push_back(std::move(newEnemy));
 		} {
 			std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
-			newEnemy->Initialize({ 3,0,5 });
+			newEnemy->Initialize(dxCommon,{ 3,0,5 });
 			newEnemy->SetPlayer(player_);
 			enemys_.push_back(std::move(newEnemy));
 		}
@@ -131,6 +135,13 @@ void EnemyManager::Draw() {
 		enemy->Draw();
 	}
 
+}
+
+void EnemyManager::FbxDraw()
+{
+	for (std::unique_ptr<Enemy>& enemy : enemys_) {
+		enemy->FbxDraw();
+	}
 }
 
 void EnemyManager::EffUpdate()
