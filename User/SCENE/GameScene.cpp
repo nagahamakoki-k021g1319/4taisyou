@@ -630,6 +630,9 @@ void GameScene::Update() {
 						}
 						mapoPosition.x = Sensitivity * 24.35 + 460;
 						markPointer->SetPozition(mapoPosition);
+
+						mousePosition.x = Sensitivity * 24.35 + 460;
+						mouse->SetPozition(mousePosition);
 						//感度更新
 						player_->SetSensitivity(Sensitivity);
 					}
@@ -783,6 +786,9 @@ void GameScene::Update() {
 
 				mousePosition.x = Sensitivity * 24.35 + 460;
 				mouse->SetPozition(mousePosition);
+
+				mapoPosition.x = Sensitivity * 24.35 + 460;
+				markPointer->SetPozition(mapoPosition);
 				//感度更新
 				player_->SetSensitivity(Sensitivity);
 			}
