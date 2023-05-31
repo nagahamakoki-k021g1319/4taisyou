@@ -16,7 +16,7 @@ void EnemyBullet::Initialize(int timer, Model* model_, Vector3 playerVec) {
 	isLive = true;
 	isPop = false;
 	shotTimer = 120;
-
+	obj_->wtf.scale = { 2.0f,2.0f,2.0f };
 
 }
 
