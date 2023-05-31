@@ -504,30 +504,6 @@ void Enemy::CreatCrystalBullet() {
 	crystalBullets_.push_back(std::move(newCrystalBullet3));*/
 }
 
-void Enemy::FbxDraw()
-{
-
-	switch (phase_) {
-	case Phase::Approach:
-		fbxFanneruObject3d_->Draw(dxCommon->GetCommandList());
-		break;
-	case Phase::Leave:
-		fbxBesideObject3d_->Draw(dxCommon->GetCommandList());
-		break;
-
-	case Phase::ReLeave:
-		fbxObject3d_->Draw(dxCommon->GetCommandList());
-		break;
-	case Phase::ShortAttack:
-		fbxMoveObject3d_->Draw(dxCommon->GetCommandList());
-		break;
-	case Phase::Explosion:
-		fbxRushObject3d_->Draw(dxCommon->GetCommandList());
-		break;
-	}
-
-}
-
 
 void Enemy::Draw() {
 	//敵のモーション管理
@@ -601,6 +577,29 @@ void Enemy::Draw() {
 	enemyAttackOmen->Draw();
 }
 
+void Enemy::FbxDraw()
+{
+
+	switch (phase_) {
+	case Phase::Approach:
+		fbxFanneruObject3d_->Draw(dxCommon->GetCommandList());
+		break;
+	case Phase::Leave:
+		fbxBesideObject3d_->Draw(dxCommon->GetCommandList());
+		break;
+
+	case Phase::ReLeave:
+		fbxObject3d_->Draw(dxCommon->GetCommandList());
+		break;
+	case Phase::ShortAttack:
+		fbxMoveObject3d_->Draw(dxCommon->GetCommandList());
+		break;
+	case Phase::Explosion:
+		fbxRushObject3d_->Draw(dxCommon->GetCommandList());
+		break;
+	}
+
+}
 void Enemy::AttackInterval()
 {
 	attackInterval = 120;
