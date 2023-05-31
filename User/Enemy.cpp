@@ -435,23 +435,38 @@ void Enemy::Update() {
 			numberOfAttacks = 0;
 		}
 		playerDirection();
+
+		switch (phase_) {
+		case Phase::Approach:
+			fbxFanneruObject3d_->Update();
+			break;
+		case Phase::Leave:
+			fbxBesideObject3d_->Update();
+			break;
+
+		case Phase::ReLeave:
+			fbxObject3d_->Update();
+			break;
+		case Phase::ShortAttack:
+			fbxMoveObject3d_->Update();
+			break;
+		case Phase::Explosion:
+			fbxRushObject3d_->Update();
+			break;
+		}
 	}
 
 	EnemyAttackSter(omenMaxSize, omenMaxTime, omenRotSpeed);
+
 	enemyObj_->Update();
 	//‘Ò‹@
-	fbxObject3d_->Update();
-	fbxBesideObject3d_->Update();
-	fbxFanneruObject3d_->Update();
-	fbxMoveObject3d_->Update();
-	fbxRushObject3d_->Update();
 
-	enemyAttack1Obj_->Update();
+	/*enemyAttack1Obj_->Update();
 	enemyAttack2Obj_->Update();
 	enemyAttack3Obj_->Update();
 	enemyAttack4Obj_->Update();
 	enemyAttack5Obj_->Update();
-	enemyAttack6Obj_->Update();
+	enemyAttack6Obj_->Update();*/
 }
 
 void Enemy::CreatDaggerBullet(int bulletNum) {
@@ -580,6 +595,7 @@ void Enemy::Draw() {
 void Enemy::FbxDraw()
 {
 
+	
 	switch (phase_) {
 	case Phase::Approach:
 		fbxFanneruObject3d_->Draw(dxCommon->GetCommandList());
