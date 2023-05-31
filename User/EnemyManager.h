@@ -18,6 +18,7 @@ public:
 	void FbxDraw();
 
 	void EffUpdate();
+	void EffFireUpdate();
 	void EffDraw();
 
 	void creatEnemy(int round);
@@ -28,6 +29,9 @@ public:
 
 	int EffTimer = 0;
 	int isEffFlag = 0;
+
+	int EffFireTimer = 0;
+	int isEffFireFlag = 0;
 
 public:
 	//音を止める関数
@@ -45,6 +49,7 @@ private:
 
 	//パーティクル
 	std::unique_ptr<ParticleManager> DamageParticle;
+	std::unique_ptr<ParticleManager> FireParticle;
 
 
 public:

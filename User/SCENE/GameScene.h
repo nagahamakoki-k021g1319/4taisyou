@@ -83,7 +83,7 @@ private:	//メンバ変数
 
 	//エネミー
 	EnemyManager* enemyManager_ = nullptr;
-	const int hitStopLimit = 10;
+	const int hitStopLimit = 1;
 	int hitStopTimer = hitStopLimit;
 
 	//背景や床
@@ -98,6 +98,9 @@ private:	//メンバ変数
 	Sprite* UI = nullptr;
 	Sprite* buttomPng1 = nullptr;
 	Sprite* buttomPng2 = nullptr;
+	Sprite* buttomx = nullptr;
+	Sprite* buttomy = nullptr;
+	Sprite* buttomb = nullptr;
 	Sprite* hpGauge = nullptr;
 	Vector2 hpPosition;
 	Sprite* mpGauge = nullptr;
@@ -108,6 +111,7 @@ private:	//メンバ変数
 	Vector3 avoidScale;
 	Sprite* sordUI = nullptr;
 	Sprite* sord2UI = nullptr;
+	Sprite* sord3UI = nullptr;
 
 	Sprite* srr = nullptr;
 	Vector2 srrPosition;
@@ -118,6 +122,23 @@ private:	//メンバ変数
 	Sprite* srd = nullptr;
 	Vector2 srdPosition;
 
+	Sprite* tutoframe1 = nullptr;
+	Sprite* tutoframe2 = nullptr;
+	Sprite* tutoframe3 = nullptr;
+
+	Sprite* option2 = nullptr;
+	Sprite* option3 = nullptr;
+	Sprite* option4 = nullptr;
+	Sprite* option5 = nullptr;
+
+	Sprite* optionco = nullptr;
+	
+	Sprite* mouse = nullptr;
+	Vector2 mousePosition;
+
+	Sprite* markPointer = nullptr;
+	Vector2 mapoPosition;
+
 	//ゲームフロー
 	enum class Scene
 	{
@@ -126,6 +147,7 @@ private:	//メンバ変数
 			Play,
 			Clear,
 			Gameover,
+			Option,
 	};
 	Scene scene;
 	int stage;
@@ -135,6 +157,21 @@ private:	//メンバ変数
 	Sprite* selectPic;
 	Sprite* clearPic;
 	Sprite* gameoverPic;
+
+	//選択画面
+	int selectMode;
+
+	//ポーズ画面
+	bool isPause;
+	bool keycon;
+	int pauseSelect;
+	Sprite* pauseBg;
+
+	//オプション
+	float Sensitivity;
+	int selecOtption;
+	bool isChangeSensitivity;
+	Sprite* optionPic;
 
 	//攻撃する前のわかりやすいエッフェクト(なぜか敵に持たせられない)
 	Sprite* CdUI = nullptr;
@@ -146,7 +183,9 @@ private:	//メンバ変数
 	//音関係まとめ
 	int soundCheckFlag = 0;
 	int soundCheckFlag2 = 0;
-	
+	int soundCheckFlag3 = 0;
+	int soundCheckFlag4 = 0;
+
 	//戦闘開始時
 	bool isActionStop;
 	int actionStopTimer;

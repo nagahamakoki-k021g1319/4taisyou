@@ -4,6 +4,7 @@
 #include "EnemyCrystalBullet.h"
 #include "EnemyShortRenge.h"
 #include "EnemyExplosionAttack.h"
+#include "Audio.h"
 
 class Player;
 #include "Collision.h"
@@ -45,43 +46,55 @@ public:
 
 	void playerDirectionToCorrect();
 
-	////ƒ[ƒ‹ƒhÀ•W‚ğæ“¾
+	void EnemyProvisional();
+
+	void EnemyAttackSter(float maxSterSize, float time, float rotationSpeed);
+
+	////ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’å–å¾—
 	Vector3 GetWorldPosition();
 
-	//s“®ƒtƒF[ƒY
+	//è¡Œå‹•ãƒ•ã‚§ãƒ¼ã‚º
 	enum class Phase {
-		Approach, //Ú‹ß‚·‚é
-		Leave,    //—£’E‚·‚é
-		ReLeave,  //Ä—£’E‚·‚é
-		ShortAttack,	//UŒ‚
-		Explosion,		//àÑ”­
+		Approach, //æ¥è¿‘ã™ã‚‹
+		Leave,    //é›¢è„±ã™ã‚‹
+		ReLeave,  //å†é›¢è„±ã™ã‚‹
+		ShortAttack,	//æ”»æ’ƒ
+		Explosion,		//çç™º
 	};
+
+	//éŸ³ã‚’æ­¢ã‚ã‚‹é–¢æ•°
+	IXAudio2SourceVoice* pSourceVoice[10] = { 0 };
 
 private:
 	DirectXCommon* dxCommon = nullptr;
 	Player* player_ = nullptr;
 	Collision coll;
 
-	//‘Ò‹@
+
+	//å¾…æ©Ÿ
 	FBXModel* fbxModel_ = nullptr;
 	FBXObject3d* fbxObject3d_ = nullptr;
-	//‰¡ˆê—ñ
+	//æ¨ªä¸€åˆ—
 	FBXModel* fbxBesideModel_ = nullptr;
 	FBXObject3d* fbxBesideObject3d_ = nullptr;
-	//ƒtƒ@ƒ“ƒlƒ‹
+	//ãƒ•ã‚¡ãƒ³ãƒãƒ«
 	FBXModel* fbxFanneruModel_ = nullptr;
 	FBXObject3d* fbxFanneruObject3d_ = nullptr;
-	//ˆÚ“®
+	//ç§»å‹•
 	FBXModel* fbxMoveModel_ = nullptr;
 	FBXObject3d* fbxMoveObject3d_ = nullptr;
-	//“Ëi
+	//çªé€²
 	FBXModel* fbxRushModel_ = nullptr;
 	FBXObject3d* fbxRushObject3d_ = nullptr;
 
 
+
+	Audio* audio = nullptr;
+
+
 	Object3d* enemyObj_ = nullptr;
 	Model* enemyModel_ = nullptr;
-	//UŒ‚‚Ìobj
+	//æ”»æ’ƒã®obj
 	Object3d* enemyAttack1Obj_ = nullptr;
 	Model* enemyAttack1Model_ = nullptr;
 	Object3d* enemyAttack2Obj_ = nullptr;
@@ -96,20 +109,20 @@ private:
 	Model* enemyAttack6Model_ = nullptr;
 
 	bool isLive = true;
-	const int hpMax = 30;
+	const int hpMax = 500;
 	int hp = hpMax;
 
 	EnemyBullet* enemyBullet = nullptr;
 
-	//–³“GŠÔ
+	//ç„¡æ•µæ™‚é–“
 	bool isHitPlayer;
 	bool isHitWolf;
 
-	//ƒtƒF[ƒY
+	//ãƒ•ã‚§ãƒ¼ã‚º
 	Phase phase_ = Phase::ReLeave;
 
-	//“G‚ÌUŒ‚Œn“
-	////-----ƒ_ƒK[ƒtƒ@ƒ“ƒlƒ‹------///
+	//æ•µã®æ”»æ’ƒç³»çµ±
+	////-----ãƒ€ã‚¬ãƒ¼ãƒ•ã‚¡ãƒ³ãƒãƒ«------///
 	std::list<std::unique_ptr<EnemyBullet>> daggerBullets_;
 	Model* daggerBulletModel_ = nullptr;
 
@@ -117,27 +130,27 @@ private:
 	int enemyAttackTimer = 0;
 	//////////////////////////////
 
-	////-----‡”Ô‚É’e‚ª”ò‚ñ‚Å‚­‚éUŒ‚------///
+	////-----é †ç•ªã«å¼¾ãŒé£›ã‚“ã§ãã‚‹æ”»æ’ƒ------///
 	std::list<std::unique_ptr<EnemyCrystalBullet>> crystalBullets_;
 	Model* enemyCBModel_ = nullptr;
 	int enemyAttackTimer2 = 0;
 	///////////////////////////////////
 
-	////-----‹ßÚUŒ‚-----////
+	////-----è¿‘æ¥æ”»æ’ƒ-----////
 	EnemyShortRenge* shortRenge = nullptr;
 	int enemyAttackTimer3 = 0;
 	/////////////////////////
 
-	////-----”š”­UŒ‚-----////
+	////-----çˆ†ç™ºæ”»æ’ƒ-----////
 	EnemyExplosionAttack* explosion = nullptr;
 	int enemyAttackTimer4 = 0;
 	/////////////////////////
 
-	////-----‹——£‚Å•Ï‚í‚éUŒ‚-----////
+	////-----è·é›¢ã§å¤‰ã‚ã‚‹æ”»æ’ƒ-----////
 	int enemyRandomAttack = 0;
 	////////////////////////////
 
-	////-----ƒ‰ƒ“ƒ_ƒ€‚ÉUŒ‚•û–@‚ğ•Ï‚¦‚é-----////
+	////-----ãƒ©ãƒ³ãƒ€ãƒ ã«æ”»æ’ƒæ–¹æ³•ã‚’å¤‰ãˆã‚‹-----////
 	int AttckNmb = 0;
 	int randomAttck = 0;
 	int numberOfAttacks = 0;
@@ -147,10 +160,10 @@ private:
 
 	int enemyResetTimer = 0;
 
-	//OBJ‚ğ•ÏX‚³‚¹‚é
+	//OBJã‚’å¤‰æ›´ã•ã›ã‚‹
 	int enemyAttackRoteTimer = 0;
 
-	//ƒp[ƒeƒBƒNƒ‹
+	//ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«
 	std::unique_ptr<ParticleManager> DamageParticle;
 
 	float playerBeforeAngle = 0;
@@ -158,8 +171,25 @@ private:
 	float playerAngleNmb = 0;
 	float PI = 3.141592;
 	float playerVecSpeed;
+	float anglePI = 0;
+
+	//æ•µã®ä»®æƒ³ã®çƒåº§æ¨™
+	Object3d* enemyProvisional[5];
 
 	Vector3 playerVector = {};
+	Vector2 playerBeforVec = {};
+	float enemyDot = 0;
+
+	//æ•µã®æ”»æ’ƒå‰æ¼”å‡º
+	Object3d* enemyAttackOmen;
+	Model* enemySter;
+	bool isEnemyAttackOmen = false;
+	float omenTime = 0;
+	float omenSize = 0;
+	float omenMaxTime = 20.0f;
+	float omenMaxSize = 3.0f;
+	float omenRotSpeed = 20 * (PI / 180);
+
 public:
 	bool isActionStop;
 };

@@ -21,6 +21,7 @@ public:
 
 	void Initialize(DirectXCommon* dxCommon, Input* input);
 	void Reset();
+	void SetSensitivity(float newSensitivity) { sensitivity = newSensitivity; };
 
 	void Update();
 	void Rota();
@@ -50,7 +51,7 @@ public:
 
 	Vector3 bVelocity(Vector3& velocity, Transform& worldTransform);
 
-	////ƒ[ƒ‹ƒhÀ•W‚ğæ“¾
+	////ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’å–å¾—
 	Vector3 GetWorldPosition();
 
 	float GetHp() { return hp; };
@@ -63,7 +64,7 @@ public:
 	void MpUpdate(float mp);
 
 	/// <summary>
-	/// ƒ|ƒWƒVƒ‡ƒ“
+	/// ãƒã‚¸ã‚·ãƒ§ãƒ³
 	/// </summary>
 	/// <param name="pos"></param>
 	void SetPos(Vector3 pos) {fbxObject3d_->wtf.position = pos; };
@@ -79,7 +80,7 @@ public:
 	int isEffHiHealFlag = 0;
 
 public:
-	//‰¹‚ğ~‚ß‚éŠÖ”
+	//éŸ³ã‚’æ­¢ã‚ã‚‹é–¢æ•°
 	IXAudio2SourceVoice* pSourceVoice[10] = { 0 };
 
 private:
@@ -88,19 +89,19 @@ private:
 	DirectXCommon* dxCommon = nullptr;
 	Collision col;
 	Audio* audio = nullptr;
-	//‘Ò‹@
+	//å¾…æ©Ÿ
 	FBXModel* fbxModel_ = nullptr;
 	FBXObject3d* fbxObject3d_ = nullptr;
-	//‰ñ”ğ
+	//å›é¿
 	FBXModel* fbxRollModel_ = nullptr;
 	FBXObject3d* fbxRollObject3d_ = nullptr;
-	//•à‚«
+	//æ­©ã
 	FBXModel* fbxWalkModel_ = nullptr;
 	FBXObject3d* fbxWalkObject3d_ = nullptr;
-	//‘–‚é
+	//èµ°ã‚‹
 	FBXModel* fbxDashModel_ = nullptr;
 	FBXObject3d* fbxDashObject3d_ = nullptr;
-	//ãUŒ‚
+	//å¼±æ”»æ’ƒ
 	FBXModel* fbxWeak1Model_ = nullptr;
 	FBXObject3d* fbxWeak1Object3d_ = nullptr;
 	FBXModel* fbxWeak2Model_ = nullptr;
@@ -109,13 +110,13 @@ private:
 	FBXObject3d* fbxWeak3Object3d_ = nullptr;
 	FBXModel* fbxWeak4Model_ = nullptr;
 	FBXObject3d* fbxWeak4Object3d_ = nullptr;
-	//‹­UŒ‚
+	//å¼·æ”»æ’ƒ
 	FBXModel* fbxStrongModel_ = nullptr;
 	FBXObject3d* fbxStrongObject3d_ = nullptr;
-	//‰ñ•œ
+	//å›å¾©
 	FBXModel* fbxHealModel_ = nullptr;
 	FBXObject3d* fbxHealObject3d_ = nullptr;
-	//ƒƒ‰
+	//ãƒ¡ãƒ©
 	FBXModel* fbxMeraModel_ = nullptr;
 	FBXObject3d* fbxMeraObject3d_ = nullptr;
 
@@ -130,114 +131,123 @@ private:
 	float targetTheta;
 	float targetDistance = 10;
 	float camMoveSpeed = 0.2f;
-	float camRotaSpeed = PI / 180;
+  
+	Vector2 camRotaSpeed = { PI / 180, PI / 180};
+
+	float sensitivity;
 	float dashSpeed = 0.4f;
 	const float dashMP = 2.0f / 60.0f;
 
-	//ƒXƒe[ƒ^ƒX
+	//ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
 	const int defaultHp = 100;
 	int hp;
 	bool isLive = true;
 	bool isAttackFin;
 	bool nextAttack;
 
-	//MPŠÖ˜A
+	//MPé–¢é€£
 	float mp;
 	const float mpRegen = 0.5f / 60.0f;
 	const float mpPuls = 5;
-	//¬‰ñ•œ
+	//å°å›å¾©
 	const int heal = defaultHp * 0.2;
 	const int healMp = 20;
-	//‘å‰ñ•œ
+	//å¤§å›å¾©
 	const int megaHeal = defaultHp * 0.6;
 	const int megaHealMp = 60;
-	//MPUŒ‚
+	//ãƒ¡ãƒ©
 	const int bulletMp = 40;
+	const int bulletLimit = 10;
+	int bulletTime;
 
-	//–³“GŠÔ
+	//ç„¡æ•µæ™‚é–“
 	bool isInvincible;
 	const float invincibleLimit = 15;
 	float invincibleTimer = invincibleLimit;
 
-	//‰æ–ÊƒVƒFƒCƒN
+	//ç”»é¢ã‚·ã‚§ã‚¤ã‚¯
 	bool isCamShake;
 	const int camShakeLimit = 20;
 	int camShakeTimer = camShakeLimit;
 	Vector3 camShakeVec;
 	Vector3 moveBack;
 
-	//ãUŒ‚
+	//å¼±æ”»æ’ƒ
 	Vector3 lightAttackLPos;
 	Vector3 lightAttackWPos;
 	const float lightMpPuls = 3;
-	//‰½‰ñ‚ß‚Ì˜AŒ‚‚©
+	//ä½•å›ã‚ã®é€£æ’ƒã‹
 	int lightAttackCount;
-	//ˆê‰ñ‚ÌUŒ‚‘S‘Ì‚ÌŠÔ
-	float lightAttackLimit[4] = { 17,18,20,30 };
+	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³é€Ÿåº¦
+	float lightAttackAnime[4] = { 2.5f,1.0f,1.5f,1.5f };
+	//ä¸€å›ã®æ”»æ’ƒå…¨ä½“ã®æ™‚é–“
+	float lightAttackLimit[4] = { 52 / lightAttackAnime[0],26 / lightAttackAnime[1],44 / lightAttackAnime[2],50 / lightAttackAnime[3]};
 	float lightAttackTimer;
-	//UŒ‚‚Ì“–‚½‚è”»’è‚Ì—L–³
+	//æ”»æ’ƒã®å½“ãŸã‚Šåˆ¤å®šã®æœ‰ç„¡
 	bool isLightAttack;
-	//”»’è‚ªon‚ß‚éŠÔ
+	//åˆ¤å®šãŒå‡ºå§‹ã‚ã‚‹æ™‚é–“
 	float lightAttackPopTime[4] = { 14,13,15,24 };
-	//”»’è‚ªÁ‚¦‚éŠÔ
+	//åˆ¤å®šãŒæ¶ˆãˆã‚‹æ™‚é–“
 	float lightAttackDeathTime[4] = { 13,12,14,22 };
-	//Ÿ‚Ì˜AŒ‚‚Ö‚Ì“ü—Íó•tŠJnŠÔ
+	//æ¬¡ã®é€£æ’ƒã¸ã®å…¥åŠ›å—ä»˜é–‹å§‹æ™‚é–“
 	float lightAttackInput[4] = { 20,20,20,0 };
 
-	//‹­UŒ‚
+	//å¼·æ”»æ’ƒ
 	Vector3 heavyAttackLPos;
 	Vector3 heavyAttackWPos;
 	const float heavyMpPuls = 8;
-	//‰½‰ñ‚ß‚Ì˜AŒ‚‚©
+	//ä½•å›ã‚ã®é€£æ’ƒã‹
 	int heavyAttackCount;
-	//ˆê‰ñ‚ÌUŒ‚‘S‘Ì‚ÌŠÔ
-	float heavyAttackLimit[2] = { 30,30 };
+	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³é€Ÿåº¦
+	float heavyAttackAnime[2] = { 1.0f,1.0f };
+	//ä¸€å›ã®æ”»æ’ƒå…¨ä½“ã®æ™‚é–“
+	float heavyAttackLimit[2] = { 40 / heavyAttackAnime[0],40 / heavyAttackAnime[1]};
 	float heavyAttackTimer;
-	//UŒ‚‚Ì“–‚½‚è”»’è‚Ì—L–³
+	//æ”»æ’ƒã®å½“ãŸã‚Šåˆ¤å®šã®æœ‰ç„¡
 	bool isHeavyAttack;
-	//”»’è‚ªon‚ß‚éŠÔ
+	//åˆ¤å®šãŒå‡ºå§‹ã‚ã‚‹æ™‚é–“
 	float heavyAttackPopTime[2] = { 15,25 };
-	//”»’è‚ªÁ‚¦‚éŠÔ
+	//åˆ¤å®šãŒæ¶ˆãˆã‚‹æ™‚é–“
 	float heavyAttackDeathTime[2] = { 12,22 };
-	//Ÿ‚Ì˜AŒ‚‚Ö‚Ì“ü—Íó•tŠJnŠÔ
+	//æ¬¡ã®é€£æ’ƒã¸ã®å…¥åŠ›å—ä»˜é–‹å§‹æ™‚é–“
 	float heavyAttackInput[2] = { 15,0 };
 
-	//‰ñ”ğ
+	//å›é¿
 	bool isDodge;
-	const int dodgeLimit = 60;
+	float dodgeAnime = 1.0f;
+	const int dodgeLimit = 30 ;
 	int dodgeTimer;
-	//‰ñ”ğŒãd’¼ŠÔ
+	//å›é¿å¾Œç¡¬ç›´æ™‚é–“
 	const int dodgeStun = 1;
 	Vector3 dodgeMoveVec;
 	Vector3 dodgeMoveVecNomal;
 
-	//OBJŠÖŒW
-	//ˆÚ“®‚µ‚½‚ÌplayerOBJ‚ğ•Ï‚¦‚é
+	//OBJé–¢ä¿‚
+	//ç§»å‹•ã—ãŸæ™‚ã®playerOBJã‚’å¤‰ãˆã‚‹
 	int objRotaTimer;
-	//UŒ‚‚µ‚½‚ÌplayerOBJ‚ğ•Ï‚¦‚é
+	//æ”»æ’ƒã—ãŸæ™‚ã®playerOBJã‚’å¤‰ãˆã‚‹
 	int attackFlag = 0;
 	int objAttackTimer;
 
-	//“G
+	//æ•µ
 	Transform* enemyPos_ = nullptr;
 
-	//ƒp[ƒeƒBƒNƒ‹ƒNƒ‰ƒX‚Ì‰Šú‰» 
-	//ƒ_ƒ[ƒW
+	//ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ã‚¯ãƒ©ã‚¹ã®åˆæœŸåŒ– 
+	//ãƒ€ãƒ¡ãƒ¼ã‚¸
 	std::unique_ptr<ParticleManager> particleManager;
-	//‰ñ•œ
+	//å›å¾©
 	std::unique_ptr<ParticleManager> particleHealManager;
 	std::unique_ptr<ParticleManager> particleHiHealManager;
-	//ƒ[ƒ‹ƒhÀ•W‚ğ“ü‚ê‚é•Ï”
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’å…¥ã‚Œã‚‹å¤‰æ•°
 	Vector3 worldPos;
 
-	//‰¹ŠÖŒW‚Ü‚Æ‚ß
+	//éŸ³é–¢ä¿‚ã¾ã¨ã‚
 	int soundCheckFlag = 0;
 	int soundCheckFlag2 = 0;
-
 
 public:
 	bool isActionStop;
 	int isAction;
-	//ƒoƒfƒB
+	//ãƒãƒ‡ã‚£
 	Wolf* wolf_ = nullptr;
 };

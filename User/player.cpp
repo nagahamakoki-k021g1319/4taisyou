@@ -26,6 +26,10 @@ Player::~Player() {
 	delete fbxWalkModel_;
 	delete fbxStrongObject3d_;
 	delete fbxStrongModel_;
+	delete fbxMeraModel_;
+	delete fbxHealModel_;
+	delete fbxMeraObject3d_;
+	delete fbxHealObject3d_;
 }
 
 void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
@@ -38,7 +42,7 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	camTransForm = new Transform();
 
 	fbxModel_ = FbxLoader::GetInstance()->LoadModelFromFile("stand");
-	fbxRollModel_ = FbxLoader::GetInstance()->LoadModelFromFile("roll");
+	fbxRollModel_ = FbxLoader::GetInstance()->LoadModelFromFile("playerRoll");
 	fbxWalkModel_ = FbxLoader::GetInstance()->LoadModelFromFile("walk");
 	fbxDashModel_ = FbxLoader::GetInstance()->LoadModelFromFile("dash");
 	fbxWeak1Model_ = FbxLoader::GetInstance()->LoadModelFromFile("weakAttack1");
@@ -53,81 +57,63 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	// グラフィックスパイプライン生成
 	FBXObject3d::CreateGraphicsPipeline();
 
+	//待機
 	fbxObject3d_ = new FBXObject3d;
 	fbxObject3d_->Initialize();
 	fbxObject3d_->SetModel(fbxModel_);
-	fbxObject3d_->SetPosition({ 0,0,0 });
 	fbxObject3d_->PlayAnimation();
 	//回避
 	fbxRollObject3d_ = new FBXObject3d;
 	fbxRollObject3d_->Initialize();
 	fbxRollObject3d_->SetModel(fbxRollModel_);
-	fbxRollObject3d_->wtf.position = { 0,10,0 };
-	fbxRollObject3d_->wtf.scale = { 10,10,10 };
-	fbxRollObject3d_->PlayAnimation();
 	//歩き
 	fbxWalkObject3d_ = new FBXObject3d;
 	fbxWalkObject3d_->Initialize();
 	fbxWalkObject3d_->SetModel(fbxWalkModel_);
-	fbxWalkObject3d_->wtf.position = { 0,10,0 };
-	fbxWalkObject3d_->wtf.scale = { 10,10,10 };
 	fbxWalkObject3d_->PlayAnimation();
 	//走る
 	fbxDashObject3d_ = new FBXObject3d;
 	fbxDashObject3d_->Initialize();
 	fbxDashObject3d_->SetModel(fbxDashModel_);
-	fbxDashObject3d_->wtf.position = { 0,10,0 };
-	fbxDashObject3d_->wtf.scale = { 10,10,10 };
 	fbxDashObject3d_->PlayAnimation();
 	//弱攻撃1
 	fbxWeak1Object3d_ = new FBXObject3d;
 	fbxWeak1Object3d_->Initialize();
 	fbxWeak1Object3d_->SetModel(fbxWeak1Model_);
-	fbxWeak1Object3d_->wtf.position = { 0,10,0 };
-	fbxWeak1Object3d_->wtf.scale = { 10,10,10 };
-	fbxWeak1Object3d_->PlayAnimation();
 	//弱攻撃2
 	fbxWeak2Object3d_ = new FBXObject3d;
 	fbxWeak2Object3d_->Initialize();
 	fbxWeak2Object3d_->SetModel(fbxWeak2Model_);
-	fbxWeak2Object3d_->wtf.position = { 0,10,0 };
-	fbxWeak2Object3d_->wtf.scale = { 10,10,10 };
-	fbxWeak2Object3d_->PlayAnimation();
 	//弱攻撃3
 	fbxWeak3Object3d_ = new FBXObject3d;
 	fbxWeak3Object3d_->Initialize();
 	fbxWeak3Object3d_->SetModel(fbxWeak3Model_);
-	fbxWeak3Object3d_->wtf.position = { 0,10,0 };
-	fbxWeak3Object3d_->wtf.scale = { 10,10,10 };
-	fbxWeak3Object3d_->PlayAnimation();
 	//弱攻撃4
 	fbxWeak4Object3d_ = new FBXObject3d;
 	fbxWeak4Object3d_->Initialize();
 	fbxWeak4Object3d_->SetModel(fbxWeak4Model_);
-	fbxWeak4Object3d_->wtf.position = { 0,10,0 };
-	fbxWeak4Object3d_->wtf.scale = { 10,10,10 };
-	fbxWeak4Object3d_->PlayAnimation();
 	//強攻撃
 	fbxStrongObject3d_ = new FBXObject3d;
 	fbxStrongObject3d_->Initialize();
 	fbxStrongObject3d_->SetModel(fbxStrongModel_);
-	fbxStrongObject3d_->wtf.position = { 0,10,0 };
-	fbxStrongObject3d_->wtf.scale = { 10,10,10 };
-	fbxStrongObject3d_->PlayAnimation();
 	//メラ
 	fbxMeraObject3d_ = new FBXObject3d;
 	fbxMeraObject3d_->Initialize();
 	fbxMeraObject3d_->SetModel(fbxMeraModel_);
+
 	fbxMeraObject3d_->wtf.position = { 0,10,0 };
 	fbxMeraObject3d_->wtf.scale = { 10,10,10 };
 	fbxMeraObject3d_->PlayAnimation();
+
 	//回復
 	fbxHealObject3d_ = new FBXObject3d;
 	fbxHealObject3d_->Initialize();
 	fbxHealObject3d_->SetModel(fbxHealModel_);
+
 	fbxHealObject3d_->wtf.position = { 0,10,0 };
 	fbxHealObject3d_->wtf.scale = { 10,10,10 };
 	fbxHealObject3d_->PlayAnimation();
+
 
 	//パーティクル生成
 	particleManager = std::make_unique<ParticleManager>();
@@ -151,6 +137,14 @@ void Player::Initialize(DirectXCommon* dxCommon, Input* input) {
 	wolf_->SetPlayerWtf(&fbxObject3d_->wtf);
 
 	audio = new Audio();
+
+	audio->Initialize();
+	audio->LoadWave("col.wav");
+	audio->LoadWave("kaihi.wav");
+	audio->LoadWave("heal.wav");
+
+	sensitivity = 10;
+
 
 	Reset();
 }
@@ -195,18 +189,13 @@ void Player::Reset() {
 	isHeavyAttack = false;
 	heavyAttackTimer = 60;
 
-	//��ʃV�F�C�N
+	//  ʃV F C N
 	isCamShake = false;
 	camShakeTimer = camShakeLimit;
 
 	//回避設定
 	dodgeTimer = dodgeLimit;
 	isDodge = false;
-
-
-	audio->Initialize();
-	audio->LoadWave("col.wav");
-	audio->LoadWave("kaihi.wav");
 
 	objRotaTimer = 0;
 
@@ -223,10 +212,13 @@ void Player::Attack() {
 		//バディ指示
 		if (input_->PushKey(DIK_LSHIFT) || input_->ButtonInput(LT)) {
 			if (input_->PushKey(DIK_1) || input_->PButtonTrigger(B)) {
-				//弾を前方に出す
+				//メラ
 				if (mp >= bulletMp) {
+					isAction = 4;
+					bulletTime = bulletLimit;
 					wolf_->Attack(1, GetWorldPosition());
 					mp -= bulletMp;
+					fbxMeraObject3d_->PlayAnimation(1.0, false);
 				}
 			}
 			else if (input_->PushKey(DIK_2) || input_->PButtonTrigger(A)) {
@@ -235,8 +227,11 @@ void Player::Attack() {
 				//大回復
 				if (mp >= megaHealMp) {
 					mp -= megaHealMp;
+					pSourceVoice[3] = audio->PlayWave("heal.wav");
+					pSourceVoice[3]->SetVolume(0.4f);
 					isEffHiHealFlag = 1;
 					hp += megaHeal;
+					fbxHealObject3d_->PlayAnimation(1.0f, false);
 					if (hp > 100) {
 						hp = 100;
 					}
@@ -246,8 +241,11 @@ void Player::Attack() {
 				//小回復
 				if (mp >= healMp) {
 					mp -= healMp;
+					pSourceVoice[2] = audio->PlayWave("heal.wav");
+					pSourceVoice[2]->SetVolume(0.4f);
 					isEffHealFlag = 1;
 					hp += heal;
+					fbxHealObject3d_->PlayAnimation(1.0f, false);
 					if (hp > 100) {
 						hp = 100;
 					}
@@ -261,6 +259,7 @@ void Player::Attack() {
 				isAction = 1;
 				lightAttackCount = 0;
 				lightAttackTimer = lightAttackLimit[0];
+				fbxWeak1Object3d_->PlayAnimation(lightAttackAnime[0], false);
 				isAttackFin = false;
 			}
 			//強攻撃
@@ -268,6 +267,7 @@ void Player::Attack() {
 				isAction = 2;
 				heavyAttackCount = 0;
 				heavyAttackTimer = heavyAttackLimit[0];
+				fbxStrongObject3d_->PlayAnimation(heavyAttackAnime[0], false);
 				isAttackFin = false;
 			}
 			//回避
@@ -279,6 +279,7 @@ void Player::Attack() {
 					Vector2 stickVec = input_->GetLeftStickVec();
 					dodgeMoveVec = { stickVec.x,0,stickVec.y };
 					dodgeMoveVecNomal = dodgeMoveVec.nomalize();
+					fbxRollObject3d_->PlayAnimation(dodgeAnime, false);
 				}
 			}
 			//null
@@ -299,6 +300,13 @@ void Player::Attack() {
 	//回避
 	else if (isAction == 3) {
 		Dodge();
+	}
+	//メラ
+	else if (isAction = 4) {
+		bulletTime--;
+		if (bulletTime < 0) {
+			isAction = 0;
+		}
 	}
 }
 
@@ -424,27 +432,27 @@ void Player::camUpdate() {
 	//左右
 	Vector3 theta;
 	if (input_->StickInput(R_LEFT)) {
-		theta.y = -camRotaSpeed;
+		theta.y = -camRotaSpeed.x * sensitivity;
 	}
 	else if (input_->StickInput(R_RIGHT)) {
-		theta.y = camRotaSpeed;
+		theta.y = camRotaSpeed.x * sensitivity;
 	}
 	camTransForm->rotation += theta;
 
 	//上下
 	if (input_->StickInput(R_UP)) {
-		targetTheta += camRotaSpeed;
+		targetTheta += camRotaSpeed.y * sensitivity;
 	}
 	else if (input_->StickInput(R_DOWN)) {
-		targetTheta += -camRotaSpeed;
+		targetTheta += -camRotaSpeed.y * sensitivity;
 	}
 
 	//角度制限
-	if (targetTheta < -PI / 5 * 2) {//下の制限
-		targetTheta = -PI / 5 * 2;
+	if (targetTheta < -PI / 9 * 2) {//下の制限
+		targetTheta = -PI / 9 * 2;
 	}
-	else if (targetTheta > PI / 3) { //上の制限
-		targetTheta = PI / 3;
+	else if (targetTheta > PI / 9*2) { //上の制限
+		targetTheta = PI / 9*2;
 	}
 
 	//視点は一定の距離
@@ -514,7 +522,7 @@ void Player::Update() {
 			EffHiHealTimer = 0;
 		}
 
-		//��ʃV�F�C�N
+		//  ʃV F C N
 		if (isCamShake == true) {
 			camShakeTimer--;
 			if (camShakeTimer <= camShakeLimit && camShakeTimer > camShakeLimit * 3 / 4) {
@@ -550,12 +558,17 @@ void Player::Update() {
 			}else if (isEffHiHealFlag) {
 				fbxHealObject3d_->Update();
 			}else if (input_->LeftStickInput()) {
-				if (input_->ButtonInput(RT)) {
-					//ダッシュ
-					fbxDashObject3d_->Update();
+				if (isActionStop == false) {
+					if (input_->ButtonInput(RT)) {
+						//ダッシュ
+						fbxDashObject3d_->Update();
+					}else {
+						//歩き
+						fbxWalkObject3d_->Update();
+					}
 				}else {
-					//歩き
-					fbxWalkObject3d_->Update();
+					//待機
+					fbxObject3d_->Update();
 				}
 			}else {
 				//待機
@@ -583,6 +596,9 @@ void Player::Update() {
 		}else if (isAction == 3) {
 			//回避
 			fbxRollObject3d_->Update();
+		}else if (isAction == 4) {
+			//メラ
+			fbxMeraObject3d_->Update();
 		}
 	}
 
@@ -642,6 +658,9 @@ void Player::FbxDraw(){
 		}else if (isAction == 3) {
 			//回避
 			fbxRollObject3d_->Draw(dxCommon->GetCommandList());
+		}else if (isAction == 4) {
+			//メラ
+			fbxMeraObject3d_->Draw(dxCommon->GetCommandList());
 		}
 	}
 }
@@ -804,7 +823,7 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 		//当たり判定が出てるか
 		if (isLightAttack) {
 			//当たり判定
-			if (col.CircleCollisionXZ(lightAttackWPos, enemyPos, 0.5f, 1.0f)) {
+			if (col.CircleCollisionXZ(lightAttackWPos, enemyPos, 1.0f, 3.0f)) {
 				damage = 3;
 				MpUpdate(lightMpPuls);
 				return true;
@@ -817,16 +836,13 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 		//当たり判定が出てるか
 		if (isHeavyAttack) {
 			//当たり判定
-			if (col.CircleCollisionXZ(heavyAttackWPos, enemyPos, 1.0f, 1.0f)) {
+			if (col.CircleCollisionXZ(heavyAttackWPos, enemyPos, 1.5f, 3.0f)) {
 				damage = 7;
 				MpUpdate(heavyMpPuls);
 				return true;
 			}
 		}
 	}
-
-	return false;
-
 	return false;
 }
 
@@ -865,6 +881,7 @@ void Player::LightAttack() {
 				//次の斬撃設定
 				lightAttackCount++;
 				lightAttackTimer = lightAttackLimit[lightAttackCount];
+				fbxWeak2Object3d_->PlayAnimation(lightAttackAnime[1], false);
 				isLightAttack = false;
 				isAttackFin = true;
 				nextAttack = false;
@@ -910,6 +927,7 @@ void Player::LightAttack() {
 				//次の斬撃設定
 				lightAttackCount++;
 				lightAttackTimer = lightAttackLimit[lightAttackCount];
+				fbxWeak3Object3d_->PlayAnimation(lightAttackAnime[2], false);
 				isLightAttack = false;
 				isAttackFin = true;
 				nextAttack = false;
@@ -955,6 +973,7 @@ void Player::LightAttack() {
 				//次の斬撃設定
 				lightAttackCount++;
 				lightAttackTimer = lightAttackLimit[lightAttackCount];
+				fbxWeak4Object3d_->PlayAnimation(lightAttackAnime[3], false);
 				isLightAttack = false;
 				isAttackFin = true;
 				nextAttack = false;
@@ -1033,6 +1052,7 @@ void Player::HeavyAttack() {
 				heavyAttackTimer = heavyAttackLimit[heavyAttackCount];
 				isHeavyAttack = false;
 				isAttackFin = true;
+				fbxStrongObject3d_->PlayAnimation(heavyAttackAnime[1], false);
 				nextAttack = false;
 			}
 			else {
@@ -1095,13 +1115,11 @@ void Player::Dodge() {
 		//移動速度変更
 		dodgeMoveVec = dodgeMoveVecNomal;
 
-	}
-	else if (dodgeTimer > 0) {
+	}else if (dodgeTimer > 0) {
 		//硬直
 		dodgeMoveVec = { 0,0,0 };
 
-	}
-	else if (dodgeTimer <= 0) {
+	}else if (dodgeTimer <= 0) {
 		isDodge = false;
 		isAction = 0;
 	}
