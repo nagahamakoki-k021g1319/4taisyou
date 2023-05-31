@@ -28,8 +28,9 @@ void EnemyShortRenge::ShortAttack()
 }
 
 
-void EnemyShortRenge::Update(Vector3 PlayerPos, FBXObject3d* enemy)
+void EnemyShortRenge::Update(Vector3 PlayerPos, FBXObject3d* enemy, Object3d* obj2)
 {
+	obj2_ = obj2;
 	obj_ = enemy;
 	playerPos = PlayerPos;
 	if (hitOne == false) {
@@ -41,6 +42,7 @@ void EnemyShortRenge::Update(Vector3 PlayerPos, FBXObject3d* enemy)
 			}
 			else if (coll->CircleCollision(obj_->wtf.position + (playerLen * 2), playerPos, 1.0f, 1.0f) == false) {
 				obj_->wtf.position += playerLen;
+				obj2_->wtf.position += playerLen;
 			}
 		}
 		if (isAttack) {
@@ -49,8 +51,10 @@ void EnemyShortRenge::Update(Vector3 PlayerPos, FBXObject3d* enemy)
 	}
 	attackRenge->wtf.position = obj_->wtf.position + (playerLen * 2);
 	obj_->Update();
+	obj2_->Update();
 	attackRenge->Update();
 	enemy = obj_;
+	obj2 = obj2_;
 }
 
 void EnemyShortRenge::Draw(ID3D12GraphicsCommandList* command)

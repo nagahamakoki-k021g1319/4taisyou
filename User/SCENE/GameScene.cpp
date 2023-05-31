@@ -859,6 +859,9 @@ void GameScene::Draw() {
 		break;
 	case Scene::Play:
 		
+		player_->FbxDraw();
+		enemyManager_->FbxDraw();
+
 		// パーティクル描画前処理
 	/*	ParticleManager::PreDraw(dxCommon->GetCommandList());*/
 		player_->EffDraw();
@@ -895,9 +898,6 @@ void GameScene::Draw() {
 
 		srr->Draw();
 		srl->Draw();
-
-		player_->FbxDraw();
-		enemyManager_->FbxDraw();
 
 		//カウントダウン
 		if (actionStopTimer > 60 * 2) {
