@@ -136,6 +136,7 @@ private:
 
 	float sensitivity;
 	float dashSpeed = 0.4f;
+	bool isDash;
 	const float dashMP = 2.0f / 60.0f;
 
 	//ステータス
