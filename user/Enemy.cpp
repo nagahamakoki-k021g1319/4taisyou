@@ -413,10 +413,10 @@ void Enemy::Update() {
 void Enemy::CreatDaggerBullet(int bulletNum) {
 	for (int i = 0; i < bulletNum; i++) {
 		std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
-		newBullet->Initialize(20 + 20 * i, daggerBulletModel_);
+		/*newBullet->Initialize(20 + 20 * i, daggerBulletModel_);
 		newBullet->SetPos({ enemyObj_->wtf.position.x - 4.0f + 2.0f * i,enemyObj_->wtf.position.y,enemyObj_->wtf.position.z + 8.0f });
 		newBullet->SetScale({ 0.5f,0.5f, 0.5f });
-		daggerBullets_.push_back(std::move(newBullet));
+		daggerBullets_.push_back(std::move(newBullet));*/
 	}
 }
  
