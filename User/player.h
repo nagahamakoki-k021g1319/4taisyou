@@ -132,7 +132,7 @@ private:
 	float targetDistance = 10;
 	float camMoveSpeed = 0.2f;
   
-	Vector2 camRotaSpeed = { PI / 180, PI / 180};
+	Vector2 camRotaSpeed = { PI / 1800, PI / 1800};
 
 	float sensitivity;
 	float dashSpeed = 0.4f;
@@ -160,6 +160,9 @@ private:
 	const int bulletMp = 40;
 	const int bulletLimit = 10;
 	int bulletTime;
+	//回避
+	const int avoid = defaultHp * 0.1;
+	const int avoidMp = 10;
 
 	//無敵時間
 	bool isInvincible;
@@ -196,7 +199,7 @@ private:
 	//強攻撃
 	Vector3 heavyAttackLPos;
 	Vector3 heavyAttackWPos;
-	const float heavyMpPuls = 8;
+	const float heavyMpPuls = 4;
 	//何回めの連撃か
 	int heavyAttackCount;
 	//アニメーション速度

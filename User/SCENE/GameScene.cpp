@@ -484,11 +484,11 @@ void GameScene::Update() {
 		
 		break;
 	case Scene::Select:
-		sruPosition.x -= 50.0f;
+		sruPosition.x -= 80.0f;
 		sruPosition.y -= 10.0f;
 		sru->SetPozition(sruPosition);
 
-		srdPosition.x += 50.0f;
+		srdPosition.x += 80.0f;
 		srdPosition.y += 10.0f;
 		srd->SetPozition(srdPosition);
 
@@ -543,6 +543,14 @@ void GameScene::Update() {
 
 		break;
 	case Scene::Play:
+		mapoPosition.x = Sensitivity * 24.35 + 460;
+		markPointer->SetPozition(mapoPosition);
+		//感度更新
+		player_->SetSensitivity(Sensitivity);
+		mousePosition.x = Sensitivity * 24.35 + 460;
+		mouse->SetPozition(mousePosition);
+		//感度更新
+		player_->SetSensitivity(Sensitivity);
 		//ポーズ切り替え
 		if (input->PButtonTrigger(START)) {
 			if (isPause == false) {
@@ -859,19 +867,18 @@ void GameScene::Draw() {
 		//ParticleManager::PostDraw();
 		
 		UI->Draw();
-		if (input->ButtonInput(X)) {
-			buttomx->Draw();
+		if (isPause == false) {
+			if (input->ButtonInput(X)) {
+				buttomx->Draw();
+			}
+
+			if (input->ButtonInput(Y)) {
+				buttomy->Draw();
+			}
+			if (input->ButtonInput(B)) {
+				buttomb->Draw();
+			}
 		}
-
-		if (input->ButtonInput(Y)) {
-			buttomy->Draw();
-		}
-
-
-		if (input->ButtonInput(B)) {
-			buttomb->Draw();
-		}
-
 		if (input->ButtonInput(LT)) {
 			buttomPng2->Draw();
 		}
