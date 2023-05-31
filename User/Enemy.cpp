@@ -130,7 +130,7 @@ void Enemy::Update() {
 			bullet->Update();
 			if (bullet->isPop) {
 				//仮でプレイヤーとのやり取り
-				if (coll.CircleCollision(player_->GetWorldPosition(), bullet->GetPos(), 1.0f, 1.0f)) {
+				if (coll.CircleCollision(player_->GetWorldPosition(), bullet->GetPos(), 1.0f, 0.8f)) {
 					player_->OnCollision();
 					bullet->OnCollision();
 				}
@@ -370,7 +370,7 @@ void Enemy::CreatDaggerBullet(int bulletNum) {
 		std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
 		newBullet->Initialize(20 + 20 * i, daggerBulletModel_, enemyVec);
 		newBullet->SetPos(enemyProvisional[i]->GetWorldPosition());
-		newBullet->SetScale({ 0.5f,0.5f, 0.5f });
+		newBullet->SetScale({ 0.8f,0.8f, 0.8f });
 		daggerBullets_.push_back(std::move(newBullet));
 	}
 
