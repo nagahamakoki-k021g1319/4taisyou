@@ -333,8 +333,10 @@ void Player::Move() {
 		//移動速度
 		float speed = camMoveSpeed;
 
+		isDash = false;
 		if (input_->ButtonInput(RT)) {
 			if (mp > dashMP) {
+				isDash = true;
 				speed = dashSpeed;
 				MpUpdate(-dashMP);
 			}
@@ -376,6 +378,8 @@ void Player::Move() {
 		else if (newPos.z < -50) {
 			velocity.z = -50 - pos.z;
 		}
+
+		velocity += GetMoveBack();
 
 		//更新
 		fbxObject3d_->wtf.position += velocity;
@@ -838,7 +842,11 @@ bool Player::CheckAttack2Enemy(Vector3 enemyPos, float& damage) {
 
 bool Player::CheckBody2Enemy(Vector3 enemyPos) {
 	if (col.CircleCollisionXZ(GetWorldPosition(), enemyPos, 1.0f, 1.0f)) {
-		moveBack += { 0, 0, -0.2 };
+		if (isDash) {
+			moveBack += { 0, 0, -0.4 };
+		}else {
+			moveBack += { 0, 0, -0.2 };
+		}
 		moveBack = bVelocity(moveBack, fbxObject3d_->wtf);
 		return true;
 	}
