@@ -193,9 +193,6 @@
     <ClCompile Include="User\EnemyExplosionAttack.cpp">
       <Filter>user\ソース</Filter>
     </ClCompile>
-    <ClCompile Include="User\Enemy.cpp">
-      <Filter>user\ソース</Filter>
-    </ClCompile>
     <ClCompile Include="User\player.cpp">
       <Filter>user\ソース</Filter>
     </ClCompile>
@@ -207,6 +204,9 @@
     </ClCompile>
     <ClCompile Include="Engine\3D\FBXObject3d.cpp">
       <Filter>Engine\ソースファイル\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Enemy.cpp">
+      <Filter>user\ソース</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
