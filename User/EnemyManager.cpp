@@ -145,7 +145,7 @@ void EnemyManager::EffUpdate()
 			pos.y += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 			pos.z += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 			pos += enemy->GetWorldPosition();
-
+			pos.y += 1.0f;
 			//速度
 			//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
 			const float rnd_vel = 0.1f;

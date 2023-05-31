@@ -132,7 +132,7 @@ private:
 	float targetDistance = 10;
 	float camMoveSpeed = 0.2f;
   
-	Vector2 camRotaSpeed = { PI / 180, PI / 180};
+	Vector2 camRotaSpeed = { PI / 1800, PI / 1800};
 
 	float sensitivity;
 	float dashSpeed = 0.4f;
