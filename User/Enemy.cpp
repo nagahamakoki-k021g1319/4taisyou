@@ -419,7 +419,7 @@ void Enemy::CreatDaggerBullet(int bulletNum) {
 		daggerBullets_.push_back(std::move(newBullet));
 	}
 }
-
+ 
 void Enemy::CreatCrystalBullet() {
 	for (int i = 0; i < 2; i++) {
 		std::unique_ptr<EnemyCrystalBullet> newCrystalBullet = std::make_unique<EnemyCrystalBullet>();
