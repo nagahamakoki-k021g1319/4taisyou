@@ -12,7 +12,7 @@ class Player;
 #include "FBXModel.h"
 #include "FbxLoader.h"
 #include "FBXObject3d.h"
-
+ 
 class Enemy {
 public:
 	Enemy();
