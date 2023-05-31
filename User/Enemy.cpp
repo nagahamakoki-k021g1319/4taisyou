@@ -481,7 +481,7 @@ void Enemy::Draw() {
 
 void Enemy::AttackInterval()
 {
-	attackInterval = 250;
+	attackInterval = 120;
 
 }
 
