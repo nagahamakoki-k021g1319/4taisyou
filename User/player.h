@@ -159,6 +159,9 @@ private:
 	const int bulletMp = 40;
 	const int bulletLimit = 10;
 	int bulletTime;
+	//回避
+	const int avoid = defaultHp * 0.1;
+	const int avoidMp = 10;
 
 	//無敵時間
 	bool isInvincible;
@@ -195,7 +198,7 @@ private:
 	//強攻撃
 	Vector3 heavyAttackLPos;
 	Vector3 heavyAttackWPos;
-	const float heavyMpPuls = 8;
+	const float heavyMpPuls = 4;
 	//何回めの連撃か
 	int heavyAttackCount;
 	//アニメーション速度

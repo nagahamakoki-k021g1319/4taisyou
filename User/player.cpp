@@ -263,13 +263,16 @@ void Player::Attack() {
 			//回避
 			if (input_->PushKey(DIK_3) || input_->PButtonTrigger(B)) {
 				if (input_->LeftStickInput()) {
-					isAction = 3;
-					isDodge = true;
-					dodgeTimer = dodgeLimit;
-					Vector2 stickVec = input_->GetLeftStickVec();
-					dodgeMoveVec = { stickVec.x,0,stickVec.y };
-					dodgeMoveVecNomal = dodgeMoveVec.nomalize();
-					fbxRollObject3d_->PlayAnimation(dodgeAnime, false);
+					if (mp >= avoidMp) {
+						mp -= avoidMp;
+						isAction = 3;
+						isDodge = true;
+						dodgeTimer = dodgeLimit;
+						Vector2 stickVec = input_->GetLeftStickVec();
+						dodgeMoveVec = { stickVec.x,0,stickVec.y };
+						dodgeMoveVecNomal = dodgeMoveVec.nomalize();
+						fbxRollObject3d_->PlayAnimation(dodgeAnime, false);
+					}
 				}
 			}
 			//null
@@ -536,8 +539,6 @@ void Player::Update() {
 				camShakeVec = { 0,0,0 };
 			}
 		}
-
-		MpUpdate(mpRegen);
 	}
 
 
@@ -590,6 +591,7 @@ void Player::Update() {
 			//メラ
 			fbxMeraObject3d_->Update();
 		}
+		MpUpdate(mpRegen);
 	}
 
 	wolf_->Update(enemyPos_);
